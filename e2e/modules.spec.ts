@@ -4,6 +4,8 @@ test.describe('Modules Navigation and Loading', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    // Garantir que a navegação lateral esteja pronta antes dos testes
+    await expect(page.locator('aside')).toBeVisible()
   })
 
   test('should navigate to Estoque IA module', async ({ page }) => {
@@ -37,11 +39,17 @@ test.describe('Modules Navigation and Loading', () => {
   })
 
   test('should navigate to Showcase module', async ({ page }) => {
-    // Find Dev Tools section and click Showcase
+    // Garantir sidebar visível e expandir Dev Tools, depois clicar em Showcase
+    await expect(page.locator('aside')).toBeVisible()
+
     const devToolsSection = page.locator('text=Dev Tools').first()
+    await expect(devToolsSection).toBeVisible({ timeout: 5000 })
     await devToolsSection.click()
 
-    await page.click('text=Showcase')
+    const showcaseLink = page.locator('text=Showcase').first()
+    await expect(showcaseLink).toBeVisible({ timeout: 5000 })
+    await showcaseLink.click()
+
     await expect(page).toHaveURL('/showcase')
     await expect(page.locator('h1, h2, text=/Showcase|Componentes/')).toBeVisible()
   })
@@ -52,7 +60,8 @@ test.describe('Modules Navigation and Loading', () => {
     await expect(page).toHaveURL('/compras')
 
     // Should show placeholder or module content
-    const content = page.locator('main, [role="main"], #root')
+    // Usar seletor específico para evitar múltiplos elementos
+    const content = page.locator('main[role="main"]')
     await expect(content).toBeVisible()
   })
 
@@ -72,9 +81,13 @@ test.describe('Modules Navigation and Loading', () => {
 
     for (const category of categories) {
       const categoryElement = page.locator(`text=${category}`).first()
-      if (await categoryElement.isVisible()) {
+      try {
+        // Tenta esperar um pouco para ver se a categoria está visível/ativável
+        await expect(categoryElement).toBeVisible({ timeout: 2000 })
         await categoryElement.click()
-        await page.waitForTimeout(300) // Wait for animation
+        await page.waitForTimeout(300) // aguardar animação
+      } catch {
+        // Categoria ausente ou não visível: ignorar e continuar
       }
     }
   })
