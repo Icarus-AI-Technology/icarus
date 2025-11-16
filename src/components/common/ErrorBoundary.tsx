@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
+import { captureError } from '@/lib/sentry/config'
 
 interface Props {
   children: ReactNode
@@ -57,13 +58,17 @@ export class ErrorBoundary extends Component<Props, State> {
       errorInfo
     })
 
+    // Send error to Sentry with React context
+    captureError(error, {
+      react: {
+        componentStack: errorInfo.componentStack,
+      },
+    })
+
     // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo)
     }
-
-    // TODO: Send to error tracking service (Sentry, LogRocket, etc.)
-    // Example: Sentry.captureException(error, { contexts: { react: errorInfo } })
   }
 
   handleReset = (): void => {

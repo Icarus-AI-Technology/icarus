@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -23,6 +22,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useSupabase } from '@/hooks/useSupabase'
+import { useDebounce } from '@/hooks/useDebounce'
+import { formatCurrency, formatDate } from '@/lib/utils/formatters'
+import { validateQuantity } from '@/lib/utils/validators'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   ClipboardCheck, Plus, Search, Filter, Eye, CheckCircle2,
   AlertTriangle, TrendingUp, Calendar, Users, BarChart3
@@ -72,6 +75,7 @@ export function Inventario() {
   const [selectedInventory, setSelectedInventory] = useState<Inventory | null>(null)
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm, 300)
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
@@ -352,28 +356,18 @@ export function Inventario() {
     }
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
+  const filteredInventories = useMemo(() => {
+    return inventories.filter(inv => {
+      const matchesSearch =
+        inv.code.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        inv.description.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        inv.responsible.toLowerCase().includes(debouncedSearch.toLowerCase())
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR')
-  }
+      const matchesStatus = statusFilter === 'all' || inv.status === statusFilter
 
-  const filteredInventories = inventories.filter(inv => {
-    const matchesSearch =
-      inv.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inv.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inv.responsible.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchesStatus = statusFilter === 'all' || inv.status === statusFilter
-
-    return matchesSearch && matchesStatus
-  })
+      return matchesSearch && matchesStatus
+    })
+  }, [inventories, debouncedSearch, statusFilter])
 
   const stats = {
     total: inventories.length,
@@ -384,24 +378,11 @@ export function Inventario() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Inventário</h1>
-          <p className="text-muted-foreground">Controle físico de estoque</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-20" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Inventário"
+        subtitle="Controle físico de estoque"
+        kpiCount={4}
+      />
     )
   }
 

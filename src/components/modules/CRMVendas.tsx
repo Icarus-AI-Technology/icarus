@@ -39,16 +39,30 @@
  * - IA: Predições, churn risk, upsell, insights
  */
 
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useSupabase } from '@/hooks/useSupabase'
+import { useDebounce } from '@/hooks/useDebounce'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { formatCurrency, formatDate } from '@/lib/utils/formatters'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
+import {
+  Users, Plus, Search, Filter, Edit, Trash2, Eye, Phone,
+  Mail, MapPin, Building2, TrendingUp, DollarSign, Target,
+  Star, Calendar, CheckCircle2, Clock, XCircle, AlertCircle
+} from 'lucide-react'
+import {
+  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Funnel, FunnelChart
+} from 'recharts'
+import { toast } from 'sonner'
 
 // ==================== INTERFACES ====================
 
@@ -758,9 +772,11 @@ export default function CRMVendas() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-lg">Carregando CRM...</div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="CRM & Vendas"
+        subtitle="Gestão de clientes e pipeline de vendas"
+        kpiCount={4}
+      />
     )
   }
 

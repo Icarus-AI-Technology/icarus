@@ -41,13 +41,24 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useSupabase } from '@/hooks/useSupabase'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
+import { formatCurrency, formatDate } from '@/lib/utils/formatters'
+import {
+  Package, AlertTriangle, TrendingUp, Brain, RefreshCw,
+  ArrowUp, ArrowDown, ChevronRight
+} from 'lucide-react'
+import {
+  BarChart, Bar, LineChart, Line, XAxis, YAxis,
+  CartesianGrid, Tooltip, ResponsiveContainer, Cell
+} from 'recharts'
+import { toast } from 'sonner'
 
 // ==================== INTERFACES ====================
 
@@ -791,12 +802,11 @@ Forneça:
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando estoque...</p>
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Estoque IA"
+        subtitle="Gestão inteligente de estoque com IA"
+        kpiCount={4}
+      />
     )
   }
 
