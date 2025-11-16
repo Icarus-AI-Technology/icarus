@@ -8,7 +8,7 @@ import { Sidebar } from './Sidebar';
  */
 figma.connect(
   Sidebar,
-  'https://www.figma.com/design/ZiDBnkCUiXqBqIjToIE59u?node-id=1004-2004',
+  'https://www.figma.com/design/mo8QUMAQbaomxqo7BHHTTN?node-id=1004-2004',
   {
     example: (props) => (
       <Sidebar

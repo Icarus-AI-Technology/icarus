@@ -15,7 +15,7 @@ import { NeuButton } from './neu-button';
  */
 figma.connect(
   NeuButton,
-  'https://www.figma.com/design/ZiDBnkCUiXqBqIjToIE59u?node-id=1001-2001',
+  'https://www.figma.com/design/mo8QUMAQbaomxqo7BHHTTN?node-id=1001-2001',
   {
     example: (props) => (
       <NeuButton

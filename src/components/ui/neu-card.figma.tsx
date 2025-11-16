@@ -8,7 +8,7 @@ import { NeuCard } from './neu-card';
  */
 figma.connect(
   NeuCard,
-  'https://www.figma.com/design/ZiDBnkCUiXqBqIjToIE59u?node-id=1002-2002',
+  'https://www.figma.com/design/mo8QUMAQbaomxqo7BHHTTN?node-id=1002-2002',
   {
     example: (props) => (
       <NeuCard

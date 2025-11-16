@@ -8,7 +8,7 @@ import { NeuInput } from './neu-input';
  */
 figma.connect(
   NeuInput,
-  'https://www.figma.com/design/ZiDBnkCUiXqBqIjToIE59u?node-id=1003-2003',
+  'https://www.figma.com/design/mo8QUMAQbaomxqo7BHHTTN?node-id=1003-2003',
   {
     example: (props) => (
       <NeuInput
