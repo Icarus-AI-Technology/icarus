@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useSupabase } from '@/hooks/useSupabase'
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+import { formatCurrency } from '@/lib/utils/formatters'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
+import { useDashboardKPIs, useDashboardStats } from '@/hooks/queries/useDashboardData'
 import {
   Calendar, Package, DollarSign, TrendingUp, TrendingDown,
   AlertCircle, CheckCircle2, Clock, Brain
@@ -14,138 +13,26 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 
-interface KPIData {
-  surgeriesToday: number
-  surgeriesChange: number
-  criticalStock: number
-  revenue: number
-  revenueChange: number
-  aiStatus: 'online' | 'offline'
-}
-
 export function Dashboard() {
-  const { supabase, isConfigured } = useSupabase()
-  const { predict } = useIcarusBrain()
-  const [loading, setLoading] = useState(true)
-  const [kpis, setKpis] = useState<KPIData>({
-    surgeriesToday: 0,
-    surgeriesChange: 0,
-    criticalStock: 0,
-    revenue: 0,
-    revenueChange: 0,
-    aiStatus: 'online'
-  })
+  // React Query hooks for data fetching
+  const { data: kpis, isLoading: kpisLoading } = useDashboardKPIs()
+  const { data: stats, isLoading: statsLoading } = useDashboardStats()
 
-  // Mock data para gráficos
-  const revenueData = [
-    { month: 'Jan', valor: 45000 },
-    { month: 'Fev', valor: 52000 },
-    { month: 'Mar', valor: 48000 },
-    { month: 'Abr', valor: 61000 },
-    { month: 'Mai', valor: 55000 },
-    { month: 'Jun', valor: 67000 },
-  ]
+  // Combined loading state
+  const loading = kpisLoading || statsLoading
 
-  const surgeriesData = [
-    { dia: 'Seg', cirurgias: 12 },
-    { dia: 'Ter', cirurgias: 15 },
-    { dia: 'Qua', cirurgias: 8 },
-    { dia: 'Qui', cirurgias: 18 },
-    { dia: 'Sex', cirurgias: 14 },
-  ]
-
-  const productCategoryData = [
-    { name: 'Cardiologia', value: 30, color: '#6366F1' },
-    { name: 'Ortopedia', value: 25, color: '#10B981' },
-    { name: 'Neurocirurgia', value: 20, color: '#F59E0B' },
-    { name: 'Oftalmologia', value: 15, color: '#EF4444' },
-    { name: 'Outros', value: 10, color: '#8B5CF6' },
-  ]
-
-  useEffect(() => {
-    loadDashboardData()
-  }, [isConfigured])
-
-  const loadDashboardData = async () => {
-    setLoading(true)
-
-    if (!isConfigured) {
-      // Mock data if Supabase not configured
-      setTimeout(() => {
-        setKpis({
-          surgeriesToday: 12,
-          surgeriesChange: 2,
-          criticalStock: 3,
-          revenue: 45200,
-          revenueChange: 12,
-          aiStatus: 'online'
-        })
-        setLoading(false)
-      }, 500)
-      return
-    }
-
-    try {
-      // Fetch surgeries today
-      const today = new Date().toISOString().split('T')[0]
-      const { data: surgeries, error: surgeriesError } = await supabase
-        .from('surgeries')
-        .select('*')
-        .eq('scheduled_date', today)
-
-      // Fetch critical stock products
-      const { data: products, error: productsError } = await supabase
-        .from('products')
-        .select('*')
-        .lt('stock_quantity', supabase.rpc('min_stock'))
-
-      // Calculate revenue (mock for now)
-      const revenue = 45200
-
-      setKpis({
-        surgeriesToday: surgeries?.length || 0,
-        surgeriesChange: 2,
-        criticalStock: products?.length || 0,
-        revenue: revenue,
-        revenueChange: 12,
-        aiStatus: 'online'
-      })
-    } catch (error) {
-      console.error('Error loading dashboard:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
+  // Extract chart data from stats (with fallback to empty arrays)
+  const revenueData = stats?.revenueData || []
+  const surgeriesData = stats?.surgeriesData || []
+  const productCategoryData = stats?.productCategoryData || []
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Visão geral do sistema ICARUS v5.0</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-16 mb-2" />
-                <Skeleton className="h-3 w-32" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Dashboard"
+        subtitle="Visão geral do sistema ICARUS v5.0"
+        kpiCount={4}
+      />
     )
   }
 
@@ -170,15 +57,15 @@ export function Dashboard() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpis.surgeriesToday}</div>
+            <div className="text-2xl font-bold">{kpis?.surgeriesToday || 0}</div>
             <div className="flex items-center text-xs text-muted-foreground mt-1">
-              {kpis.surgeriesChange > 0 ? (
+              {(kpis?.surgeriesChange || 0) > 0 ? (
                 <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
               ) : (
                 <TrendingDown className="h-3 w-3 text-red-500 mr-1" />
               )}
-              <span className={kpis.surgeriesChange > 0 ? 'text-green-500' : 'text-red-500'}>
-                {kpis.surgeriesChange > 0 ? '+' : ''}{kpis.surgeriesChange}
+              <span className={(kpis?.surgeriesChange || 0) > 0 ? 'text-green-500' : 'text-red-500'}>
+                {(kpis?.surgeriesChange || 0) > 0 ? '+' : ''}{kpis?.surgeriesChange || 0}
               </span>
               <span className="ml-1">desde ontem</span>
             </div>
@@ -194,7 +81,7 @@ export function Dashboard() {
             <AlertCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpis.criticalStock}</div>
+            <div className="text-2xl font-bold">{kpis?.criticalStock || 0}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Produtos abaixo do mínimo
             </p>
@@ -210,10 +97,10 @@ export function Dashboard() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(kpis.revenue)}</div>
+            <div className="text-2xl font-bold">{formatCurrency(kpis?.revenue || 0)}</div>
             <div className="flex items-center text-xs text-muted-foreground mt-1">
               <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-              <span className="text-green-500">+{kpis.revenueChange}%</span>
+              <span className="text-green-500">+{kpis?.revenueChange || 0}%</span>
               <span className="ml-1">vs mês anterior</span>
             </div>
           </CardContent>
@@ -229,7 +116,7 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              {kpis.aiStatus === 'online' ? (
+              {(kpis?.aiStatus || 'offline') === 'online' ? (
                 <>
                   <CheckCircle2 className="h-6 w-6 text-green-500" />
                   <span className="text-xl font-bold">Online</span>

@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -23,6 +22,9 @@ import {
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useSupabase } from '@/hooks/useSupabase'
+import { useDebounce } from '@/hooks/useDebounce'
+import { formatCurrency } from '@/lib/utils/formatters'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   Package, Plus, Search, Filter, Edit, Trash2, Eye,
   AlertTriangle, TrendingUp, BarChart3, Grid, List,
@@ -73,6 +75,7 @@ export function ProdutosOPME() {
   const [categories, setCategories] = useState<Category[]>([])
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm, 300)
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [stockFilter, setStockFilter] = useState<string>('all')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -542,35 +545,29 @@ export function ProdutosOPME() {
     }
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
-
   const calculateMargin = (cost: number, sale: number) => {
     if (cost === 0) return 0
     return ((sale - cost) / sale * 100).toFixed(1)
   }
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category_name?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        product.code.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        product.category_name?.toLowerCase().includes(debouncedSearch.toLowerCase())
 
-    const matchesCategory = categoryFilter === 'all' || product.category_id === categoryFilter
+      const matchesCategory = categoryFilter === 'all' || product.category_id === categoryFilter
 
-    const matchesStock =
-      stockFilter === 'all' ||
-      (stockFilter === 'critical' && getStockStatus(product) === 'critical') ||
-      (stockFilter === 'low' && getStockStatus(product) === 'low') ||
-      (stockFilter === 'normal' && getStockStatus(product) === 'normal')
+      const matchesStock =
+        stockFilter === 'all' ||
+        (stockFilter === 'critical' && getStockStatus(product) === 'critical') ||
+        (stockFilter === 'low' && getStockStatus(product) === 'low') ||
+        (stockFilter === 'normal' && getStockStatus(product) === 'normal')
 
-    return matchesSearch && matchesCategory && matchesStock
-  })
+      return matchesSearch && matchesCategory && matchesStock
+    })
+  }, [products, debouncedSearch, categoryFilter, stockFilter])
 
   const stats = {
     total: products.length,
@@ -582,24 +579,11 @@ export function ProdutosOPME() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Produtos OPME</h1>
-          <p className="text-muted-foreground">Catálogo completo de produtos</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-16" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Produtos OPME"
+        subtitle="Catálogo completo de produtos e materiais"
+        kpiCount={5}
+      />
     )
   }
 

@@ -3,7 +3,7 @@ import {
   ShoppingCart, FileText, Settings, BarChart3, Truck, Shield,
   Brain, Zap, Webhook, TrendingUp, UserCog, FileSpreadsheet,
   Activity, Bell, MessageSquare, Video, Fingerprint, Workflow,
-  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory
+  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
@@ -513,6 +513,21 @@ export const navigationConfig: NavigationCategory[] = [
         icon: Factory,
         category: 'Integrações',
         isImplemented: false
+      }
+    ]
+  },
+  {
+    name: 'Dev Tools',
+    icon: Eye,
+    routes: [
+      {
+        id: 'showcase',
+        path: '/showcase',
+        name: 'Showcase',
+        icon: Eye,
+        category: 'Dev Tools',
+        description: 'Demonstração interativa de todos os componentes',
+        isImplemented: true
       }
     ]
   }

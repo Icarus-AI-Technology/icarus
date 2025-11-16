@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -22,6 +21,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useSupabase } from '@/hooks/useSupabase'
+import { useDebounce } from '@/hooks/useDebounce'
+import { formatCurrency, formatDate } from '@/lib/utils/formatters'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   Calendar, Plus, Search, Filter, Edit, Trash2, Eye,
   Clock, CheckCircle2, XCircle, AlertCircle, TrendingUp
@@ -70,6 +72,7 @@ export function Cirurgias() {
   const [doctors, setDoctors] = useState<Doctor[]>([])
   const [hospitals, setHospitals] = useState<Hospital[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm, 300)
   const [statusFilter, setStatusFilter] = useState<SurgeryStatus | 'all'>('all')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -498,28 +501,18 @@ export function Cirurgias() {
     }
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
+  const filteredSurgeries = useMemo(() => {
+    return surgeries.filter(surgery => {
+      const matchesSearch =
+        surgery.patient_name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        surgery.surgery_number.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        surgery.surgery_type.toLowerCase().includes(debouncedSearch.toLowerCase())
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR')
-  }
+      const matchesStatus = statusFilter === 'all' || surgery.status === statusFilter
 
-  const filteredSurgeries = surgeries.filter(surgery => {
-    const matchesSearch =
-      surgery.patient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      surgery.surgery_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      surgery.surgery_type.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchesStatus = statusFilter === 'all' || surgery.status === statusFilter
-
-    return matchesSearch && matchesStatus
-  })
+      return matchesSearch && matchesStatus
+    })
+  }, [surgeries, debouncedSearch, statusFilter])
 
   const stats = {
     total: surgeries.length,
@@ -532,24 +525,11 @@ export function Cirurgias() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Cirurgias</h1>
-          <p className="text-muted-foreground">Gestão completa de procedimentos cirúrgicos</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-16" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Cirurgias"
+        subtitle="Gestão completa de procedimentos cirúrgicos"
+        kpiCount={4}
+      />
     )
   }
 
