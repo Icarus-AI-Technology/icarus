@@ -88,9 +88,9 @@ ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 
 -- Categories Policies
-CREATE POLICY "Categories are viewable by everyone"
+CREATE POLICY "Authenticated users can view categories"
   ON categories FOR SELECT
-  USING (true);
+  USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Authenticated users can insert categories"
   ON categories FOR INSERT
@@ -106,9 +106,9 @@ CREATE POLICY "Authenticated users can delete categories"
   USING (auth.role() = 'authenticated');
 
 -- Products Policies
-CREATE POLICY "Products are viewable by everyone"
+CREATE POLICY "Authenticated users can view products"
   ON products FOR SELECT
-  USING (true);
+  USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Authenticated users can insert products"
   ON products FOR INSERT

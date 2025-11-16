@@ -6,6 +6,8 @@ import {
   TrendingUp, FileText, Truck, Settings,
   Database, Brain, Zap, Shield
 } from 'lucide-react'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { Header } from '@/components/layouts/Header'
 
 export default function HomePage() {
   const modules = [
@@ -27,34 +29,11 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0f1419]">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-100">ICARUS v5.0</h1>
-              <p className="text-gray-400 mt-1">ERP Moderno, Inteligente e Neumórfico</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="
-                bg-gradient-to-br from-gray-800 to-gray-900
-                px-6 py-3 rounded-xl
-                border border-white/10
-                text-gray-100 font-medium
-                shadow-[2px_2px_5px_rgba(0,0,0,0.5),-2px_-2px_5px_rgba(255,255,255,0.03)]
-                hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]
-                active:scale-95
-                transition-all duration-200
-              ">
-                Documentação
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <ProtectedRoute>
+      <div className="min-h-screen bg-[#0f1419]">
+        <Header />
 
-      {/* Main Content */}
+        {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
 
         {/* Features */}
@@ -177,5 +156,6 @@ export default function HomePage() {
 
       </main>
     </div>
+    </ProtectedRoute>
   )
 }

@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus, Package, TrendingUp, AlertTriangle, DollarSign, Edit, Trash2 } from 'lucide-react'
 import { Card, KPICard, Button, Input, Loading } from '@/components/ui'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { Header } from '@/components/layouts/Header'
 import { useProducts } from './hooks/useProducts'
 import { productSchema } from './schemas/product.schema'
 import type { ProductFormData } from './types/product.types'
@@ -108,31 +110,42 @@ export default function ProdutosPage() {
 
   if (loading && !products.length) {
     return (
-      <div className="min-h-screen bg-[#0f1419]">
-        <Loading text="Carregando produtos..." />
-      </div>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-[#0f1419]">
+          <Header />
+          <Loading text="Carregando produtos..." />
+        </div>
+      </ProtectedRoute>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0f1419] p-6">
-        <div className="max-w-7xl mx-auto">
-          <Card className="bg-red-500/10 border-red-500/20">
-            <h2 className="text-red-400 font-bold text-lg">Erro ao carregar dados</h2>
-            <p className="text-red-300 mt-2">{error.message}</p>
-            <p className="text-gray-400 text-sm mt-4">
-              Verifique se o Supabase está configurado corretamente em .env.local
-            </p>
-          </Card>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-[#0f1419]">
+          <Header />
+          <div className="p-6">
+            <div className="max-w-7xl mx-auto">
+              <Card className="bg-red-500/10 border-red-500/20">
+                <h2 className="text-red-400 font-bold text-lg">Erro ao carregar dados</h2>
+                <p className="text-red-300 mt-2">{error.message}</p>
+                <p className="text-gray-400 text-sm mt-4">
+                  Verifique se o Supabase está configurado corretamente em .env.local
+                </p>
+              </Card>
+            </div>
+          </div>
         </div>
-      </div>
+      </ProtectedRoute>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1419] p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-[#0f1419]">
+        <Header />
+        <div className="p-6">
+          <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -495,7 +508,9 @@ export default function ProdutosPage() {
           )}
         </Card>
 
+          </div>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   )
 }
