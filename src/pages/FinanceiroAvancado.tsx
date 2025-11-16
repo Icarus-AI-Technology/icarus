@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useFinancial } from '@/hooks/useFinancial'
 import { AccountFormDialog } from '@/components/financial/AccountFormDialog'
 import { PaymentDialog } from '@/components/financial/PaymentDialog'
+import { ExportService } from '@/services/export.service'
 import {
   type FinancialAccount,
   type FinancialAccountFormData,
@@ -26,6 +27,9 @@ import {
   DollarSign as PayIcon,
   Filter,
   X,
+  FileText,
+  Download,
+  FileSpreadsheet,
 } from 'lucide-react'
 import {
   LineChart,
@@ -127,6 +131,24 @@ export default function FinanceiroAvancado() {
       console.error('Error submitting payment:', error)
       throw error
     }
+  }
+
+  // Export handlers
+  const handleExportPDF = () => {
+    if (!summary) return
+    ExportService.exportFinancialReportPDF(summary, receivableAccounts, payableAccounts, monthlyData)
+  }
+
+  const handleExportExcel = () => {
+    ExportService.exportAccountsExcel(receivableAccounts, payableAccounts)
+  }
+
+  const handleExportCashFlowCSV = () => {
+    ExportService.exportCashFlowCSV(monthlyData)
+  }
+
+  const handleExportCashFlowExcel = () => {
+    ExportService.exportCashFlowExcel(monthlyData)
   }
 
   if (loading) {
@@ -247,10 +269,64 @@ export default function FinanceiroAvancado() {
               <h1 className="text-3xl font-bold text-gray-100">Financeiro Avançado</h1>
               <p className="text-gray-400 mt-1">Gestão completa de contas e fluxo de caixa</p>
             </div>
-            <Button onClick={reload} variant="outline" className="flex items-center gap-2">
-              <RefreshCw className="w-4 h-4" />
-              Atualizar
-            </Button>
+            <div className="flex items-center gap-3">
+              {/* Export Dropdown */}
+              <div className="relative group">
+                <Button variant="default" className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700">
+                  <Download className="w-4 h-4" />
+                  Exportar
+                </Button>
+                <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                  <div className="py-2">
+                    <button
+                      onClick={handleExportPDF}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700 flex items-center gap-3 transition-colors"
+                    >
+                      <FileText className="w-4 h-4 text-red-400" />
+                      <div>
+                        <p className="font-medium">Relatório PDF</p>
+                        <p className="text-xs text-gray-400">Resumo completo</p>
+                      </div>
+                    </button>
+                    <button
+                      onClick={handleExportExcel}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700 flex items-center gap-3 transition-colors"
+                    >
+                      <FileSpreadsheet className="w-4 h-4 text-green-400" />
+                      <div>
+                        <p className="font-medium">Contas Excel</p>
+                        <p className="text-xs text-gray-400">Receber e Pagar</p>
+                      </div>
+                    </button>
+                    <button
+                      onClick={handleExportCashFlowCSV}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700 flex items-center gap-3 transition-colors"
+                    >
+                      <FileText className="w-4 h-4 text-blue-400" />
+                      <div>
+                        <p className="font-medium">Fluxo CSV</p>
+                        <p className="text-xs text-gray-400">Dados mensais</p>
+                      </div>
+                    </button>
+                    <button
+                      onClick={handleExportCashFlowExcel}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700 flex items-center gap-3 transition-colors"
+                    >
+                      <FileSpreadsheet className="w-4 h-4 text-purple-400" />
+                      <div>
+                        <p className="font-medium">Fluxo Excel</p>
+                        <p className="text-xs text-gray-400">Análise detalhada</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <Button onClick={reload} variant="outline" className="flex items-center gap-2">
+                <RefreshCw className="w-4 h-4" />
+                Atualizar
+              </Button>
+            </div>
           </div>
 
           {/* KPIs Grid - 8 Cards */}
