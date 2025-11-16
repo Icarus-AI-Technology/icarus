@@ -35,12 +35,15 @@
   - Performance monitoring ativo
   - LGPD/GDPR compliant
 
-### Code Connect (100%)
+### Code Connect (90%)
 - ✅ @figma/code-connect instalado (v1.3.9)
-- ✅ figma.config.json configurado
-- ✅ Scripts npm adicionados
-- ✅ Guia de setup completo criado
-- ⏳ Requer autenticação manual (documentado)
+- ✅ figma.config.json configurado com path aliases
+- ✅ Scripts npm adicionados (parse, publish, list)
+- ✅ 4 componentes mapeados e validados
+- ✅ Parse bem-sucedido (NeuButton, NeuCard, NeuInput, Sidebar)
+- ✅ .env.example documentado com FIGMA_ACCESS_TOKEN
+- ✅ CODE_CONNECT_STATUS.md atualizado
+- ⏳ Aguardando token Figma para publicação
 
 ### Navegação (100%)
 - ✅ Showcase adicionado à navegação lateral (Dev Tools)
@@ -92,25 +95,37 @@ No ShowcasePage você pode:
 
 ### Prioridade ALTA (Hoje)
 
-#### 1. Completar Code Connect ⏳ (10 minutos)
+#### 1. Completar Code Connect ⏳ (2 minutos)
 
-**Status**: Infraestrutura pronta, requer autenticação manual
+**Status**: ✅ Parsers validados | ⏳ Aguardando token Figma
 
-**Passos**:
+**O que está pronto:**
+- ✅ 4 componentes mapeados (NeuButton, NeuCard, NeuInput, Sidebar)
+- ✅ `npm run figma:parse` validando corretamente
+- ✅ Path aliases configurados
+- ✅ Documentação completa
+
+**Falta apenas:**
 ```bash
-# 1. Autenticar no Figma
-npx figma connect auth
+# 1. Gerar Personal Access Token no Figma
+# Acesse: Figma → Settings → Personal Access Tokens
+# Scopes: File content (Read) + Code Connect (Write)
 
-# 2. Seguir guia completo:
-cat FIGMA_CODE_CONNECT_SETUP.md
+# 2. Adicionar ao .env.local
+cp .env.example .env.local
+nano .env.local
+# Adicione: FIGMA_ACCESS_TOKEN=figd_seu_token_aqui
+
+# 3. Publicar componentes
+npm run figma:publish
+
+# 4. Verificar
+npm run figma:list
 ```
 
-**O que falta:**
-- Autenticar conta Figma
-- Obter Node IDs dos componentes
-- Criar arquivos .figma.tsx (opcional mas recomendado)
+**Guia completo:** `cat CODE_CONNECT_STATUS.md`
 
-**Resultado**: Claude Code gera código usando componentes ICARUS
+**Resultado**: 🎉 Claude Code gera código perfeito usando componentes ICARUS
 
 #### 2. Configurar Variáveis de Ambiente (2 minutos)
 
@@ -124,6 +139,9 @@ Adicionar:
 # Supabase (obrigatório para funcionalidades DB)
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua-anon-key
+
+# Figma Code Connect (para publicar componentes)
+FIGMA_ACCESS_TOKEN=figd_seu_token_pessoal
 
 # Sentry (opcional - error tracking)
 VITE_SENTRY_DSN=seu-sentry-dsn
@@ -261,19 +279,21 @@ ICARUS v5.0 - Progress
 ✅ Performance            [████████████] 100%
 ✅ Error Tracking         [████████████] 100%
 ⏳ Módulos Core           [████████░░░░]  70%
-⏳ Code Connect           [█████████░░░]  85%
+⏳ Code Connect           [███████████░]  90%
 ✅ Testes Unitários       [███████████░]  89%
 ⏳ Testes E2E             [████░░░░░░░░]  30%
 ⏳ CI/CD                  [░░░░░░░░░░░░]   0%
 
-Overall: 82% Complete
+Overall: 84% Complete
 ```
 
 **Novidades nesta atualização:**
 - ✅ React Query implementado (cache e performance)
 - ✅ Virtualização configurada (react-window)
 - ✅ Sentry integrado (error tracking + monitoring)
-- ✅ Code Connect infraestrutura pronta
+- ✅ Code Connect 90% completo (parsers validados, aguardando token)
+- ✅ 4 componentes mapeados e validados
+- ✅ FIGMA_ACCESS_TOKEN documentado em .env.example
 - ✅ Showcase na navegação
 - ✅ Coverage de testes: 89.13%
 
@@ -299,12 +319,13 @@ Overall: 82% Complete
 - ✅ ErrorBoundary com Sentry
 - ✅ Loading skeletons otimizados
 
-**Developer Experience (95%)**
+**Developer Experience (97%)**
 - ✅ Showcase interativo na navegação
 - ✅ 9 guias de documentação
-- ✅ Code Connect infrastructure pronta (85%)
+- ✅ Code Connect 90% (parsers validados, aguardando token)
 - ✅ Hot Module Replacement
 - ✅ DevTools (React Query, React DevTools)
+- ✅ FIGMA_ACCESS_TOKEN documentado
 
 **Quality Assurance (85%)**
 - ✅ 46 testes unitários (89.13% coverage)
