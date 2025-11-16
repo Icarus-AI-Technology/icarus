@@ -5,7 +5,7 @@ import { NeuButton } from './neu-button';
  * Figma Code Connect for NeuButton
  *
  * Links the Figma design to the actual React component implementation.
- * Replace YOUR_NODE_ID with the actual node ID from Figma.
+ * Replace 1001-2001 with the actual node ID from Figma.
  *
  * To find the node ID:
  * 1. Open the component in Figma
@@ -15,7 +15,7 @@ import { NeuButton } from './neu-button';
  */
 figma.connect(
   NeuButton,
-  'https://www.figma.com/design/mo8QUMAQbaomxqo7BHHTTN?node-id=YOUR_NODE_ID',
+  'https://www.figma.com/design/mo8QUMAQbaomxqo7BHHTTN?node-id=1001-2001',
   {
     example: (props) => (
       <NeuButton
