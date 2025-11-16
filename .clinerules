@@ -1,0 +1,700 @@
+# 📋 .clinerules - Regras Obrigatórias ICARUS v5.0
+
+**ESTAS REGRAS SÃO OBRIGATÓRIAS E INVIOLÁVEIS**
+
+Leia SEMPRE antes de desenvolver qualquer código.
+
+---
+
+## 🎨 ORACLUSX DESIGN SYSTEM
+
+### Regra 1: COMPONENTES SHADCN/UI OBRIGATÓRIOS
+
+❌ **PROIBIDO** usar componentes HTML nativos:
+```tsx
+// ❌ NUNCA FAÇA ISSO
+<input type="text" />
+<button>Click</button>
+<select><option>...</option></select>
+<textarea></textarea>
+```
+
+✅ **SEMPRE** use shadcn/ui:
+```tsx
+// ✅ CORRETO
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+
+<Input />
+<Button>Click</Button>
+<Select>...</Select>
+<Textarea />
+```
+
+---
+
+### Regra 2: PALETA DE CORES UNIVERSAL
+
+❌ **PROIBIDO** cores customizadas fora da paleta:
+```tsx
+// ❌ NUNCA
+className="bg-blue-500"
+className="text-red-600"
+style={{ color: '#FF0000' }}
+```
+
+✅ **SEMPRE** use a paleta universal:
+```css
+/* ÚNICAS cores permitidas */
+--primary: #6366F1      /* Indigo - COR PRINCIPAL */
+--success: #10B981      /* Verde - Sucesso */
+--warning: #F59E0B      /* Laranja - Avisos */
+--danger: #EF4444       /* Vermelho - Perigo */
+--background: #F9FAFB   /* Cinza claro - Fundo */
+--foreground: #1F2937   /* Cinza escuro - Texto */
+```
+
+```tsx
+// ✅ CORRETO
+className="bg-primary"
+className="text-success"
+className="border-warning"
+className="bg-danger"
+```
+
+---
+
+### Regra 3: INPUTS EM FORM-ROW
+
+❌ **PROIBIDO** inputs sem label e form-row:
+```tsx
+// ❌ NUNCA
+<Input placeholder="Nome" />
+<Input type="email" />
+```
+
+✅ **SEMPRE** use form-row com label:
+```tsx
+// ✅ CORRETO
+<div className="form-row">
+  <label htmlFor="nome">Nome *</label>
+  <Input id="nome" required />
+</div>
+
+<div className="form-row">
+  <label htmlFor="email">Email</label>
+  <Input id="email" type="email" />
+</div>
+```
+
+---
+
+### Regra 4: GRID RESPONSIVO 3/2/1
+
+❌ **PROIBIDO** grids fixos:
+```tsx
+// ❌ NUNCA
+<div className="grid grid-cols-3">
+  {/* Quebra em mobile */}
+</div>
+```
+
+✅ **SEMPRE** use responsive grid 3/2/1:
+```tsx
+// ✅ CORRETO
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {/* 3 colunas desktop, 2 tablet, 1 mobile */}
+</div>
+
+// Para 4 colunas (KPIs)
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  {/* 4 colunas desktop, 2 tablet, 1 mobile */}
+</div>
+```
+
+---
+
+### Regra 5: ACESSIBILIDADE OBRIGATÓRIA
+
+❌ **PROIBIDO** botões ícone sem aria-label:
+```tsx
+// ❌ NUNCA
+<Button size="icon">
+  <PlusIcon />
+</Button>
+```
+
+✅ **SEMPRE** adicione aria-label:
+```tsx
+// ✅ CORRETO
+<Button size="icon" aria-label="Adicionar novo item">
+  <PlusIcon />
+</Button>
+
+<Button size="icon" aria-label="Deletar">
+  <TrashIcon />
+</Button>
+```
+
+---
+
+### Regra 6: DIALOG EM VEZ DE ALERT/CONFIRM
+
+❌ **PROIBIDO** usar alert/confirm do navegador:
+```tsx
+// ❌ NUNCA
+alert('Erro!')
+confirm('Tem certeza?')
+```
+
+✅ **SEMPRE** use Dialog component:
+```tsx
+// ✅ CORRETO
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
+<Dialog open={showError} onOpenChange={setShowError}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Erro!</DialogTitle>
+    </DialogHeader>
+    <p>Descrição do erro</p>
+  </DialogContent>
+</Dialog>
+```
+
+---
+
+### Regra 7: VARIANTES DE BOTÕES
+
+❌ **PROIBIDO** customizar cores de botões:
+```tsx
+// ❌ NUNCA
+<Button className="bg-blue-600">Salvar</Button>
+```
+
+✅ **SEMPRE** use variantes corretas:
+```tsx
+// ✅ CORRETO
+<Button variant="default">Ação Principal</Button>      // Indigo (#6366F1)
+<Button variant="secondary">Ação Secundária</Button>   // Cinza
+<Button variant="destructive">Deletar</Button>         // Vermelho
+<Button variant="outline">Cancelar</Button>            // Borda
+<Button variant="ghost">Sutil</Button>                 // Transparente
+```
+
+---
+
+### Regra 8: CARDS NEUMÓRFICOS
+
+❌ **PROIBIDO** cards sem classe neumórfica:
+```tsx
+// ❌ NUNCA
+<Card>
+  <CardContent>...</CardContent>
+</Card>
+```
+
+✅ **SEMPRE** use classes neumórficas:
+```tsx
+// ✅ CORRETO
+<Card className="neu-soft">      // Padrão (sombras suaves)
+  <CardContent>...</CardContent>
+</Card>
+
+<Card className="neu-card">      // Maior profundidade
+  <CardContent>...</CardContent>
+</Card>
+```
+
+---
+
+## 📦 PADRÃO DE MÓDULOS
+
+### Regra 9: ESTRUTURA OBRIGATÓRIA
+
+Todos os módulos **DEVEM** ter:
+
+```tsx
+export function NomeModulo() {
+  return (
+    <div className="p-6">
+      {/* 1. KPIs (4-5 cards) - OBRIGATÓRIO */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <Card className="neu-card">
+          <CardContent className="pt-6">
+            <p className="text-sm text-gray-600">Métrica</p>
+            <p className="text-2xl font-bold">142</p>
+            <p className="text-xs text-green-600">↑ 12.5%</p>
+          </CardContent>
+        </Card>
+        {/* ... mais 3 KPIs */}
+      </div>
+
+      {/* 2. Tabs - OBRIGATÓRIO */}
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="lista">Lista</TabsTrigger>
+          <TabsTrigger value="relatorios">Relatórios</TabsTrigger>
+          <TabsTrigger value="ia">IA</TabsTrigger>
+        </TabsList>
+
+        {/* 3. Conteúdo das tabs */}
+        <TabsContent value="overview">
+          {/* Gráficos + Dashboard */}
+        </TabsContent>
+
+        <TabsContent value="lista">
+          {/* Tabela + CRUD */}
+        </TabsContent>
+
+        <TabsContent value="relatorios">
+          {/* Relatórios */}
+        </TabsContent>
+
+        <TabsContent value="ia">
+          {/* Serviços IA */}
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+```
+
+---
+
+### Regra 10: NOMES DE ARQUIVOS
+
+❌ **PROIBIDO**:
+```
+cirurgias.tsx
+Cirurgias_Module.tsx
+CirurgiasPage.tsx
+```
+
+✅ **CORRETO**:
+```
+Cirurgias.tsx           // PascalCase, sem sufixo
+Estoque.tsx
+ContasReceber.tsx
+```
+
+---
+
+## 🗄️ SUPABASE DATABASE
+
+### Regra 11: SEMPRE TRATE ERROS
+
+❌ **PROIBIDO** ignorar erros:
+```tsx
+// ❌ NUNCA
+const { data } = await supabase.from('produtos').select('*')
+// Sem verificar error!
+```
+
+✅ **SEMPRE** verifique erros:
+```tsx
+// ✅ CORRETO
+const { data, error } = await supabase.from('produtos').select('*')
+
+if (error) {
+  console.error('Erro ao buscar produtos:', error)
+  toast.error('Erro ao carregar produtos')
+  return
+}
+
+// Agora pode usar data com segurança
+```
+
+---
+
+### Regra 12: USE HOOKS/SERVICES
+
+❌ **PROIBIDO** queries diretas em componentes:
+```tsx
+// ❌ NUNCA (em component)
+useEffect(() => {
+  supabase.from('produtos').select('*').then(...)
+}, [])
+```
+
+✅ **SEMPRE** use hooks customizados:
+```tsx
+// ✅ CORRETO
+// hooks/useProdutos.ts
+export function useProdutos() {
+  const [produtos, setProdutos] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    async function fetchProdutos() {
+      setLoading(true)
+      const { data, error } = await supabase.from('produtos').select('*')
+
+      if (error) {
+        console.error(error)
+        toast.error('Erro ao carregar produtos')
+      } else {
+        setProdutos(data)
+      }
+
+      setLoading(false)
+    }
+
+    fetchProdutos()
+  }, [])
+
+  return { produtos, loading }
+}
+
+// No component
+const { produtos, loading } = useProdutos()
+```
+
+---
+
+## 🧠 ICARUSBRAIN (IA)
+
+### Regra 13: USE O HOOK CORRETO
+
+❌ **PROIBIDO** chamadas diretas à API:
+```tsx
+// ❌ NUNCA
+fetch('https://api.anthropic.com/...', {
+  headers: { 'x-api-key': '...' }
+})
+```
+
+✅ **SEMPRE** use useIcarusBrain:
+```tsx
+// ✅ CORRETO
+import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+
+const { predict, analyze, recommend, chat } = useIcarusBrain()
+
+const forecast = await predict('demanda', { produto_id, dias: 30 })
+```
+
+---
+
+### Regra 14: TRATE LOADING E ERROS DA IA
+
+```tsx
+// ✅ CORRETO
+const [loading, setLoading] = useState(false)
+const [error, setError] = useState(null)
+
+async function handlePredict() {
+  setLoading(true)
+  setError(null)
+
+  try {
+    const result = await predict('demanda', { produto_id, dias: 30 })
+    // Usar resultado
+  } catch (err) {
+    setError(err.message)
+    toast.error('Erro na previsão de demanda')
+  } finally {
+    setLoading(false)
+  }
+}
+```
+
+---
+
+## 💻 TYPESCRIPT
+
+### Regra 15: STRICT MODE
+
+❌ **PROIBIDO**:
+```tsx
+// ❌ NUNCA
+const data: any = ...
+// @ts-ignore
+const result = ...
+```
+
+✅ **SEMPRE** use tipos corretos:
+```tsx
+// ✅ CORRETO
+interface Produto {
+  id: string
+  nome: string
+  preco: number
+  ativo: boolean
+}
+
+const produtos: Produto[] = ...
+```
+
+---
+
+### Regra 16: INTERFACES PARA PROPS
+
+```tsx
+// ✅ CORRETO
+interface ButtonProps {
+  variant?: 'default' | 'secondary' | 'destructive'
+  size?: 'sm' | 'md' | 'lg'
+  children: React.ReactNode
+  onClick?: () => void
+}
+
+export function Button({ variant = 'default', size = 'md', children, onClick }: ButtonProps) {
+  // ...
+}
+```
+
+---
+
+## 🧪 TESTES
+
+### Regra 17: COBERTURA MÍNIMA
+
+- **Mínimo**: 65% coverage
+- **Meta**: 85% coverage
+- **Obrigatório**: Testar lógica complexa, hooks customizados, utils
+
+```tsx
+// ✅ CORRETO
+describe('useProdutos', () => {
+  it('deve carregar produtos corretamente', async () => {
+    const { result } = renderHook(() => useProdutos())
+
+    await waitFor(() => {
+      expect(result.current.produtos).toHaveLength(10)
+      expect(result.current.loading).toBe(false)
+    })
+  })
+
+  it('deve tratar erros', async () => {
+    // Mock erro
+    const { result } = renderHook(() => useProdutos())
+
+    await waitFor(() => {
+      expect(result.current.error).toBeDefined()
+    })
+  })
+})
+```
+
+---
+
+## 📱 RESPONSIVIDADE
+
+### Regra 18: TESTE EM 3 BREAKPOINTS
+
+Sempre teste em:
+- **Mobile**: 375px (iPhone SE)
+- **Tablet**: 768px (iPad)
+- **Desktop**: 1920px (Full HD)
+
+```tsx
+// ✅ CORRETO - Responsive classes
+<div className="
+  p-4 md:p-6 lg:p-8              // Padding progressivo
+  text-sm md:text-base lg:text-lg  // Font size responsivo
+  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  // Grid responsivo
+">
+```
+
+---
+
+## 🌓 DARK MODE
+
+### Regra 19: SEMPRE SUPORTE DARK MODE
+
+❌ **PROIBIDO** cores fixas:
+```tsx
+// ❌ NUNCA
+className="bg-white text-black"
+```
+
+✅ **SEMPRE** use classes que funcionam em ambos:
+```tsx
+// ✅ CORRETO
+className="bg-background text-foreground"
+className="bg-card text-card-foreground"
+className="border-border"
+```
+
+---
+
+## 📝 COMMITS
+
+### Regra 20: CONVENÇÃO OBRIGATÓRIA
+
+```bash
+# Padrão: tipo(escopo): descrição
+
+# ✅ CORRETO
+feat(cirurgias): adicionar filtro por data
+fix(estoque): corrigir cálculo de saldo
+docs(readme): atualizar instalação
+refactor(ia): otimizar hook useIcarusBrain
+test(cirurgias): adicionar testes unitários
+chore(deps): atualizar dependências
+
+# ❌ ERRADO
+adicionado filtro
+fix bug
+update
+WIP
+```
+
+---
+
+## ⚡ PERFORMANCE
+
+### Regra 21: BUNDLE SIZE
+
+- **Máximo**: 1.5MB
+- **Meta**: <800KB
+- **Obrigatório**: Lazy loading de rotas e módulos pesados
+
+```tsx
+// ✅ CORRETO
+const Cirurgias = lazy(() => import('./components/modules/Cirurgias'))
+
+<Suspense fallback={<Loading />}>
+  <Cirurgias />
+</Suspense>
+```
+
+---
+
+### Regra 22: LIGHTHOUSE SCORE
+
+- **Mínimo**: 90
+- **Meta**: >95
+- **Obrigatório**: Performance, Accessibility, Best Practices, SEO
+
+---
+
+## 🔒 SEGURANÇA
+
+### Regra 23: NUNCA COMMIT SECRETS
+
+❌ **PROIBIDO** em código:
+```tsx
+// ❌ NUNCA
+const API_KEY = 'sk-ant-1234567890'
+const SUPABASE_URL = 'https://...'
+```
+
+✅ **SEMPRE** use .env:
+```bash
+# .env.local
+VITE_ANTHROPIC_API_KEY=sk-ant-...
+VITE_SUPABASE_URL=https://...
+```
+
+```tsx
+// ✅ CORRETO
+const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY
+```
+
+---
+
+### Regra 24: VALIDE INPUTS
+
+```tsx
+// ✅ CORRETO
+import { z } from 'zod'
+
+const produtoSchema = z.object({
+  nome: z.string().min(3).max(100),
+  preco: z.number().positive(),
+  ativo: z.boolean()
+})
+
+try {
+  const validated = produtoSchema.parse(formData)
+  // Usar validated
+} catch (err) {
+  // Tratar erro de validação
+}
+```
+
+---
+
+## 📊 MONITORAMENTO
+
+### Regra 25: LOGGING ADEQUADO
+
+❌ **PROIBIDO** console.log em produção:
+```tsx
+// ❌ NUNCA
+console.log('dados:', data)
+```
+
+✅ **SEMPRE** use logger estruturado:
+```tsx
+// ✅ CORRETO
+if (import.meta.env.DEV) {
+  console.log('dados:', data)
+}
+
+// Para produção
+logger.info('Produto criado', { produto_id: data.id })
+logger.error('Erro ao criar produto', { error })
+```
+
+---
+
+## 📚 DOCUMENTAÇÃO
+
+### Regra 26: JSDOC EM FUNÇÕES COMPLEXAS
+
+```tsx
+// ✅ CORRETO
+/**
+ * Calcula o score de inadimplência do cliente
+ * @param clienteId - ID do cliente
+ * @param historicoMeses - Meses de histórico (padrão: 12)
+ * @returns Score de 0-100 e classificação de risco
+ */
+export async function calcularScoreInadimplencia(
+  clienteId: string,
+  historicoMeses: number = 12
+): Promise<{ score: number; risco: 'baixo' | 'medio' | 'alto' }> {
+  // ...
+}
+```
+
+---
+
+## ✅ CHECKLIST FINAL
+
+Antes de commitar, verifique:
+
+- [ ] Leu `.clinerules`?
+- [ ] Seguiu OraclusX Design System?
+- [ ] Usou componentes shadcn/ui (não HTML nativo)?
+- [ ] Paleta de cores universal?
+- [ ] Inputs em form-row com label?
+- [ ] Grid responsivo 3/2/1?
+- [ ] Aria-labels em botões ícone?
+- [ ] Tratou erros Supabase?
+- [ ] Usou hooks/services (não queries diretas)?
+- [ ] TypeScript strict (sem any/@ts-ignore)?
+- [ ] Testou dark mode?
+- [ ] Testou responsividade (mobile/tablet/desktop)?
+- [ ] Lighthouse score >90?
+- [ ] Bundle size ok?
+- [ ] Testes passando?
+- [ ] Sem console.log?
+- [ ] Commit message segue convenção?
+
+---
+
+**ESTAS REGRAS SÃO INVIOLÁVEIS**
+
+Qualquer código que violar estas regras será **rejeitado** no code review.
+
+**Versão**: 1.0.0
+**Última atualização**: 2025-11-15
+
+🚀 **Agora desenvolva com excelência!**
