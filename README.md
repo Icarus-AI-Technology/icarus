@@ -27,6 +27,15 @@
 }
 ```
 
+### Características Principais
+
+- **58 Módulos Integrados**: Gestão completa de distribuidoras OPME
+- **IA Integrada**: Claude Sonnet 4.5 para análises e previsões
+- **OraclusX Design System**: Interface neumórfica moderna e acessível
+- **Real-time**: Sincronização em tempo real via Supabase
+- **Escalável**: Arquitetura modular preparada para crescimento
+- **Acessível**: WCAG 2.1 AA compliant
+
 ---
 
 ## ✨ Diferenciais Competitivos
@@ -85,7 +94,7 @@ Interface neumórfica (3D) com:
 - ✅ Dark mode nativo
 - ✅ Performance otimizada
 
-[📖 Ver Design System completo →](docs/06-ORACLUSX-DESIGN-SYSTEM.md)
+[📖 Ver Design System completo →](docs/skills/SKILL_ORACLUSX_DS.md)
 
 ---
 
@@ -111,7 +120,7 @@ const response = await chat('Qual o status do estoque?')
 
 **ROI da IA**: 2.000% (R$ 40.000 economia/mês vs R$ 2.000 custo)
 
-[📖 Ver documentação completa da IA →](docs/07-IA-ICARUSBRAIN.md)
+[📖 Ver documentação completa da IA →](docs/skills/SKILL_IA_INTEGRATION.md)
 
 ---
 
@@ -142,18 +151,16 @@ const response = await chat('Qual o status do estoque?')
 - ✅ Armazenagem Inteligente
 - ✅ ... [ver lista completa](docs/09-MODULOS.md)
 
-[📖 Ver todos os 58 módulos →](docs/09-MODULOS.md)
-
 ---
 
 ## 🚀 Quick Start
 
 ### Pré-requisitos
 
-- Node.js 18+
+- Node.js >= 18.x
 - npm ou yarn
-- Conta Supabase (grátis)
-- API Key Anthropic (opcional, para IA)
+- Conta Supabase (para backend)
+- API Key Anthropic (para IA, opcional)
 
 ### Instalação
 
@@ -197,29 +204,54 @@ vercel --prod
 
 ---
 
+## 📁 Estrutura do Projeto
+
+```
+icarus/
+├── src/
+│   ├── components/
+│   │   ├── ui/              # Componentes shadcn/ui
+│   │   └── modules/         # Módulos ICARUS (58)
+│   ├── hooks/               # Custom React hooks
+│   │   ├── useSupabase.ts
+│   │   └── useIcarusBrain.ts
+│   ├── lib/
+│   │   ├── ai/              # Integração IA
+│   │   ├── supabase/        # Cliente Supabase
+│   │   └── utils.ts         # Utilitários
+│   ├── styles/
+│   │   └── globals.css      # Estilos globais + neomorphism
+│   └── types/               # TypeScript types
+├── docs/
+│   ├── skills/              # Skills de desenvolvimento
+│   ├── 01-VISAO-GERAL.md
+│   ├── 04-COMPARATIVO-PROTHEUS.md
+│   └── 10-QUICK-START.md
+├── CLAUDE.md                # Contexto para Claude Code
+├── .clinerules              # Regras obrigatórias
+└── TROUBLESHOOTING.md       # Guia de problemas
+```
+
+---
+
 ## 📚 Documentação
 
 ### Para Desenvolvedores
 
 - [🎯 Visão Geral](docs/01-VISAO-GERAL.md) - Entenda o projeto
-- [🏗️ Arquitetura](docs/02-ARQUITETURA.md) - Estrutura técnica
-- [⚙️ Stack Tecnológico](docs/03-STACK-TECNOLOGICO.md) - Tecnologias usadas
-- [🎨 OraclusX Design System](docs/06-ORACLUSX-DESIGN-SYSTEM.md) - Guia de UI/UX
-- [🗄️ Supabase Database](docs/08-SUPABASE-DATABASE.md) - Schema e queries
+- [🎨 OraclusX Design System](docs/skills/SKILL_ORACLUSX_DS.md) - Guia de UI/UX
+- [📦 Criar Módulos](docs/skills/SKILL_CRIAR_MODULOS.md) - Padrão de módulos
+- [🧠 IA Integration](docs/skills/SKILL_IA_INTEGRATION.md) - Integrar IcarusBrain
+- [🗄️ Supabase](docs/skills/SKILL_SUPABASE.md) - Patterns database
 
 ### Para Claude Code
 
 - [🤖 CLAUDE.md](CLAUDE.md) - Contexto principal
 - [📋 .clinerules](.clinerules) - Regras obrigatórias
-- [🎨 SKILL: OraclusX DS](docs/skills/SKILL_ORACLUSX_DS.md) - Como usar Design System
-- [📦 SKILL: Criar Módulos](docs/skills/SKILL_CRIAR_MODULOS.md) - Padrão de módulos
-- [🧠 SKILL: IA Integration](docs/skills/SKILL_IA_INTEGRATION.md) - Integrar IcarusBrain
-- [🗄️ SKILL: Supabase](docs/skills/SKILL_SUPABASE.md) - Patterns database
 
 ### Análise Competitiva
 
 - [📊 Comparativo Protheus](docs/04-COMPARATIVO-PROTHEUS.md) - Análise detalhada vs líder
-- [🔗 Code Connect](docs/05-CODE-CONNECT.md) - Figma ↔ Código (ROI 10.400%)
 
 ### Troubleshooting
 
@@ -227,22 +259,74 @@ vercel --prod
 
 ---
 
-## 🎨 Code Connect (Figma ↔ Código)
+## 🎨 OraclusX Design System
 
-**Sincronização automática entre design e código**
+O ICARUS usa o **OraclusX Design System**, baseado em **Neomorphism** (design neumórfico).
 
-### Antes vs Depois
+### Classes Neumórficas
 
-| Métrica | Sem Code Connect | Com Code Connect | Melhoria |
-|---------|------------------|------------------|----------|
-| Tempo/página | 4h | 1h | **-75%** ⚡ |
-| Retrabalho | 60% | 5% | **-92%** 🎯 |
-| Consistência | 70% | 99% | **+29pp** ✅ |
-| Erros/página | 15 | 1 | **-93%** 🐛 |
+```tsx
+// Soft elevation (raised)
+<Card className="neu-soft">...</Card>
 
-**ROI**: 10.400% no primeiro ano (payback em 3 dias)
+// Pressed effect (inset)
+<Card className="neu-pressed">...</Card>
 
-[📖 Ver guia completo de Code Connect →](docs/05-CODE-CONNECT.md)
+// KPI Card preset
+<Card className="neu-card">...</Card>
+```
+
+### Paleta de Cores Universal
+
+- **Primary**: #6366F1 (Indigo) - Cor universal de botões
+- **Success**: #10B981 (Green)
+- **Warning**: #F59E0B (Amber)
+- **Error**: #EF4444 (Red)
+
+---
+
+## 🧩 Criando Módulos
+
+Siga o template base para criar novos módulos:
+
+```tsx
+// src/components/modules/SeuModulo.tsx
+import { useState } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+
+export function SeuModulo() {
+  const { predict } = useIcarusBrain()
+
+  return (
+    <div className="p-6">
+      {/* 4-5 KPIs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* KPI cards */}
+      </div>
+
+      {/* Tabs: Overview, Lista, Relatórios, IA */}
+      <Tabs defaultValue="overview">
+        {/* Tab content */}
+      </Tabs>
+    </div>
+  )
+}
+```
+
+### Checklist de Módulo
+
+- [ ] 4-5 KPIs no topo
+- [ ] 3-5 abas de navegação
+- [ ] Integração Supabase
+- [ ] Componentes shadcn/ui
+- [ ] Classes neumórficas
+- [ ] Acessibilidade (labels, aria-*)
+- [ ] Responsividade (grid cols 4/2/1)
+- [ ] (Opcional) Serviços IA
+
+[📖 Ver guia completo →](docs/skills/SKILL_CRIAR_MODULOS.md)
 
 ---
 
@@ -267,6 +351,24 @@ vercel --prod
   satisfacao_usuario: "9.2/10",
   produtividade_dev: "+75%"
 }
+```
+
+---
+
+## 🧪 Testes
+
+```bash
+# Rodar testes
+npm test
+
+# Testes com coverage
+npm test -- --coverage
+
+# Build de produção
+npm run build
+
+# Preview do build
+npm run preview
 ```
 
 ---
