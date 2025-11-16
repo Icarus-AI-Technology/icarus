@@ -278,3 +278,100 @@ export interface PaymentReceipt {
   confirmation_number: string | null
   created_at: string
 }
+
+// =====================================================
+// AI Forecasting & Predictions
+// =====================================================
+
+export interface ForecastPeriod {
+  date: string
+  revenue: {
+    predicted: number
+    lower: number // confidence interval lower bound
+    upper: number // confidence interval upper bound
+    confidence: number // 0-100
+  }
+  expenses: {
+    predicted: number
+    lower: number
+    upper: number
+    confidence: number
+  }
+  cashFlow: {
+    predicted: number
+    lower: number
+    upper: number
+    confidence: number
+  }
+}
+
+export interface ForecastData {
+  periods: ForecastPeriod[]
+  accuracy: {
+    revenue: number // 0-100
+    expenses: number
+    overall: number
+  }
+  trends: {
+    revenue: 'growing' | 'stable' | 'declining'
+    expenses: 'growing' | 'stable' | 'declining'
+    profitability: 'improving' | 'stable' | 'declining'
+  }
+  seasonality: {
+    detected: boolean
+    pattern: string | null // 'monthly', 'quarterly', etc
+    peaks: string[] // months with peaks
+  }
+}
+
+export interface SmartAlert {
+  id: string
+  type: 'warning' | 'danger' | 'info' | 'success'
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  title: string
+  message: string
+  category: 'cash_flow' | 'revenue' | 'expenses' | 'receivables' | 'payables' | 'anomaly'
+  date: string
+  metadata?: any
+}
+
+export interface AnomalyDetection {
+  date: string
+  type: 'revenue' | 'expense'
+  expected: number
+  actual: number
+  deviation: number // percentage
+  severity: 'low' | 'medium' | 'high'
+  description: string
+}
+
+export interface BudgetComparison {
+  period: {
+    start: string
+    end: string
+  }
+  categories: {
+    category: string
+    budgeted: number
+    actual: number
+    variance: number
+    variancePercent: number
+    status: 'under' | 'on_track' | 'over'
+  }[]
+  summary: {
+    totalBudgeted: number
+    totalActual: number
+    totalVariance: number
+    variancePercent: number
+    categoriesOnTrack: number
+    categoriesOver: number
+    categoriesUnder: number
+  }
+}
+
+export interface PredictionMetrics {
+  mape: number // Mean Absolute Percentage Error
+  rmse: number // Root Mean Square Error
+  accuracy: number // 0-100
+  confidence: number // 0-100
+}

@@ -7,6 +7,7 @@ import { AccountFormDialog } from '@/components/financial/AccountFormDialog'
 import { PaymentDialog } from '@/components/financial/PaymentDialog'
 import { ExportService } from '@/services/export.service'
 import { DREService } from '@/services/dre.service'
+import { ForecastService } from '@/services/forecast.service'
 import {
   type FinancialAccount,
   type FinancialAccountFormData,
@@ -35,6 +36,9 @@ import {
   Activity,
   Target,
   Percent,
+  Brain,
+  Zap,
+  AlertTriangle,
 } from 'lucide-react'
 import {
   LineChart,
@@ -69,7 +73,7 @@ export default function FinanceiroAvancado() {
     payAccount,
   } = useFinancial()
   const [activeTab, setActiveTab] = useState<
-    'receivable' | 'payable' | 'cashflow' | 'summary' | 'dre'
+    'receivable' | 'payable' | 'cashflow' | 'summary' | 'dre' | 'forecast'
   >('summary')
 
   // Dialog states
@@ -180,6 +184,22 @@ export default function FinanceiroAvancado() {
     if (accounts.length === 0) return []
     return DREService.getMonthlyDREHistory(accounts, 6)
   }, [accounts])
+
+  // Calculate Forecast data (AI Predictions)
+  const forecastData = useMemo(() => {
+    if (accounts.length === 0 || monthlyData.length === 0) return null
+    return ForecastService.generateForecast(accounts, monthlyData, 90)
+  }, [accounts, monthlyData])
+
+  const anomalies = useMemo(() => {
+    if (accounts.length === 0 || monthlyData.length === 0) return []
+    return ForecastService.detectAnomalies(accounts, monthlyData)
+  }, [accounts, monthlyData])
+
+  const smartAlerts = useMemo(() => {
+    if (!forecastData) return []
+    return ForecastService.generateSmartAlerts(accounts, forecastData, anomalies)
+  }, [accounts, forecastData, anomalies])
 
   if (loading) {
     return (
@@ -615,6 +635,10 @@ export default function FinanceiroAvancado() {
                 <TabsTrigger value="payable">Contas a Pagar</TabsTrigger>
                 <TabsTrigger value="cashflow">Fluxo de Caixa</TabsTrigger>
                 <TabsTrigger value="dre">DRE</TabsTrigger>
+                <TabsTrigger value="forecast">
+                  <Brain className="w-4 h-4 mr-2" />
+                  Projeções IA
+                </TabsTrigger>
               </TabsList>
 
               {/* Summary Tab */}
@@ -1439,6 +1463,268 @@ export default function FinanceiroAvancado() {
                         </ResponsiveContainer>
                       </div>
                     )}
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Forecast Tab - AI Predictions */}
+              <TabsContent value="forecast">
+                {!forecastData ? (
+                  <div className="text-center py-12">
+                    <Brain className="w-16 h-16 mx-auto text-gray-600 mb-4" />
+                    <p className="text-gray-400">
+                      Dados insuficientes para gerar previsões. Adicione mais transações financeiras.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Header */}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-100 mb-2">Projeções Financeiras com IA</h2>
+                        <p className="text-gray-400">IcarusBrain - Previsões inteligentes baseadas em Machine Learning</p>
+                      </div>
+                      <div className="flex gap-3">
+                        <div className="text-right">
+                          <p className="text-xs text-gray-500">Precisão do Modelo</p>
+                          <p className="text-2xl font-bold text-green-400">{forecastData.accuracy.overall.toFixed(1)}%</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Smart Alerts Section */}
+                    {smartAlerts.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
+                          <Zap className="w-5 h-5 text-yellow-400" />
+                          Alertas Inteligentes ({smartAlerts.length})
+                        </h3>
+                        <div className="grid grid-cols-1 gap-3">
+                          {smartAlerts.slice(0, 5).map((alert) => (
+                            <Card
+                              key={alert.id}
+                              className={`p-4 border ${
+                                alert.type === 'danger'
+                                  ? 'bg-red-500/10 border-red-500/30'
+                                  : alert.type === 'warning'
+                                  ? 'bg-yellow-500/10 border-yellow-500/30'
+                                  : alert.type === 'success'
+                                  ? 'bg-green-500/10 border-green-500/30'
+                                  : 'bg-blue-500/10 border-blue-500/30'
+                              }`}
+                            >
+                              <div className="flex items-start gap-3">
+                                {alert.severity === 'critical' && <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />}
+                                {alert.severity === 'high' && <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />}
+                                {alert.severity === 'medium' && <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />}
+                                {alert.severity === 'low' && <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />}
+                                <div className="flex-1">
+                                  <h4 className={`font-semibold ${
+                                    alert.type === 'danger' ? 'text-red-300' :
+                                    alert.type === 'warning' ? 'text-yellow-300' :
+                                    alert.type === 'success' ? 'text-green-300' :
+                                    'text-blue-300'
+                                  }`}>
+                                    {alert.title}
+                                  </h4>
+                                  <p className="text-sm text-gray-400 mt-1">{alert.message}</p>
+                                  <span className="text-xs text-gray-500 mt-2 inline-block">
+                                    {alert.category} • {alert.severity}
+                                  </span>
+                                </div>
+                              </div>
+                            </Card>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Trend Analysis Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Card className={`p-4 border ${
+                        forecastData.trends.revenue === 'growing'
+                          ? 'bg-green-500/10 border-green-500/30'
+                          : forecastData.trends.revenue === 'declining'
+                          ? 'bg-red-500/10 border-red-500/30'
+                          : 'bg-gray-500/10 border-gray-500/30'
+                      }`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-400">Tendência de Receita</span>
+                          {forecastData.trends.revenue === 'growing' && <TrendingUp className="w-5 h-5 text-green-400" />}
+                          {forecastData.trends.revenue === 'declining' && <TrendingDown className="w-5 h-5 text-red-400" />}
+                          {forecastData.trends.revenue === 'stable' && <Activity className="w-5 h-5 text-gray-400" />}
+                        </div>
+                        <p className={`text-2xl font-bold ${
+                          forecastData.trends.revenue === 'growing'
+                            ? 'text-green-400'
+                            : forecastData.trends.revenue === 'declining'
+                            ? 'text-red-400'
+                            : 'text-gray-400'
+                        }`}>
+                          {forecastData.trends.revenue === 'growing' ? 'Crescimento' : forecastData.trends.revenue === 'declining' ? 'Queda' : 'Estável'}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Precisão: {forecastData.accuracy.revenue.toFixed(1)}%
+                        </p>
+                      </Card>
+
+                      <Card className={`p-4 border ${
+                        forecastData.trends.expenses === 'growing'
+                          ? 'bg-red-500/10 border-red-500/30'
+                          : forecastData.trends.expenses === 'declining'
+                          ? 'bg-green-500/10 border-green-500/30'
+                          : 'bg-gray-500/10 border-gray-500/30'
+                      }`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-400">Tendência de Despesas</span>
+                          {forecastData.trends.expenses === 'growing' && <TrendingUp className="w-5 h-5 text-red-400" />}
+                          {forecastData.trends.expenses === 'declining' && <TrendingDown className="w-5 h-5 text-green-400" />}
+                          {forecastData.trends.expenses === 'stable' && <Activity className="w-5 h-5 text-gray-400" />}
+                        </div>
+                        <p className={`text-2xl font-bold ${
+                          forecastData.trends.expenses === 'growing'
+                            ? 'text-red-400'
+                            : forecastData.trends.expenses === 'declining'
+                            ? 'text-green-400'
+                            : 'text-gray-400'
+                        }`}>
+                          {forecastData.trends.expenses === 'growing' ? 'Crescimento' : forecastData.trends.expenses === 'declining' ? 'Queda' : 'Estável'}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Precisão: {forecastData.accuracy.expenses.toFixed(1)}%
+                        </p>
+                      </Card>
+
+                      <Card className={`p-4 border ${
+                        forecastData.trends.profitability === 'improving'
+                          ? 'bg-green-500/10 border-green-500/30'
+                          : forecastData.trends.profitability === 'declining'
+                          ? 'bg-red-500/10 border-red-500/30'
+                          : 'bg-gray-500/10 border-gray-500/30'
+                      }`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-400">Rentabilidade</span>
+                          {forecastData.trends.profitability === 'improving' && <TrendingUp className="w-5 h-5 text-green-400" />}
+                          {forecastData.trends.profitability === 'declining' && <TrendingDown className="w-5 h-5 text-red-400" />}
+                          {forecastData.trends.profitability === 'stable' && <Activity className="w-5 h-5 text-gray-400" />}
+                        </div>
+                        <p className={`text-2xl font-bold ${
+                          forecastData.trends.profitability === 'improving'
+                            ? 'text-green-400'
+                            : forecastData.trends.profitability === 'declining'
+                            ? 'text-red-400'
+                            : 'text-gray-400'
+                        }`}>
+                          {forecastData.trends.profitability === 'improving' ? 'Melhorando' : forecastData.trends.profitability === 'declining' ? 'Piorando' : 'Estável'}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {forecastData.seasonality.detected ? `Sazonalidade: ${forecastData.seasonality.pattern}` : 'Sem sazonalidade'}
+                        </p>
+                      </Card>
+                    </div>
+
+                    {/* Forecast Chart - 90 Days Prediction */}
+                    <Card className="p-6">
+                      <h3 className="text-lg font-semibold text-gray-100 mb-4 flex items-center gap-2">
+                        <Brain className="w-5 h-5 text-purple-400" />
+                        Projeção 30/60/90 Dias - Receitas vs Despesas
+                      </h3>
+                      <ResponsiveContainer width="100%" height={350}>
+                        <AreaChart
+                          data={forecastData.periods.map((period) => ({
+                            date: new Date(period.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }),
+                            revenue: period.revenue.predicted,
+                            revenueLower: period.revenue.lower,
+                            revenueUpper: period.revenue.upper,
+                            expenses: period.expenses.predicted,
+                            expensesLower: period.expenses.lower,
+                            expensesUpper: period.expenses.upper,
+                            cashFlow: period.cashFlow.predicted,
+                          }))}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                          <XAxis dataKey="date" stroke="#9CA3AF" style={{ fontSize: '11px' }} />
+                          <YAxis stroke="#9CA3AF" style={{ fontSize: '12px' }} tickFormatter={(value) => `R$ ${(value / 1000).toFixed(0)}k`} />
+                          <Tooltip
+                            contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px' }}
+                            labelStyle={{ color: '#F3F4F6' }}
+                            formatter={(value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)}
+                          />
+                          <Legend wrapperStyle={{ color: '#9CA3AF' }} />
+                          <Area type="monotone" dataKey="revenue" name="Receita Prevista" stroke="#10B981" fill="#10B981" fillOpacity={0.2} strokeWidth={2} />
+                          <Area type="monotone" dataKey="expenses" name="Despesas Previstas" stroke="#EF4444" fill="#EF4444" fillOpacity={0.2} strokeWidth={2} />
+                          <Line type="monotone" dataKey="cashFlow" name="Fluxo de Caixa" stroke="#6366F1" strokeWidth={3} />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                      <div className="mt-4 flex items-center justify-center gap-6 text-sm text-gray-500">
+                        <span>● Intervalo de confiança mostrado em área sombreada</span>
+                        <span>● Modelo atualizado em tempo real</span>
+                      </div>
+                    </Card>
+
+                    {/* Anomalies Detection */}
+                    {anomalies.length > 0 && (
+                      <Card className="p-6 bg-orange-500/5 border-orange-500/20">
+                        <h3 className="text-lg font-semibold text-orange-300 mb-4 flex items-center gap-2">
+                          <AlertTriangle className="w-5 h-5" />
+                          Anomalias Detectadas ({anomalies.length})
+                        </h3>
+                        <div className="space-y-3">
+                          {anomalies.slice(0, 3).map((anomaly, index) => (
+                            <div
+                              key={index}
+                              className="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg border border-orange-500/20"
+                            >
+                              <AlertCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                                anomaly.severity === 'high' ? 'text-red-400' :
+                                anomaly.severity === 'medium' ? 'text-orange-400' :
+                                'text-yellow-400'
+                              }`} />
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-gray-200">
+                                    {anomaly.type === 'revenue' ? 'Receita' : 'Despesa'} Anormal
+                                  </span>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(anomaly.date).toLocaleDateString('pt-BR')}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-400 mt-1">{anomaly.description}</p>
+                                <div className="flex gap-4 mt-2 text-xs">
+                                  <span className="text-gray-500">
+                                    Esperado: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(anomaly.expected)}
+                                  </span>
+                                  <span className="text-gray-500">
+                                    Real: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(anomaly.actual)}
+                                  </span>
+                                  <span className={`font-semibold ${anomaly.deviation > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                    {anomaly.deviation > 0 ? '+' : ''}{anomaly.deviation.toFixed(1)}%
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </Card>
+                    )}
+
+                    {/* AI Model Info */}
+                    <Card className="p-4 bg-purple-500/5 border-purple-500/20">
+                      <div className="flex items-center gap-3">
+                        <Brain className="w-8 h-8 text-purple-400" />
+                        <div>
+                          <h4 className="font-semibold text-purple-300">IcarusBrain v2.0 - Machine Learning Financeiro</h4>
+                          <p className="text-sm text-gray-400 mt-1">
+                            Algoritmos: Linear Regression, Exponential Smoothing, Z-score Anomaly Detection, Seasonality Analysis
+                          </p>
+                          <div className="flex gap-4 mt-2 text-xs text-gray-500">
+                            <span>Treino: {monthlyData.length} períodos</span>
+                            <span>Confiança: {forecastData.periods[0]?.revenue.confidence || 0}%</span>
+                            <span>Última atualização: {new Date().toLocaleString('pt-BR')}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
                   </div>
                 )}
               </TabsContent>
