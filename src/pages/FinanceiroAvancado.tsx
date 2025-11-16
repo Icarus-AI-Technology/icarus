@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
-import { Header } from '@/components/layouts/Header'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -120,36 +118,26 @@ export default function FinanceiroAvancado() {
 
   if (loading) {
     return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-[#0f1419]">
-          <Header />
-          <div className="flex items-center justify-center h-[calc(100vh-80px)]">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-gray-400 text-lg">Carregando dados financeiros...</p>
-            </div>
-          </div>
+      <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-400 text-lg">Carregando dados financeiros...</p>
         </div>
-      </ProtectedRoute>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-[#0f1419]">
-          <Header />
-          <div className="p-6">
-            <Card className="p-6 bg-red-500/10 border-red-500/20">
-              <h2 className="text-red-400 font-bold text-lg mb-2">Erro ao carregar dados</h2>
-              <p className="text-red-300">{error.message}</p>
-              <Button onClick={reload} className="mt-4">
-                Tentar novamente
-              </Button>
-            </Card>
-          </div>
-        </div>
-      </ProtectedRoute>
+      <div className="p-6">
+        <Card className="p-6 bg-red-500/10 border-red-500/20">
+          <h2 className="text-red-400 font-bold text-lg mb-2">Erro ao carregar dados</h2>
+          <p className="text-red-300">{error.message}</p>
+          <Button onClick={reload} className="mt-4">
+            Tentar novamente
+          </Button>
+        </Card>
+      </div>
     )
   }
 
@@ -157,11 +145,7 @@ export default function FinanceiroAvancado() {
   const payableAccounts = accounts.filter((a) => a.type === 'payable')
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-[#0f1419]">
-        <Header />
-
-        <div className="p-6 max-w-[1600px] mx-auto space-y-6">
+    <div className="p-6 max-w-[1600px] mx-auto space-y-6">
           {/* Page Header */}
           <div className="flex items-center justify-between">
             <div>
@@ -670,16 +654,15 @@ export default function FinanceiroAvancado() {
           onSubmit={handleAccountFormSubmit}
         />
 
-        {selectedAccount && (
-          <PaymentDialog
-            open={paymentDialogOpen}
-            onOpenChange={setPaymentDialogOpen}
-            account={selectedAccount}
-            bankAccounts={bankAccounts}
-            onSubmit={handlePaymentSubmit}
-          />
-        )}
-      </div>
-    </ProtectedRoute>
+      {selectedAccount && (
+        <PaymentDialog
+          open={paymentDialogOpen}
+          onOpenChange={setPaymentDialogOpen}
+          account={selectedAccount}
+          bankAccounts={bankAccounts}
+          onSubmit={handlePaymentSubmit}
+        />
+      )}
+    </div>
   )
 }
