@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import Login from '@/pages/Login'
-import Dashboard from '@/pages/Dashboard'
+import DashboardPrincipal from '@/pages/DashboardPrincipal'
 
 export function AppRoutes() {
   return (
@@ -13,14 +12,7 @@ export function AppRoutes() {
           <Route path="/login" element={<Login />} />
 
           {/* Protected Routes */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/" element={<DashboardPrincipal />} />
 
           {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

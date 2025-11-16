@@ -1,9 +1,6 @@
-'use client'
-
 import { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session, AuthError } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { User, Session } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase/client'
 
 interface AuthContextType {
   user: User | null
@@ -21,7 +18,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     // Get initial session
@@ -45,15 +41,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) throw error
 
-      router.push('/')
-      router.refresh()
+      // Navigation will be handled by ProtectedRoute
     } catch (error) {
       console.error('Error signing in:', error)
       throw error
@@ -85,8 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
 
-      router.push('/login')
-      router.refresh()
+      // Navigation will be handled by ProtectedRoute
     } catch (error) {
       console.error('Error signing out:', error)
       throw error
