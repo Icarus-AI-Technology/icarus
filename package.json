@@ -19,6 +19,7 @@
     "figma:publish": "figma connect publish",
     "figma:parse": "figma connect parse",
     "figma:list": "figma connect list",
+    "figma:auth": "bash scripts/setup-figma-auth.sh",
     "prepare": "husky"
   },
   "dependencies": {
