@@ -1,25 +1,54 @@
 import Anthropic from '@anthropic-ai/sdk'
 
+/**
+ * IcarusBrain - AI Service Integration
+ *
+ * Provides 12 AI services for predictive analytics, insights, and recommendations
+ * Uses Claude Sonnet 4.5 for advanced AI capabilities
+ */
+
 const client = new Anthropic({
   apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
 })
+
+export type AIServiceType =
+  | 'demanda'           // Demand forecasting
+  | 'inadimplencia'     // Delinquency score
+  | 'produtos'          // Product recommendations
+  | 'estoque'           // Inventory optimization
+  | 'sentimento'        // Sentiment analysis
+  | 'anomalias'         // Anomaly detection
+  | 'precificacao'      // Dynamic pricing
+  | 'churn'             // Churn prediction
+  | 'lead-scoring'      // Lead qualification
+  | 'credito'           // Credit management
+  | 'roteamento'        // Intelligent routing
+  | 'assistente'        // Virtual assistant
 
 export interface PredictParams {
   produto_id?: string
   cliente_id?: string
   dias?: number
+  periodo?: number
+  limite?: number
   contexto?: string
   usuario_id?: string
+  tipo?: 'cross-sell' | 'up-sell' | 'similar'
   [key: string]: any
 }
 
 export interface PredictResult {
   valores?: number[]
+  previsoes?: Array<{ data: string; quantidade: number; confianca: number }>
   confidence?: number
   score?: number
   risco?: 'baixo' | 'medio' | 'alto'
   resposta?: string
   acoes?: any[]
+  items?: any[]
+  fatores?: Array<{ fator: string; impacto: number }>
+  recomendacao?: string
+  tendencia?: 'alta' | 'baixa' | 'estavel'
   [key: string]: any
 }
 
@@ -109,21 +138,53 @@ Retorne um JSON com os campos: resposta (string) e opcionalmente acoes (array).
     switch (tipo) {
       case 'demanda':
         return `
-Preveja a demanda para o produto ${params.produto_id} nos próximos ${params.dias || 30} dias.
-Retorne um JSON com: { valores: number[], confidence: number }
+Preveja a demanda para o produto ${params.produto_id} nos próximos ${params.dias || params.periodo || 30} dias.
+Retorne um JSON com: {
+  valores: number[],
+  confidence: number,
+  tendencia: 'alta' | 'baixa' | 'estavel',
+  previsoes: Array<{ data: string, quantidade: number, confianca: number }>
+}
 `
 
       case 'analise_inadimplencia':
         return `
 Analise o risco de inadimplência do cliente ${params.cliente_id}.
-Retorne um JSON com: { score: number, risco: 'baixo' | 'medio' | 'alto' }
+Retorne um JSON com: {
+  score: number (0-100),
+  risco: 'baixo' | 'medio' | 'alto',
+  fatores: Array<{ fator: string, impacto: number }>,
+  recomendacao: string
+}
 `
 
       case 'recomendacao_produtos':
         return `
 Recomende produtos para o cliente ${params.cliente_id}.
+Tipo: ${params.tipo || 'cross-sell'}
 Limite: ${params.limite || 5} produtos.
-Retorne um JSON com: { items: Array<{ id, nome, razao }> }
+Retorne um JSON com: {
+  items: Array<{
+    produto_id: string,
+    nome: string,
+    score: number,
+    motivo: string,
+    tipo: string
+  }>
+}
+`
+
+      case 'analise_estoque':
+        return `
+Analise o estoque e sugira otimizações.
+Produto: ${params.produto_id || 'todos'}
+Retorne um JSON com sugestões de reposição e otimização.
+`
+
+      case 'analise_sentimento':
+        return `
+Analise o sentimento do feedback/texto fornecido.
+Retorne um JSON com: { score: number, sentimento: 'positivo' | 'neutro' | 'negativo' }
 `
 
       default:
