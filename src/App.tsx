@@ -9,6 +9,7 @@ import { SupabaseConnectionTest } from '@/components/dev-tools/SupabaseConnectio
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import { getAllRoutes } from '@/lib/data/navigation'
 import { queryClient } from '@/lib/query/queryClient'
+import ShowcasePage from '@/pages/ShowcasePage'
 
 function App() {
   const allRoutes = getAllRoutes()
@@ -21,6 +22,9 @@ function App() {
             <Routes>
               {/* Dashboard - Implemented */}
               <Route path="/" element={<Dashboard />} />
+
+              {/* Showcase - Component Demo */}
+              <Route path="/showcase" element={<ShowcasePage />} />
 
               {/* Generate routes for all modules */}
               {allRoutes.map((route) => {
