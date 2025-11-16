@@ -1,48 +1,104 @@
-import { icarusBrain } from '@/lib/ai/icarus-brain'
-import type { PredictParams, PredictResult } from '@/lib/ai/icarus-brain'
+import { useState } from 'react'
+import { icarusBrain, type AIResponse } from '@/lib/services/ai/icarus-brain'
 
-/**
- * Hook para acessar serviços de IA do ICARUS Brain
- *
- * @example
- * ```tsx
- * const { predict, analyze, recommend, chat } = useIcarusBrain()
- *
- * // Previsão de demanda
- * const forecast = await predict('demanda', {
- *   produto_id: '123',
- *   dias: 30
- * })
- *
- * // Análise de inadimplência
- * const score = await analyze('inadimplencia', {
- *   cliente_id: '456'
- * })
- *
- * // Recomendação de produtos
- * const produtos = await recommend('produtos', {
- *   cliente_id: '789',
- *   limite: 5
- * })
- *
- * // Chat
- * const response = await chat('Qual o status do estoque?', {
- *   contexto: 'estoque'
- * })
- * ```
- */
 export function useIcarusBrain() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const predict = async (type: 'demand' | 'pricing', params: any): Promise<AIResponse | null> => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      let response: AIResponse
+
+      switch (type) {
+        case 'demand':
+          response = await icarusBrain.predictDemand(params)
+          break
+        case 'pricing':
+          response = await icarusBrain.predictPricing(params.productId, params.marketData)
+          break
+        default:
+          throw new Error(`Unknown prediction type: ${type}`)
+      }
+
+      setLoading(false)
+      return response
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      setError(message)
+      setLoading(false)
+      return null
+    }
+  }
+
+  const analyze = async (type: 'default-risk' | 'quality', params: any): Promise<AIResponse | null> => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      let response: AIResponse
+
+      switch (type) {
+        case 'default-risk':
+          response = await icarusBrain.analyzeDefaultRisk(params)
+          break
+        case 'quality':
+          response = await icarusBrain.analyzeQuality(params.productId, params.metrics)
+          break
+        default:
+          throw new Error(`Unknown analysis type: ${type}`)
+      }
+
+      setLoading(false)
+      return response
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      setError(message)
+      setLoading(false)
+      return null
+    }
+  }
+
+  const recommend = async (type: 'products', params: any): Promise<AIResponse | null> => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await icarusBrain.recommendProducts(params)
+      setLoading(false)
+      return response
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      setError(message)
+      setLoading(false)
+      return null
+    }
+  }
+
+  const optimize = async (type: 'routes', params: any): Promise<AIResponse | null> => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await icarusBrain.optimizeRoutes(params.warehouses, params.deliveries)
+      setLoading(false)
+      return response
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      setError(message)
+      setLoading(false)
+      return null
+    }
+  }
+
   return {
-    predict: (tipo: string, params: PredictParams): Promise<PredictResult> =>
-      icarusBrain.predict(tipo, params),
-
-    analyze: (tipo: string, params: PredictParams): Promise<PredictResult> =>
-      icarusBrain.analyze(tipo, params),
-
-    recommend: (tipo: string, params: PredictParams): Promise<any[]> =>
-      icarusBrain.recommend(tipo, params),
-
-    chat: (mensagem: string, params?: PredictParams): Promise<PredictResult> =>
-      icarusBrain.chat(mensagem, params),
+    predict,
+    analyze,
+    recommend,
+    optimize,
+    loading,
+    error
   }
 }
