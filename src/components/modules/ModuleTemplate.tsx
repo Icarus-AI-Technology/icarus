@@ -22,6 +22,7 @@
 
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { KPICard } from '@/components/ui/KPICard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -180,62 +181,38 @@ export function ModuleTemplate() {
           ========================================== */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* KPI 1 */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Total de Itens</p>
-                <p className="text-2xl font-bold mt-1">{formatNumber(kpi1)}</p>
-                <p className="text-xs text-green-600 mt-1">↑ 8 novos este mês</p>
-              </div>
-              <Package className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Total de Itens"
+          value={formatNumber(kpi1)}
+          icon={Package}
+          trend={{ value: 8, direction: 'up' }}
+          variant="default"
+        />
 
         {/* KPI 2 */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Valor Total</p>
-                <p className="text-2xl font-bold mt-1">
-                  {formatCurrency(kpi2)}
-                </p>
-                <p className="text-xs text-green-600 mt-1">↑ 12.5%</p>
-              </div>
-              <DollarSign className="h-8 w-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Valor Total"
+          value={formatCurrency(kpi2)}
+          icon={DollarSign}
+          trend={{ value: 12.5, direction: 'up' }}
+          variant="success"
+        />
 
         {/* KPI 3 */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Em Crescimento</p>
-                <p className="text-2xl font-bold mt-1">{formatNumber(kpi3)}</p>
-                <p className="text-xs text-gray-600 mt-1">Este mês</p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-purple-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Em Crescimento"
+          value={formatNumber(kpi3)}
+          icon={TrendingUp}
+          variant="default"
+        />
 
         {/* KPI 4 */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Requer Atenção</p>
-                <p className="text-2xl font-bold mt-1">{formatNumber(kpi4)}</p>
-                <p className="text-xs text-red-600 mt-1">Ação necessária</p>
-              </div>
-              <AlertTriangle className="h-8 w-8 text-red-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Pendências"
+          value={formatNumber(kpi4)}
+          icon={AlertTriangle}
+          variant="warning"
+        />
       </div>
 
       {/* ==========================================

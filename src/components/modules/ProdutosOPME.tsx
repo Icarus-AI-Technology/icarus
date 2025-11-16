@@ -38,33 +38,33 @@ import { toast } from 'sonner'
 
 interface Product {
   id: string
-  code: string
-  name: string
-  description: string | null
-  category_id: string
-  category_name?: string
-  manufacturer_id: string
-  manufacturer_name?: string
-  cost_price: number
-  sale_price: number
-  stock_quantity: number
-  min_stock: number
-  max_stock: number | null
-  unit: string
-  active: boolean
-  anvisa_register: string | null
+  codigo: string
+  nome: string
+  descricao: string | null
+  categoria_id: string
+  nome_categoria?: string
+  fabricante_id: string
+  nome_fabricante?: string
+  preco_custo: number
+  preco_venda: number
+  quantidade_estoque: number
+  estoque_minimo: number
+  estoque_maximo: number | null
+  unidade: string
+  ativo: boolean
+  codigo_anvisa: string | null
 }
 
 interface Category {
   id: string
-  name: string
-  description: string | null
+  nome: string
+  descricao: string | null
 }
 
 interface Manufacturer {
   id: string
-  name: string
-  country: string
+  nome: string
+  pais: string
 }
 
 export function ProdutosOPME() {
@@ -85,127 +85,127 @@ export function ProdutosOPME() {
 
   // Form state
   const [formData, setFormData] = useState({
-    code: '',
-    name: '',
-    description: '',
-    category_id: '',
-    manufacturer_id: '',
-    cost_price: '',
-    sale_price: '',
-    stock_quantity: '',
-    min_stock: '',
-    max_stock: '',
-    unit: 'un',
-    anvisa_register: ''
+    codigo: '',
+    nome: '',
+    descricao: '',
+    categoria_id: '',
+    fabricante_id: '',
+    preco_custo: '',
+    preco_venda: '',
+    quantidade_estoque: '',
+    estoque_minimo: '',
+    estoque_maximo: '',
+    unidade: 'un',
+    codigo_anvisa: ''
   })
 
   // Mock data
   const mockCategories: Category[] = [
-    { id: '1', name: 'Cardiologia', description: 'Produtos para procedimentos cardiovasculares' },
-    { id: '2', name: 'Ortopedia', description: 'Implantes e próteses ortopédicas' },
-    { id: '3', name: 'Neurocirurgia', description: 'Materiais para neurocirurgia' },
-    { id: '4', name: 'Oftalmologia', description: 'Produtos oftalmológicos' },
-    { id: '5', name: 'Vascular', description: 'Materiais vasculares' }
+    { id: '1', nome: 'Cardiologia', descricao: 'Produtos para procedimentos cardiovasculares' },
+    { id: '2', nome: 'Ortopedia', descricao: 'Implantes e próteses ortopédicas' },
+    { id: '3', nome: 'Neurocirurgia', descricao: 'Materiais para neurocirurgia' },
+    { id: '4', nome: 'Oftalmologia', descricao: 'Produtos oftalmológicos' },
+    { id: '5', nome: 'Vascular', descricao: 'Materiais vasculares' }
   ]
 
   const mockManufacturers: Manufacturer[] = [
-    { id: '1', name: 'Medtronic', country: 'USA' },
-    { id: '2', name: 'Boston Scientific', country: 'USA' },
-    { id: '3', name: 'Stryker', country: 'USA' },
-    { id: '4', name: 'Johnson & Johnson', country: 'USA' },
-    { id: '5', name: 'Zimmer Biomet', country: 'USA' }
+    { id: '1', nome: 'Medtronic', pais: 'USA' },
+    { id: '2', nome: 'Boston Scientific', pais: 'USA' },
+    { id: '3', nome: 'Stryker', pais: 'USA' },
+    { id: '4', nome: 'Johnson & Johnson', pais: 'USA' },
+    { id: '5', nome: 'Zimmer Biomet', pais: 'USA' }
   ]
 
   const mockProducts: Product[] = [
     {
       id: '1',
-      code: 'STN-CARD-001',
-      name: 'Stent Coronário Farmacológico',
-      description: 'Stent coronário com liberação de medicamento para prevenção de reestenose',
-      category_id: '1',
-      category_name: 'Cardiologia',
-      manufacturer_id: '1',
-      manufacturer_name: 'Medtronic',
-      cost_price: 8000,
-      sale_price: 12000,
-      stock_quantity: 5,
-      min_stock: 10,
-      max_stock: 50,
-      unit: 'un',
-      active: true,
-      anvisa_register: '80123456789'
+      codigo: 'STN-CARD-001',
+      nome: 'Stent Coronário Farmacológico',
+      descricao: 'Stent coronário com liberação de medicamento para prevenção de reestenose',
+      categoria_id: '1',
+      nome_categoria: 'Cardiologia',
+      fabricante_id: '1',
+      nome_fabricante: 'Medtronic',
+      preco_custo: 8000,
+      preco_venda: 12000,
+      quantidade_estoque: 5,
+      estoque_minimo: 10,
+      estoque_maximo: 50,
+      unidade: 'un',
+      ativo: true,
+      codigo_anvisa: '80123456789'
     },
     {
       id: '2',
-      code: 'PRT-ORTO-001',
-      name: 'Prótese de Quadril Cerâmica',
-      description: 'Prótese total de quadril com componentes cerâmicos de alta durabilidade',
-      category_id: '2',
-      category_name: 'Ortopedia',
-      manufacturer_id: '3',
-      manufacturer_name: 'Stryker',
-      cost_price: 15000,
-      sale_price: 22000,
-      stock_quantity: 12,
-      min_stock: 15,
-      max_stock: 40,
-      unit: 'un',
-      active: true,
-      anvisa_register: '80234567890'
+      codigo: 'PRT-ORTO-001',
+      nome: 'Prótese de Quadril Cerâmica',
+      descricao: 'Prótese total de quadril com componentes cerâmicos de alta durabilidade',
+      categoria_id: '2',
+      nome_categoria: 'Ortopedia',
+      fabricante_id: '3',
+      nome_fabricante: 'Stryker',
+      preco_custo: 15000,
+      preco_venda: 22000,
+      quantidade_estoque: 12,
+      estoque_minimo: 15,
+      estoque_maximo: 40,
+      unidade: 'un',
+      ativo: true,
+      codigo_anvisa: '80234567890'
     },
     {
       id: '3',
-      code: 'MCP-CARD-001',
-      name: 'Marcapasso Definitivo',
-      description: 'Marcapasso cardíaco definitivo de câmara dupla com telemetria',
-      category_id: '1',
-      category_name: 'Cardiologia',
-      manufacturer_id: '1',
-      manufacturer_name: 'Medtronic',
-      cost_price: 18000,
-      sale_price: 25000,
-      stock_quantity: 25,
-      min_stock: 10,
-      max_stock: 30,
-      unit: 'un',
-      active: true,
-      anvisa_register: '80345678901'
+      codigo: 'MCP-CARD-001',
+      nome: 'Marcapasso Definitivo',
+      descricao: 'Marcapasso cardíaco definitivo de câmara dupla com telemetria',
+      categoria_id: '1',
+      nome_categoria: 'Cardiologia',
+      fabricante_id: '1',
+      nome_fabricante: 'Medtronic',
+      preco_custo: 18000,
+      preco_venda: 25000,
+      quantidade_estoque: 25,
+      estoque_minimo: 10,
+      estoque_maximo: 30,
+      unidade: 'un',
+      ativo: true,
+      codigo_anvisa: '80345678901'
     },
     {
       id: '4',
-      code: 'LIO-OFTA-001',
-      name: 'Lente Intraocular Dobrável',
-      description: 'Lente intraocular dobrável para cirurgia de catarata',
-      category_id: '4',
-      category_name: 'Oftalmologia',
-      manufacturer_id: '4',
-      manufacturer_name: 'Johnson & Johnson',
-      cost_price: 800,
-      sale_price: 1500,
-      stock_quantity: 45,
-      min_stock: 30,
-      max_stock: 100,
-      unit: 'un',
-      active: true,
-      anvisa_register: '80456789012'
+      codigo: 'LIO-OFTA-001',
+      nome: 'Lente Intraocular Dobrável',
+      descricao: 'Lente intraocular dobrável para cirurgia de catarata',
+      categoria_id: '4',
+      nome_categoria: 'Oftalmologia',
+      fabricante_id: '4',
+      nome_fabricante: 'Johnson & Johnson',
+      preco_custo: 800,
+      preco_venda: 1500,
+      quantidade_estoque: 45,
+      estoque_minimo: 30,
+      estoque_maximo: 100,
+      unidade: 'un',
+      ativo: true,
+      codigo_anvisa: '80456789012'
     },
     {
       id: '5',
-      code: 'PLT-NEURO-001',
-      name: 'Placa Craniana Titânio',
-      description: 'Placa de titânio para cranioplastia',
-      category_id: '3',
-      category_name: 'Neurocirurgia',
-      manufacturer_id: '2',
-      manufacturer_name: 'Boston Scientific',
-      cost_price: 3500,
-      sale_price: 5500,
-      stock_quantity: 8,
-      min_stock: 12,
-      max_stock: 35,
-      unit: 'un',
-      active: true,
-      anvisa_register: '80567890123'
+      codigo: 'PLT-NEURO-001',
+      nome: 'Placa Craniana Titânio',
+      descricao: 'Placa de titânio para cranioplastia',
+      categoria_id: '3',
+      nome_categoria: 'Neurocirurgia',
+      fabricante_id: '2',
+      nome_fabricante: 'Boston Scientific',
+      preco_custo: 3500,
+      preco_venda: 5500,
+      quantidade_estoque: 8,
+      estoque_minimo: 12,
+      estoque_maximo: 35,
+      unidade: 'un',
+      ativo: true,
+      codigo_anvisa: '80567890123'
     }
   ]
 
@@ -255,29 +255,29 @@ export function ProdutosOPME() {
     try {
       // Fetch products with joins
       const { data: productsData, error: productsError } = await supabase
-        .from('products')
+        .from('produtos')
         .select(`
           *,
-          category:product_categories(id, name),
-          manufacturer:manufacturers(id, name)
+          categoria:categorias_produtos(id, nome),
+          fabricante:fabricantes(id, nome)
         `)
-        .order('name')
+        .order('nome')
 
       if (productsError) throw productsError
 
       // Fetch categories
       const { data: categoriesData, error: categoriesError } = await supabase
-        .from('product_categories')
+        .from('categorias_produtos')
         .select('*')
-        .order('name')
+        .order('nome')
 
       if (categoriesError) throw categoriesError
 
       // Fetch manufacturers
       const { data: manufacturersData, error: manufacturersError } = await supabase
-        .from('manufacturers')
+        .from('fabricantes')
         .select('*')
-        .order('name')
+        .order('nome')
 
       if (manufacturersError) throw manufacturersError
 
