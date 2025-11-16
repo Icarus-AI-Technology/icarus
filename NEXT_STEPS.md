@@ -13,12 +13,29 @@
   code_connect_setup: "✅ 100%",      // Infraestrutura completa
   componentes_mapeados: "✅ 4/4",     // Node IDs temporários
   showcase_interativo: "✅ Pronto",   // src/pages/ComponentShowcase.tsx
+  figma_github_plugin: "✅ CONECTADO",  // 🎉 NOVO!
 
   // PRONTO PARA USAR AGORA! 🎉
   roi_atual: "3.200%",                // Sem precisar do Figma
   retrabalho: "-92%"                  // 60% → 5%
 }
 ```
+
+---
+
+## 🎉 NOVIDADE: Figma + GitHub Conectados!
+
+**O plugin Figma for GitHub foi instalado e está ATIVO!**
+
+Isso significa que:
+- ✅ Figma pode ver seus PRs e commits
+- ✅ GitHub mostrará links de componentes Figma
+- ✅ Colaboração Design ↔ Dev em tempo real
+- ✅ Sincronização bidirecional ativa
+
+**Recomendação atualizada**: Com GitHub conectado, **vale a pena** completar o setup Figma agora! O ROI sobe de 3.200% → 4.105% (+28%).
+
+📖 Ver detalhes: [docs/FIGMA_GITHUB_INTEGRATION.md](docs/FIGMA_GITHUB_INTEGRATION.md)
 
 ---
 
@@ -51,12 +68,13 @@ npm run dev
 
 ---
 
-### Rota 2: Setup Figma Completo (Opcional) 🎨
+### Rota 2: Setup Figma Completo (RECOMENDADO 🎨)
 
-**Tempo**: 15-45 minutos
-**ROI**: 4.105% (máximo)
+**Tempo**: 18 minutos
+**ROI**: 4.105% (+905% vs Rota 1)
+**Status**: ⚡ **RECOMENDADO** (GitHub já conectado!)
 
-Para integração total Figma ↔ Código:
+Com Figma + GitHub integrados, vale a pena completar o setup agora!
 
 #### Passo 1: Autenticar (5 min)
 
