@@ -22,7 +22,8 @@ import type { PredictParams, PredictResult } from '@/lib/ai/icarus-brain'
  * // Recomendação de produtos
  * const produtos = await recommend('produtos', {
  *   cliente_id: '789',
- *   limite: 5
+ *   limite: 5,
+ *   tipo: 'cross-sell'
  * })
  *
  * // Chat
