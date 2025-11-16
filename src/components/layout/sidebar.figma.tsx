@@ -1,5 +1,5 @@
 import figma from '@figma/code-connect';
-import { Sidebar } from './sidebar';
+import { Sidebar } from './Sidebar';
 
 /**
  * Figma Code Connect for Sidebar
