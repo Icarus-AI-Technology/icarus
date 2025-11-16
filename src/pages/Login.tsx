@@ -1,11 +1,11 @@
-'use client'
-
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useAuth } from '@/contexts/AuthContext'
-import { Button, Input, Card } from '@/components/ui'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card } from '@/components/ui/card'
 import { LogIn, UserPlus, Lock } from 'lucide-react'
 
 const loginSchema = z.object({
@@ -44,6 +44,7 @@ export default function LoginPage() {
     try {
       setError(null)
       await signIn(data.email, data.password)
+      // Navigation is handled by AuthContext
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login')
     }
@@ -84,7 +85,7 @@ export default function LoginPage() {
         </div>
 
         {/* Main Card */}
-        <Card>
+        <Card className="p-6">
           {/* Tabs */}
           <div className="flex gap-2 border-b border-white/10 mb-6">
             <button
@@ -131,24 +132,40 @@ export default function LoginPage() {
           {/* Login Form */}
           {mode === 'login' && (
             <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
-              <Input
-                label="Email"
-                type="email"
-                {...loginForm.register('email')}
-                error={loginForm.formState.errors.email?.message}
-                placeholder="seu@email.com"
-                required
-                autoFocus
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email
+                </label>
+                <Input
+                  type="email"
+                  {...loginForm.register('email')}
+                  placeholder="seu@email.com"
+                  required
+                  autoFocus
+                />
+                {loginForm.formState.errors.email && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {loginForm.formState.errors.email.message}
+                  </p>
+                )}
+              </div>
 
-              <Input
-                label="Senha"
-                type="password"
-                {...loginForm.register('password')}
-                error={loginForm.formState.errors.password?.message}
-                placeholder="••••••••"
-                required
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Senha
+                </label>
+                <Input
+                  type="password"
+                  {...loginForm.register('password')}
+                  placeholder="••••••••"
+                  required
+                />
+                {loginForm.formState.errors.password && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {loginForm.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
 
               <div className="flex justify-end">
                 <button
@@ -163,10 +180,16 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 className="w-full"
-                loading={loginForm.formState.isSubmitting}
+                disabled={loginForm.formState.isSubmitting}
               >
-                <LogIn className="w-5 h-5" />
-                Entrar
+                {loginForm.formState.isSubmitting ? (
+                  'Entrando...'
+                ) : (
+                  <>
+                    <LogIn className="w-5 h-5 mr-2" />
+                    Entrar
+                  </>
+                )}
               </Button>
             </form>
           )}
@@ -174,41 +197,71 @@ export default function LoginPage() {
           {/* SignUp Form */}
           {mode === 'signup' && (
             <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
-              <Input
-                label="Email"
-                type="email"
-                {...signUpForm.register('email')}
-                error={signUpForm.formState.errors.email?.message}
-                placeholder="seu@email.com"
-                required
-                autoFocus
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email
+                </label>
+                <Input
+                  type="email"
+                  {...signUpForm.register('email')}
+                  placeholder="seu@email.com"
+                  required
+                  autoFocus
+                />
+                {signUpForm.formState.errors.email && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {signUpForm.formState.errors.email.message}
+                  </p>
+                )}
+              </div>
 
-              <Input
-                label="Senha"
-                type="password"
-                {...signUpForm.register('password')}
-                error={signUpForm.formState.errors.password?.message}
-                placeholder="••••••••"
-                required
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Senha
+                </label>
+                <Input
+                  type="password"
+                  {...signUpForm.register('password')}
+                  placeholder="••••••••"
+                  required
+                />
+                {signUpForm.formState.errors.password && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {signUpForm.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
 
-              <Input
-                label="Confirmar Senha"
-                type="password"
-                {...signUpForm.register('confirmPassword')}
-                error={signUpForm.formState.errors.confirmPassword?.message}
-                placeholder="••••••••"
-                required
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Confirmar Senha
+                </label>
+                <Input
+                  type="password"
+                  {...signUpForm.register('confirmPassword')}
+                  placeholder="••••••••"
+                  required
+                />
+                {signUpForm.formState.errors.confirmPassword && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {signUpForm.formState.errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
 
               <Button
                 type="submit"
                 className="w-full"
-                loading={signUpForm.formState.isSubmitting}
+                disabled={signUpForm.formState.isSubmitting}
               >
-                <UserPlus className="w-5 h-5" />
-                Criar Conta
+                {signUpForm.formState.isSubmitting ? (
+                  'Criando conta...'
+                ) : (
+                  <>
+                    <UserPlus className="w-5 h-5 mr-2" />
+                    Criar Conta
+                  </>
+                )}
               </Button>
 
               <p className="text-xs text-gray-400 text-center">
@@ -230,20 +283,28 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <Input
-                label="Email"
-                type="email"
-                {...resetForm.register('email')}
-                error={resetForm.formState.errors.email?.message}
-                placeholder="seu@email.com"
-                required
-                autoFocus
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email
+                </label>
+                <Input
+                  type="email"
+                  {...resetForm.register('email')}
+                  placeholder="seu@email.com"
+                  required
+                  autoFocus
+                />
+                {resetForm.formState.errors.email && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {resetForm.formState.errors.email.message}
+                  </p>
+                )}
+              </div>
 
               <div className="flex gap-3">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => setMode('login')}
                   className="flex-1"
                 >
@@ -252,9 +313,9 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="flex-1"
-                  loading={resetForm.formState.isSubmitting}
+                  disabled={resetForm.formState.isSubmitting}
                 >
-                  Enviar
+                  {resetForm.formState.isSubmitting ? 'Enviando...' : 'Enviar'}
                 </Button>
               </div>
             </form>
@@ -262,8 +323,8 @@ export default function LoginPage() {
         </Card>
 
         {/* Demo Credentials (Development only) */}
-        {process.env.NODE_ENV === 'development' && (
-          <Card className="bg-yellow-500/5 border-yellow-500/20">
+        {import.meta.env.DEV && (
+          <Card className="p-4 bg-yellow-500/5 border-yellow-500/20">
             <h4 className="text-yellow-400 font-medium text-sm mb-2">
               🔧 Modo Desenvolvimento
             </h4>

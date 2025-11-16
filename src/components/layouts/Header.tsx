@@ -1,8 +1,6 @@
-'use client'
-
-import Link from 'next/link'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { Button } from '@/components/ui'
+import { Button } from '@/components/ui/button'
 import { LogOut, User } from 'lucide-react'
 
 export function Header() {
@@ -15,7 +13,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo / Title */}
-          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <div className="p-2 bg-blue-500/10 rounded-xl">
               <span className="text-2xl">🚀</span>
             </div>
