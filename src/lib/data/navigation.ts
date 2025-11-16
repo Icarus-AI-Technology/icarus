@@ -78,7 +78,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Contas a Receber',
         icon: FileSpreadsheet,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Gestão completa de recebíveis',
+        isImplemented: true
       },
       {
         id: 'faturamento',
@@ -86,7 +87,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Faturamento NFe',
         icon: FileText,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Emissão de notas fiscais eletrônicas',
+        isImplemented: true
       },
       {
         id: 'inventario',
@@ -94,7 +96,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Inventário',
         icon: ClipboardCheck,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Controle de inventário físico',
+        isImplemented: true
       },
       {
         id: 'tabela-precos',
@@ -102,7 +105,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Tabela de Preços',
         icon: DollarSign,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Gestão de tabelas de preços',
+        isImplemented: true
       }
     ]
   },
@@ -116,7 +120,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Gestão de Compras',
         icon: ShoppingCart,
         category: 'Compras & Fornecedores',
-        isImplemented: false
+        description: 'Gestão completa de compras e fornecedores',
+        isImplemented: true
       },
       {
         id: 'notas-compra',
@@ -148,7 +153,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Licitações',
         icon: FileSpreadsheet,
         category: 'Compras & Fornecedores',
-        isImplemented: false
+        description: 'Gestão de licitações públicas',
+        isImplemented: true
       },
       {
         id: 'grupos-produtos',
@@ -170,7 +176,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Cadastros',
         icon: FileText,
         category: 'Cadastros & Gestão',
-        isImplemented: false
+        description: 'Cadastros auxiliares do sistema',
+        isImplemented: true
       },
       {
         id: 'contratos',

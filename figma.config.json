@@ -1,18 +1,21 @@
 {
   "codeConnect": {
     "include": [
+      "src/components/ui/**/*.figma.tsx",
       "src/components/ui/**/*.tsx",
+      "src/components/layout/**/*.figma.tsx",
       "src/components/layout/**/*.tsx",
+      "src/components/modules/**/*.figma.tsx",
       "src/components/modules/**/*.tsx"
     ],
     "parser": "react",
     "importStatementFormat": "typescript",
     "labels": ["icarus-components", "oraclusx-ds", "neumorphism"],
-    "documentUrlSubstitutions": {
-      "FIGMA_FILE_ID": "mo8QUMAQbaomxqo7BHHTTN"
-    },
     "paths": {
       "@/*": ["./src/*"]
+    },
+    "documentUrlSubstitutions": {
+      "FIGMA_FILE_ID": "mo8QUMAQbaomxqo7BHHTTN"
     }
   }
 }
