@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { IcarusLayout } from '@/components/layout/IcarusLayout'
 import { ModulePlaceholder } from '@/components/modules/ModulePlaceholder'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
@@ -63,6 +64,9 @@ function App() {
         {/* React Query DevTools (only in development) */}
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
+
+      {/* Vercel Speed Insights (only in production) */}
+      <SpeedInsights />
     </ErrorBoundary>
   )
 }
