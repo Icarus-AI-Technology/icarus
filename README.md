@@ -485,6 +485,18 @@ MIT License - veja [LICENSE](LICENSE) para detalhes.
 
 ICARUS integra **Figma Code Connect** para permitir que LLMs (Claude Code, GitHub Copilot) gerem código usando exatamente os componentes do Design System OraclusX.
 
+### Status do Setup
+
+```typescript
+{
+  infraestrutura: "✅ 100%",     // @figma/code-connect instalado
+  componentes: "✅ 4/4",         // NeuButton, NeuCard, NeuInput, Sidebar
+  documentacao: "✅ 100%",       // 7 arquivos, 2.650+ linhas
+  node_ids: "⚠️ Temporários",    // Atualizar com Figma real
+  publicacao: "⏳ Pendente"      // Requer autenticação local
+}
+```
+
 ### Benefícios
 
 - **⚡ 75% mais rápido**: Reduz de 4h para 1h o tempo para criar uma página completa
@@ -492,18 +504,42 @@ ICARUS integra **Figma Code Connect** para permitir que LLMs (Claude Code, GitHu
 - **✅ 99% consistência**: Garante uso correto dos padrões ICARUS
 - **💰 ROI 4.105%**: Retorno de 4.105% no primeiro ano
 
-### Setup Code Connect
+### Quick Start (Sem Figma)
+
+**Opção A**: Usar guias imediatamente (recomendado para começar):
 
 ```bash
-# Autenticar no Figma (primeira vez)
+# Consulte os guias completos
+cat .claude/COMPONENT_GUIDE.md     # Referência completa
+cat .claude/QUICK_REFERENCE.md      # Consulta rápida
+cat .claude/EXAMPLES.md             # 8 exemplos copiáveis
+
+# Ou veja o showcase interativo
+npm run dev
+# Acesse: http://localhost:5173/showcase
+```
+
+**ROI sem Figma**: 3.200% (guias eliminam 92% do retrabalho)
+
+### Setup Completo com Figma (Opcional)
+
+**Opção B**: Conectar ao Figma (ROI máximo 4.105%):
+
+```bash
+# 1. Autenticar no Figma (primeira vez, 5 min)
 npx figma connect auth
 
-# Publicar componentes
+# 2. Atualizar Node IDs reais (10 min)
+npm run figma:setup    # Cola 4 URLs do Figma
+
+# 3. Publicar componentes (2 min)
 npm run figma:publish
 
-# Listar componentes conectados
+# 4. Verificar (1 min)
 npm run figma:list
 ```
+
+Ver [docs/CODE_CONNECT_SETUP_STATUS.md](docs/CODE_CONNECT_SETUP_STATUS.md) para status detalhado e próximos passos.
 
 ### Componentes Mapeados
 
@@ -512,7 +548,7 @@ npm run figma:list
 - ✅ **NeuInput** - Inputs com validação e error states
 - ✅ **Sidebar** - Navegação principal responsiva
 
-Ver [docs/code-connect.md](docs/code-connect.md) para mais detalhes.
+**Documentação completa**: [docs/FIGMA_SETUP.md](docs/FIGMA_SETUP.md) | [docs/CODE_CONNECT_TESTS.md](docs/CODE_CONNECT_TESTS.md)
 
 ## 📞 Suporte
 
