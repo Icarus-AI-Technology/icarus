@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -22,6 +21,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useSupabase } from '@/hooks/useSupabase'
+import { useDebounce } from '@/hooks/useDebounce'
+import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
+import { validateAmount } from '@/lib/utils/validators'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   DollarSign, Calendar, AlertCircle, CheckCircle2, Clock,
   TrendingDown, Search, Filter, Download, Eye, CreditCard
@@ -64,6 +67,7 @@ export function ContasReceber() {
   const [receivables, setReceivables] = useState<Receivable[]>([])
   const [selectedReceivable, setSelectedReceivable] = useState<Receivable | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm, 300)
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [agingFilter, setAgingFilter] = useState<string>('all')
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false)
@@ -208,38 +212,38 @@ export function ContasReceber() {
 
   const calculateDaysOverdue = (dueDate: string, status: ReceivableStatus): number | undefined => {
     if (status !== 'overdue') return undefined
-    const due = new Date(dueDate)
-    const today = new Date()
-    const diff = Math.floor((today.getTime() - due.getTime()) / (1000 * 60 * 60 * 24))
-    return diff > 0 ? diff : 0
+    const days = daysOverdue(dueDate)
+    return days > 0 ? days : 0
   }
 
-  const getReceivableStatus = (receivable: any): ReceivableStatus => {
+  const getReceivableStatus = (receivable: {
+    status?: string
+    amount_paid: number
+    amount: number
+    due_date: string
+  }): ReceivableStatus => {
     if (receivable.status === 'cancelled') return 'cancelled'
     if (receivable.amount_paid >= receivable.amount) return 'paid'
 
-    const today = new Date()
-    const dueDate = new Date(receivable.due_date)
+    const days = daysOverdue(receivable.due_date)
 
-    if (today > dueDate) return 'overdue'
+    if (days > 0) return 'overdue'
     if (receivable.amount_paid > 0) return 'partial'
     return 'pending'
   }
 
   const handlePayment = async () => {
     if (!selectedReceivable) return
-    if (!paymentForm.amount || parseFloat(paymentForm.amount) <= 0) {
-      toast.error('Informe um valor válido')
-      return
-    }
 
-    const paymentAmount = parseFloat(paymentForm.amount)
     const remaining = selectedReceivable.amount - selectedReceivable.amount_paid
+    const validation = validateAmount(paymentForm.amount, remaining)
 
-    if (paymentAmount > remaining) {
-      toast.error('Valor maior que o saldo devedor')
+    if (!validation.valid) {
+      toast.error(validation.error || 'Valor inválido')
       return
     }
+
+    const paymentAmount = validation.value!
 
     if (!isConfigured) {
       // Mock payment
@@ -312,34 +316,24 @@ export function ContasReceber() {
     }
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
+  const filteredReceivables = useMemo(() => {
+    return receivables.filter(rec => {
+      const matchesSearch =
+        rec.invoice_number.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        rec.customer_name.toLowerCase().includes(debouncedSearch.toLowerCase())
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR')
-  }
+      const matchesStatus = statusFilter === 'all' || rec.status === statusFilter
 
-  const filteredReceivables = receivables.filter(rec => {
-    const matchesSearch =
-      rec.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      rec.customer_name.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesAging =
+        agingFilter === 'all' ||
+        (agingFilter === 'current' && rec.status !== 'overdue') ||
+        (agingFilter === '1-30' && rec.days_overdue && rec.days_overdue >= 1 && rec.days_overdue <= 30) ||
+        (agingFilter === '31-60' && rec.days_overdue && rec.days_overdue >= 31 && rec.days_overdue <= 60) ||
+        (agingFilter === '60+' && rec.days_overdue && rec.days_overdue > 60)
 
-    const matchesStatus = statusFilter === 'all' || rec.status === statusFilter
-
-    const matchesAging =
-      agingFilter === 'all' ||
-      (agingFilter === 'current' && rec.status !== 'overdue') ||
-      (agingFilter === '1-30' && rec.days_overdue && rec.days_overdue >= 1 && rec.days_overdue <= 30) ||
-      (agingFilter === '31-60' && rec.days_overdue && rec.days_overdue >= 31 && rec.days_overdue <= 60) ||
-      (agingFilter === '60+' && rec.days_overdue && rec.days_overdue > 60)
-
-    return matchesSearch && matchesStatus && matchesAging
-  })
+      return matchesSearch && matchesStatus && matchesAging
+    })
+  }, [receivables, debouncedSearch, statusFilter, agingFilter])
 
   const stats = {
     total: receivables.reduce((sum, r) => sum + (r.amount - r.amount_paid), 0),
@@ -352,24 +346,11 @@ export function ContasReceber() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Contas a Receber</h1>
-          <p className="text-muted-foreground">Gestão de recebíveis e cobranças</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-20" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Contas a Receber"
+        subtitle="Gestão de recebíveis e cobranças"
+        kpiCount={4}
+      />
     )
   }
 
