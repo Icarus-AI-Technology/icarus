@@ -36,3 +36,4 @@ The frontend components must expose the following `data-testid` attributes for t
 - `card-item` - Individual card elements
 - `card-details-panel` - Card details panel
 # Documentation update
+
