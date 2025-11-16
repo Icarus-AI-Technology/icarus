@@ -12,6 +12,9 @@ const Compras = lazy(() => import('@/components/modules/Compras').then(m => ({ d
 const ContasReceber = lazy(() => import('@/components/modules/ContasReceber').then(m => ({ default: m.ContasReceber })))
 const FaturamentoNFe = lazy(() => import('@/components/modules/FaturamentoNFe').then(m => ({ default: m.FaturamentoNFe })))
 const Inventario = lazy(() => import('@/components/modules/Inventario').then(m => ({ default: m.Inventario })))
+const TabelaPrecos = lazy(() => import('@/components/modules/TabelaPrecos').then(m => ({ default: m.TabelaPrecos })))
+const Licitacoes = lazy(() => import('@/components/modules/Licitacoes').then(m => ({ default: m.Licitacoes })))
+const Cadastros = lazy(() => import('@/components/modules/Cadastros').then(m => ({ default: m.Cadastros })))
 const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
 
 export interface ModuleComponentMap {
@@ -36,9 +39,14 @@ export const moduleComponents: ModuleComponentMap = {
   'contas-receber': ContasReceber,
   'faturamento': FaturamentoNFe,
   'inventario': Inventario,
+  'tabela-precos': TabelaPrecos,
 
   // Compras & Fornecedores
   'compras': Compras,
+  'licitacoes': Licitacoes,
+
+  // Cadastros & Gestão
+  'cadastros': Cadastros,
 
   // Dev Tools
   'showcase': ShowcasePage,

@@ -105,7 +105,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Tabela de Preços',
         icon: DollarSign,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Gestão de tabelas de preços',
+        isImplemented: true
       }
     ]
   },
@@ -152,7 +153,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Licitações',
         icon: FileSpreadsheet,
         category: 'Compras & Fornecedores',
-        isImplemented: false
+        description: 'Gestão de licitações públicas',
+        isImplemented: true
       },
       {
         id: 'grupos-produtos',
@@ -174,7 +176,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Cadastros',
         icon: FileText,
         category: 'Cadastros & Gestão',
-        isImplemented: false
+        description: 'Cadastros auxiliares do sistema',
+        isImplemented: true
       },
       {
         id: 'contratos',
