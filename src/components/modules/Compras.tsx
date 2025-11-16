@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -23,6 +22,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useSupabase } from '@/hooks/useSupabase'
+import { useDebounce } from '@/hooks/useDebounce'
+import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   ShoppingCart, Plus, Search, Filter, Eye, Send, CheckCircle2,
   Package, TrendingUp, DollarSign, Clock, Truck, XCircle
@@ -80,6 +82,7 @@ export function Compras() {
   const [selectedPO, setSelectedPO] = useState<PurchaseOrder | null>(null)
   const [poItems, setPOItems] = useState<POItem[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm, 300)
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [supplierFilter, setSupplierFilter] = useState<string>('all')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -364,35 +367,22 @@ export function Compras() {
     }
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR')
-  }
-
   const getDaysUntilDelivery = (expectedDate: string): number => {
-    const today = new Date()
-    const delivery = new Date(expectedDate)
-    const diff = Math.ceil((delivery.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-    return diff
+    return -daysOverdue(expectedDate)
   }
 
-  const filteredPOs = purchaseOrders.filter(po => {
-    const matchesSearch =
-      po.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      po.supplier_name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPOs = useMemo(() => {
+    return purchaseOrders.filter(po => {
+      const matchesSearch =
+        po.po_number.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        po.supplier_name.toLowerCase().includes(debouncedSearch.toLowerCase())
 
-    const matchesStatus = statusFilter === 'all' || po.status === statusFilter
-    const matchesSupplier = supplierFilter === 'all' || po.supplier_id === supplierFilter
+      const matchesStatus = statusFilter === 'all' || po.status === statusFilter
+      const matchesSupplier = supplierFilter === 'all' || po.supplier_id === supplierFilter
 
-    return matchesSearch && matchesStatus && matchesSupplier
-  })
+      return matchesSearch && matchesStatus && matchesSupplier
+    })
+  }, [purchaseOrders, debouncedSearch, statusFilter, supplierFilter])
 
   const stats = {
     total: purchaseOrders.reduce((sum, po) => sum + po.total_amount, 0),
@@ -404,24 +394,11 @@ export function Compras() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Compras</h1>
-          <p className="text-muted-foreground">Gestão de pedidos e fornecedores</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-20" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Compras"
+        subtitle="Gestão de pedidos e fornecedores"
+        kpiCount={4}
+      />
     )
   }
 
