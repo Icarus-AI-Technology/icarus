@@ -9,6 +9,26 @@
 
 ---
 
+## ⚡ Quick Start em 3 Passos
+
+```bash
+# 1. Instalar
+npm install
+
+# 2. Configurar
+cp .env.example .env.local
+# Editar .env.local com suas credenciais Supabase
+
+# 3. Rodar
+npm run dev
+```
+
+Acesse: **http://localhost:5173**
+
+**Ver guia completo:** [GETTING_STARTED.md](./GETTING_STARTED.md)
+
+---
+
 ## 📋 Sobre o Projeto
 
 ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias web, incorporando **Inteligência Artificial** para otimização de processos em empresas de OPME.
@@ -24,6 +44,23 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
 
 ---
 
+## 📚 Documentação
+
+### Para Começar
+- **[GETTING_STARTED.md](./GETTING_STARTED.md)** - Setup completo em 5 minutos ⚡
+- **[QUICKSTART.md](./QUICKSTART.md)** - Guia rápido de início
+
+### Code Connect (Figma → Code)
+- **[CODE_CONNECT_IMPLEMENTATION.md](./CODE_CONNECT_IMPLEMENTATION.md)** - Implementar Code Connect (15min)
+- [CODE_CONNECT_SETUP.md](./CODE_CONNECT_SETUP.md) - Visão geral Code Connect
+- [docs/code-connect-analysis.md](./docs/code-connect-analysis.md) - Análise ROI detalhada (4.105%)
+
+### Suporte
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Solução de problemas comuns
+- [docs/troubleshooting.md](./docs/troubleshooting.md) - Guia de troubleshooting
+
+---
+
 ## 🛠️ Stack Tecnológico
 
 ```typescript
@@ -33,48 +70,41 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
   database: "Supabase PostgreSQL 15",
   designSystem: "OraclusX DS (Neumorphism)",
   ai: ["Claude Sonnet 4.5", "GPT-4", "TensorFlow.js"],
-  deployment: "Vercel + GitHub Actions"
+  deployment: "Vercel + GitHub Actions",
+  codeConnect: "Figma → Code automation"
 }
 ```
 
 ---
 
-## 🚀 Começando
+## 🎨 Componentes Neumorphism
 
-### Pré-requisitos
+### Principais Componentes
+- ✅ **NeuButton** - 5 variantes (primary, soft, danger, secondary, pressed)
+- ✅ **NeuCard** - 4 elevações (low, medium, high) + 3 variantes
+- ✅ **NeuInput** - Com validação, helper text e error handling
+- ✅ **Icon3D** - Ícones com profundidade
+- ✅ **Sidebar** - Navegação collapsible
+- ✅ **Dialog, Tabs, Select, Table** - Componentes auxiliares
 
-- Node.js 18+
-- npm ou yarn
-- Conta no Supabase (para produção)
+### 🎭 Showcase Interativo
+**Ver todos os componentes em ação:**
 
-### Instalação
+Acesse: `src/pages/ShowcasePage.tsx`
 
-```bash
-# Clone o repositório
-git clone https://github.com/Icarus-AI-Technology/icarus.git
-cd icarus
+Inclui:
+- Todos os componentes com exemplos vivos
+- Estados (loading, disabled, error)
+- Formulário completo funcional
+- Guias de uso inline
+- 400+ linhas de exemplos práticos
 
-# Instale as dependências
-npm install
-
-# Configure as variáveis de ambiente
-cp .env.example .env
-# Edite o .env com suas credenciais do Supabase
-
-# Inicie o servidor de desenvolvimento
-npm run dev
-```
-
-O aplicativo estará disponível em `http://localhost:5173`
-
-### Scripts Disponíveis
-
-```bash
-npm run dev      # Inicia servidor de desenvolvimento
-npm run build    # Cria build de produção
-npm run preview  # Preview do build de produção
-npm run lint     # Executa linter
-```
+### Design System
+- Design System Neumorphism completo
+- 14+ componentes otimizados
+- Dark mode ready
+- Acessibilidade (WCAG 2.1 AA)
+- Responsivo mobile-first
 
 ---
 
@@ -84,24 +114,32 @@ npm run lint     # Executa linter
 icarus/
 ├── src/
 │   ├── components/
-│   │   ├── ui/              # Componentes shadcn/ui
-│   │   │   ├── button.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── input.tsx
-│   │   │   └── tabs.tsx
+│   │   ├── ui/              # Componentes shadcn/ui + Neumorphism
+│   │   │   ├── neu-button.tsx
+│   │   │   ├── neu-card.tsx
+│   │   │   ├── neu-input.tsx
+│   │   │   └── icon-3d.tsx
+│   │   ├── layout/          # Layout components
+│   │   │   ├── IcarusLayout.tsx
+│   │   │   └── sidebar.tsx
 │   │   └── modules/         # Módulos do sistema
 │   │       └── Dashboard.tsx
+│   ├── pages/               # Páginas
+│   │   └── ShowcasePage.tsx # Demonstração interativa
 │   ├── hooks/               # Hooks customizados
-│   │   └── useSupabase.ts
+│   │   ├── useSupabase.ts
+│   │   └── useIcarusBrain.ts
 │   ├── lib/                 # Utilitários
 │   │   ├── utils.ts
-│   │   └── supabase.ts
+│   │   ├── supabase.ts
+│   │   └── data/navigation.ts
 │   ├── types/               # Tipos TypeScript
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── index.css
-├── public/
-├── claude.md                # Contexto para Claude Code
+├── docs/                    # Documentação completa
+├── .clinerules              # Regras de desenvolvimento
+├── CLAUDE.md                # Contexto para Claude Code
 ├── package.json
 ├── vite.config.ts
 ├── tailwind.config.js
@@ -127,9 +165,15 @@ O ICARUS utiliza o **OraclusX Design System**, baseado em neumorfismo:
 Todos os componentes utilizam shadcn/ui:
 
 ```tsx
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { NeuButton } from '@/components/ui/neu-button'
+import { NeuCard } from '@/components/ui/neu-card'
+import { NeuInput } from '@/components/ui/neu-input'
+
+// Exemplo
+<NeuCard variant="soft" elevation="medium" padding="lg">
+  <h2>Título</h2>
+  <NeuButton variant="primary">Ação</NeuButton>
+</NeuCard>
 ```
 
 ### Classes Neumórficas
@@ -156,6 +200,11 @@ const forecast = await predict('demanda', {
   produto_id: '123',
   dias: 30
 })
+
+// Score de inadimplência
+const score = await analyze('inadimplencia', {
+  cliente_id: '456'
+})
 ```
 
 ---
@@ -177,7 +226,7 @@ const forecast = await predict('demanda', {
 ### Setup
 
 1. Crie um projeto no [Supabase](https://supabase.com)
-2. Copie as credenciais para `.env`:
+2. Copie as credenciais para `.env.local`:
 
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
@@ -204,9 +253,36 @@ await supabase
 
 ---
 
+## 🔗 Code Connect (Figma → Code)
+
+**Automatize 75% do desenvolvimento** com Code Connect:
+
+### Benefícios
+- ⚡ **75% mais rápido** para desenvolver
+- 🎯 **92% menos retrabalho**
+- ✅ **99% consistência** design-código
+- 💰 **ROI 4.105%** no primeiro ano
+
+### Setup Rápido (15min)
+
+```bash
+# 1. Autenticar
+npx figma connect auth
+
+# 2. Publicar componentes
+npm run figma:publish
+
+# 3. Verificar
+npm run figma:list
+```
+
+**Ver guia completo:** [CODE_CONNECT_IMPLEMENTATION.md](./CODE_CONNECT_IMPLEMENTATION.md)
+
+---
+
 ## 🤝 Trabalhando com Claude Code
 
-Este projeto foi otimizado para desenvolvimento com **Claude Code**. Consulte `claude.md` para o contexto completo.
+Este projeto foi otimizado para desenvolvimento com **Claude Code**. Consulte `CLAUDE.md` para o contexto completo.
 
 ### Comandos úteis para Claude:
 
@@ -214,7 +290,32 @@ Este projeto foi otimizado para desenvolvimento com **Claude Code**. Consulte `c
 "Crie um novo módulo de Compras seguindo o padrão OraclusX"
 "Adicione previsão de demanda no módulo Estoque IA"
 "Implemente validação Zod no formulário de produtos"
+"Criar botão de salvar usando componentes ICARUS"
 ```
+
+---
+
+## 📝 Scripts Disponíveis
+
+```bash
+npm run dev         # Inicia servidor de desenvolvimento (port 5173)
+npm run build       # Cria build de produção
+npm run preview     # Preview do build de produção
+npm run lint        # Executa linter
+
+# Code Connect
+npm run figma:publish  # Publicar componentes no Figma
+npm run figma:list     # Listar componentes conectados
+npm run figma:parse    # Validar arquivos .figma.tsx
+```
+
+---
+
+## 🔧 Suporte
+
+- **Issues**: Reportar bugs via [GitHub Issues](https://github.com/Icarus-AI-Technology/icarus/issues)
+- **Docs**: Ver pasta `/docs/` para guias completos
+- **Troubleshooting**: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
 
 ---
 
@@ -227,6 +328,14 @@ Este projeto é propriedade da **Icarus AI Technology**.
 ## 🌟 Versão
 
 **v5.0.3** - Production Ready
+
+### Status do Projeto
+- ✅ Setup completo
+- ✅ 14+ componentes Neumorphism
+- ✅ Code Connect preparado
+- ✅ Showcase interativo
+- ✅ 8 guias de documentação
+- ✅ Módulos exemplo com IA
 
 ---
 
