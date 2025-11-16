@@ -1,0 +1,404 @@
+# .clinerules - Regras de Desenvolvimento ICARUS v5.0
+
+## 🎯 Objetivo
+
+Garantir código consistente, performático e manutenível no ICARUS ERP.
+
+---
+
+## 📏 Regras Gerais
+
+### TypeScript
+
+```typescript
+// ✅ BOM
+interface Produto {
+  id: string
+  nome: string
+  preco: number
+}
+
+function getProduto(id: string): Promise<Produto> {
+  return supabase.from('produtos').select('*').eq('id', id).single()
+}
+
+// ❌ RUIM
+function getProduto(id: any): any {
+  return supabase.from('produtos').select('*').eq('id', id).single()
+}
+```
+
+**Regras**:
+- ❌ **NUNCA** usar `any`
+- ✅ Definir interfaces explícitas
+- ✅ Tipos de retorno obrigatórios em funções
+- ✅ Strict mode habilitado
+
+---
+
+### Componentes React
+
+```tsx
+// ✅ BOM - Functional + TypeScript
+interface ButtonProps {
+  variant?: 'default' | 'success' | 'danger'
+  onClick: () => void
+  children: React.ReactNode
+}
+
+export function Button({ variant = 'default', onClick, children }: ButtonProps) {
+  return (
+    <button className={cn('neu-soft', variantClass[variant])} onClick={onClick}>
+      {children}
+    </button>
+  )
+}
+
+// ❌ RUIM - Class component
+class Button extends React.Component {
+  render() {
+    return <button>{this.props.children}</button>
+  }
+}
+```
+
+**Regras**:
+- ✅ Componentes funcionais + hooks
+- ❌ Componentes de classe
+- ✅ Props tipadas com interface
+- ✅ Destructuring de props
+
+---
+
+### Design Neumórfico
+
+```tsx
+// ✅ BOM - Usando classes neumórficas
+<Card className="neu-soft hover:neu-hover transition-all">
+  <Button className="neu-soft">Salvar</Button>
+</Card>
+
+// ❌ RUIM - Sem efeito neumórfico
+<Card className="shadow-lg">
+  <Button>Salvar</Button>
+</Card>
+```
+
+**Regras**:
+- ✅ `neu-soft` em cards e botões
+- ✅ `neu-hover` em interações
+- ✅ `neu-inset` em inputs
+- ✅ `transition-all` para suavidade
+
+---
+
+### Paleta de Cores
+
+```tsx
+// ✅ BOM - Usando cores do tema
+<Button variant="primary">Salvar</Button>
+<Button variant="success">Confirmar</Button>
+<Button variant="danger">Excluir</Button>
+<Button variant="warning">Atenção</Button>
+
+// ❌ RUIM - Cores hardcoded
+<button style={{ backgroundColor: '#ff0000' }}>Excluir</button>
+```
+
+**Paleta**:
+- `primary`: `#6366F1` (Indigo)
+- `success`: `#10B981` (Green)
+- `warning`: `#F59E0B` (Amber)
+- `danger`: `#EF4444` (Red)
+
+---
+
+### Performance
+
+```tsx
+// ✅ BOM - Lazy loading
+const Dashboard = lazy(() => import('@/pages/Dashboard'))
+const Produtos = lazy(() => import('@/pages/Produtos'))
+
+// ✅ BOM - Memoization
+const ExpensiveComponent = memo(({ data }) => {
+  const computed = useMemo(() => heavyCalculation(data), [data])
+  return <div>{computed}</div>
+})
+
+// ❌ RUIM - Tudo eager loaded
+import Dashboard from '@/pages/Dashboard'
+import Produtos from '@/pages/Produtos'
+```
+
+**Regras**:
+- ✅ Lazy load de rotas
+- ✅ `useMemo` para cálculos pesados
+- ✅ `useCallback` para funções passadas como props
+- ✅ Code splitting automático (Vite)
+
+---
+
+### Acessibilidade
+
+```tsx
+// ✅ BOM - Acessível
+<button
+  aria-label="Fechar modal"
+  onClick={onClose}
+  className="neu-soft"
+>
+  <X aria-hidden="true" />
+</button>
+
+// ❌ RUIM - Não acessível
+<div onClick={onClose}>
+  <X />
+</div>
+```
+
+**Regras**:
+- ✅ `aria-label` em ícones sem texto
+- ✅ `<button>` para cliques, não `<div>`
+- ✅ Navegação por teclado (Tab, Enter, Esc)
+- ✅ Contraste mínimo 4.5:1 (WCAG AA)
+
+---
+
+### Estado e Data Fetching
+
+```tsx
+// ✅ BOM - React Query
+import { useQuery } from '@tanstack/react-query'
+
+function Produtos() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['produtos'],
+    queryFn: () => supabase.from('produtos').select('*')
+  })
+
+  if (isLoading) return <Loading />
+  return <List items={data} />
+}
+
+// ❌ RUIM - useEffect manual
+function Produtos() {
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    supabase.from('produtos').select('*').then(setData)
+  }, [])
+}
+```
+
+**Regras**:
+- ✅ React Query para server state
+- ✅ Zustand para client state
+- ❌ useEffect para fetching (use React Query)
+- ✅ Invalidação automática de cache
+
+---
+
+### Supabase
+
+```typescript
+// ✅ BOM - Tipos + Error handling
+async function getProduto(id: string): Promise<Produto | null> {
+  const { data, error } = await supabase
+    .from('produtos')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error) {
+    console.error('Erro ao buscar produto:', error)
+    return null
+  }
+
+  return data
+}
+
+// ❌ RUIM - Sem tipos, sem error handling
+async function getProduto(id) {
+  const { data } = await supabase.from('produtos').select('*').eq('id', id).single()
+  return data
+}
+```
+
+**Regras**:
+- ✅ Sempre verificar `error`
+- ✅ Usar tipos do `Database`
+- ✅ Queries otimizadas (select apenas campos necessários)
+- ✅ RLS habilitado (Row Level Security)
+
+---
+
+### Testes
+
+```typescript
+// ✅ BOM - Teste completo
+describe('Button', () => {
+  it('should render with correct variant', () => {
+    render(<Button variant="success">Salvar</Button>)
+    expect(screen.getByText('Salvar')).toHaveClass('bg-success')
+  })
+
+  it('should call onClick when clicked', () => {
+    const onClick = jest.fn()
+    render(<Button onClick={onClick}>Click</Button>)
+    fireEvent.click(screen.getByText('Click'))
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+})
+```
+
+**Regras**:
+- ✅ Mínimo 65% coverage para PR
+- ✅ Testar comportamento, não implementação
+- ✅ E2E para fluxos críticos
+- ✅ Mocks para Supabase/APIs
+
+---
+
+### Commits
+
+```bash
+# ✅ BOM - Conventional Commits
+git commit -m "feat(vendas): adicionar filtro avançado de pedidos"
+git commit -m "fix(auth): corrigir login com Google"
+git commit -m "docs(readme): atualizar seção de deploy"
+
+# ❌ RUIM
+git commit -m "update"
+git commit -m "fix bug"
+```
+
+**Formato**:
+```
+<tipo>(<escopo>): <descrição>
+
+[corpo opcional]
+
+[footer opcional]
+```
+
+**Tipos**:
+- `feat` - Nova feature
+- `fix` - Bug fix
+- `docs` - Documentação
+- `style` - Formatação
+- `refactor` - Refatoração
+- `test` - Testes
+- `chore` - Manutenção
+
+---
+
+### Estrutura de Arquivos
+
+```
+src/
+├── components/
+│   ├── ui/                  # Componentes reutilizáveis
+│   │   ├── button.tsx
+│   │   └── card.tsx
+│   ├── layout/              # Layout global
+│   │   ├── Sidebar.tsx
+│   │   └── Header.tsx
+│   └── modules/             # Módulos de negócio
+│       └── vendas/
+│           ├── Pedidos.tsx
+│           └── Orcamentos.tsx
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts        # Cliente Supabase
+│   │   └── types.ts         # Types do DB
+│   └── utils.ts             # Utilitários
+├── hooks/
+│   ├── use-toast.ts
+│   └── useIcarusBrain.ts
+└── pages/
+    ├── Dashboard.tsx
+    └── Vendas.tsx
+```
+
+**Regras**:
+- ✅ PascalCase para componentes
+- ✅ camelCase para funções/variáveis
+- ✅ kebab-case para arquivos CSS
+- ✅ Um componente por arquivo
+
+---
+
+### Segurança
+
+```typescript
+// ✅ BOM - Sanitização
+import DOMPurify from 'dompurify'
+
+function Comment({ html }: { html: string }) {
+  const clean = DOMPurify.sanitize(html)
+  return <div dangerouslySetInnerHTML={{ __html: clean }} />
+}
+
+// ❌ RUIM - XSS vulnerability
+function Comment({ html }) {
+  return <div dangerouslySetInnerHTML={{ __html: html }} />
+}
+```
+
+**Regras**:
+- ✅ Sanitizar HTML de usuários
+- ✅ Validar inputs (Zod)
+- ✅ HTTPS only
+- ✅ Secrets em variáveis de ambiente
+- ❌ Nunca commitar `.env`
+
+---
+
+### Responsividade
+
+```tsx
+// ✅ BOM - Mobile-first
+<div className="
+  flex flex-col          /* mobile */
+  md:flex-row           /* tablet+ */
+  lg:gap-6              /* desktop+ */
+">
+  <Card className="w-full md:w-1/2" />
+  <Card className="w-full md:w-1/2" />
+</div>
+
+// ❌ RUIM - Desktop-only
+<div className="flex gap-6">
+  <Card className="w-1/2" />
+  <Card className="w-1/2" />
+</div>
+```
+
+**Breakpoints Tailwind**:
+- `sm`: 640px
+- `md`: 768px
+- `lg`: 1024px
+- `xl`: 1280px
+- `2xl`: 1536px
+
+---
+
+## ✅ Checklist PR
+
+Antes de abrir Pull Request:
+
+- [ ] `npm run lint` sem erros
+- [ ] `npm run type-check` sem erros
+- [ ] `npm test` com coverage ≥ 65%
+- [ ] Design neumórfico aplicado
+- [ ] Acessibilidade verificada
+- [ ] Responsivo testado
+- [ ] Commit messages seguem Conventional Commits
+- [ ] `.env` não commitado
+
+---
+
+**v5.0.3** | Release: 2025-11-15
+
+🎯 **Siga estas regras rigorosamente para manter a qualidade do código!**

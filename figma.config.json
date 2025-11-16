@@ -1,0 +1,15 @@
+{
+  "codeConnect": {
+    "include": [
+      "src/components/ui/**/*.figma.tsx",
+      "src/components/layout/**/*.figma.tsx",
+      "src/components/modules/**/*.figma.tsx"
+    ],
+    "parser": "react",
+    "importStatementFormat": "typescript",
+    "labels": ["icarus-components", "oraclusx-ds", "neumorphism"],
+    "documentUrlSubstitutions": {
+      "FIGMA_FILE_ID": "mo8QUMAQbaomxqo7BHHTTN"
+    }
+  }
+}
