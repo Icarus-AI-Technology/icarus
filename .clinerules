@@ -1,0 +1,608 @@
+# 📋 ICARUS v5.0 - Development Rules
+
+## 🎨 Design System Rules (OraclusX DS)
+
+### 1. Paleta de Cores (OBRIGATÓRIA)
+
+```css
+/* NUNCA use outras cores! Apenas estas: */
+
+/* Backgrounds */
+--bg-primary: #0f1419
+--bg-secondary: #1a1f26
+--bg-tertiary: #232930
+
+/* Neumorphic Shadows */
+--shadow-light: rgba(255,255,255,0.03)
+--shadow-dark: rgba(0,0,0,0.5)
+
+/* Accent Colors */
+--accent-primary: #3b82f6    /* Azul - ações principais */
+--accent-success: #10b981    /* Verde - sucesso */
+--accent-warning: #f59e0b    /* Amarelo - avisos */
+--accent-danger: #ef4444     /* Vermelho - erros */
+--accent-info: #06b6d4       /* Ciano - informações */
+
+/* Text */
+--text-primary: #f3f4f6      /* Texto principal */
+--text-secondary: #9ca3af    /* Texto secundário */
+--text-muted: #6b7280        /* Texto desabilitado */
+
+/* Borders */
+--border-primary: rgba(255,255,255,0.1)
+--border-focus: rgba(59,130,246,0.5)
+```
+
+### 2. Classes Neumórficas Padrão
+
+#### Input
+```tsx
+className="
+  bg-gray-900/50 backdrop-blur-sm
+  border border-white/10
+  rounded-xl px-4 py-3
+  text-gray-100 placeholder-gray-500
+  shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
+  focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20
+  transition-all duration-200
+  disabled:opacity-50 disabled:cursor-not-allowed
+"
+```
+
+#### Button Primary
+```tsx
+className="
+  bg-gradient-to-br from-blue-500 to-blue-600
+  border border-blue-400/20
+  rounded-xl px-6 py-3
+  text-white font-medium
+  shadow-[2px_2px_5px_rgba(0,0,0,0.5),-2px_-2px_5px_rgba(59,130,246,0.1)]
+  hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.3)]
+  active:scale-95
+  disabled:opacity-50 disabled:cursor-not-allowed
+  transition-all duration-200
+"
+```
+
+#### Button Secondary
+```tsx
+className="
+  bg-gradient-to-br from-gray-800 to-gray-900
+  border border-white/10
+  rounded-xl px-6 py-3
+  text-gray-100 font-medium
+  shadow-[2px_2px_5px_rgba(0,0,0,0.5),-2px_-2px_5px_rgba(255,255,255,0.03)]
+  hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]
+  active:scale-95
+  transition-all duration-200
+"
+```
+
+#### Card
+```tsx
+className="
+  bg-gradient-to-br from-gray-900/90 to-gray-800/90
+  backdrop-blur-sm
+  border border-white/10
+  rounded-2xl p-6
+  shadow-[5px_5px_15px_rgba(0,0,0,0.5),-5px_-5px_15px_rgba(255,255,255,0.03)]
+"
+```
+
+### 3. Layout & Grid Patterns
+
+#### Page Layout
+```tsx
+<div className="min-h-screen bg-[#0f1419] p-6">
+  <div className="max-w-7xl mx-auto space-y-6">
+    {/* KPIs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI Cards */}
+    </div>
+
+    {/* Main Content */}
+    <div className="bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+      {/* Content */}
+    </div>
+  </div>
+</div>
+```
+
+#### Form Layout
+```tsx
+<form className="space-y-6">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {/* Form fields */}
+  </div>
+
+  <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+    {/* Action buttons */}
+  </div>
+</form>
+```
+
+#### Table Layout
+```tsx
+<div className="overflow-x-auto">
+  <table className="w-full">
+    <thead className="bg-gray-800/50 border-b border-white/10">
+      <tr>
+        <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
+          {/* Header */}
+        </th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-white/5">
+      <tr className="hover:bg-white/5 transition-colors">
+        <td className="px-4 py-3 text-sm text-gray-300">
+          {/* Cell */}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+---
+
+## ♿ Acessibilidade (WCAG 2.1 AA)
+
+### Regras Obrigatórias
+
+1. **Contraste de Texto**
+   - Texto normal: mínimo 4.5:1
+   - Texto grande: mínimo 3:1
+   - Use `text-gray-100` ou `text-gray-200` em fundos escuros
+
+2. **ARIA Labels**
+```tsx
+// Botões com ícones
+<button aria-label="Fechar modal">
+  <X className="w-5 h-5" />
+</button>
+
+// Inputs
+<input
+  aria-label="Nome do cliente"
+  aria-required="true"
+  aria-invalid={errors.name ? "true" : "false"}
+/>
+
+// Status messages
+<div role="alert" aria-live="polite">
+  {successMessage}
+</div>
+```
+
+3. **Navegação por Teclado**
+   - Todos os elementos interativos devem ter `tabIndex` adequado
+   - Ordem lógica de tab
+   - Atalhos de teclado para ações principais
+
+4. **Focus Visible**
+```tsx
+className="focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+```
+
+5. **Landmarks**
+```tsx
+<header role="banner">
+<nav role="navigation" aria-label="Main navigation">
+<main role="main">
+<aside role="complementary" aria-label="Sidebar">
+<footer role="contentinfo">
+```
+
+---
+
+## 🤖 IA Integration Patterns
+
+### 1. Hook useIcarusBrain
+
+```tsx
+import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+
+function MyComponent() {
+  const { predict, analyze, recommend, chat, loading, error } = useIcarusBrain()
+
+  // Sempre verificar loading e error
+  if (loading) return <Loading />
+  if (error) return <ErrorMessage error={error} />
+
+  // Usar try-catch
+  const handlePredict = async () => {
+    try {
+      const result = await predict({
+        type: 'sales_forecast',
+        data: { /* ... */ }
+      })
+      // Handle success
+    } catch (err) {
+      // Handle error
+      console.error('Prediction failed:', err)
+    }
+  }
+
+  return (/* JSX */)
+}
+```
+
+### 2. Error Handling IA
+
+```tsx
+// Sempre mostrar feedback ao usuário
+{error && (
+  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+    <p className="text-red-400 text-sm">
+      {error.message || 'Erro ao processar IA'}
+    </p>
+  </div>
+)}
+
+// Loading states
+{loading && (
+  <div className="flex items-center gap-2 text-blue-400">
+    <Loader2 className="w-4 h-4 animate-spin" />
+    <span>Processando com IA...</span>
+  </div>
+)}
+```
+
+---
+
+## 🗄️ Supabase Patterns
+
+### 1. Client Setup
+
+```tsx
+// lib/supabase.ts
+import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/supabase'
+
+export const supabase = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+```
+
+### 2. CRUD Patterns
+
+#### Create
+```tsx
+const { data, error } = await supabase
+  .from('products')
+  .insert({
+    name: 'Product Name',
+    price: 100,
+    // ...
+  })
+  .select()
+  .single()
+
+if (error) throw error
+return data
+```
+
+#### Read
+```tsx
+const { data, error } = await supabase
+  .from('products')
+  .select('*, category(*)')
+  .eq('active', true)
+  .order('created_at', { ascending: false })
+  .limit(10)
+
+if (error) throw error
+return data
+```
+
+#### Update
+```tsx
+const { data, error } = await supabase
+  .from('products')
+  .update({ price: 150 })
+  .eq('id', productId)
+  .select()
+  .single()
+
+if (error) throw error
+return data
+```
+
+#### Delete
+```tsx
+const { error } = await supabase
+  .from('products')
+  .delete()
+  .eq('id', productId)
+
+if (error) throw error
+```
+
+### 3. Realtime Subscriptions
+
+```tsx
+useEffect(() => {
+  const channel = supabase
+    .channel('products-changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'products'
+      },
+      (payload) => {
+        console.log('Change received!', payload)
+        // Update local state
+      }
+    )
+    .subscribe()
+
+  return () => {
+    supabase.removeChannel(channel)
+  }
+}, [])
+```
+
+### 4. RLS (Row Level Security)
+
+```sql
+-- SEMPRE habilitar RLS
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+
+-- Policies
+CREATE POLICY "Users can view their own products"
+ON products FOR SELECT
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own products"
+ON products FOR INSERT
+WITH CHECK (auth.uid() = user_id);
+```
+
+---
+
+## 📘 TypeScript Strict Rules
+
+### 1. Configuração tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true
+  }
+}
+```
+
+### 2. Types para Props
+
+```tsx
+// SEMPRE definir tipos para props
+interface ProductFormProps {
+  product?: Product
+  onSubmit: (data: ProductFormData) => Promise<void>
+  onCancel: () => void
+}
+
+function ProductForm({ product, onSubmit, onCancel }: ProductFormProps) {
+  // ...
+}
+```
+
+### 3. Evitar `any`
+
+```tsx
+// ❌ ERRADO
+const handleData = (data: any) => {
+  // ...
+}
+
+// ✅ CORRETO
+interface DataType {
+  id: string
+  name: string
+}
+
+const handleData = (data: DataType) => {
+  // ...
+}
+
+// ✅ ACEITÁVEL (quando realmente genérico)
+const handleData = <T,>(data: T) => {
+  // ...
+}
+```
+
+### 4. Null/Undefined Safety
+
+```tsx
+// SEMPRE verificar null/undefined
+const userName = user?.name ?? 'Guest'
+
+// Optional chaining
+const address = user?.profile?.address?.street
+
+// Nullish coalescing
+const count = data?.count ?? 0
+```
+
+---
+
+## ⚡ Performance Optimization
+
+### 1. Memoization
+
+```tsx
+// React.memo para componentes
+export const ProductCard = React.memo(({ product }: Props) => {
+  // ...
+})
+
+// useMemo para valores computados
+const filteredProducts = useMemo(() => {
+  return products.filter(p => p.category === selectedCategory)
+}, [products, selectedCategory])
+
+// useCallback para funções
+const handleSubmit = useCallback((data: FormData) => {
+  // ...
+}, [dependency])
+```
+
+### 2. Lazy Loading
+
+```tsx
+// Componentes
+const ProductDetail = lazy(() => import('./ProductDetail'))
+
+// Rotas
+<Suspense fallback={<Loading />}>
+  <ProductDetail />
+</Suspense>
+
+// Images
+import Image from 'next/image'
+
+<Image
+  src="/product.jpg"
+  alt="Product"
+  width={400}
+  height={300}
+  loading="lazy"
+/>
+```
+
+### 3. Debounce em Inputs
+
+```tsx
+import { useDebouncedCallback } from 'use-debounce'
+
+const handleSearch = useDebouncedCallback((value: string) => {
+  // Search logic
+}, 300)
+
+<input onChange={(e) => handleSearch(e.target.value)} />
+```
+
+---
+
+## 🔒 Security Checklist
+
+- [ ] Inputs sanitizados (DOMPurify para HTML)
+- [ ] Validação Zod em forms
+- [ ] CSRF tokens em mutations
+- [ ] Rate limiting em APIs
+- [ ] Env vars nunca expostas no client
+- [ ] SQL injection prevenido (via Supabase)
+- [ ] XSS prevenido (React escapa automaticamente)
+- [ ] Auth verificada em todas as rotas protegidas
+- [ ] RLS habilitado em todas as tabelas Supabase
+
+---
+
+## 📦 Imports Organization
+
+```tsx
+// 1. React & Next
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+// 2. External libraries
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+
+// 3. Internal components
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+
+// 4. Hooks
+import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+
+// 5. Utils & Types
+import { formatCurrency } from '@/lib/utils'
+import type { Product } from '@/types/models'
+
+// 6. Styles (se necessário)
+import styles from './styles.module.css'
+```
+
+---
+
+## 📝 Commit Conventions
+
+```bash
+# Formato
+<type>(<scope>): <subject>
+
+# Types
+feat:     Nova feature
+fix:      Bug fix
+docs:     Documentação
+style:    Formatação (não afeta código)
+refactor: Refatoração
+test:     Testes
+chore:    Manutenção
+
+# Exemplos
+feat(products): Add product creation form
+fix(sales): Fix total calculation in cart
+docs(readme): Update installation guide
+refactor(auth): Simplify login flow
+test(products): Add unit tests for ProductCard
+```
+
+---
+
+## ✅ Code Review Checklist
+
+### Antes de Commitar
+
+- [ ] TypeScript sem erros (`npm run type-check`)
+- [ ] Lint passou (`npm run lint`)
+- [ ] Testes passando (`npm test`)
+- [ ] Build funcionando (`npm run build`)
+- [ ] Design System seguido (OraclusX)
+- [ ] Acessibilidade implementada (WCAG 2.1 AA)
+- [ ] Performance otimizada (memoization, lazy loading)
+- [ ] Security checklist verificado
+- [ ] Documentação atualizada
+
+### Durante Review
+
+- [ ] Código legível e auto-explicativo
+- [ ] Sem código duplicado (DRY)
+- [ ] Funções pequenas e focadas (SRP)
+- [ ] Nomes descritivos (variáveis, funções, componentes)
+- [ ] Comentários apenas onde necessário
+- [ ] Error handling completo
+- [ ] Edge cases cobertos
+
+---
+
+## 🎯 Best Practices Summary
+
+1. **SEMPRE** ler `CLAUDE.md` antes de codificar
+2. **SEMPRE** usar OraclusX Design System
+3. **SEMPRE** validar com Zod
+4. **SEMPRE** tipar com TypeScript
+5. **SEMPRE** verificar acessibilidade
+6. **SEMPRE** otimizar performance
+7. **SEMPRE** fazer error handling
+8. **SEMPRE** testar antes de commitar
+9. **NUNCA** usar `any` sem justificativa
+10. **NUNCA** ignorar warnings do TypeScript
+
+---
+
+**Versão**: 1.0.0
+**Data**: 2025-11-15
+**Status**: ✅ Regras ativas
+
+⚠️ **ESTAS REGRAS SÃO OBRIGATÓRIAS EM TODO O DESENVOLVIMENTO!**
