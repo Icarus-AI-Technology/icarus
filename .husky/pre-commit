@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Type check
+echo "🔍 Running TypeScript type check..."
+npx tsc --noEmit
+
+# Lint check (if ESLint is configured)
+# echo "🔍 Running ESLint..."
+# npm run lint
+
+echo "✅ Pre-commit checks passed!"
