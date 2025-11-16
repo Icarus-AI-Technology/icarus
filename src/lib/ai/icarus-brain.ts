@@ -1,8 +1,15 @@
+import Anthropic from '@anthropic-ai/sdk'
+
 /**
  * IcarusBrain - AI Service Integration
  *
  * Provides 12 AI services for predictive analytics, insights, and recommendations
+ * Uses Claude Sonnet 4.5 for advanced AI capabilities
  */
+
+const client = new Anthropic({
+  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
+})
 
 export type AIServiceType =
   | 'demanda'           // Demand forecasting
@@ -18,232 +25,177 @@ export type AIServiceType =
   | 'roteamento'        // Intelligent routing
   | 'assistente'        // Virtual assistant
 
-export interface AIRequest {
-  type: AIServiceType
-  data: Record<string, unknown>
-  options?: {
-    model?: 'claude' | 'gpt4'
-    temperature?: number
-    maxTokens?: number
-  }
+export interface PredictParams {
+  produto_id?: string
+  cliente_id?: string
+  dias?: number
+  periodo?: number
+  limite?: number
+  contexto?: string
+  usuario_id?: string
+  tipo?: 'cross-sell' | 'up-sell' | 'similar'
+  [key: string]: any
 }
 
-export interface AIResponse<T = unknown> {
-  success: boolean
-  data?: T
-  error?: string
-  metadata?: {
-    model: string
-    tokens: number
-    latency: number
-  }
+export interface PredictResult {
+  valores?: number[]
+  previsoes?: Array<{ data: string; quantidade: number; confianca: number }>
+  confidence?: number
+  score?: number
+  risco?: 'baixo' | 'medio' | 'alto'
+  resposta?: string
+  acoes?: any[]
+  items?: any[]
+  fatores?: Array<{ fator: string; impacto: number }>
+  recomendacao?: string
+  tendencia?: 'alta' | 'baixa' | 'estavel'
+  [key: string]: any
 }
 
-export interface DemandForecast {
-  produto_id: string
-  previsoes: Array<{
-    data: string
-    quantidade: number
-    confianca: number
-  }>
-  tendencia: 'alta' | 'baixa' | 'estavel'
-  sazonalidade?: {
-    detectada: boolean
-    periodo?: string
-  }
-}
+class IcarusBrain {
+  /**
+   * Realiza previsões usando IA
+   */
+  async predict(tipo: string, params: PredictParams): Promise<PredictResult> {
+    const prompt = this.buildPrompt(tipo, params)
 
-export interface InadimplenciaScore {
-  cliente_id: string
-  score: number // 0-100
-  risco: 'baixo' | 'medio' | 'alto'
-  fatores: Array<{
-    fator: string
-    impacto: number
-  }>
+    try {
+      const response = await client.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: prompt }],
+      })
+
+      const content = response.content[0]
+      if (content.type === 'text') {
+        try {
+          return JSON.parse(content.text)
+        } catch {
+          return { resposta: content.text }
+        }
+      }
+
+      return { resposta: 'Erro ao processar resposta' }
+    } catch (error) {
+      console.error('Erro IcarusBrain:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Analisa dados usando IA
+   */
+  async analyze(tipo: string, params: PredictParams): Promise<PredictResult> {
+    return this.predict(`analise_${tipo}`, params)
+  }
+
+  /**
+   * Gera recomendações usando IA
+   */
+  async recommend(tipo: string, params: PredictParams): Promise<any[]> {
+    const result = await this.predict(`recomendacao_${tipo}`, params)
+    return result.items || []
+  }
+
+  /**
+   * Chat com assistente IA
+   */
+  async chat(mensagem: string, params: PredictParams = {}): Promise<PredictResult> {
+    const prompt = `
+Contexto: ${params.contexto || 'geral'}
+Usuário: ${params.usuario_id || 'desconhecido'}
+
+Mensagem do usuário: ${mensagem}
+
+Responda de forma clara e objetiva. Se houver ações sugeridas, inclua no campo "acoes".
+Retorne um JSON com os campos: resposta (string) e opcionalmente acoes (array).
+`
+
+    try {
+      const response = await client.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2048,
+        messages: [{ role: 'user', content: prompt }],
+      })
+
+      const content = response.content[0]
+      if (content.type === 'text') {
+        try {
+          return JSON.parse(content.text)
+        } catch {
+          return { resposta: content.text, acoes: [] }
+        }
+      }
+
+      return { resposta: 'Erro ao processar resposta', acoes: [] }
+    } catch (error) {
+      console.error('Erro IcarusBrain chat:', error)
+      throw error
+    }
+  }
+
+  private buildPrompt(tipo: string, params: PredictParams): string {
+    switch (tipo) {
+      case 'demanda':
+        return `
+Preveja a demanda para o produto ${params.produto_id} nos próximos ${params.dias || params.periodo || 30} dias.
+Retorne um JSON com: {
+  valores: number[],
+  confidence: number,
+  tendencia: 'alta' | 'baixa' | 'estavel',
+  previsoes: Array<{ data: string, quantidade: number, confianca: number }>
+}
+`
+
+      case 'analise_inadimplencia':
+        return `
+Analise o risco de inadimplência do cliente ${params.cliente_id}.
+Retorne um JSON com: {
+  score: number (0-100),
+  risco: 'baixo' | 'medio' | 'alto',
+  fatores: Array<{ fator: string, impacto: number }>,
   recomendacao: string
 }
+`
 
-export interface ProductRecommendation {
-  produto_id: string
-  nome: string
-  score: number
-  motivo: string
-  tipo: 'cross-sell' | 'up-sell' | 'similar'
-}
-
-class IcarusBrainService {
-  private apiKey: string
-  private baseUrl: string
-
-  constructor() {
-    this.apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY || ''
-    this.baseUrl = 'https://api.anthropic.com/v1'
-  }
-
-  /**
-   * Predict demand for a product
-   */
-  async predictDemand(
+      case 'recomendacao_produtos':
+        return `
+Recomende produtos para o cliente ${params.cliente_id}.
+Tipo: ${params.tipo || 'cross-sell'}
+Limite: ${params.limite || 5} produtos.
+Retorne um JSON com: {
+  items: Array<{
     produto_id: string,
-    periodo = 30
-  ): Promise<AIResponse<DemandForecast>> {
-    try {
-      // In production, this would call the actual AI API
-      // For now, returning mock data
-      const forecast: DemandForecast = {
-        produto_id,
-        previsoes: Array.from({ length: periodo }, (_, i) => ({
-          data: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString(),
-          quantidade: Math.floor(Math.random() * 100) + 50,
-          confianca: 0.85 + Math.random() * 0.1,
-        })),
-        tendencia: 'alta',
-        sazonalidade: {
-          detectada: true,
-          periodo: 'mensal',
-        },
-      }
+    nome: string,
+    score: number,
+    motivo: string,
+    tipo: string
+  }>
+}
+`
 
-      return {
-        success: true,
-        data: forecast,
-        metadata: {
-          model: 'claude-sonnet-4.5',
-          tokens: 1250,
-          latency: 450,
-        },
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }
-    }
-  }
+      case 'analise_estoque':
+        return `
+Analise o estoque e sugira otimizações.
+Produto: ${params.produto_id || 'todos'}
+Retorne um JSON com sugestões de reposição e otimização.
+`
 
-  /**
-   * Analyze customer delinquency risk
-   */
-  async analyzeInadimplencia(
-    cliente_id: string
-  ): Promise<AIResponse<InadimplenciaScore>> {
-    try {
-      const score: InadimplenciaScore = {
-        cliente_id,
-        score: Math.floor(Math.random() * 40) + 20, // 20-60
-        risco: 'medio',
-        fatores: [
-          { fator: 'Histórico de pagamentos', impacto: 0.35 },
-          { fator: 'Tempo de relacionamento', impacto: -0.15 },
-          { fator: 'Volume de compras', impacto: -0.10 },
-          { fator: 'Atrasos recentes', impacto: 0.25 },
-        ],
-        recomendacao: 'Monitorar próximos pagamentos. Considerar redução de limite.',
-      }
+      case 'analise_sentimento':
+        return `
+Analise o sentimento do feedback/texto fornecido.
+Retorne um JSON com: { score: number, sentimento: 'positivo' | 'neutro' | 'negativo' }
+`
 
-      return {
-        success: true,
-        data: score,
-        metadata: {
-          model: 'claude-sonnet-4.5',
-          tokens: 890,
-          latency: 320,
-        },
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }
-    }
-  }
+      default:
+        return `
+Tipo de análise: ${tipo}
+Parâmetros: ${JSON.stringify(params)}
 
-  /**
-   * Recommend products for a customer
-   */
-  async recommendProducts(
-    cliente_id: string,
-    tipo: 'cross-sell' | 'up-sell' | 'similar' = 'cross-sell'
-  ): Promise<AIResponse<ProductRecommendation[]>> {
-    try {
-      const recommendations: ProductRecommendation[] = [
-        {
-          produto_id: '1',
-          nome: 'Prótese Premium XYZ',
-          score: 0.92,
-          motivo: 'Alta compatibilidade com histórico de compras',
-          tipo,
-        },
-        {
-          produto_id: '2',
-          nome: 'Kit Cirúrgico ABC',
-          score: 0.87,
-          motivo: 'Frequentemente comprado junto',
-          tipo,
-        },
-        {
-          produto_id: '3',
-          nome: 'Material Especial DEF',
-          score: 0.81,
-          motivo: 'Tendência do setor',
-          tipo,
-        },
-      ]
-
-      return {
-        success: true,
-        data: recommendations,
-        metadata: {
-          model: 'claude-sonnet-4.5',
-          tokens: 1100,
-          latency: 380,
-        },
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }
-    }
-  }
-
-  /**
-   * General AI query
-   */
-  async query(request: AIRequest): Promise<AIResponse> {
-    const model = request.options?.model === 'gpt4' ? 'gpt-4' : 'claude-sonnet-4.5'
-
-    try {
-      // In production, this would route to the appropriate AI service
-      // based on the request type
-
-      switch (request.type) {
-        case 'demanda':
-          return this.predictDemand(
-            request.data.produto_id as string,
-            request.data.periodo as number
-          )
-        case 'inadimplencia':
-          return this.analyzeInadimplencia(request.data.cliente_id as string)
-        case 'produtos':
-          return this.recommendProducts(
-            request.data.cliente_id as string,
-            request.data.tipo as 'cross-sell' | 'up-sell' | 'similar'
-          )
-        default:
-          return {
-            success: false,
-            error: `Service type '${request.type}' not implemented yet`,
-          }
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }
+Retorne um JSON apropriado para este tipo de análise.
+`
     }
   }
 }
 
-export const icarusBrain = new IcarusBrainService()
+export const icarusBrain = new IcarusBrain()

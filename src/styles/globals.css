@@ -1,0 +1,267 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Mode - OraclusX Design System */
+    --background: 240 10% 98%;          /* #F9FAFB */
+    --neomorphic-bg: 214 27% 96%;       /* #F0F4F8 */
+    --foreground: 222 47% 11%;          /* #1F2937 */
+    --primary: 239 84% 67%;             /* #6366F1 - Indigo */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 20% 65%;           /* #64748B */
+    --secondary-foreground: 0 0% 100%;
+    --accent: 258 90% 66%;              /* #8B5CF6 */
+    --accent-foreground: 0 0% 100%;
+    --muted: 220 14% 96%;               /* #F3F4F6 */
+    --muted-foreground: 215 16% 47%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --border: 220 13% 91%;              /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 239 84% 67%;
+    --radius: 0.5rem;
+
+    /* Semantic Colors */
+    --success: 158 64% 52%;             /* #10B981 - Green */
+    --warning: 38 92% 50%;              /* #F59E0B - Amber */
+    --error: 4 90% 58%;                 /* #EF4444 - Red */
+    --info: 217 91% 60%;                /* #3B82F6 - Blue */
+  }
+
+  .dark {
+    /* Dark Mode - OraclusX Design System */
+    --background: 222 47% 11%;          /* #0F172A */
+    --neomorphic-bg: 220 26% 18%;       /* #1E293B */
+    --foreground: 220 14% 96%;          /* #F3F4F6 */
+    --primary: 239 84% 67%;             /* #6366F1 - Mesmo indigo */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 38%;           /* #475569 */
+    --secondary-foreground: 0 0% 100%;
+    --accent: 258 90% 74%;              /* #A78BFA */
+    --accent-foreground: 0 0% 100%;
+    --muted: 220 26% 18%;               /* #1E293B */
+    --muted-foreground: 215 16% 65%;
+    --card: 220 26% 18%;
+    --card-foreground: 220 14% 96%;
+    --popover: 220 26% 18%;
+    --popover-foreground: 220 14% 96%;
+    --border: 215 28% 25%;              /* #334155 */
+    --input: 215 28% 25%;
+    --ring: 239 84% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ==========================================
+   NEOMORPHIC CLASSES - OraclusX Design System
+   ========================================== */
+
+@layer components {
+  /* Soft elevation - Raised effect */
+  .neu-soft {
+    background: hsl(var(--neomorphic-bg));
+    box-shadow: 8px 8px 16px rgba(174, 174, 192, 0.2),
+                -8px -8px 16px rgba(255, 255, 255, 0.5);
+  }
+
+  .dark .neu-soft {
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3),
+                -8px -8px 16px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Pressed effect - Inset */
+  .neu-pressed {
+    background: hsl(var(--neomorphic-bg));
+    box-shadow: inset 4px 4px 8px rgba(174, 174, 192, 0.2),
+                inset -4px -4px 8px rgba(255, 255, 255, 0.5);
+  }
+
+  .dark .neu-pressed {
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+                inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Concave effect */
+  .neu-concave {
+    background: linear-gradient(145deg, #d9dce0, #f0f3f7);
+    box-shadow: 8px 8px 16px #c5c7ca,
+                -8px -8px 16px #ffffff;
+  }
+
+  .dark .neu-concave {
+    background: linear-gradient(145deg, #14192a, #1e293b);
+    box-shadow: 8px 8px 16px #0a0e1a,
+                -8px -8px 16px #28344c;
+  }
+
+  /* Convex effect */
+  .neu-convex {
+    background: linear-gradient(145deg, #f0f3f7, #d9dce0);
+    box-shadow: 8px 8px 16px #c5c7ca,
+                -8px -8px 16px #ffffff;
+  }
+
+  .dark .neu-convex {
+    background: linear-gradient(145deg, #1e293b, #14192a);
+    box-shadow: 8px 8px 16px #0a0e1a,
+                -8px -8px 16px #28344c;
+  }
+
+  /* KPI Card - Preset for dashboard cards */
+  .neu-card {
+    @apply neu-soft p-6 rounded-lg;
+  }
+
+  /* Form Row - Standard form field wrapper */
+  .form-row {
+    @apply flex flex-col gap-2;
+  }
+
+  .form-row label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .dark .form-row label {
+    @apply text-gray-300;
+  }
+
+  /* Hover states for neomorphic elements */
+  .neu-soft:hover {
+    box-shadow: 10px 10px 20px rgba(174, 174, 192, 0.25),
+                -10px -10px 20px rgba(255, 255, 255, 0.6);
+  }
+
+  .dark .neu-soft:hover {
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.4),
+                -10px -10px 20px rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+
+@layer utilities {
+  /* Scrollbar customization */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/50;
+  }
+
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  /* Glassmorphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+
+@layer utilities {
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 1000px 100%;
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+   ========================================== */
+
+@layer base {
+  /* Focus visible for keyboard navigation */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .neu-soft,
+    .neu-pressed,
+    .neu-concave,
+    .neu-convex {
+      box-shadow: none;
+      border: 2px solid hsl(var(--border));
+    }
+  }
+}
