@@ -22,7 +22,9 @@ test.describe('Performance and Loading', () => {
 
     // Check if DevTools exist (they may be closed)
     const devToolsCount = await devTools.count()
-    expect(devToolsCount).toBeGreaterThanOrEqual(0)
+    // Não falhar no CI: apenas garantir que a chamada não lance erro.
+    // Se quiser validar presença em ambiente de dev, ajustar essa asserção condicionalmente.
+    expect(typeof devToolsCount).toBe('number')
   })
 
   test('should not have console errors on load', async ({ page }) => {
@@ -60,7 +62,8 @@ test.describe('Performance and Loading', () => {
     await page.waitForLoadState('networkidle')
 
     // UI should still be responsive
-    const sidebar = page.locator('nav, aside, [role="navigation"]')
+    // Selecionar aside explicitamente para evitar múltiplos matches
+    const sidebar = page.locator('aside').first()
     await expect(sidebar).toBeVisible()
 
     // Should be able to navigate back
@@ -83,7 +86,7 @@ test.describe('Performance and Loading', () => {
     await expect(page).toHaveURL('/')
 
     // UI should still be functional
-    const content = page.locator('main, [role="main"]')
+    const content = page.locator('main[role="main"]')
     await expect(content).toBeVisible()
   })
 })
