@@ -1,49 +1,134 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Package, TrendingUp, AlertTriangle, DollarSign } from 'lucide-react'
-import { Card, KPICard, Button } from '@/components/ui'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus, Package, TrendingUp, AlertTriangle, DollarSign, Edit, Trash2 } from 'lucide-react'
+import { Card, KPICard, Button, Input, Loading } from '@/components/ui'
+import { useProducts } from './hooks/useProducts'
+import { productSchema } from './schemas/product.schema'
+import type { ProductFormData } from './types/product.types'
 
 export default function ProdutosPage() {
   const [activeTab, setActiveTab] = useState<'list' | 'form'>('list')
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState<'all' | 'true' | 'false'>('all')
 
-  // Mock data (replace with real data from Supabase)
-  const kpis = {
-    total: 1250,
-    active: 1180,
-    lowStock: 45,
-    totalValue: 458900.50
+  // Supabase integration
+  const {
+    products,
+    kpis,
+    loading,
+    error,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    setFilters
+  } = useProducts()
+
+  // React Hook Form with Zod validation
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    setValue,
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      active: true,
+      stock: 0,
+      min_stock: 0,
+      cost: 0,
+      price: 0,
+      unit: 'UN',
+    },
+  })
+
+  // Handle form submit
+  const onSubmit = async (data: ProductFormData) => {
+    try {
+      if (editingId) {
+        await updateProduct(editingId, data)
+      } else {
+        await createProduct(data)
+      }
+
+      reset()
+      setEditingId(null)
+      setActiveTab('list')
+    } catch (err) {
+      console.error('Error saving product:', err)
+      alert(err instanceof Error ? err.message : 'Erro ao salvar produto')
+    }
   }
 
-  const mockProducts = [
-    {
-      id: '1',
-      code: 'PRD001',
-      name: 'Notebook Dell Inspiron',
-      price: 3500,
-      stock: 15,
-      min_stock: 5,
-      active: true
-    },
-    {
-      id: '2',
-      code: 'PRD002',
-      name: 'Mouse Logitech MX',
-      price: 250,
-      stock: 3,
-      min_stock: 10,
-      active: true
-    },
-    {
-      id: '3',
-      code: 'PRD003',
-      name: 'Teclado Mecânico',
-      price: 450,
-      stock: 25,
-      min_stock: 10,
-      active: true
-    },
-  ]
+  // Handle edit
+  const handleEdit = (product: any) => {
+    setEditingId(product.id)
+    setValue('code', product.code)
+    setValue('name', product.name)
+    setValue('description', product.description || '')
+    setValue('price', product.price)
+    setValue('cost', product.cost)
+    setValue('stock', product.stock)
+    setValue('min_stock', product.min_stock)
+    setValue('unit', product.unit)
+    setValue('active', product.active)
+    setActiveTab('form')
+  }
+
+  // Handle delete
+  const handleDelete = async (id: string, name: string) => {
+    if (confirm(`Deseja realmente excluir o produto "${name}"?`)) {
+      try {
+        await deleteProduct(id)
+      } catch (err) {
+        console.error('Error deleting product:', err)
+        alert('Erro ao excluir produto')
+      }
+    }
+  }
+
+  // Handle cancel
+  const handleCancel = () => {
+    reset()
+    setEditingId(null)
+    setActiveTab('list')
+  }
+
+  // Apply filters
+  const handleApplyFilters = () => {
+    setFilters({
+      search: searchTerm || undefined,
+      active: statusFilter !== 'all' ? statusFilter === 'true' : undefined,
+    })
+  }
+
+  if (loading && !products.length) {
+    return (
+      <div className="min-h-screen bg-[#0f1419]">
+        <Loading text="Carregando produtos..." />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#0f1419] p-6">
+        <div className="max-w-7xl mx-auto">
+          <Card className="bg-red-500/10 border-red-500/20">
+            <h2 className="text-red-400 font-bold text-lg">Erro ao carregar dados</h2>
+            <p className="text-red-300 mt-2">{error.message}</p>
+            <p className="text-gray-400 text-sm mt-4">
+              Verifique se o Supabase está configurado corretamente em .env.local
+            </p>
+          </Card>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#0f1419] p-6">
@@ -55,46 +140,50 @@ export default function ProdutosPage() {
             <h1 className="text-2xl font-bold text-gray-100">Produtos</h1>
             <p className="text-gray-400 mt-1">Gerencie seu cadastro de produtos</p>
           </div>
-          <Button onClick={() => setActiveTab('form')}>
+          <Button
+            onClick={() => {
+              reset()
+              setEditingId(null)
+              setActiveTab('form')
+            }}
+          >
             <Plus className="w-5 h-5" />
             Novo Produto
           </Button>
         </div>
 
         {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <KPICard
-            label="Total de Produtos"
-            value={kpis.total}
-            icon={<Package className="w-6 h-6" />}
-            color="blue"
-            trend={{ value: 5.2, isPositive: true }}
-          />
-          <KPICard
-            label="Produtos Ativos"
-            value={kpis.active}
-            icon={<TrendingUp className="w-6 h-6" />}
-            color="green"
-            trend={{ value: 2.1, isPositive: true }}
-          />
-          <KPICard
-            label="Estoque Baixo"
-            value={kpis.lowStock}
-            icon={<AlertTriangle className="w-6 h-6" />}
-            color="yellow"
-            trend={{ value: 8.5, isPositive: false }}
-          />
-          <KPICard
-            label="Valor Total"
-            value={new Intl.NumberFormat('pt-BR', {
-              style: 'currency',
-              currency: 'BRL'
-            }).format(kpis.totalValue)}
-            icon={<DollarSign className="w-6 h-6" />}
-            color="purple"
-            trend={{ value: 12.3, isPositive: true }}
-          />
-        </div>
+        {kpis && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <KPICard
+              label="Total de Produtos"
+              value={kpis.total}
+              icon={<Package className="w-6 h-6" />}
+              color="blue"
+            />
+            <KPICard
+              label="Produtos Ativos"
+              value={kpis.active}
+              icon={<TrendingUp className="w-6 h-6" />}
+              color="green"
+            />
+            <KPICard
+              label="Estoque Baixo"
+              value={kpis.lowStock}
+              icon={<AlertTriangle className="w-6 h-6" />}
+              color="yellow"
+            />
+            <KPICard
+              label="Valor Total"
+              value={new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(kpis.totalValue)}
+              icon={<DollarSign className="w-6 h-6" />}
+              color="purple"
+            />
+          </div>
+        )}
 
         {/* Content */}
         <Card>
@@ -110,7 +199,7 @@ export default function ProdutosPage() {
                 }
               `}
             >
-              Lista
+              Lista ({products.length})
             </button>
             <button
               onClick={() => setActiveTab('form')}
@@ -122,11 +211,11 @@ export default function ProdutosPage() {
                 }
               `}
             >
-              Formulário
+              {editingId ? 'Editar' : 'Novo'}
             </button>
           </div>
 
-          {/* Tab Content */}
+          {/* Tab Content - List */}
           {activeTab === 'list' && (
             <div className="space-y-4">
               {/* Filters */}
@@ -134,6 +223,9 @@ export default function ProdutosPage() {
                 <input
                   type="search"
                   placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
                   className="
                     flex-1
                     bg-gray-900/50 backdrop-blur-sm
@@ -146,6 +238,8 @@ export default function ProdutosPage() {
                   "
                 />
                 <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value as any)}
                   className="
                     bg-gray-900/50 backdrop-blur-sm
                     px-4 py-3 rounded-xl
@@ -157,10 +251,13 @@ export default function ProdutosPage() {
                     cursor-pointer
                   "
                 >
-                  <option value="">Todos os status</option>
+                  <option value="all">Todos os status</option>
                   <option value="true">Ativos</option>
                   <option value="false">Inativos</option>
                 </select>
+                <Button onClick={handleApplyFilters} variant="secondary">
+                  Filtrar
+                </Button>
               </div>
 
               {/* Table */}
@@ -189,211 +286,212 @@ export default function ProdutosPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {mockProducts.map((product) => (
-                      <tr key={product.id} className="hover:bg-white/5 transition-colors">
-                        <td className="px-4 py-3 text-sm text-gray-300">
-                          {product.code}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-300">
-                          {product.name}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-300 text-right">
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL'
-                          }).format(product.price)}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-right">
-                          <span className={
-                            product.stock <= product.min_stock
-                              ? 'text-yellow-400'
-                              : 'text-gray-300'
-                          }>
-                            {product.stock}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <span className={`
-                            inline-flex items-center gap-1
-                            px-3 py-1 rounded-lg text-xs font-medium
-                            ${product.active
-                              ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                              : 'bg-red-500/10 border border-red-500/20 text-red-400'
-                            }
-                          `}>
-                            {product.active ? 'Ativo' : 'Inativo'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <button className="text-blue-400 hover:text-blue-300 text-sm">
-                            Editar
-                          </button>
+                    {products.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                          Nenhum produto encontrado
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      products.map((product) => (
+                        <tr key={product.id} className="hover:bg-white/5 transition-colors">
+                          <td className="px-4 py-3 text-sm text-gray-300">
+                            {product.code}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-300">
+                            {product.name}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-300 text-right">
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL'
+                            }).format(product.price)}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-right">
+                            <span className={
+                              product.stock <= product.min_stock
+                                ? 'text-yellow-400 font-medium'
+                                : 'text-gray-300'
+                            }>
+                              {product.stock}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <span className={`
+                              inline-flex items-center gap-1
+                              px-3 py-1 rounded-lg text-xs font-medium
+                              ${product.active
+                                ? 'bg-green-500/10 border border-green-500/20 text-green-400'
+                                : 'bg-red-500/10 border border-red-500/20 text-red-400'
+                              }
+                            `}>
+                              {product.active ? 'Ativo' : 'Inativo'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => handleEdit(product)}
+                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-colors"
+                                title="Editar"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(product.id, product.name)}
+                                className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+                                title="Excluir"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                <p className="text-sm text-gray-400">
-                  Mostrando 1-{mockProducts.length} de {kpis.total}
-                </p>
-                <div className="flex gap-2">
-                  <Button variant="secondary" disabled>
-                    Anterior
-                  </Button>
-                  <Button variant="secondary">
-                    Próxima
-                  </Button>
-                </div>
               </div>
             </div>
           )}
 
+          {/* Tab Content - Form */}
           {activeTab === 'form' && (
-            <div>
-              <form className="space-y-6">
-                {/* Grid 2 colunas */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Código *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="PRD001"
-                      className="
-                        bg-gray-900/50 backdrop-blur-sm
-                        w-full px-4 py-3 rounded-xl
-                        border border-white/10
-                        text-gray-100 placeholder-gray-500
-                        shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
-                        focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
-                        transition-all duration-200
-                      "
-                    />
-                  </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Grid 2 colunas */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Código"
+                  {...register('code')}
+                  error={errors.code?.message}
+                  required
+                  placeholder="PRD001"
+                />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Nome *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Nome do produto"
-                      className="
-                        bg-gray-900/50 backdrop-blur-sm
-                        w-full px-4 py-3 rounded-xl
-                        border border-white/10
-                        text-gray-100 placeholder-gray-500
-                        shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
-                        focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
-                        transition-all duration-200
-                      "
-                    />
-                  </div>
-                </div>
+                <Input
+                  label="Nome"
+                  {...register('name')}
+                  error={errors.name?.message}
+                  required
+                  placeholder="Nome do produto"
+                />
+              </div>
 
-                {/* Descrição full width */}
+              {/* Descrição full width */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Descrição
+                </label>
+                <textarea
+                  {...register('description')}
+                  rows={4}
+                  placeholder="Descrição do produto..."
+                  className={`
+                    bg-gray-900/50 backdrop-blur-sm
+                    w-full px-4 py-3 rounded-xl
+                    border ${errors.description ? 'border-red-500/50' : 'border-white/10'}
+                    text-gray-100 placeholder-gray-500
+                    shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
+                    focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
+                    resize-none
+                    transition-all duration-200
+                  `}
+                />
+                {errors.description && (
+                  <p className="text-red-400 text-sm mt-1">{errors.description.message}</p>
+                )}
+              </div>
+
+              {/* Grid 4 colunas */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Input
+                  label="Preço"
+                  type="number"
+                  step="0.01"
+                  {...register('price', { valueAsNumber: true })}
+                  error={errors.price?.message}
+                  required
+                  placeholder="0.00"
+                />
+
+                <Input
+                  label="Custo"
+                  type="number"
+                  step="0.01"
+                  {...register('cost', { valueAsNumber: true })}
+                  error={errors.cost?.message}
+                  required
+                  placeholder="0.00"
+                />
+
+                <Input
+                  label="Estoque"
+                  type="number"
+                  {...register('stock', { valueAsNumber: true })}
+                  error={errors.stock?.message}
+                  required
+                  placeholder="0"
+                />
+
+                <Input
+                  label="Est. Mínimo"
+                  type="number"
+                  {...register('min_stock', { valueAsNumber: true })}
+                  error={errors.min_stock?.message}
+                  required
+                  placeholder="0"
+                />
+              </div>
+
+              {/* Grid 2 colunas */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Unidade"
+                  {...register('unit')}
+                  error={errors.unit?.message}
+                  required
+                  placeholder="UN"
+                  maxLength={10}
+                />
+
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Descrição
+                    Status
                   </label>
-                  <textarea
-                    rows={4}
-                    placeholder="Descrição do produto..."
+                  <select
+                    {...register('active')}
                     className="
                       bg-gray-900/50 backdrop-blur-sm
                       w-full px-4 py-3 rounded-xl
                       border border-white/10
-                      text-gray-100 placeholder-gray-500
+                      text-gray-100
                       shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
                       focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
-                      resize-none
                       transition-all duration-200
+                      cursor-pointer
                     "
-                  />
-                </div>
-
-                {/* Grid preço/custo/estoque */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Preço *
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="0.00"
-                      className="
-                        bg-gray-900/50 backdrop-blur-sm
-                        w-full px-4 py-3 rounded-xl
-                        border border-white/10
-                        text-gray-100 placeholder-gray-500
-                        shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
-                        focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
-                        transition-all duration-200
-                      "
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Custo *
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="0.00"
-                      className="
-                        bg-gray-900/50 backdrop-blur-sm
-                        w-full px-4 py-3 rounded-xl
-                        border border-white/10
-                        text-gray-100 placeholder-gray-500
-                        shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
-                        focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
-                        transition-all duration-200
-                      "
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Estoque *
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="0"
-                      className="
-                        bg-gray-900/50 backdrop-blur-sm
-                        w-full px-4 py-3 rounded-xl
-                        border border-white/10
-                        text-gray-100 placeholder-gray-500
-                        shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
-                        focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
-                        transition-all duration-200
-                      "
-                    />
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setActiveTab('list')}
                   >
-                    Cancelar
-                  </Button>
-                  <Button type="submit">
-                    Salvar Produto
-                  </Button>
+                    <option value="true">Ativo</option>
+                    <option value="false">Inativo</option>
+                  </select>
                 </div>
-              </form>
-            </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleCancel}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" loading={isSubmitting}>
+                  {editingId ? 'Atualizar' : 'Salvar'} Produto
+                </Button>
+              </div>
+            </form>
           )}
         </Card>
 
