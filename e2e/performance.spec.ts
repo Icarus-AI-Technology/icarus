@@ -22,8 +22,8 @@ test.describe('Performance and Loading', () => {
 
     // Check if DevTools exist (they may be closed)
     const devToolsCount = await devTools.count()
-    // Não falhar no CI: apenas garantir que a chamada não lance erro.
-    // Se quiser validar presença em ambiente de dev, ajustar essa asserção condicionalmente.
+    // Don't fail in CI: just ensure the call doesn't throw an error.
+    // To validate presence in dev environment, adjust this assertion conditionally.
     expect(typeof devToolsCount).toBe('number')
   })
 
@@ -62,7 +62,7 @@ test.describe('Performance and Loading', () => {
     await page.waitForLoadState('networkidle')
 
     // UI should still be responsive
-    // Selecionar aside explicitamente para evitar múltiplos matches
+    // Select aside explicitly to avoid multiple matches
     const sidebar = page.locator('aside').first()
     await expect(sidebar).toBeVisible()
 

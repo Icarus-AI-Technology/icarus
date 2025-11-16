@@ -4,7 +4,7 @@ test.describe('Modules Navigation and Loading', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
-    // Garantir que a navegação lateral esteja pronta antes dos testes
+    // Ensure sidebar navigation is ready before tests
     await expect(page.locator('aside')).toBeVisible()
   })
 
@@ -39,7 +39,7 @@ test.describe('Modules Navigation and Loading', () => {
   })
 
   test('should navigate to Showcase module', async ({ page }) => {
-    // Garantir sidebar visível e expandir Dev Tools, depois clicar em Showcase
+    // Ensure sidebar is visible, expand Dev Tools, then click Showcase
     await expect(page.locator('aside')).toBeVisible()
 
     const devToolsSection = page.locator('text=Dev Tools').first()
@@ -60,7 +60,7 @@ test.describe('Modules Navigation and Loading', () => {
     await expect(page).toHaveURL('/compras')
 
     // Should show placeholder or module content
-    // Usar seletor específico para evitar múltiplos elementos
+    // Use specific selector to avoid multiple elements
     const content = page.locator('main[role="main"]')
     await expect(content).toBeVisible()
   })
@@ -82,12 +82,12 @@ test.describe('Modules Navigation and Loading', () => {
     for (const category of categories) {
       const categoryElement = page.locator(`text=${category}`).first()
       try {
-        // Tenta esperar um pouco para ver se a categoria está visível/ativável
+        // Try waiting briefly to see if the category is visible/clickable
         await expect(categoryElement).toBeVisible({ timeout: 2000 })
         await categoryElement.click()
-        await page.waitForTimeout(300) // aguardar animação
+        await page.waitForTimeout(300) // Wait for animation
       } catch {
-        // Categoria ausente ou não visível: ignorar e continuar
+        // Category absent or not visible: ignore and continue
       }
     }
   })
