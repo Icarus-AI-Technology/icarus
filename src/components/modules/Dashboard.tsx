@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useSupabase } from '@/hooks/useSupabase'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+import { formatCurrency } from '@/lib/utils/formatters'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   Calendar, Package, DollarSign, TrendingUp, TrendingDown,
   AlertCircle, CheckCircle2, Clock, Brain
@@ -117,35 +118,13 @@ export function Dashboard() {
     }
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
-
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Visão geral do sistema ICARUS v5.0</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-16 mb-2" />
-                <Skeleton className="h-3 w-32" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Dashboard"
+        subtitle="Visão geral do sistema ICARUS v5.0"
+        kpiCount={4}
+      />
     )
   }
 

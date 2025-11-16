@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useSupabase } from '@/hooks/useSupabase'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   Package, AlertTriangle, TrendingUp, Brain, RefreshCw,
   ArrowUp, ArrowDown, ChevronRight
@@ -201,24 +201,11 @@ export function EstoqueIA() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Estoque IA</h1>
-          <p className="text-muted-foreground">Gestão inteligente de estoque com IA</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-4 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-16" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ModuleLoadingSkeleton
+        title="Estoque IA"
+        subtitle="Gestão inteligente de estoque com IA"
+        kpiCount={4}
+      />
     )
   }
 
