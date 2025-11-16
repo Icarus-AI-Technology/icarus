@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -6,6 +6,7 @@ import { useFinancial } from '@/hooks/useFinancial'
 import { AccountFormDialog } from '@/components/financial/AccountFormDialog'
 import { PaymentDialog } from '@/components/financial/PaymentDialog'
 import { ExportService } from '@/services/export.service'
+import { DREService } from '@/services/dre.service'
 import {
   type FinancialAccount,
   type FinancialAccountFormData,
@@ -30,6 +31,10 @@ import {
   FileText,
   Download,
   FileSpreadsheet,
+  BarChart3,
+  Activity,
+  Target,
+  Percent,
 } from 'lucide-react'
 import {
   LineChart,
@@ -63,9 +68,9 @@ export default function FinanceiroAvancado() {
     deleteAccount,
     payAccount,
   } = useFinancial()
-  const [activeTab, setActiveTab] = useState<'receivable' | 'payable' | 'cashflow' | 'summary'>(
-    'summary'
-  )
+  const [activeTab, setActiveTab] = useState<
+    'receivable' | 'payable' | 'cashflow' | 'summary' | 'dre'
+  >('summary')
 
   // Dialog states
   const [accountFormOpen, setAccountFormOpen] = useState(false)
@@ -150,6 +155,31 @@ export default function FinanceiroAvancado() {
   const handleExportCashFlowExcel = () => {
     ExportService.exportCashFlowExcel(monthlyData)
   }
+
+  const handleExportDRE = () => {
+    if (!dreData) return
+    DREService.exportDREtoPDF(dreData, dreIndicators)
+  }
+
+  // Calculate DRE data
+  const dreComparative = useMemo(() => {
+    if (accounts.length === 0) return null
+    return DREService.calculateComparativeDRE(accounts)
+  }, [accounts])
+
+  const dreData = dreComparative?.current || null
+  const drePrevious = dreComparative?.previous || null
+  const dreComparison = dreComparative?.comparison || null
+
+  const dreIndicators = useMemo(() => {
+    if (!dreData) return null
+    return DREService.calculateIndicators(dreData)
+  }, [dreData])
+
+  const dreHistory = useMemo(() => {
+    if (accounts.length === 0) return []
+    return DREService.getMonthlyDREHistory(accounts, 6)
+  }, [accounts])
 
   if (loading) {
     return (
@@ -316,6 +346,18 @@ export default function FinanceiroAvancado() {
                       <div>
                         <p className="font-medium">Fluxo Excel</p>
                         <p className="text-xs text-gray-400">Análise detalhada</p>
+                      </div>
+                    </button>
+                    <div className="border-t border-gray-700 my-1"></div>
+                    <button
+                      onClick={handleExportDRE}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700 flex items-center gap-3 transition-colors"
+                      disabled={!dreData}
+                    >
+                      <BarChart3 className="w-4 h-4 text-orange-400" />
+                      <div>
+                        <p className="font-medium">DRE PDF</p>
+                        <p className="text-xs text-gray-400">Demonstração completa</p>
                       </div>
                     </button>
                   </div>
@@ -572,6 +614,7 @@ export default function FinanceiroAvancado() {
                 <TabsTrigger value="receivable">Contas a Receber</TabsTrigger>
                 <TabsTrigger value="payable">Contas a Pagar</TabsTrigger>
                 <TabsTrigger value="cashflow">Fluxo de Caixa</TabsTrigger>
+                <TabsTrigger value="dre">DRE</TabsTrigger>
               </TabsList>
 
               {/* Summary Tab */}
@@ -1140,6 +1183,264 @@ export default function FinanceiroAvancado() {
                     </div>
                   </div>
                 </div>
+              </TabsContent>
+
+              {/* DRE Tab */}
+              <TabsContent value="dre">
+                {!dreData ? (
+                  <div className="text-center py-12">
+                    <Activity className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-400 mb-2">Carregando DRE...</h3>
+                    <p className="text-gray-500 text-sm">Calculando demonstração de resultados</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* DRE Header */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-100">
+                          Demonstração de Resultados do Exercício
+                        </h3>
+                        <p className="text-sm text-gray-400 mt-1">
+                          Período: {new Date(dreData.period.start).toLocaleDateString('pt-BR')} até{' '}
+                          {new Date(dreData.period.end).toLocaleDateString('pt-BR')}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={handleExportDRE}
+                        className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700"
+                      >
+                        <Download className="w-4 h-4" />
+                        Exportar DRE
+                      </Button>
+                    </div>
+
+                    {/* Comparative Cards */}
+                    {dreComparison && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Card className="p-4 bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+                          <div className="flex items-center gap-3">
+                            <TrendingUp className="w-8 h-8 text-blue-400" />
+                            <div>
+                              <p className="text-sm text-gray-400">Crescimento Receita</p>
+                              <p className={`text-2xl font-bold ${dreComparison.revenueGrowth >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                {dreComparison.revenueGrowth >= 0 ? '+' : ''}
+                                {dreComparison.revenueGrowth.toFixed(1)}%
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
+                        <Card className="p-4 bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+                          <div className="flex items-center gap-3">
+                            <Target className="w-8 h-8 text-green-400" />
+                            <div>
+                              <p className="text-sm text-gray-400">Crescimento Lucro</p>
+                              <p className={`text-2xl font-bold ${dreComparison.profitGrowth >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                {dreComparison.profitGrowth >= 0 ? '+' : ''}
+                                {dreComparison.profitGrowth.toFixed(1)}%
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
+                        <Card className="p-4 bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+                          <div className="flex items-center gap-3">
+                            <Percent className="w-8 h-8 text-purple-400" />
+                            <div>
+                              <p className="text-sm text-gray-400">Variação Margem</p>
+                              <p className={`text-2xl font-bold ${dreComparison.marginChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                {dreComparison.marginChange >= 0 ? '+' : ''}
+                                {dreComparison.marginChange.toFixed(2)}pp
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                    )}
+
+                    {/* DRE Table */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <tbody className="divide-y divide-white/5">
+                          <tr className="bg-indigo-600/20">
+                            <td colSpan={2} className="px-4 py-3 text-sm font-bold text-indigo-300">
+                              RECEITAS OPERACIONAIS
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Vendas e Cirurgias</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.revenue.sales)}
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Serviços</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.revenue.services)}
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Outras Receitas</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.revenue.other)}
+                            </td>
+                          </tr>
+                          <tr className="bg-green-600/10 font-bold">
+                            <td className="px-4 py-3 text-sm text-green-300">Total de Receitas</td>
+                            <td className="px-4 py-3 text-sm text-green-300 text-right">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.revenue.total)}
+                            </td>
+                          </tr>
+                          <tr><td colSpan={2} className="py-2"></td></tr>
+                          <tr className="bg-red-600/20">
+                            <td colSpan={2} className="px-4 py-3 text-sm font-bold text-red-300">
+                              CUSTOS OPERACIONAIS
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Materiais</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.costs.materials)}
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Mão de Obra</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.costs.labor)}
+                            </td>
+                          </tr>
+                          <tr className="bg-red-600/10 font-bold">
+                            <td className="px-4 py-3 text-sm text-red-300">Total de Custos</td>
+                            <td className="px-4 py-3 text-sm text-red-300 text-right">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.costs.total)}
+                            </td>
+                          </tr>
+                          <tr><td colSpan={2} className="py-2"></td></tr>
+                          <tr className="bg-green-600/20">
+                            <td className="px-4 py-3 text-base font-bold text-green-300">LUCRO BRUTO</td>
+                            <td className="px-4 py-3 text-base font-bold text-green-300 text-right">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.result.grossProfit)}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colSpan={2} className="px-4 py-1 text-xs text-gray-500">
+                              Margem Bruta: {dreData.result.grossMargin.toFixed(2)}%
+                            </td>
+                          </tr>
+                          <tr><td colSpan={2} className="py-2"></td></tr>
+                          <tr className="bg-red-600/20">
+                            <td colSpan={2} className="px-4 py-3 text-sm font-bold text-red-300">
+                              DESPESAS OPERACIONAIS
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Despesas Administrativas</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.expenses.administrative)}
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Despesas de Vendas</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.expenses.sales)}
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-white/5">
+                            <td className="px-8 py-2 text-sm text-gray-300">Despesas Financeiras</td>
+                            <td className="px-4 py-2 text-sm text-gray-100 text-right font-medium">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.expenses.financial)}
+                            </td>
+                          </tr>
+                          <tr className="bg-red-600/10 font-bold">
+                            <td className="px-4 py-3 text-sm text-red-300">Total de Despesas</td>
+                            <td className="px-4 py-3 text-sm text-red-300 text-right">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.expenses.total)}
+                            </td>
+                          </tr>
+                          <tr><td colSpan={2} className="py-2"></td></tr>
+                          <tr className="bg-indigo-600/20">
+                            <td className="px-4 py-3 text-base font-bold text-indigo-300">RESULTADO OPERACIONAL</td>
+                            <td className="px-4 py-3 text-base font-bold text-indigo-300 text-right">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.result.operatingProfit)}
+                            </td>
+                          </tr>
+                          <tr><td colSpan={2} className="py-2"></td></tr>
+                          <tr className="bg-green-600/30">
+                            <td className="px-4 py-4 text-lg font-bold text-green-200">RESULTADO LÍQUIDO</td>
+                            <td className="px-4 py-4 text-lg font-bold text-green-200 text-right">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dreData.result.netProfit)}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colSpan={2} className="px-4 py-1 text-xs text-gray-500">
+                              Margem Líquida: {dreData.result.netMargin.toFixed(2)}%
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Indicators Cards */}
+                    {dreIndicators && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-100 mb-4">Indicadores Financeiros</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          <Card className="p-4">
+                            <p className="text-sm text-gray-400 mb-1">ROI (Return on Investment)</p>
+                            <p className="text-2xl font-bold text-blue-400">{dreIndicators.roi.toFixed(2)}%</p>
+                          </Card>
+                          <Card className="p-4">
+                            <p className="text-sm text-gray-400 mb-1">EBITDA</p>
+                            <p className="text-2xl font-bold text-green-400">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 }).format(dreIndicators.ebitda)}
+                            </p>
+                          </Card>
+                          <Card className="p-4">
+                            <p className="text-sm text-gray-400 mb-1">Margem Operacional</p>
+                            <p className="text-2xl font-bold text-indigo-400">{dreIndicators.operationalMargin.toFixed(2)}%</p>
+                          </Card>
+                          <Card className="p-4">
+                            <p className="text-sm text-gray-400 mb-1">Margem de Contribuição</p>
+                            <p className="text-2xl font-bold text-purple-400">{dreIndicators.contributionMarginRatio.toFixed(2)}%</p>
+                          </Card>
+                          <Card className="p-4">
+                            <p className="text-sm text-gray-400 mb-1">Ponto de Equilíbrio</p>
+                            <p className="text-2xl font-bold text-orange-400">
+                              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 }).format(dreIndicators.breakEvenPoint)}
+                            </p>
+                          </Card>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Evolution Chart */}
+                    {dreHistory.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-100 mb-4">Evolução - Últimos 6 Meses</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                          <LineChart data={dreHistory.map((dre, i) => ({
+                            month: new Date(dre.period.start).toLocaleDateString('pt-BR', { month: 'short' }),
+                            revenue: dre.revenue.total,
+                            costs: dre.costs.total,
+                            profit: dre.result.netProfit,
+                          }))}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                            <XAxis dataKey="month" stroke="#9CA3AF" style={{ fontSize: '12px' }} />
+                            <YAxis stroke="#9CA3AF" style={{ fontSize: '12px' }} tickFormatter={(value) => `R$ ${(value / 1000).toFixed(0)}k`} />
+                            <Tooltip
+                              contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px' }}
+                              labelStyle={{ color: '#F3F4F6' }}
+                              formatter={(value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)}
+                            />
+                            <Legend wrapperStyle={{ color: '#9CA3AF' }} />
+                            <Line type="monotone" dataKey="revenue" name="Receitas" stroke="#10B981" strokeWidth={2} />
+                            <Line type="monotone" dataKey="costs" name="Custos" stroke="#EF4444" strokeWidth={2} />
+                            <Line type="monotone" dataKey="profit" name="Lucro Líquido" stroke="#6366F1" strokeWidth={3} />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
           </Card>
