@@ -3,7 +3,7 @@ import {
   ShoppingCart, FileText, Settings, BarChart3, Truck, Shield,
   Brain, Zap, Webhook, TrendingUp, UserCog, FileSpreadsheet,
   Activity, Bell, MessageSquare, Video, Fingerprint, Workflow,
-  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory
+  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
@@ -78,7 +78,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Contas a Receber',
         icon: FileSpreadsheet,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Gestão completa de recebíveis',
+        isImplemented: true
       },
       {
         id: 'faturamento',
@@ -86,7 +87,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Faturamento NFe',
         icon: FileText,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Emissão de notas fiscais eletrônicas',
+        isImplemented: true
       },
       {
         id: 'inventario',
@@ -94,7 +96,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Inventário',
         icon: ClipboardCheck,
         category: 'Core Business',
-        isImplemented: false
+        description: 'Controle de inventário físico',
+        isImplemented: true
       },
       {
         id: 'tabela-precos',
@@ -116,7 +119,8 @@ export const navigationConfig: NavigationCategory[] = [
         name: 'Gestão de Compras',
         icon: ShoppingCart,
         category: 'Compras & Fornecedores',
-        isImplemented: false
+        description: 'Gestão completa de compras e fornecedores',
+        isImplemented: true
       },
       {
         id: 'notas-compra',
@@ -513,6 +517,21 @@ export const navigationConfig: NavigationCategory[] = [
         icon: Factory,
         category: 'Integrações',
         isImplemented: false
+      }
+    ]
+  },
+  {
+    name: 'Dev Tools',
+    icon: Eye,
+    routes: [
+      {
+        id: 'showcase',
+        path: '/showcase',
+        name: 'Showcase',
+        icon: Eye,
+        category: 'Dev Tools',
+        description: 'Demonstração interativa de todos os componentes',
+        isImplemented: true
       }
     ]
   }

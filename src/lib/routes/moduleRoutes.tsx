@@ -1,0 +1,66 @@
+import { lazy } from 'react'
+import type { LucideIcon } from 'lucide-react'
+
+// Lazy load modules for better performance
+const Dashboard = lazy(() => import('@/components/modules/Dashboard').then(m => ({ default: m.Dashboard })))
+const EstoqueIA = lazy(() => import('@/components/modules/EstoqueIA').then(m => ({ default: m.EstoqueIA })))
+const Cirurgias = lazy(() => import('@/components/modules/Cirurgias').then(m => ({ default: m.Cirurgias })))
+const Financeiro = lazy(() => import('@/components/modules/Financeiro').then(m => ({ default: m.Financeiro })))
+const CRMVendas = lazy(() => import('@/components/modules/CRMVendas').then(m => ({ default: m.CRMVendas })))
+const ProdutosOPME = lazy(() => import('@/components/modules/ProdutosOPME').then(m => ({ default: m.ProdutosOPME })))
+const Compras = lazy(() => import('@/components/modules/Compras').then(m => ({ default: m.Compras })))
+const ContasReceber = lazy(() => import('@/components/modules/ContasReceber').then(m => ({ default: m.ContasReceber })))
+const FaturamentoNFe = lazy(() => import('@/components/modules/FaturamentoNFe').then(m => ({ default: m.FaturamentoNFe })))
+const Inventario = lazy(() => import('@/components/modules/Inventario').then(m => ({ default: m.Inventario })))
+const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
+
+export interface ModuleComponentMap {
+  [key: string]: React.LazyExoticComponent<() => JSX.Element>
+}
+
+/**
+ * Module Route Mapping
+ * Maps route IDs to their corresponding React components
+ * Only implemented modules are listed here
+ */
+export const moduleComponents: ModuleComponentMap = {
+  // Principal
+  'dashboard': Dashboard,
+
+  // Core Business
+  'estoque-ia': EstoqueIA,
+  'cirurgias': Cirurgias,
+  'financeiro': Financeiro,
+  'crm-vendas': CRMVendas,
+  'produtos': ProdutosOPME,
+  'contas-receber': ContasReceber,
+  'faturamento': FaturamentoNFe,
+  'inventario': Inventario,
+
+  // Compras & Fornecedores
+  'compras': Compras,
+
+  // Dev Tools
+  'showcase': ShowcasePage,
+}
+
+/**
+ * Check if a module has an implementation
+ */
+export const isModuleImplemented = (moduleId: string): boolean => {
+  return moduleId in moduleComponents
+}
+
+/**
+ * Get component for a module
+ */
+export const getModuleComponent = (moduleId: string) => {
+  return moduleComponents[moduleId] || null
+}
+
+/**
+ * Get all implemented module IDs
+ */
+export const getImplementedModuleIds = (): string[] => {
+  return Object.keys(moduleComponents)
+}
