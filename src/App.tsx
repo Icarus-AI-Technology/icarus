@@ -5,6 +5,7 @@ import { Dashboard } from '@/components/modules/Dashboard'
 import { ModulePlaceholder } from '@/components/modules/ModulePlaceholder'
 import { SupabaseConnectionTest } from '@/components/dev-tools/SupabaseConnectionTest'
 import { getAllRoutes } from '@/lib/data/navigation'
+import ShowcasePage from '@/pages/ShowcasePage'
 
 function App() {
   const allRoutes = getAllRoutes()
@@ -15,6 +16,9 @@ function App() {
         <Routes>
           {/* Dashboard - Implemented */}
           <Route path="/" element={<Dashboard />} />
+
+          {/* Showcase - Component Demo */}
+          <Route path="/showcase" element={<ShowcasePage />} />
 
           {/* Generate routes for all modules */}
           {allRoutes.map((route) => {
