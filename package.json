@@ -9,10 +9,12 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
+    "figma:setup": "node scripts/update-node-ids.js",
     "figma:connect": "figma connect",
     "figma:publish": "figma connect publish",
     "figma:parse": "figma connect parse",
-    "figma:list": "figma connect list"
+    "figma:list": "figma connect list",
+    "figma:auth": "figma connect auth"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
