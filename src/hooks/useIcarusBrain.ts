@@ -1,120 +1,49 @@
-import { useState } from 'react'
+import { icarusBrain } from '@/lib/ai/icarus-brain'
+import type { PredictParams, PredictResult } from '@/lib/ai/icarus-brain'
 
-interface PredictParams {
-  type: 'sales_forecast' | 'demand_forecast' | 'price_optimization'
-  data: Record<string, any>
-}
-
-interface AnalyzeParams {
-  type: 'customer_behavior' | 'product_performance' | 'market_trends'
-  targetId: string
-}
-
-interface RecommendParams {
-  context: 'product_upsell' | 'customer_retention' | 'inventory_optimization'
-  userId: string
-}
-
-interface ChatParams {
-  message: string
-  context?: Record<string, any>
-}
-
+/**
+ * Hook para acessar serviços de IA do ICARUS Brain
+ *
+ * @example
+ * ```tsx
+ * const { predict, analyze, recommend, chat } = useIcarusBrain()
+ *
+ * // Previsão de demanda
+ * const forecast = await predict('demanda', {
+ *   produto_id: '123',
+ *   dias: 30
+ * })
+ *
+ * // Análise de inadimplência
+ * const score = await analyze('inadimplencia', {
+ *   cliente_id: '456'
+ * })
+ *
+ * // Recomendação de produtos
+ * const produtos = await recommend('produtos', {
+ *   cliente_id: '789',
+ *   limite: 5,
+ *   tipo: 'cross-sell'
+ * })
+ *
+ * // Chat
+ * const response = await chat('Qual o status do estoque?', {
+ *   contexto: 'estoque'
+ * })
+ * ```
+ */
 export function useIcarusBrain() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  return {
+    predict: (tipo: string, params: PredictParams): Promise<PredictResult> =>
+      icarusBrain.predict(tipo, params),
 
-  const predict = async (params: PredictParams) => {
-    try {
-      setLoading(true)
-      setError(null)
+    analyze: (tipo: string, params: PredictParams): Promise<PredictResult> =>
+      icarusBrain.analyze(tipo, params),
 
-      const response = await fetch('/api/ia/predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
-      })
+    recommend: (tipo: string, params: PredictParams): Promise<any[]> =>
+      icarusBrain.recommend(tipo, params),
 
-      if (!response.ok) throw new Error('Prediction failed')
-
-      const result = await response.json()
-      return result
-    } catch (err) {
-      setError(err as Error)
-      throw err
-    } finally {
-      setLoading(false)
-    }
+    chat: (mensagem: string, params?: PredictParams): Promise<PredictResult> =>
+      icarusBrain.chat(mensagem, params),
   }
-
-  const analyze = async (params: AnalyzeParams) => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const response = await fetch('/api/ia/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
-      })
-
-      if (!response.ok) throw new Error('Analysis failed')
-
-      const result = await response.json()
-      return result
-    } catch (err) {
-      setError(err as Error)
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const recommend = async (params: RecommendParams) => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const response = await fetch('/api/ia/recommend', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
-      })
-
-      if (!response.ok) throw new Error('Recommendation failed')
-
-      const result = await response.json()
-      return result
-    } catch (err) {
-      setError(err as Error)
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const chat = async (params: ChatParams) => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const response = await fetch('/api/ia/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
-      })
-
-      if (!response.ok) throw new Error('Chat failed')
-
-      const result = await response.json()
-      return result
-    } catch (err) {
-      setError(err as Error)
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { predict, analyze, recommend, chat, loading, error }
 }

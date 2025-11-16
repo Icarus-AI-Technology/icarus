@@ -1,174 +1,334 @@
-# 🔧 ICARUS - Troubleshooting Guide
+# 🔧 Troubleshooting Guide
 
-## 🚨 Problemas Comuns
+Soluções para problemas comuns no ICARUS v5.0
 
-### 1. TypeScript Errors
+---
 
-**Problema**: `Property 'X' does not exist on type 'Y'`
+## 🚨 Problemas de Build
+
+### Erro: "Cannot find module '@/...'"
+
+**Problema**: Imports com `@/` não funcionam
 
 **Solução**:
 ```bash
-# Regenerar types do Supabase
-npm run db:types
-
 # Verificar tsconfig.json
-npm run type-check
-```
-
----
-
-### 2. Supabase Connection Failed
-
-**Problema**: `Failed to fetch` ou timeout em queries
-
-**Solução**:
-```bash
-# Verificar env vars
-echo $NEXT_PUBLIC_SUPABASE_URL
-echo $NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-# Testar conexão
-curl $NEXT_PUBLIC_SUPABASE_URL/rest/v1/
-
-# Verificar RLS policies no Supabase Dashboard
-```
-
----
-
-### 3. Build Falha
-
-**Problema**: `npm run build` falha
-
-**Solução**:
-```bash
-# Limpar cache
-rm -rf .next
-rm -rf node_modules
-npm install
-
-# Verificar erros
-npm run lint
-npm run type-check
-
-# Build novamente
-npm run build
-```
-
----
-
-### 4. Componentes Não Renderizam
-
-**Problema**: Tela branca ou componente não aparece
-
-**Solução**:
-```tsx
-// Verificar no console do navegador
-// Adicionar error boundary
-
-import { ErrorBoundary } from 'react-error-boundary'
-
-function ErrorFallback({ error }) {
-  return (
-    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
-      <h2 className="text-red-400 font-bold">Erro</h2>
-      <pre className="text-red-300 text-sm mt-2">{error.message}</pre>
-    </div>
-  )
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
 
-<ErrorBoundary FallbackComponent={ErrorFallback}>
-  <MyComponent />
-</ErrorBoundary>
-```
-
----
-
-### 5. Styling Não Funciona
-
-**Problema**: Classes Tailwind não aplicam
-
-**Solução**:
-```bash
-# Verificar tailwind.config.js
-# Certifi car que content inclui seus arquivos:
-content: [
-  './src/**/*.{js,ts,jsx,tsx,mdx}',
-]
-
-# Rebuild
+# Reiniciar servidor dev
 npm run dev
 ```
 
 ---
 
-## ⚡ Performance Issues
+### Erro: "process is not defined"
 
-### Lentidão Geral
+**Problema**: Variáveis de ambiente incorretas
 
-```tsx
-// Adicionar React.memo
-export const MyComponent = React.memo(({ data }) => {
-  // ...
-})
+**Solução**:
+```bash
+# Usar VITE_ prefix
+# ❌ ERRADO
+SUPABASE_URL=...
 
-// Usar useMemo para computações pesadas
-const filteredData = useMemo(() => {
-  return data.filter(/* ... */)
-}, [data])
+# ✅ CORRETO
+VITE_SUPABASE_URL=...
 
-// Usar useCallback para funções
-const handleClick = useCallback(() => {
-  // ...
-}, [dependency])
-
-// Lazy load rotas
-const ProductPage = lazy(() => import('./ProductPage'))
+# Reiniciar dev server após mudar .env
 ```
 
 ---
 
-## 🐛 Debug Mode
+### Build muito lento
 
-### Habilitar Debug
+**Solução**:
+```bash
+# Limpar cache
+rm -rf node_modules/.vite
+npm run dev
 
-```tsx
-// .env.local
-NEXT_PUBLIC_DEBUG=true
+# Otimizar dependências
+npm run build -- --profile
+```
 
-// Usar no código
-if (process.env.NEXT_PUBLIC_DEBUG === 'true') {
-  console.log('Debug info:', data)
+---
+
+## 🗄️ Problemas Supabase
+
+### Erro: "Invalid API key"
+
+**Problema**: Credenciais incorretas
+
+**Solução**:
+```bash
+# Verificar .env.local
+VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ... (anon/public key)
+
+# NÃO usar service_role key no frontend!
+```
+
+---
+
+### RLS bloqueando queries
+
+**Problema**: Row Level Security impedindo acesso
+
+**Solução**:
+```sql
+-- Habilitar RLS policies no Supabase
+CREATE POLICY "Enable read for authenticated users"
+ON produtos
+FOR SELECT
+TO authenticated
+USING (true);
+```
+
+---
+
+### Realtime não funciona
+
+**Solução**:
+```typescript
+// Verificar subscription
+const channel = supabase
+  .channel('my-channel')
+  .on('postgres_changes', {
+    event: '*',
+    schema: 'public',
+    table: 'produtos'
+  }, (payload) => {
+    console.log('Change:', payload)
+  })
+  .subscribe((status) => {
+    console.log('Status:', status) // Deve ser 'SUBSCRIBED'
+  })
+```
+
+---
+
+## 🎨 Problemas de Estilo
+
+### Tailwind classes não aplicadas
+
+**Solução**:
+```bash
+# Verificar tailwind.config.ts
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}", // Incluir todos os arquivos
+  ],
+}
+
+# Reiniciar dev server
+npm run dev
+```
+
+---
+
+### Efeito neumórfico não aparece
+
+**Problema**: Classes `neu-*` não funcionam
+
+**Solução**:
+```css
+/* Verificar src/index.css */
+@layer utilities {
+  .neu-soft {
+    @apply shadow-neu-soft;
+  }
+}
+
+/* E tailwind.config.ts */
+theme: {
+  extend: {
+    boxShadow: {
+      'neu-soft': '8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.9)',
+    }
+  }
 }
 ```
 
-### React DevTools
+---
 
-```bash
-# Instalar extensão:
-# Chrome: React Developer Tools
-# Firefox: React Developer Tools
+## 🧪 Problemas de Teste
 
-# Usar no navegador:
-# Components tab: ver árvore de componentes
-# Profiler tab: medir performance
+### Jest não encontra módulos
+
+**Solução**:
+```json
+// jest.config.js
+module.exports = {
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+}
 ```
 
 ---
 
-## 📞 Suporte
+### Testes E2E falhando
 
-Se os problemas persistirem:
+**Solução**:
+```bash
+# Instalar browsers do Playwright
+npx playwright install
 
-1. **Verificar logs**: `npm run dev` (terminal)
-2. **Console navegador**: F12 → Console
-3. **Network tab**: F12 → Network (ver chamadas API)
-4. **Criar issue**: GitHub Issues com:
-   - Descrição do problema
-   - Steps to reproduce
-   - Versão do Node/npm
-   - Logs relevantes
+# Rodar em modo debug
+npx playwright test --debug
+```
 
 ---
 
-**Versão**: 1.0.0
-**Status**: ✅ Guia ativo
+## 🔒 Problemas de Autenticação
+
+### Login não persiste
+
+**Solução**:
+```typescript
+// Verificar Supabase client config
+export const supabase = createClient(url, key, {
+  auth: {
+    persistSession: true, // ✅ Deve ser true
+    autoRefreshToken: true,
+  }
+})
+```
+
+---
+
+### Redirect após login não funciona
+
+**Solução**:
+```typescript
+// Configurar redirect URL no Supabase Dashboard
+// Authentication > URL Configuration > Redirect URLs
+// Adicionar: http://localhost:5173/auth/callback
+```
+
+---
+
+## 📦 Problemas de Dependências
+
+### npm install falha
+
+**Solução**:
+```bash
+# Limpar cache npm
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# Ou usar pnpm (mais rápido)
+npm install -g pnpm
+pnpm install
+```
+
+---
+
+### Conflitos de versão
+
+**Solução**:
+```bash
+# Ver árvore de dependências
+npm ls <package-name>
+
+# Forçar resolução (package.json)
+"overrides": {
+  "package-name": "^1.0.0"
+}
+```
+
+---
+
+## 🚀 Problemas de Deploy
+
+### Vercel build timeout
+
+**Solução**:
+```json
+// vercel.json
+{
+  "buildCommand": "npm run build",
+  "framework": "vite",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "maxDuration": 300
+      }
+    }
+  ]
+}
+```
+
+---
+
+### Environment variables não carregam
+
+**Solução**:
+```bash
+# Vercel Dashboard > Settings > Environment Variables
+# Adicionar:
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+
+# Redeploy após adicionar vars
+```
+
+---
+
+## 🔍 Debug Geral
+
+### React DevTools não conecta
+
+**Solução**:
+```bash
+# Instalar extensão do navegador
+# Chrome: React Developer Tools
+# Firefox: React DevTools
+
+# Verificar modo dev
+npm run dev # Não build
+```
+
+---
+
+### Performance ruim em dev
+
+**Solução**:
+```typescript
+// vite.config.ts
+export default defineConfig({
+  server: {
+    hmr: true,
+    watch: {
+      usePolling: false, // Desabilitar polling
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'], // Pre-bundle deps
+  }
+})
+```
+
+---
+
+## 📞 Ainda com problemas?
+
+1. **Verificar Issues do GitHub** - Alguém já teve o mesmo problema
+2. **Logs detalhados** - `DEBUG=* npm run dev`
+3. **Abrir Issue** - Com logs + steps to reproduce
+
+---
+
+**v5.0.3** | Last updated: 2025-11-15
