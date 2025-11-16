@@ -5,8 +5,8 @@
 echo "🔍 Running TypeScript type check..."
 npx tsc --noEmit
 
-# Lint check (if ESLint is configured)
-# echo "🔍 Running ESLint..."
-# npm run lint
+# Lint check (only blocks on errors, not warnings)
+echo "🔍 Running ESLint..."
+npm run lint:check
 
 echo "✅ Pre-commit checks passed!"
