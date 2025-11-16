@@ -1,201 +1,233 @@
-# 🚀 ICARUS v5.0 - ERP Enterprise Neumórfico
+# 🚀 ICARUS v5.0
 
-![Status](https://img.shields.io/badge/status-production--ready-success)
-![Version](https://img.shields.io/badge/version-5.0.3-blue)
-![TypeScript](https://img.shields.io/badge/typescript-100%25-blue)
-![Tests](https://img.shields.io/badge/coverage-65%25-yellow)
-![Lighthouse](https://img.shields.io/badge/lighthouse-98+-green)
+**ERP Enterprise neumórfico para OPME** (Órteses, Próteses e Materiais Especiais)
 
-**Sistema ERP completo para OPME com IA integrada, design neumórfico 3D e 58 módulos funcionais.**
-
----
-
-## 📋 Quick Start
-
-```bash
-# Clone + Install
-git clone https://github.com/seu-usuario/icarus-v5.git
-cd icarus-v5 && npm install
-
-# Configure
-cp .env.example .env.local
-# Editar .env.local com Supabase credentials
-
-# Run
-npm run dev  # http://localhost:5173
-
-# Build
-npm run build && npm run preview
-```
+[![React](https://img.shields.io/badge/React-18.3.1-blue?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.0.0-646CFF?logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 
 ---
 
-## ✨ Features
+## 📋 Sobre o Projeto
 
-- ✅ **58 Módulos Completos** - Gestão total OPME
-- ✅ **12 Serviços IA** - Previsões, análises, recomendações
-- ✅ **OraclusX DS** - Design system neumórfico enterprise
-- ✅ **Supabase PostgreSQL** - Database com RLS multi-tenant
-- ✅ **Realtime WebSockets** - Sync ao vivo
-- ✅ **WCAG 2.1 AA** - Acessibilidade certificada
-- ✅ **PWA** - Instalável offline-first
-- ✅ **Code Connect** - Figma ↔ Código sincronizado
+ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias web, incorporando **Inteligência Artificial** para otimização de processos em empresas de OPME.
+
+### ✨ Principais Funcionalidades
+
+- 🏥 **Gestão de Cirurgias** - Controle completo de procedimentos cirúrgicos
+- 📦 **Estoque Inteligente** - Previsão de demanda com IA
+- 💰 **Financeiro** - Controle de faturamento e inadimplência
+- 🤖 **IcarusBrain** - IA integrada para análises preditivas
+- 📊 **Dashboards** - Visualizações em tempo real
+- 🎨 **OraclusX DS** - Design System neumórfico
 
 ---
 
-## 📊 Stack
+## 🛠️ Stack Tecnológico
 
 ```typescript
 {
-  frontend: "React 18 + TypeScript 5 + Vite 6",
-  styling: "Tailwind CSS 4 + shadcn/ui",
+  frontend: "React 18.3.1 + TypeScript 5.6.3 + Vite 6.0.0",
+  styling: "Tailwind CSS 4.0 + shadcn/ui",
   database: "Supabase PostgreSQL 15",
-  ai: "Claude Sonnet 4.5 + GPT-4",
-  deploy: "Vercel + GitHub Actions"
+  designSystem: "OraclusX DS (Neumorphism)",
+  ai: ["Claude Sonnet 4.5", "GPT-4", "TensorFlow.js"],
+  deployment: "Vercel + GitHub Actions"
 }
 ```
 
 ---
 
-## 🗂️ Estrutura
+## 🚀 Começando
+
+### Pré-requisitos
+
+- Node.js 18+
+- npm ou yarn
+- Conta no Supabase (para produção)
+
+### Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/Icarus-AI-Technology/icarus.git
+cd icarus
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais do Supabase
+
+# Inicie o servidor de desenvolvimento
+npm run dev
+```
+
+O aplicativo estará disponível em `http://localhost:5173`
+
+### Scripts Disponíveis
+
+```bash
+npm run dev      # Inicia servidor de desenvolvimento
+npm run build    # Cria build de produção
+npm run preview  # Preview do build de produção
+npm run lint     # Executa linter
+```
+
+---
+
+## 📁 Estrutura do Projeto
 
 ```
-icarus-v5.0/
-├── CLAUDE.md              ← Contexto para Claude Code
-├── .clinerules            ← Regras de desenvolvimento
+icarus/
 ├── src/
 │   ├── components/
-│   │   ├── ui/           # 175+ componentes OraclusX
-│   │   ├── layout/       # Sidebar + Header
-│   │   └── modules/      # 58 módulos
-│   ├── lib/ai/           # IcarusBrain
-│   └── lib/supabase/     # Client + types
-└── docs/                  # Documentação completa
+│   │   ├── ui/              # Componentes shadcn/ui
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── input.tsx
+│   │   │   └── tabs.tsx
+│   │   └── modules/         # Módulos do sistema
+│   │       └── Dashboard.tsx
+│   ├── hooks/               # Hooks customizados
+│   │   └── useSupabase.ts
+│   ├── lib/                 # Utilitários
+│   │   ├── utils.ts
+│   │   └── supabase.ts
+│   ├── types/               # Tipos TypeScript
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── public/
+├── claude.md                # Contexto para Claude Code
+├── package.json
+├── vite.config.ts
+├── tailwind.config.js
+└── tsconfig.json
 ```
 
 ---
 
 ## 🎨 OraclusX Design System
 
-```tsx
-import { Button, Card } from '@/components/ui'
+O ICARUS utiliza o **OraclusX Design System**, baseado em neumorfismo:
 
-<Card className="neu-soft">  {/* Neumorphism 3D */}
-  <Button variant="default">Salvar</Button>
+### Paleta de Cores
+
+```css
+--primary: #6366F1      /* Indigo - Botões principais */
+--background: #F9FAFB   /* Fundo claro */
+--foreground: #1F2937   /* Texto escuro */
+```
+
+### Componentes Base
+
+Todos os componentes utilizam shadcn/ui:
+
+```tsx
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+```
+
+### Classes Neumórficas
+
+```tsx
+<Card className="neu-card">
+  {/* Efeito neumórfico automático */}
 </Card>
 ```
 
-**Paleta Universal**:
-- Primary: `#6366F1` (Indigo)
-- Success: `#10B981`
-- Warning: `#F59E0B`
-- Danger: `#EF4444`
-
 ---
 
-## 🧠 IA Integrada
+## 🧠 Integração com IA
+
+### IcarusBrain
 
 ```typescript
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 
-const { predict, analyze } = useIcarusBrain()
+const { predict, analyze, recommend } = useIcarusBrain()
 
-// Previsão demanda (30 dias)
-const forecast = await predict('demanda', { produto_id: '123' })
-
-// Score inadimplência
-const score = await analyze('inadimplencia', { cliente_id: '456' })
+// Previsão de demanda
+const forecast = await predict('demanda', {
+  produto_id: '123',
+  dias: 30
+})
 ```
 
 ---
 
-## 📚 Documentação
+## 📊 Módulos Disponíveis
 
-| Documento | Descrição |
-|-----------|-----------|
-| `CLAUDE.md` | **Contexto Claude Code** (LEIA PRIMEIRO) |
-| `.clinerules` | Regras de desenvolvimento |
-| `SKILL_*.md` | Skills específicas (DS, IA, Supabase) |
-| `TROUBLESHOOTING.md` | Resolução de problemas |
-| `/docs/modulos/` | 58 módulos documentados |
+- ✅ **Dashboard** - Visão geral do sistema
+- 🏥 **Cirurgias** - Gestão de procedimentos
+- 📦 **Estoque IA** - Controle inteligente
+- 💰 **Financeiro** - Faturamento e cobrança
+- 👥 **Clientes** - CRM integrado
+- 🏢 **Hospitais** - Cadastro de unidades
+- ⚙️ **Configurações** - Preferências do sistema
 
 ---
 
-## 🧪 Testes
+## 🗄️ Supabase
 
-```bash
-npm test                # Unit tests (Jest)
-npm run test:coverage   # Coverage report
-npm run test:e2e        # E2E (Playwright)
+### Setup
+
+1. Crie um projeto no [Supabase](https://supabase.com)
+2. Copie as credenciais para `.env`:
+
+```env
+VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+VITE_SUPABASE_ANON_KEY=sua_chave_anon
 ```
 
-**Meta**: 85% coverage (atual: 65%)
+### Exemplo de Uso
 
----
+```typescript
+import { useSupabase } from '@/hooks/useSupabase'
 
-## 🚀 Deploy
+const { supabase } = useSupabase()
 
-```bash
-# Vercel (recomendado)
-vercel
+// Fetch
+const { data } = await supabase
+  .from('produtos')
+  .select('*')
 
-# Ou manual
-npm run build
-# Deploy pasta dist/
-```
-
-**CI/CD**: GitHub Actions (`.github/workflows/deploy.yml`)
-
----
-
-## 📈 Roadmap
-
-### v5.1.0 (Dez 2025)
-- [ ] Blockchain Traceability
-- [ ] Code Connect 100%
-- [ ] Coverage 85%+
-- [ ] Bundle <800KB
-
-### v6.0.0 (2026)
-- [ ] Multi-idioma (EN, ES)
-- [ ] Mobile Native (React Native)
-- [ ] Marketplace de Plugins
-
----
-
-## 🤝 Contribuir
-
-```bash
-# 1. Fork + Clone
-# 2. Criar branch
-git checkout -b feat/nova-feature
-
-# 3. Desenvolver seguindo .clinerules
-# 4. Testar
-npm test
-
-# 5. Commit (Conventional Commits)
-git commit -m "feat(modulo): adicionar funcionalidade X"
-
-# 6. Pull Request
+// Insert
+await supabase
+  .from('produtos')
+  .insert([{ nome: 'Produto 1' }])
 ```
 
 ---
 
-## 📞 Suporte
+## 🤝 Trabalhando com Claude Code
 
-- **Docs**: `/docs/`
-- **Issues**: GitHub Issues
-- **Code Connect**: Figma integrado
+Este projeto foi otimizado para desenvolvimento com **Claude Code**. Consulte `claude.md` para o contexto completo.
+
+### Comandos úteis para Claude:
+
+```
+"Crie um novo módulo de Compras seguindo o padrão OraclusX"
+"Adicione previsão de demanda no módulo Estoque IA"
+"Implemente validação Zod no formulário de produtos"
+```
 
 ---
 
-## 📄 Licença
+## 📝 Licença
 
-Proprietária © 2025 ICARUS Team
+Este projeto é propriedade da **Icarus AI Technology**.
 
 ---
 
-**v5.0.3** | Release: 2025-11-15 | [Changelog](CHANGELOG.md)
+## 🌟 Versão
 
-🎯 **58 Módulos. Zero Retrabalho. ROI 450%.**
+**v5.0.3** - Production Ready
+
+---
+
+**Desenvolvido com ❤️ pela equipe Icarus AI Technology**

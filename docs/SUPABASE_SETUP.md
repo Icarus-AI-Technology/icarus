@@ -1,309 +1,267 @@
-# 🗄️ Supabase Setup - ICARUS v5.0
+# Supabase Setup Guide - ICARUS v5.0
 
-## 📋 Pré-requisitos
+## 📋 Overview
 
-- Conta no Supabase (gratuita): https://supabase.com
-- Node.js 20+ instalado
-- Git configurado
+ICARUS v5.0 uses **Supabase** as its primary database and backend service.
 
----
-
-## 🚀 Setup Completo (10 minutos)
-
-### 1. Criar Projeto no Supabase
-
-1. Acesse https://app.supabase.com
-2. Clique em "New Project"
-3. Preencha:
-   - **Name**: icarus-v5
-   - **Database Password**: (escolha uma senha segura e **anote**)
-   - **Region**: South America (São Paulo)
-4. Clique em "Create new project"
-5. Aguarde ~2 minutos (projeto sendo provisionado)
+**Database**: PostgreSQL 15
+**Tables**: 12 core tables
+**Security**: Row Level Security (RLS) enabled
+**Features**: Auth, Realtime, Storage
 
 ---
 
-### 2. Executar Schema SQL
+## 🚀 Quick Start
 
-1. No dashboard do Supabase, vá em **SQL Editor** (menu lateral)
-2. Clique em "+ New query"
-3. Cole todo o conteúdo de `supabase/schema.sql`
-4. Clique em "Run" (ou Ctrl+Enter)
-5. Aguarde confirmação: ✅ Success
+### Step 1: Create Supabase Project
 
-**O que foi criado:**
-- 2 tabelas: `categories`, `products`
-- Triggers para `updated_at`
-- Row Level Security (RLS) policies
-- 3 views para analytics
-- 7 produtos de exemplo (seed data)
+1. Go to [supabase.com](https://supabase.com)
+2. Sign in / Create account
+3. Click "New Project"
+4. Fill in:
+   - **Project Name**: `ICARUS-FIGMA` (or your choice)
+   - **Database Password**: (save this!)
+   - **Region**: Choose closest to you (recommend: South America - São Paulo)
+5. Click "Create Project" and wait ~2 minutes
 
----
+### Step 2: Get Credentials
 
-### 3. Configurar Variáveis de Ambiente
+Once your project is created:
 
-1. No dashboard do Supabase, vá em **Settings** → **API**
-2. Copie as credenciais:
-   - **Project URL**
-   - **anon public** key
+1. Go to **Project Settings** (gear icon)
+2. Navigate to **API** section
+3. Copy these values:
+   - **Project URL**: `https://xxxxx.supabase.co`
+   - **anon/public key**: `eyJhbGc...` (long token)
 
-3. No projeto ICARUS, crie/edite `.env.local`:
+### Step 3: Configure Environment Variables
+
+1. Open `.env` file in project root
+2. Replace placeholder values:
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+3. Save the file
+
+### Step 4: Run Migrations
+
+**Option A: Supabase Dashboard (Easiest)**
+
+1. Go to your Supabase project
+2. Click **SQL Editor** in left sidebar
+3. Copy content from `/supabase/migrations/001_icarus_core_schema.sql`
+4. Paste in SQL Editor and click "Run"
+5. Repeat for `002_rls_policies.sql`
+6. Repeat for `003_seed_data.sql`
+
+**Option B: Supabase CLI**
 
 ```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-anon-key-aqui
-
-# OpenAI (IcarusBrain) - opcional por enquanto
-# OPENAI_API_KEY=sk-...
-
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_DEBUG=false
-```
-
-**⚠️ IMPORTANTE:**
-- Nunca commite `.env.local` no Git
-- Use `.env.example` como template
-
----
-
-### 4. Instalar Dependências
-
-```bash
-npm install
-```
-
-Isso instalará:
-- `@supabase/supabase-js` - Cliente Supabase
-- `zod` - Validação
-- `react-hook-form` - Formulários
-- `@hookform/resolvers` - Integração Zod + RHF
-
----
-
-### 5. Testar Conexão
-
-```bash
-npm run dev
-```
-
-Acesse: http://localhost:3000/estoque/produtos
-
-**Verificações:**
-- ✅ KPIs mostram dados reais (7 produtos)
-- ✅ Tabela lista os 7 produtos de exemplo
-- ✅ Criar novo produto funciona
-- ✅ Editar produto funciona
-- ✅ Excluir produto funciona
-- ✅ Filtros funcionam
-
----
-
-## 🔍 Verificar Dados no Supabase
-
-### Via Dashboard
-
-1. No Supabase, vá em **Table Editor**
-2. Selecione `products` ou `categories`
-3. Veja os dados em tempo real
-4. Edite, adicione ou remova dados diretamente
-
-### Via SQL Editor
-
-```sql
--- Ver todos os produtos
-SELECT * FROM products ORDER BY created_at DESC;
-
--- Ver KPIs
-SELECT * FROM vw_products_summary;
-
--- Ver produtos com estoque baixo
-SELECT * FROM vw_low_stock_products;
-
--- Ver produtos com categoria
-SELECT * FROM vw_products_with_category;
-```
-
----
-
-## 🔒 Segurança (RLS)
-
-### Políticas Atuais
-
-As políticas estão configuradas para:
-
-**Leitura (SELECT)**: Todos (público)
-**Escrita (INSERT/UPDATE/DELETE)**: Apenas autenticados
-
-### Para Produção
-
-1. Habilite autenticação:
-   - Supabase Auth
-   - Magic Link
-   - OAuth (Google, GitHub)
-
-2. Ajuste policies conforme necessidade:
-
-```sql
--- Exemplo: Apenas admin pode deletar
-CREATE POLICY "Only admins can delete products"
-  ON products FOR DELETE
-  USING (
-    auth.jwt() ->> 'role' = 'admin'
-  );
-```
-
----
-
-## 🔄 Realtime (Sincronização Automática)
-
-O módulo de Produtos já está configurado com Realtime!
-
-**Como funciona:**
-1. Usuário A cria/edita/deleta produto
-2. Supabase emite evento via WebSocket
-3. Usuário B recebe atualização instantânea
-4. Lista e KPIs atualizam automaticamente
-
-**Ver código:**
-`src/modules/estoque/produtos/hooks/useProducts.ts:65-80`
-
----
-
-## 📊 Gerar Types TypeScript
-
-Sempre que alterar o schema SQL, regenere os types:
-
-```bash
-npm run db:types
-```
-
-Isso atualiza `src/types/supabase.ts` com os tipos corretos.
-
-**Nota**: Requer Supabase CLI instalado:
-```bash
+# Install Supabase CLI (if not installed)
 npm install -g supabase
+
+# Login
 supabase login
-supabase link --project-ref seu-project-ref
+
+# Link to your project
+supabase link --project-ref your-project-id
+
+# Run all migrations
+supabase db push
 ```
 
----
+### Step 5: Verify Connection
 
-## 🐛 Troubleshooting
-
-### Erro: "Invalid API key"
-
-**Causa**: `.env.local` não configurado ou incorreto
-
-**Solução**:
-1. Verificar `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-2. Copiar novamente do dashboard Supabase
-3. Reiniciar `npm run dev`
+1. Start your dev server: `npm run dev`
+2. Open the app in browser
+3. Click the **"Database"** button (bottom right)
+4. Click **"Test"** button
+5. All 4 tests should show ✅ green checkmarks
 
 ---
 
-### Erro: "relation 'products' does not exist"
+## 📊 Database Structure
 
-**Causa**: Schema SQL não executado
+### 12 Tables Created
 
-**Solução**:
-1. Ir no SQL Editor do Supabase
-2. Executar `supabase/schema.sql` completo
-3. Verificar sucesso (✅)
+| # | Table | Description | Demo Data |
+|---|-------|-------------|-----------|
+| 1 | `companies` | Empresas/Distribuidoras | 1 company |
+| 2 | `profiles` | User profiles | Auto-created |
+| 3 | `product_categories` | OPME categories | 5 categories |
+| 4 | `manufacturers` | Fabricantes | 5 manufacturers |
+| 5 | `products` | Produtos OPME | 5 products |
+| 6 | `hospitals` | Hospitais | 3 hospitals |
+| 7 | `doctors` | Médicos | 4 doctors |
+| 8 | `surgeries` | Cirurgias/Procedimentos | 10 surgeries |
+| 9 | `surgery_items` | Items in surgeries | - |
+| 10 | `invoices` | Notas Fiscais | - |
+| 11 | `accounts_receivable` | Contas a Receber | - |
+| 12 | `stock_movements` | Movimentações Estoque | - |
 
----
+### Security (RLS)
 
-### Erro: "new row violates row-level security policy"
-
-**Causa**: Tentando inserir/atualizar sem permissão
-
-**Solução**:
-1. Verificar policies em RLS
-2. Temporariamente desabilitar RLS para testes:
-   ```sql
-   ALTER TABLE products DISABLE ROW LEVEL SECURITY;
-   ```
-3. **Não fazer isso em produção!**
-
----
-
-### Produtos não aparecem
-
-**Causa**: Seed data não inserido ou filtros ativos
-
-**Solução**:
-1. Executar parte de seed data do schema.sql
-2. Verificar filtros na interface
-3. Ver no Table Editor do Supabase
+All tables have **Row Level Security** enabled:
+- Users see only data from their own company
+- Multi-tenant architecture
+- Role-based access control (admin, manager, user, viewer)
 
 ---
 
-## 📚 Próximos Passos
+## 🔧 Troubleshooting
 
-### 1. Adicionar Autenticação
+### Error: "Missing credentials"
 
-```bash
-# Habilitar Supabase Auth no dashboard
-# Implementar login/logout
-# Ajustar RLS policies
-```
+**Solution**: Check your `.env` file has correct values.
 
-### 2. Adicionar Mais Módulos
+### Error: "Connection failed"
 
-Use o módulo Produtos como template:
-- Vendas
-- Compras
-- Financeiro
+**Solutions**:
+1. Verify your Supabase project is active
+2. Check URL and anon key are correct
+3. Ensure no firewall blocking connection
 
-### 3. Implementar Storage
+### Error: "Query failed" or "Table doesn't exist"
+
+**Solution**: Run migrations (Step 4 above).
+
+### Error: "Permission denied"
+
+**Solution**:
+1. Make sure you're logged in (or RLS policies are correct)
+2. Check if tables have RLS enabled
+
+---
+
+## 📚 Using Supabase in Code
+
+### Fetch Data
 
 ```typescript
-// Upload de imagens de produtos
-import { supabase } from '@/lib/supabase'
+import { useSupabase } from '@/hooks/useSupabase'
 
-const { data, error } = await supabase.storage
+function MyComponent() {
+  const { supabase, isConfigured } = useSupabase()
+
+  useEffect(() => {
+    if (!isConfigured) return
+
+    async function fetchProducts() {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error:', error)
+        return
+      }
+
+      console.log('Products:', data)
+    }
+
+    fetchProducts()
+  }, [isConfigured])
+}
+```
+
+### Insert Data
+
+```typescript
+const { error } = await supabase
   .from('products')
-  .upload('product.jpg', file)
+  .insert([{
+    company_id: 'uuid-here',
+    name: 'New Product',
+    code: 'PROD-001',
+    sale_price: 1000,
+    stock_quantity: 10
+  }])
+
+if (error) {
+  console.error('Error:', error)
+} else {
+  console.log('Product created!')
+}
 ```
 
-### 4. Adicionar Edge Functions
+### Update Data
 
-Para lógica backend complexa:
-```bash
-supabase functions new minha-funcao
+```typescript
+const { error } = await supabase
+  .from('products')
+  .update({ stock_quantity: 20 })
+  .eq('id', 'product-uuid')
+```
+
+### Delete Data
+
+```typescript
+const { error } = await supabase
+  .from('products')
+  .delete()
+  .eq('id', 'product-uuid')
+```
+
+### Realtime Subscriptions
+
+```typescript
+const subscription = supabase
+  .channel('products_changes')
+  .on('postgres_changes', {
+    event: '*',
+    schema: 'public',
+    table: 'products'
+  }, (payload) => {
+    console.log('Change detected:', payload)
+  })
+  .subscribe()
+
+// Cleanup
+return () => {
+  subscription.unsubscribe()
+}
 ```
 
 ---
 
-## 🎯 Checklist Final
+## 🔐 Authentication (Future)
 
-Setup completo quando:
+Supabase Auth is pre-configured. To enable login:
 
-- [ ] Projeto Supabase criado
-- [ ] Schema SQL executado
-- [ ] `.env.local` configurado
-- [ ] Dependências instaladas (`npm install`)
-- [ ] App rodando (`npm run dev`)
-- [ ] 7 produtos aparecem na lista
-- [ ] CRUD funciona (criar/editar/excluir)
-- [ ] KPIs mostram valores corretos
-- [ ] Realtime funciona (testar em 2 abas)
+```typescript
+// Sign up
+const { data, error } = await supabase.auth.signUp({
+  email: 'user@example.com',
+  password: 'password123'
+})
+
+// Sign in
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'user@example.com',
+  password: 'password123'
+})
+
+// Sign out
+await supabase.auth.signOut()
+
+// Get current user
+const { data: { user } } = await supabase.auth.getUser()
+```
 
 ---
 
-## 📞 Suporte
+## 📖 Additional Resources
 
-**Documentação Supabase**: https://supabase.com/docs
-
-**Troubleshooting ICARUS**: Ver `TROUBLESHOOTING.md`
-
-**Issues**: GitHub Issues do projeto
+- [Supabase Documentation](https://supabase.com/docs)
+- [PostgreSQL Tutorial](https://www.postgresql.org/docs/)
+- [Row Level Security Guide](https://supabase.com/docs/guides/auth/row-level-security)
 
 ---
 
-**Versão**: 1.0.0
-**Data**: 2025-11-15
-**Status**: ✅ Guia completo
-
-🗄️ **Supabase configurado e pronto para produção!**
+**Version**: 1.0
+**Last Updated**: 2025-11-16
+**Author**: ICARUS Development Team
