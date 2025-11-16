@@ -1,33 +1,28 @@
 /**
- * ICARUS v5.0 - Módulo: Cirurgias & Procedimentos
+ * ICARUS v5.0 - Módulo: Cirurgias & Procedimentos (COMPLETO)
  *
  * Categoria: Core Business
- * Descrição: Gestão completa de cirurgias e procedimentos que utilizam OPME
+ * Descrição: Gestão completa do fluxo cirúrgico OPME com Kanban
  *
- * CONTEXTO DE NEGÓCIO:
- * - Sistema para Distribuidora de Dispositivos Médicos (OPME)
- * - Fluxo: Médico prescreve → Hospital/Plano solicita → Distribuidora fornece → Cirurgia → Faturamento
- * - Este módulo rastreia cirurgias agendadas/realizadas e produtos OPME utilizados
+ * ARQUITETURA:
+ * - Kanban Board com 5 colunas de fluxo
+ * - Gráfico horizontal de status (12 etapas)
+ * - Sistema de upload de documentos
+ * - Integração com estoque, tabelas de preços, calendário
+ * - Consignação com toggle urgência
+ * - Rastreabilidade completa (QR Code, fotos, lacres)
  *
- * Funcionalidades:
- * - Acompanhamento de cirurgias agendadas
- * - Vinculação de produtos OPME a cada procedimento
- * - Rastreabilidade de uso (qual produto/lote usado em qual cirurgia/paciente)
- * - Gestão de status (Agendada, Em Preparo, Realizada, Faturada, Cancelada)
- * - Integração com hospitais, médicos e produtos
- * - IA para predição de demanda e análise de consumo
+ * FLUXO COMPLETO:
+ * 1. PRÉ-CIRÚRGICO: Cotação → Tabela Preços → Autorização → Agendamento
+ * 2. LOGÍSTICA: Separação e envio de materiais
+ * 3. CIRURGIA: Execução, QR Code, evidências
+ * 4. LOGÍSTICA REVERSA: Devolução de não utilizados
+ * 5. PÓS-CIRÚRGICO: Cotação pós → Autorização → Faturamento
  *
- * KPIs:
- * - Total de Cirurgias (período)
- * - Produtos Pendentes (aguardando entrega)
- * - Valor Total (R$)
- * - Taxa de Sucesso (%)
- *
- * Abas:
- * - Overview: KPIs + gráficos + cirurgias recentes
- * - Agendadas: Lista de cirurgias agendadas + gestão de produtos
- * - Realizadas: Histórico de cirurgias realizadas
- * - IA: Predições de demanda, análises de consumo, insights
+ * CORES STATUS:
+ * - 🔴 Vermelho: Pendente
+ * - 🟠 Laranja: Em processamento
+ * - 🟢 Verde: Concluído
  */
 
 import React, { useState, useEffect } from 'react'
@@ -43,62 +38,196 @@ import { formatCurrency, formatDate } from '@/lib/utils'
 
 // ==================== INTERFACES ====================
 
-interface Cirurgia {
+type StatusFluxo = 'pendente' | 'processando' | 'concluido'
+type TipoCirurgia = 'eletiva' | 'urgencia'
+type StatusFaturamento = 'nao_faturado' | 'parcial' | 'total'
+
+interface EtapaFluxo {
+  id: string
+  nome: string
+  status: StatusFluxo
+  data_inicio?: string
+  data_fim?: string
+}
+
+interface CirurgiaCard {
   id: number
-  hospital_id: number
-  hospital_name: string
-  doctor_id: number
-  doctor_name: string
-  patient_name: string
-  procedure_type: string
-  scheduled_date: string
-  status: 'agendada' | 'em_preparo' | 'realizada' | 'faturada' | 'cancelada'
-  total_value: number
-  items: CirurgiaItem[]
+  paciente: string
+  medico: string
+  hospital: string
+  convenio: string
+  tipo: TipoCirurgia
+  procedimento: string
+  data_agendada: string
+  status_geral: StatusFluxo
+  coluna_atual: string // 'pre_cirurgico' | 'logistica' | 'cirurgia' | 'logistica_reversa' | 'pos_cirurgico'
+
+  // Pré-cirúrgico
+  pedido_medico?: ArquivoUpload
+  cotacao?: Cotacao
+  tabela_precos_id?: number
+  autorizacao?: ArquivoUpload
+  agendamento_outlook?: AgendamentoOutlook
+  nota_consignacao?: NotaConsignacao
+
+  // Cirurgia
+  materiais_utilizados: MaterialUtilizado[]
+  evidencias: Evidencia[]
+  materiais_extras: MaterialExtra[]
+
+  // Pós-cirúrgico
+  cotacao_pos?: Cotacao
+  autorizacao_faturamento?: AutorizacaoFaturamento
+  faturamento?: Faturamento
+
+  // Fluxo completo
+  etapas: EtapaFluxo[]
+
   created_at: string
-  observations?: string
+  updated_at: string
 }
 
-interface CirurgiaItem {
+interface ArquivoUpload {
   id: number
-  surgery_id: number
-  product_id: number
-  product_name: string
-  quantity: number
-  unit_price: number
-  total_price: number
-  lote?: string
-  validade?: string
-  status: 'pendente' | 'entregue' | 'utilizado' | 'devolvido'
+  nome: string
+  url: string
+  tipo: 'pedido_medico' | 'autorizacao' | 'email_aprovacao' | 'evidencia' | 'relatorio'
+  data_upload: string
 }
 
-interface Hospital {
+interface Cotacao {
   id: number
-  name: string
-  cnpj: string
-  city: string
+  numero: string
+  materiais: MaterialCotacao[]
+  valor_total: number
+  status: 'rascunho' | 'enviada' | 'aprovada' | 'rejeitada'
+  pdf_url?: string
+  data_criacao: string
+  data_envio?: string
 }
 
-interface Doctor {
+interface MaterialCotacao {
   id: number
-  name: string
-  crm: string
-  specialty: string
+  produto_id: number
+  produto_nome: string
+  quantidade: number
+  disponivel_estoque: boolean
+  valor_unitario: number
+  valor_total: number
+  observacao?: string
 }
 
-interface Product {
+interface TabelaPreco {
   id: number
-  name: string
-  category: string
-  price: number
-  stock: number
+  tipo: 'fixa' | 'flexivel'
+  nome: string
+  convenio_id?: number
+  hospital_id?: number
+  produtos: ProdutoTabela[]
+  vigencia_inicio: string
+  vigencia_fim?: string
 }
 
-interface KPIs {
-  totalCirurgias: number
-  produtosPendentes: number
-  valorTotal: number
-  taxaSucesso: number
+interface ProdutoTabela {
+  produto_id: number
+  produto_nome: string
+  preco: number
+}
+
+interface AgendamentoOutlook {
+  id: number
+  evento_id: string
+  data_hora: string
+  participantes: string[]
+  lista_materiais: string[]
+  notificacoes_enviadas: boolean
+  link_calendario: string
+}
+
+interface NotaConsignacao {
+  id: number
+  numero: string
+  tipo_cirurgia: TipoCirurgia
+  urgencia_ativa: boolean
+  valor_simbolico: number // R$ 100 se urgência
+  justificativa_medica?: string
+  materiais: MaterialConsignacao[]
+  data_emissao: string
+  notificacoes: Notificacao[]
+}
+
+interface MaterialConsignacao {
+  produto_id: number
+  produto_nome: string
+  quantidade: number
+  lote: string
+  validade: string
+}
+
+interface Notificacao {
+  tipo: '2_dias_antes' | '1_dia_antes' | 'dia_cirurgia'
+  enviada: boolean
+  data_envio?: string
+}
+
+interface MaterialUtilizado {
+  id: number
+  produto_id: number
+  produto_nome: string
+  quantidade: number
+  lote: string
+  validade: string
+  codigo_barras?: string
+  qr_code?: string
+  paciente_vinculado: string
+  data_vinculacao: string
+}
+
+interface Evidencia {
+  id: number
+  tipo: 'foto' | 'lacre' | 'relatorio' | 'comprovante'
+  url: string
+  descricao: string
+  data_upload: string
+}
+
+interface MaterialExtra {
+  id: number
+  produto_id: number
+  produto_nome: string
+  quantidade: number
+  justificativa_medica: string
+  medico_solicitante: string
+  data_solicitacao: string
+  aprovado: boolean
+}
+
+interface AutorizacaoFaturamento {
+  id: number
+  tipo: 'parcial' | 'total'
+  valor_autorizado: number
+  materiais_autorizados: number[]
+  responsavel: string
+  data_autorizacao: string
+}
+
+interface Faturamento {
+  id: number
+  tipo: 'parcial' | 'total'
+  nota_fiscal: string
+  valor: number
+  materiais_faturados: number[]
+  data_emissao: string
+  status: 'emitida' | 'enviada' | 'paga'
+}
+
+interface KPIsCirurgia {
+  em_andamento: number
+  finalizadas_hoje: number
+  finalizadas_semana: number
+  finalizadas_mes: number
+  pendentes_faturamento: number
+  valor_total_mes: number
 }
 
 // ==================== COMPONENTE PRINCIPAL ====================
@@ -107,237 +236,283 @@ export function CirurgiasProcedimentos() {
   const { supabase } = useSupabase()
   const { predict, chat, isLoading: aiLoading } = useIcarusBrain()
 
-  // Estados
-  const [cirurgias, setCirurgias] = useState<Cirurgia[]>([])
-  const [kpis, setKpis] = useState<KPIs>({
-    totalCirurgias: 0,
-    produtosPendentes: 0,
-    valorTotal: 0,
-    taxaSucesso: 0,
+  // Estados principais
+  const [cirurgias, setCirurgias] = useState<CirurgiaCard[]>([])
+  const [kpis, setKPIs] = useState<KPIsCirurgia>({
+    em_andamento: 0,
+    finalizadas_hoje: 0,
+    finalizadas_semana: 0,
+    finalizadas_mes: 0,
+    pendentes_faturamento: 0,
+    valor_total_mes: 0,
   })
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('overview')
 
   // Filtros
-  const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [dateFilter, setDateFilter] = useState<string>('30')
+  const [filtroTipo, setFiltroTipo] = useState<'todas' | 'eletiva' | 'urgencia'>('todas')
+  const [filtroStatus, setFiltroStatus] = useState<'todos' | StatusFluxo>('todos')
 
-  // Modal de criação/edição
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingCirurgia, setEditingCirurgia] = useState<Cirurgia | null>(null)
+  // Modal
+  const [cirurgiaSelecionada, setCirurgiaSelecionada] = useState<CirurgiaCard | null>(null)
+  const [modalAberto, setModalAberto] = useState(false)
+  const [abaModal, setAbaModal] = useState('detalhes')
 
-  // IA
-  const [aiPrediction, setAiPrediction] = useState<any>(null)
-  const [aiInsights, setAiInsights] = useState<string>('')
+  // Upload
+  const [uploadingFile, setUploadingFile] = useState(false)
+
+  // ==================== COLUNAS KANBAN ====================
+
+  const colunas = [
+    { id: 'pre_cirurgico', nome: 'Pré-Cirúrgico', cor: 'bg-blue-100 border-blue-300' },
+    { id: 'logistica', nome: 'Logística', cor: 'bg-purple-100 border-purple-300' },
+    { id: 'cirurgia', nome: 'Cirurgia', cor: 'bg-green-100 border-green-300' },
+    { id: 'logistica_reversa', nome: 'Logística Reversa', cor: 'bg-orange-100 border-orange-300' },
+    { id: 'pos_cirurgico', nome: 'Pós-Cirúrgico', cor: 'bg-indigo-100 border-indigo-300' },
+  ]
+
+  // ==================== ETAPAS DO FLUXO (Gráfico Horizontal) ====================
+
+  const etapasFluxoCompleto = [
+    'Pré-cirúrgico',
+    'Tabela Preços',
+    'Análise',
+    'Autorização',
+    'Agendamento',
+    'Logística',
+    'Cirurgia',
+    'Logística Reversa',
+    'Pós-cirúrgico',
+    'Análise',
+    'Monitoramento',
+    'Autorização Faturamento',
+    'Faturamento',
+  ]
 
   // ==================== EFEITOS ====================
 
   useEffect(() => {
-    loadData()
-  }, [dateFilter, statusFilter])
+    loadCirurgias()
+  }, [filtroTipo, filtroStatus])
 
   // ==================== FUNÇÕES DE DADOS ====================
 
-  const loadData = async () => {
+  const loadCirurgias = async () => {
     setLoading(true)
     try {
-      // Simular carregamento de dados do Supabase
-      // Em produção: const { data, error } = await supabase.from('surgeries').select('*')
-
-      const mockCirurgias: Cirurgia[] = [
+      // Mock data completo
+      const mockCirurgias: CirurgiaCard[] = [
         {
           id: 1,
-          hospital_id: 1,
-          hospital_name: 'Hospital São Lucas',
-          doctor_id: 1,
-          doctor_name: 'Dr. Carlos Silva',
-          patient_name: 'João Santos',
-          procedure_type: 'Artroplastia de Joelho',
-          scheduled_date: '2025-11-20T09:00:00',
-          status: 'agendada',
-          total_value: 45000,
-          items: [
-            {
-              id: 1,
-              surgery_id: 1,
-              product_id: 1,
-              product_name: 'Prótese de Joelho - Modelo Premium',
-              quantity: 1,
-              unit_price: 35000,
-              total_price: 35000,
-              lote: 'LOT2025001',
-              validade: '2027-12-31',
-              status: 'pendente',
-            },
-            {
-              id: 2,
-              surgery_id: 1,
-              product_id: 2,
-              product_name: 'Parafusos de Fixação Titânio (kit)',
-              quantity: 2,
-              unit_price: 5000,
-              total_price: 10000,
-              lote: 'LOT2025045',
-              validade: '2028-06-30',
-              status: 'entregue',
-            },
+          paciente: 'João Silva Santos',
+          medico: 'Dr. Carlos Alberto',
+          hospital: 'Hospital São Lucas',
+          convenio: 'Unimed Nacional',
+          tipo: 'eletiva',
+          procedimento: 'Artroplastia Total de Joelho',
+          data_agendada: '2025-11-22T09:00:00',
+          status_geral: 'processando',
+          coluna_atual: 'pre_cirurgico',
+          pedido_medico: {
+            id: 1,
+            nome: 'pedido_medico_joao.pdf',
+            url: '/uploads/pedido_1.pdf',
+            tipo: 'pedido_medico',
+            data_upload: '2025-11-10T14:30:00',
+          },
+          cotacao: {
+            id: 1,
+            numero: 'COT-2025-001',
+            materiais: [
+              {
+                id: 1,
+                produto_id: 101,
+                produto_nome: 'Prótese de Joelho Premium - Tamanho M',
+                quantidade: 1,
+                disponivel_estoque: true,
+                valor_unitario: 35000,
+                valor_total: 35000,
+              },
+              {
+                id: 2,
+                produto_id: 102,
+                produto_nome: 'Parafusos de Fixação Titânio (kit 12 unidades)',
+                quantidade: 2,
+                disponivel_estoque: true,
+                valor_unitario: 5000,
+                valor_total: 10000,
+              },
+              {
+                id: 3,
+                produto_id: 103,
+                produto_nome: 'Cimento Ortopédico 40g',
+                quantidade: 1,
+                disponivel_estoque: false, // ZERADO
+                valor_unitario: 800,
+                valor_total: 800,
+                observacao: '⚠️ ZERADO EM ESTOQUE - Notificação enviada para Compras',
+              },
+            ],
+            valor_total: 45800,
+            status: 'aprovada',
+            pdf_url: '/cotacoes/COT-2025-001.pdf',
+            data_criacao: '2025-11-11T09:00:00',
+            data_envio: '2025-11-11T10:30:00',
+          },
+          tabela_precos_id: 5, // Tabela fixa Unimed
+          autorizacao: {
+            id: 2,
+            nome: 'autorizacao_unimed_123456.pdf',
+            url: '/uploads/autorizacao_1.pdf',
+            tipo: 'autorizacao',
+            data_upload: '2025-11-13T16:00:00',
+          },
+          agendamento_outlook: {
+            id: 1,
+            evento_id: 'outlook-event-abc123',
+            data_hora: '2025-11-22T09:00:00',
+            participantes: ['dr.carlos@hospital.com', 'logistica@distribuidora.com', 'financeiro@distribuidora.com'],
+            lista_materiais: ['Prótese Joelho Premium M', 'Parafusos Titânio kit x2', 'Cimento Ortopédico 40g'],
+            notificacoes_enviadas: false,
+            link_calendario: 'https://outlook.office.com/calendar/event/abc123',
+          },
+          nota_consignacao: {
+            id: 1,
+            numero: 'CONS-2025-001',
+            tipo_cirurgia: 'eletiva',
+            urgencia_ativa: false,
+            valor_simbolico: 0,
+            materiais: [
+              { produto_id: 101, produto_nome: 'Prótese de Joelho Premium - Tamanho M', quantidade: 1, lote: 'LOT2025-045', validade: '2027-12-31' },
+              { produto_id: 102, produto_nome: 'Parafusos de Fixação Titânio (kit)', quantidade: 2, lote: 'LOT2025-087', validade: '2028-06-30' },
+            ],
+            data_emissao: '2025-11-14T10:00:00',
+            notificacoes: [
+              { tipo: '2_dias_antes', enviada: false },
+              { tipo: '1_dia_antes', enviada: false },
+              { tipo: 'dia_cirurgia', enviada: false },
+            ],
+          },
+          materiais_utilizados: [],
+          evidencias: [],
+          materiais_extras: [],
+          etapas: [
+            { id: '1', nome: 'Pré-cirúrgico', status: 'concluido', data_inicio: '2025-11-10T14:30:00', data_fim: '2025-11-11T10:30:00' },
+            { id: '2', nome: 'Tabela Preços', status: 'concluido', data_inicio: '2025-11-11T10:30:00', data_fim: '2025-11-11T11:00:00' },
+            { id: '3', nome: 'Análise', status: 'concluido', data_inicio: '2025-11-11T11:00:00', data_fim: '2025-11-13T14:00:00' },
+            { id: '4', nome: 'Autorização', status: 'concluido', data_inicio: '2025-11-13T14:00:00', data_fim: '2025-11-13T16:00:00' },
+            { id: '5', nome: 'Agendamento', status: 'processando', data_inicio: '2025-11-14T09:00:00' },
+            { id: '6', nome: 'Logística', status: 'pendente' },
+            { id: '7', nome: 'Cirurgia', status: 'pendente' },
+            { id: '8', nome: 'Logística Reversa', status: 'pendente' },
+            { id: '9', nome: 'Pós-cirúrgico', status: 'pendente' },
+            { id: '10', nome: 'Análise', status: 'pendente' },
+            { id: '11', nome: 'Monitoramento', status: 'pendente' },
+            { id: '12', nome: 'Autorização Faturamento', status: 'pendente' },
+            { id: '13', nome: 'Faturamento', status: 'pendente' },
           ],
           created_at: '2025-11-10T14:30:00',
-          observations: 'Paciente com alergia a níquel - usar titânio',
+          updated_at: '2025-11-14T10:00:00',
         },
         {
           id: 2,
-          hospital_id: 2,
-          hospital_name: 'Clínica Ortopédica Excellence',
-          doctor_id: 2,
-          doctor_name: 'Dra. Maria Oliveira',
-          patient_name: 'Ana Costa',
-          procedure_type: 'Artrodese de Coluna',
-          scheduled_date: '2025-11-18T14:00:00',
-          status: 'em_preparo',
-          total_value: 62000,
-          items: [
+          paciente: 'Maria Costa Oliveira',
+          medico: 'Dra. Ana Paula Mendes',
+          hospital: 'Clínica Ortopédica Excellence',
+          convenio: 'Bradesco Saúde',
+          tipo: 'urgencia',
+          procedimento: 'Osteossíntese de Fêmur com Placa',
+          data_agendada: '2025-11-17T15:00:00',
+          status_geral: 'processando',
+          coluna_atual: 'cirurgia',
+          nota_consignacao: {
+            id: 2,
+            numero: 'CONS-URG-2025-002',
+            tipo_cirurgia: 'urgencia',
+            urgencia_ativa: true,
+            valor_simbolico: 100, // URGÊNCIA
+            justificativa_medica: 'Paciente politraumatizada, fratura exposta de fêmur. Cirurgia imediata necessária para preservação do membro.',
+            materiais: [
+              { produto_id: 201, produto_nome: 'Placa Bloqueada Fêmur 10 furos', quantidade: 1, lote: 'LOT2025-123', validade: '2027-08-15' },
+              { produto_id: 202, produto_nome: 'Parafusos Cortical 4.5mm (kit)', quantidade: 1, lote: 'LOT2025-125', validade: '2028-02-20' },
+            ],
+            data_emissao: '2025-11-17T10:00:00',
+            notificacoes: [
+              { tipo: '2_dias_antes', enviada: false }, // Não se aplica em urgência
+              { tipo: '1_dia_antes', enviada: false },
+              { tipo: 'dia_cirurgia', enviada: true, data_envio: '2025-11-17T10:05:00' },
+            ],
+          },
+          materiais_utilizados: [
             {
-              id: 3,
-              surgery_id: 2,
-              product_id: 3,
-              product_name: 'Sistema de Fixação Vertebral',
-              quantity: 1,
-              unit_price: 48000,
-              total_price: 48000,
-              lote: 'LOT2025089',
-              validade: '2027-09-15',
-              status: 'entregue',
+              id: 1,
+              produto_id: 201,
+              produto_nome: 'Placa Bloqueada Fêmur 10 furos',
+              quantidade: 1,
+              lote: 'LOT2025-123',
+              validade: '2027-08-15',
+              codigo_barras: '7891234567890',
+              qr_code: 'QR-LOT2025-123-PLACA-FEMUR',
+              paciente_vinculado: 'Maria Costa Oliveira',
+              data_vinculacao: '2025-11-17T15:45:00',
             },
             {
-              id: 4,
-              surgery_id: 2,
-              product_id: 4,
-              product_name: 'Cage Intersomático PEEK',
-              quantity: 2,
-              unit_price: 7000,
-              total_price: 14000,
-              lote: 'LOT2025102',
-              validade: '2028-03-20',
-              status: 'entregue',
-            },
-          ],
-          created_at: '2025-11-08T10:15:00',
-        },
-        {
-          id: 3,
-          hospital_id: 1,
-          hospital_name: 'Hospital São Lucas',
-          doctor_id: 3,
-          doctor_name: 'Dr. Pedro Almeida',
-          patient_name: 'Roberto Lima',
-          procedure_type: 'Artroplastia de Quadril',
-          scheduled_date: '2025-11-15T08:30:00',
-          status: 'realizada',
-          total_value: 52000,
-          items: [
-            {
-              id: 5,
-              surgery_id: 3,
-              product_id: 5,
-              product_name: 'Prótese de Quadril Cimentada',
-              quantity: 1,
-              unit_price: 42000,
-              total_price: 42000,
-              lote: 'LOT2024987',
-              validade: '2027-05-10',
-              status: 'utilizado',
-            },
-            {
-              id: 6,
-              surgery_id: 3,
-              product_id: 6,
-              product_name: 'Parafusos de Fixação (kit)',
-              quantity: 1,
-              unit_price: 10000,
-              total_price: 10000,
-              lote: 'LOT2024999',
-              validade: '2027-08-25',
-              status: 'utilizado',
+              id: 2,
+              produto_id: 202,
+              produto_nome: 'Parafusos Cortical 4.5mm (kit)',
+              quantidade: 1,
+              lote: 'LOT2025-125',
+              validade: '2028-02-20',
+              codigo_barras: '7891234567891',
+              qr_code: 'QR-LOT2025-125-PARAF-CORT',
+              paciente_vinculado: 'Maria Costa Oliveira',
+              data_vinculacao: '2025-11-17T16:00:00',
             },
           ],
-          created_at: '2025-11-01T11:20:00',
-          observations: 'Cirurgia realizada com sucesso',
-        },
-        {
-          id: 4,
-          hospital_id: 3,
-          hospital_name: 'Hospital Regional Sul',
-          doctor_id: 1,
-          doctor_name: 'Dr. Carlos Silva',
-          patient_name: 'Mariana Souza',
-          procedure_type: 'Reconstrução de LCA',
-          scheduled_date: '2025-11-22T10:00:00',
-          status: 'agendada',
-          total_value: 18000,
-          items: [
+          evidencias: [
             {
-              id: 7,
-              surgery_id: 4,
-              product_id: 7,
-              product_name: 'Enxerto de LCA',
-              quantity: 1,
-              unit_price: 12000,
-              total_price: 12000,
-              status: 'pendente',
+              id: 1,
+              tipo: 'foto',
+              url: '/evidencias/cirurgia_2_foto_1.jpg',
+              descricao: 'Imagem do campo cirúrgico com placa posicionada',
+              data_upload: '2025-11-17T17:00:00',
             },
             {
-              id: 8,
-              surgery_id: 4,
-              product_id: 8,
-              product_name: 'Parafusos de Interferência',
-              quantity: 2,
-              unit_price: 3000,
-              total_price: 6000,
-              status: 'pendente',
+              id: 2,
+              tipo: 'lacre',
+              url: '/evidencias/cirurgia_2_lacre_1.jpg',
+              descricao: 'Lacre de segurança da embalagem da placa',
+              data_upload: '2025-11-17T17:05:00',
             },
           ],
-          created_at: '2025-11-12T16:45:00',
-        },
-        {
-          id: 5,
-          hospital_id: 2,
-          hospital_name: 'Clínica Ortopédica Excellence',
-          doctor_id: 4,
-          doctor_name: 'Dr. Fernando Costa',
-          patient_name: 'Lucas Pereira',
-          procedure_type: 'Osteossíntese de Fêmur',
-          scheduled_date: '2025-11-12T13:00:00',
-          status: 'faturada',
-          total_value: 38000,
-          items: [
+          materiais_extras: [
             {
-              id: 9,
-              surgery_id: 5,
-              product_id: 9,
-              product_name: 'Haste Intramedular Bloqueada',
-              quantity: 1,
-              unit_price: 28000,
-              total_price: 28000,
-              lote: 'LOT2024856',
-              validade: '2027-02-15',
-              status: 'utilizado',
-            },
-            {
-              id: 10,
-              surgery_id: 5,
-              product_id: 10,
-              product_name: 'Parafusos de Bloqueio (kit)',
-              quantity: 1,
-              unit_price: 10000,
-              total_price: 10000,
-              lote: 'LOT2024867',
-              validade: '2027-04-10',
-              status: 'utilizado',
+              id: 1,
+              produto_id: 203,
+              produto_nome: 'Parafuso Adicional 4.5mm x 50mm',
+              quantidade: 2,
+              justificativa_medica: 'Necessário fixação adicional devido à complexidade da fratura. Fragmento ósseo adicional requereu parafusos extras para estabilização adequada.',
+              medico_solicitante: 'Dra. Ana Paula Mendes',
+              data_solicitacao: '2025-11-17T16:30:00',
+              aprovado: true,
             },
           ],
-          created_at: '2025-11-05T09:30:00',
+          etapas: [
+            { id: '1', nome: 'Pré-cirúrgico', status: 'concluido', data_inicio: '2025-11-17T10:00:00', data_fim: '2025-11-17T10:30:00' },
+            { id: '2', nome: 'Tabela Preços', status: 'concluido', data_inicio: '2025-11-17T10:30:00', data_fim: '2025-11-17T10:35:00' },
+            { id: '3', nome: 'Análise', status: 'concluido', data_inicio: '2025-11-17T10:35:00', data_fim: '2025-11-17T11:00:00' },
+            { id: '4', nome: 'Autorização', status: 'concluido', data_inicio: '2025-11-17T11:00:00', data_fim: '2025-11-17T12:00:00' },
+            { id: '5', nome: 'Agendamento', status: 'concluido', data_inicio: '2025-11-17T12:00:00', data_fim: '2025-11-17T12:30:00' },
+            { id: '6', nome: 'Logística', status: 'concluido', data_inicio: '2025-11-17T12:30:00', data_fim: '2025-11-17T14:30:00' },
+            { id: '7', nome: 'Cirurgia', status: 'processando', data_inicio: '2025-11-17T15:00:00' },
+            { id: '8', nome: 'Logística Reversa', status: 'pendente' },
+            { id: '9', nome: 'Pós-cirúrgico', status: 'pendente' },
+            { id: '10', nome: 'Análise', status: 'pendente' },
+            { id: '11', nome: 'Monitoramento', status: 'pendente' },
+            { id: '12', nome: 'Autorização Faturamento', status: 'pendente' },
+            { id: '13', nome: 'Faturamento', status: 'pendente' },
+          ],
+          created_at: '2025-11-17T10:00:00',
+          updated_at: '2025-11-17T17:05:00',
         },
       ]
 
@@ -350,139 +525,118 @@ export function CirurgiasProcedimentos() {
     }
   }
 
-  const calculateKPIs = (data: Cirurgia[]) => {
-    const total = data.length
-    const pendentes = data.reduce((acc, c) => {
-      return acc + c.items.filter(item => item.status === 'pendente').length
-    }, 0)
-    const valorTotal = data.reduce((acc, c) => acc + c.total_value, 0)
-    const realizadas = data.filter(c => c.status === 'realizada' || c.status === 'faturada').length
-    const taxaSucesso = total > 0 ? (realizadas / total) * 100 : 0
+  const calculateKPIs = (data: CirurgiaCard[]) => {
+    const hoje = new Date()
+    const inicioSemana = new Date(hoje.setDate(hoje.getDate() - hoje.getDay()))
+    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1)
 
-    setKpis({
-      totalCirurgias: total,
-      produtosPendentes: pendentes,
-      valorTotal,
-      taxaSucesso,
+    setKPIs({
+      em_andamento: data.filter(c => c.status_geral === 'processando').length,
+      finalizadas_hoje: data.filter(c => {
+        const dataCirurgia = new Date(c.data_agendada)
+        return dataCirurgia.toDateString() === new Date().toDateString() && c.status_geral === 'concluido'
+      }).length,
+      finalizadas_semana: data.filter(c => {
+        const dataCirurgia = new Date(c.data_agendada)
+        return dataCirurgia >= inicioSemana && c.status_geral === 'concluido'
+      }).length,
+      finalizadas_mes: data.filter(c => {
+        const dataCirurgia = new Date(c.data_agendada)
+        return dataCirurgia >= inicioMes && c.status_geral === 'concluido'
+      }).length,
+      pendentes_faturamento: data.filter(c => !c.faturamento && c.status_geral === 'concluido').length,
+      valor_total_mes: data.reduce((acc, c) => {
+        const dataCirurgia = new Date(c.data_agendada)
+        if (dataCirurgia >= inicioMes && c.cotacao) {
+          return acc + c.cotacao.valor_total
+        }
+        return acc
+      }, 0),
     })
   }
 
-  const handleCreateCirurgia = () => {
-    setEditingCirurgia(null)
-    setIsDialogOpen(true)
+  // ==================== HELPERS ====================
+
+  const getStatusColor = (status: StatusFluxo) => {
+    const colors = {
+      pendente: 'bg-red-500',
+      processando: 'bg-orange-500',
+      concluido: 'bg-green-500',
+    }
+    return colors[status]
   }
 
-  const handleEditCirurgia = (cirurgia: Cirurgia) => {
-    setEditingCirurgia(cirurgia)
-    setIsDialogOpen(true)
+  const getStatusLabel = (status: StatusFluxo) => {
+    const labels = {
+      pendente: 'Pendente',
+      processando: 'Em Processamento',
+      concluido: 'Concluído',
+    }
+    return labels[status]
   }
 
-  const handleSaveCirurgia = async () => {
-    // Implementar lógica de salvar no Supabase
-    setIsDialogOpen(false)
-    await loadData()
+  const getTipoBadge = (tipo: TipoCirurgia) => {
+    return tipo === 'urgencia'
+      ? <span className="px-2 py-1 text-xs font-bold bg-red-100 text-red-700 rounded uppercase">🚨 URGÊNCIA</span>
+      : <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded uppercase">Eletiva</span>
   }
 
-  const handlePredictDemand = async () => {
+  const handleAbrirDetalhes = (cirurgia: CirurgiaCard) => {
+    setCirurgiaSelecionada(cirurgia)
+    setAbaModal('detalhes')
+    setModalAberto(true)
+  }
+
+  const handleUploadArquivo = async (tipo: string, file: File) => {
+    setUploadingFile(true)
     try {
-      const result = await predict('demanda_produtos', {
-        cirurgias: cirurgias.slice(0, 10),
-        periodo: 'próximos 30 dias',
-      })
-      setAiPrediction(result)
+      // Simular upload (em produção: Supabase Storage)
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      console.log(`Arquivo ${file.name} uploaded como ${tipo}`)
+      // Recarregar dados
+      await loadCirurgias()
     } catch (error) {
-      console.error('Erro na predição:', error)
+      console.error('Erro no upload:', error)
+    } finally {
+      setUploadingFile(false)
     }
   }
 
-  const handleAnalyzeConsumption = async () => {
-    try {
-      const prompt = `Analise o padrão de consumo de produtos OPME nas cirurgias abaixo e forneça insights:
+  const handleToggleUrgencia = (cirurgiaId: number) => {
+    setCirurgias(prev => prev.map(c => {
+      if (c.id === cirurgiaId && c.nota_consignacao) {
+        return {
+          ...c,
+          nota_consignacao: {
+            ...c.nota_consignacao,
+            urgencia_ativa: !c.nota_consignacao.urgencia_ativa,
+            valor_simbolico: !c.nota_consignacao.urgencia_ativa ? 100 : 0,
+          }
+        }
+      }
+      return c
+    }))
+  }
 
-${cirurgias.slice(0, 5).map(c => `
-- Procedimento: ${c.procedure_type}
-- Hospital: ${c.hospital_name}
-- Médico: ${c.doctor_name}
-- Produtos: ${c.items.map(i => `${i.product_name} (${i.quantity}x)`).join(', ')}
-- Valor: ${formatCurrency(c.total_value)}
-`).join('\n')}
+  const handleAprovarFaturamento = (cirurgiaId: number, tipo: 'parcial' | 'total') => {
+    console.log(`Aprovar faturamento ${tipo} para cirurgia ${cirurgiaId}`)
+    // Enviar evento para módulo financeiro
+  }
 
-Forneça insights sobre:
-1. Produtos mais utilizados
-2. Padrões de consumo por tipo de procedimento
-3. Recomendações de estoque
-4. Oportunidades de otimização`
-
-      const response = await chat(prompt)
-      setAiInsights(response)
-    } catch (error) {
-      console.error('Erro na análise:', error)
-    }
+  const handleEmitirNFe = (cirurgiaId: number, tipo: 'parcial' | 'total') => {
+    console.log(`Emitir NFe ${tipo} para cirurgia ${cirurgiaId}`)
   }
 
   // ==================== FILTROS ====================
 
-  const filteredCirurgias = cirurgias.filter(cirurgia => {
-    const matchesSearch =
-      cirurgia.patient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cirurgia.hospital_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cirurgia.doctor_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cirurgia.procedure_type.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchesStatus = statusFilter === 'all' || cirurgia.status === statusFilter
-
-    return matchesSearch && matchesStatus
+  const cirurgiasFiltradas = cirurgias.filter(c => {
+    const matchTipo = filtroTipo === 'todas' || c.tipo === filtroTipo
+    const matchStatus = filtroStatus === 'todos' || c.status_geral === filtroStatus
+    return matchTipo && matchStatus
   })
 
-  const cirurgiasAgendadas = filteredCirurgias.filter(c => c.status === 'agendada' || c.status === 'em_preparo')
-  const cirurgiasRealizadas = filteredCirurgias.filter(c => c.status === 'realizada' || c.status === 'faturada')
-
-  // ==================== STATUS BADGE ====================
-
-  const getStatusBadge = (status: Cirurgia['status']) => {
-    const styles = {
-      agendada: 'bg-blue-100 text-blue-800',
-      em_preparo: 'bg-yellow-100 text-yellow-800',
-      realizada: 'bg-green-100 text-green-800',
-      faturada: 'bg-purple-100 text-purple-800',
-      cancelada: 'bg-red-100 text-red-800',
-    }
-
-    const labels = {
-      agendada: 'Agendada',
-      em_preparo: 'Em Preparo',
-      realizada: 'Realizada',
-      faturada: 'Faturada',
-      cancelada: 'Cancelada',
-    }
-
-    return (
-      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${styles[status]}`}>
-        {labels[status]}
-      </span>
-    )
-  }
-
-  const getItemStatusBadge = (status: CirurgiaItem['status']) => {
-    const styles = {
-      pendente: 'bg-orange-100 text-orange-800',
-      entregue: 'bg-blue-100 text-blue-800',
-      utilizado: 'bg-green-100 text-green-800',
-      devolvido: 'bg-gray-100 text-gray-800',
-    }
-
-    const labels = {
-      pendente: 'Pendente',
-      entregue: 'Entregue',
-      utilizado: 'Utilizado',
-      devolvido: 'Devolvido',
-    }
-
-    return (
-      <span className={`px-2 py-1 text-xs font-medium rounded ${styles[status]}`}>
-        {labels[status]}
-      </span>
-    )
+  const getCirurgiasPorColuna = (colunaId: string) => {
+    return cirurgiasFiltradas.filter(c => c.coluna_atual === colunaId)
   }
 
   // ==================== RENDERIZAÇÃO ====================
@@ -503,454 +657,487 @@ Forneça insights sobre:
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Cirurgias & Procedimentos</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Cirurgias & Procedimentos OPME</h1>
           <p className="text-muted-foreground mt-1">
-            Gestão de cirurgias e produtos OPME - B2B para Hospitais e Planos
+            Gestão completa do fluxo cirúrgico com Kanban
           </p>
         </div>
-        <Button onClick={handleCreateCirurgia} size="lg">
-          + Nova Cirurgia
-        </Button>
+        <Button size="lg">+ Nova Cirurgia</Button>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="neu-soft">
-          <CardHeader className="pb-2">
-            <CardDescription>Total de Cirurgias</CardDescription>
-            <CardTitle className="text-3xl">{kpis.totalCirurgias}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
-          </CardContent>
-        </Card>
-
-        <Card className="neu-soft">
-          <CardHeader className="pb-2">
-            <CardDescription>Produtos Pendentes</CardDescription>
-            <CardTitle className="text-3xl text-orange-600">{kpis.produtosPendentes}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Aguardando entrega</p>
-          </CardContent>
-        </Card>
-
-        <Card className="neu-soft">
-          <CardHeader className="pb-2">
-            <CardDescription>Valor Total</CardDescription>
-            <CardTitle className="text-3xl text-green-600">{formatCurrency(kpis.valorTotal)}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Período selecionado</p>
-          </CardContent>
-        </Card>
-
-        <Card className="neu-soft">
-          <CardHeader className="pb-2">
-            <CardDescription>Taxa de Sucesso</CardDescription>
-            <CardTitle className="text-3xl text-blue-600">{kpis.taxaSucesso.toFixed(1)}%</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Cirurgias realizadas</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Filtros */}
+      {/* KPIs - Barra Superior */}
       <Card className="neu-soft">
         <CardContent className="pt-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input
-              placeholder="Buscar por paciente, hospital, médico ou procedimento..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filtrar por status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os status</SelectItem>
-                <SelectItem value="agendada">Agendada</SelectItem>
-                <SelectItem value="em_preparo">Em Preparo</SelectItem>
-                <SelectItem value="realizada">Realizada</SelectItem>
-                <SelectItem value="faturada">Faturada</SelectItem>
-                <SelectItem value="cancelada">Cancelada</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={dateFilter} onValueChange={setDateFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Período" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="7">Últimos 7 dias</SelectItem>
-                <SelectItem value="30">Últimos 30 dias</SelectItem>
-                <SelectItem value="90">Últimos 90 dias</SelectItem>
-                <SelectItem value="all">Todos os períodos</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Em Andamento</p>
+              <p className="text-3xl font-bold text-orange-600">{kpis.em_andamento}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Hoje</p>
+              <p className="text-3xl font-bold text-blue-600">{kpis.finalizadas_hoje}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Esta Semana</p>
+              <p className="text-3xl font-bold text-green-600">{kpis.finalizadas_semana}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Este Mês</p>
+              <p className="text-3xl font-bold text-purple-600">{kpis.finalizadas_mes}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Pendentes Faturamento</p>
+              <p className="text-3xl font-bold text-red-600">{kpis.pendentes_faturamento}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Valor Mês</p>
+              <p className="text-2xl font-bold text-green-600">{formatCurrency(kpis.valor_total_mes)}</p>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="agendadas">Agendadas ({cirurgiasAgendadas.length})</TabsTrigger>
-          <TabsTrigger value="realizadas">Realizadas ({cirurgiasRealizadas.length})</TabsTrigger>
-          <TabsTrigger value="ia">IA</TabsTrigger>
-        </TabsList>
+      {/* Filtros */}
+      <Card className="neu-soft">
+        <CardContent className="pt-6">
+          <div className="flex flex-wrap gap-4">
+            <Select value={filtroTipo} onValueChange={(v: any) => setFiltroTipo(v)}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todas">Todas</SelectItem>
+                <SelectItem value="eletiva">Eletivas</SelectItem>
+                <SelectItem value="urgencia">Urgências</SelectItem>
+              </SelectContent>
+            </Select>
 
-        {/* TAB: Overview */}
-        <TabsContent value="overview" className="space-y-4">
-          <Card className="neu-soft">
-            <CardHeader>
-              <CardTitle>Próximas Cirurgias</CardTitle>
-              <CardDescription>Cirurgias agendadas para os próximos dias</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {cirurgiasAgendadas.slice(0, 3).map(cirurgia => (
-                  <div key={cirurgia.id} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-semibold">{cirurgia.procedure_type}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {formatDate(cirurgia.scheduled_date)} - {cirurgia.hospital_name}
-                        </p>
-                      </div>
-                      {getStatusBadge(cirurgia.status)}
+            <Select value={filtroStatus} onValueChange={(v: any) => setFiltroStatus(v)}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos Status</SelectItem>
+                <SelectItem value="pendente">Pendente</SelectItem>
+                <SelectItem value="processando">Processando</SelectItem>
+                <SelectItem value="concluido">Concluído</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button variant="outline">
+              📊 Relatórios
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Kanban Board */}
+      <div className="overflow-x-auto">
+        <div className="flex gap-4 min-w-max pb-4">
+          {colunas.map(coluna => (
+            <div key={coluna.id} className="flex-shrink-0 w-80">
+              <Card className={`${coluna.cor} border-2`}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold">
+                    {coluna.nome} ({getCirurgiasPorColuna(coluna.id).length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {getCirurgiasPorColuna(coluna.id).map(cirurgia => (
+                      <Card
+                        key={cirurgia.id}
+                        className="cursor-pointer hover:shadow-lg transition-shadow bg-white"
+                        onClick={() => handleAbrirDetalhes(cirurgia)}
+                      >
+                        <CardContent className="p-4">
+                          <div className="space-y-2">
+                            <div className="flex items-start justify-between">
+                              <h4 className="font-semibold text-sm">{cirurgia.paciente}</h4>
+                              {getTipoBadge(cirurgia.tipo)}
+                            </div>
+
+                            <div className="text-xs space-y-1">
+                              <p className="text-muted-foreground">
+                                <strong>Procedimento:</strong> {cirurgia.procedimento}
+                              </p>
+                              <p className="text-muted-foreground">
+                                <strong>Médico:</strong> {cirurgia.medico}
+                              </p>
+                              <p className="text-muted-foreground">
+                                <strong>Hospital:</strong> {cirurgia.hospital}
+                              </p>
+                              <p className="text-muted-foreground">
+                                <strong>Convênio:</strong> {cirurgia.convenio}
+                              </p>
+                              <p className="text-muted-foreground">
+                                <strong>Data:</strong> {formatDate(cirurgia.data_agendada)}
+                              </p>
+                              {cirurgia.cotacao && (
+                                <p className="font-semibold text-green-600">
+                                  {formatCurrency(cirurgia.cotacao.valor_total)}
+                                </p>
+                              )}
+                            </div>
+
+                            {/* Indicador de status */}
+                            <div className="flex items-center gap-2 mt-2">
+                              <div className={`w-3 h-3 rounded-full ${getStatusColor(cirurgia.status_geral)}`}></div>
+                              <span className="text-xs font-medium">{getStatusLabel(cirurgia.status_geral)}</span>
+                            </div>
+
+                            {/* Ícones de ações rápidas */}
+                            <div className="flex gap-2 mt-2">
+                              {cirurgia.pedido_medico && (
+                                <span className="text-xs bg-gray-100 px-2 py-1 rounded" title="Pedido médico anexado">
+                                  📄
+                                </span>
+                              )}
+                              {cirurgia.autorizacao && (
+                                <span className="text-xs bg-green-100 px-2 py-1 rounded" title="Autorização aprovada">
+                                  ✅
+                                </span>
+                              )}
+                              {cirurgia.nota_consignacao?.urgencia_ativa && (
+                                <span className="text-xs bg-red-100 px-2 py-1 rounded font-bold" title="Urgência ativa">
+                                  🚨
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Modal de Detalhes */}
+      <Dialog open={modalAberto} onOpenChange={setModalAberto}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {cirurgiaSelecionada && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  <span>{cirurgiaSelecionada.paciente}</span>
+                  {getTipoBadge(cirurgiaSelecionada.tipo)}
+                </DialogTitle>
+                <DialogDescription>
+                  {cirurgiaSelecionada.procedimento} • {cirurgiaSelecionada.hospital}
+                </DialogDescription>
+              </DialogHeader>
+
+              <Tabs value={abaModal} onValueChange={setAbaModal}>
+                <TabsList className="grid w-full grid-cols-5">
+                  <TabsTrigger value="detalhes">Detalhes</TabsTrigger>
+                  <TabsTrigger value="fluxo">Fluxo</TabsTrigger>
+                  <TabsTrigger value="materiais">Materiais</TabsTrigger>
+                  <TabsTrigger value="evidencias">Evidências</TabsTrigger>
+                  <TabsTrigger value="faturamento">Faturamento</TabsTrigger>
+                </TabsList>
+
+                {/* ABA: Detalhes */}
+                <TabsContent value="detalhes" className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Médico</p>
+                      <p className="font-semibold">{cirurgiaSelecionada.medico}</p>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm mt-2">
-                      <div>
-                        <span className="text-muted-foreground">Paciente:</span> {cirurgia.patient_name}
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Médico:</span> {cirurgia.doctor_name}
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Produtos:</span> {cirurgia.items.length} itens
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Valor:</span> {formatCurrency(cirurgia.total_value)}
-                      </div>
+                    <div>
+                      <p className="text-muted-foreground">Convênio</p>
+                      <p className="font-semibold">{cirurgiaSelecionada.convenio}</p>
                     </div>
+                    <div>
+                      <p className="text-muted-foreground">Data Agendada</p>
+                      <p className="font-semibold">{formatDate(cirurgiaSelecionada.data_agendada)}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Status</p>
+                      <p className="font-semibold">{getStatusLabel(cirurgiaSelecionada.status_geral)}</p>
+                    </div>
+                  </div>
+
+                  {cirurgiaSelecionada.cotacao && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Cotação {cirurgiaSelecionada.cotacao.numero}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          {cirurgiaSelecionada.cotacao.materiais.map(mat => (
+                            <div key={mat.id} className="flex items-center justify-between p-2 bg-accent/30 rounded">
+                              <div className="flex-1">
+                                <p className="font-medium text-sm">{mat.produto_nome}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  Qtd: {mat.quantidade} • {formatCurrency(mat.valor_unitario)}/un
+                                  {!mat.disponivel_estoque && (
+                                    <span className="text-red-600 font-bold ml-2">⚠️ ZERADO</span>
+                                  )}
+                                </p>
+                                {mat.observacao && (
+                                  <p className="text-xs text-orange-600 mt-1">{mat.observacao}</p>
+                                )}
+                              </div>
+                              <span className="font-semibold">{formatCurrency(mat.valor_total)}</span>
+                            </div>
+                          ))}
+                          <div className="pt-2 border-t">
+                            <div className="flex justify-between items-center">
+                              <span className="font-bold">TOTAL:</span>
+                              <span className="font-bold text-lg text-green-600">
+                                {formatCurrency(cirurgiaSelecionada.cotacao.valor_total)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {cirurgiaSelecionada.nota_consignacao && (
+                    <Card>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-base">
+                            Nota Consignação {cirurgiaSelecionada.nota_consignacao.numero}
+                          </CardTitle>
+                          <Button
+                            variant={cirurgiaSelecionada.nota_consignacao.urgencia_ativa ? "destructive" : "outline"}
+                            size="sm"
+                            onClick={() => handleToggleUrgencia(cirurgiaSelecionada.id)}
+                          >
+                            {cirurgiaSelecionada.nota_consignacao.urgencia_ativa ? '🚨 Urgência ATIVA' : 'Ativar Urgência'}
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        {cirurgiaSelecionada.nota_consignacao.urgencia_ativa && (
+                          <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded">
+                            <p className="text-sm font-semibold text-red-700">
+                              Valor Simbólico: {formatCurrency(cirurgiaSelecionada.nota_consignacao.valor_simbolico)}
+                            </p>
+                            {cirurgiaSelecionada.nota_consignacao.justificativa_medica && (
+                              <p className="text-xs text-red-600 mt-1">
+                                <strong>Justificativa:</strong> {cirurgiaSelecionada.nota_consignacao.justificativa_medica}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                        <div className="space-y-2">
+                          {cirurgiaSelecionada.nota_consignacao.materiais.map((mat, idx) => (
+                            <div key={idx} className="text-sm p-2 bg-accent/30 rounded">
+                              <p className="font-medium">{mat.produto_nome}</p>
+                              <p className="text-xs text-muted-foreground">
+                                Qtd: {mat.quantidade} • Lote: {mat.lote} • Validade: {formatDate(mat.validade)}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </TabsContent>
+
+                {/* ABA: Fluxo (Gráfico Horizontal) */}
+                <TabsContent value="fluxo" className="space-y-4">
+                  <div className="space-y-2">
+                    {cirurgiaSelecionada.etapas.map((etapa, index) => (
+                      <div key={etapa.id} className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">
+                          {index + 1}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-3 h-3 rounded-full ${getStatusColor(etapa.status)}`}></div>
+                            <span className="font-semibold text-sm">{etapa.nome}</span>
+                            <span className={`text-xs px-2 py-0.5 rounded ${
+                              etapa.status === 'concluido' ? 'bg-green-100 text-green-700' :
+                              etapa.status === 'processando' ? 'bg-orange-100 text-orange-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {getStatusLabel(etapa.status)}
+                            </span>
+                          </div>
+                          {etapa.data_inicio && (
+                            <p className="text-xs text-muted-foreground ml-5 mt-1">
+                              Início: {formatDate(etapa.data_inicio)}
+                              {etapa.data_fim && ` • Fim: ${formatDate(etapa.data_fim)}`}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                {/* ABA: Materiais */}
+                <TabsContent value="materiais" className="space-y-4">
+                  {cirurgiaSelecionada.materiais_utilizados.length > 0 ? (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Materiais Utilizados</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          {cirurgiaSelecionada.materiais_utilizados.map(mat => (
+                            <div key={mat.id} className="p-3 border rounded">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <p className="font-semibold text-sm">{mat.produto_nome}</p>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Qtd: {mat.quantidade} • Lote: {mat.lote} • Validade: {formatDate(mat.validade)}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    Código de Barras: {mat.codigo_barras || 'N/A'} • QR Code: {mat.qr_code || 'N/A'}
+                                  </p>
+                                  <p className="text-xs font-medium text-green-600 mt-1">
+                                    ✅ Vinculado a: {mat.paciente_vinculado} em {formatDate(mat.data_vinculacao)}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <p className="text-center text-muted-foreground">Nenhum material vinculado ainda</p>
+                  )}
+
+                  {cirurgiaSelecionada.materiais_extras.length > 0 && (
+                    <Card className="border-orange-300">
+                      <CardHeader>
+                        <CardTitle className="text-base text-orange-700">Materiais Extras Solicitados</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          {cirurgiaSelecionada.materiais_extras.map(mat => (
+                            <div key={mat.id} className="p-3 bg-orange-50 border border-orange-200 rounded">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <p className="font-semibold text-sm">{mat.produto_nome}</p>
+                                  <p className="text-xs text-muted-foreground">Qtd: {mat.quantidade}</p>
+                                  <p className="text-xs mt-1">
+                                    <strong>Justificativa:</strong> {mat.justificativa_medica}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Solicitado por: {mat.medico_solicitante} em {formatDate(mat.data_solicitacao)}
+                                  </p>
+                                  {mat.aprovado && (
+                                    <p className="text-xs text-green-600 font-semibold mt-1">✅ APROVADO</p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </TabsContent>
+
+                {/* ABA: Evidências */}
+                <TabsContent value="evidencias" className="space-y-4">
+                  {cirurgiaSelecionada.evidencias.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-4">
+                      {cirurgiaSelecionada.evidencias.map(ev => (
+                        <Card key={ev.id}>
+                          <CardHeader>
+                            <CardTitle className="text-sm">
+                              {ev.tipo === 'foto' && '📷 Foto'}
+                              {ev.tipo === 'lacre' && '🔒 Lacre'}
+                              {ev.tipo === 'relatorio' && '📄 Relatório'}
+                              {ev.tipo === 'comprovante' && '✅ Comprovante'}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="aspect-video bg-gray-100 rounded mb-2 flex items-center justify-center">
+                              <span className="text-xs text-muted-foreground">[Imagem: {ev.url}]</span>
+                            </div>
+                            <p className="text-xs">{ev.descricao}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Upload: {formatDate(ev.data_upload)}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground mb-4">Nenhuma evidência anexada</p>
+                      <Button variant="outline">
+                        📤 Upload de Evidência
+                      </Button>
+                    </div>
+                  )}
+                </TabsContent>
+
+                {/* ABA: Faturamento */}
+                <TabsContent value="faturamento" className="space-y-4">
+                  <div className="flex gap-2">
                     <Button
                       variant="outline"
-                      size="sm"
-                      className="mt-3"
-                      onClick={() => handleEditCirurgia(cirurgia)}
+                      onClick={() => handleAprovarFaturamento(cirurgiaSelecionada.id, 'parcial')}
                     >
-                      Ver Detalhes
+                      Aprovar Parcial
+                    </Button>
+                    <Button
+                      variant="default"
+                      onClick={() => handleAprovarFaturamento(cirurgiaSelecionada.id, 'total')}
+                    >
+                      Aprovar Total
                     </Button>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card className="neu-soft">
-              <CardHeader>
-                <CardTitle>Produtos Mais Utilizados</CardTitle>
-                <CardDescription>Top 5 produtos em procedimentos</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Prótese de Joelho Premium</span>
-                    <span className="font-semibold">8 cirurgias</span>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => handleEmitirNFe(cirurgiaSelecionada.id, 'parcial')}
+                    >
+                      📄 Emitir NFe Parcial
+                    </Button>
+                    <Button
+                      variant="default"
+                      onClick={() => handleEmitirNFe(cirurgiaSelecionada.id, 'total')}
+                    >
+                      📄 Emitir NFe Total
+                    </Button>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Sistema Fixação Vertebral</span>
-                    <span className="font-semibold">6 cirurgias</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Prótese de Quadril</span>
-                    <span className="font-semibold">5 cirurgias</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Parafusos Titânio (kit)</span>
-                    <span className="font-semibold">12 cirurgias</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Haste Intramedular</span>
-                    <span className="font-semibold">4 cirurgias</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            <Card className="neu-soft">
-              <CardHeader>
-                <CardTitle>Hospitais Ativos</CardTitle>
-                <CardDescription>Principais clientes B2B</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Hospital São Lucas</span>
-                    <span className="font-semibold">2 cirurgias</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Clínica Ortopédica Excellence</span>
-                    <span className="font-semibold">2 cirurgias</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Hospital Regional Sul</span>
-                    <span className="font-semibold">1 cirurgia</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
+                  {cirurgiaSelecionada.faturamento && (
+                    <Card className="border-green-300">
+                      <CardHeader>
+                        <CardTitle className="text-base text-green-700">
+                          Faturamento Realizado
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2 text-sm">
+                          <p><strong>Nota Fiscal:</strong> {cirurgiaSelecionada.faturamento.nota_fiscal}</p>
+                          <p><strong>Valor:</strong> {formatCurrency(cirurgiaSelecionada.faturamento.valor)}</p>
+                          <p><strong>Tipo:</strong> {cirurgiaSelecionada.faturamento.tipo === 'total' ? 'Total' : 'Parcial'}</p>
+                          <p><strong>Emissão:</strong> {formatDate(cirurgiaSelecionada.faturamento.data_emissao)}</p>
+                          <p><strong>Status:</strong> {cirurgiaSelecionada.faturamento.status}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </TabsContent>
+              </Tabs>
 
-        {/* TAB: Agendadas */}
-        <TabsContent value="agendadas" className="space-y-4">
-          {cirurgiasAgendadas.length === 0 ? (
-            <Card className="neu-soft">
-              <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground">Nenhuma cirurgia agendada no momento</p>
-              </CardContent>
-            </Card>
-          ) : (
-            cirurgiasAgendadas.map(cirurgia => (
-              <Card key={cirurgia.id} className="neu-soft">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle>{cirurgia.procedure_type}</CardTitle>
-                      <CardDescription className="mt-1">
-                        {formatDate(cirurgia.scheduled_date)} • {cirurgia.hospital_name} • Dr(a). {cirurgia.doctor_name}
-                      </CardDescription>
-                    </div>
-                    {getStatusBadge(cirurgia.status)}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <p className="text-muted-foreground">Paciente</p>
-                        <p className="font-medium">{cirurgia.patient_name}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Produtos</p>
-                        <p className="font-medium">{cirurgia.items.length} itens</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Valor Total</p>
-                        <p className="font-medium text-green-600">{formatCurrency(cirurgia.total_value)}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Criado em</p>
-                        <p className="font-medium">{formatDate(cirurgia.created_at)}</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Produtos OPME:</h4>
-                      <div className="space-y-2">
-                        {cirurgia.items.map(item => (
-                          <div key={item.id} className="flex items-center justify-between p-2 bg-accent/30 rounded">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{item.product_name}</p>
-                              <p className="text-xs text-muted-foreground">
-                                Qtd: {item.quantity} • Unitário: {formatCurrency(item.unit_price)}
-                                {item.lote && ` • Lote: ${item.lote}`}
-                                {item.validade && ` • Validade: ${formatDate(item.validade)}`}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              {getItemStatusBadge(item.status)}
-                              <span className="font-semibold">{formatCurrency(item.total_price)}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {cirurgia.observations && (
-                      <div className="p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                        <p className="text-sm"><strong>Observações:</strong> {cirurgia.observations}</p>
-                      </div>
-                    )}
-
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => handleEditCirurgia(cirurgia)}>
-                        Editar
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        Confirmar Entrega
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        Imprimir Romaneio
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </TabsContent>
-
-        {/* TAB: Realizadas */}
-        <TabsContent value="realizadas" className="space-y-4">
-          {cirurgiasRealizadas.length === 0 ? (
-            <Card className="neu-soft">
-              <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground">Nenhuma cirurgia realizada no período selecionado</p>
-              </CardContent>
-            </Card>
-          ) : (
-            cirurgiasRealizadas.map(cirurgia => (
-              <Card key={cirurgia.id} className="neu-soft">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle>{cirurgia.procedure_type}</CardTitle>
-                      <CardDescription className="mt-1">
-                        {formatDate(cirurgia.scheduled_date)} • {cirurgia.hospital_name} • Dr(a). {cirurgia.doctor_name}
-                      </CardDescription>
-                    </div>
-                    {getStatusBadge(cirurgia.status)}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <p className="text-muted-foreground">Paciente</p>
-                        <p className="font-medium">{cirurgia.patient_name}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Produtos</p>
-                        <p className="font-medium">{cirurgia.items.length} itens</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Valor Total</p>
-                        <p className="font-medium text-green-600">{formatCurrency(cirurgia.total_value)}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Status Faturamento</p>
-                        <p className="font-medium">{cirurgia.status === 'faturada' ? '✅ Faturado' : '⏳ Pendente'}</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Produtos Utilizados:</h4>
-                      <div className="space-y-2">
-                        {cirurgia.items.map(item => (
-                          <div key={item.id} className="flex items-center justify-between p-2 bg-accent/30 rounded">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{item.product_name}</p>
-                              <p className="text-xs text-muted-foreground">
-                                Qtd: {item.quantity} • Lote: {item.lote} • Validade: {item.validade && formatDate(item.validade)}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              {getItemStatusBadge(item.status)}
-                              <span className="font-semibold">{formatCurrency(item.total_price)}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        Ver Detalhes Completos
-                      </Button>
-                      {cirurgia.status === 'realizada' && (
-                        <Button variant="default" size="sm">
-                          Gerar Fatura
-                        </Button>
-                      )}
-                      <Button variant="outline" size="sm">
-                        Exportar PDF
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </TabsContent>
-
-        {/* TAB: IA */}
-        <TabsContent value="ia" className="space-y-4">
-          <Card className="neu-soft">
-            <CardHeader>
-              <CardTitle>Predição de Demanda com IA</CardTitle>
-              <CardDescription>
-                Análise preditiva de demanda de produtos OPME baseada no histórico de cirurgias
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Button
-                onClick={handlePredictDemand}
-                disabled={aiLoading}
-                className="w-full"
-              >
-                {aiLoading ? 'Analisando...' : 'Gerar Predição de Demanda'}
-              </Button>
-
-              {aiPrediction && (
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-semibold mb-2">Resultado da Predição:</h4>
-                  <pre className="text-sm whitespace-pre-wrap">{JSON.stringify(aiPrediction, null, 2)}</pre>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="neu-soft">
-            <CardHeader>
-              <CardTitle>Análise de Consumo</CardTitle>
-              <CardDescription>
-                Insights sobre padrões de consumo de produtos em procedimentos cirúrgicos
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Button
-                onClick={handleAnalyzeConsumption}
-                disabled={aiLoading}
-                className="w-full"
-              >
-                {aiLoading ? 'Analisando...' : 'Analisar Padrão de Consumo'}
-              </Button>
-
-              {aiInsights && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <h4 className="font-semibold mb-2">Insights de IA:</h4>
-                  <div className="prose prose-sm max-w-none">
-                    <p className="whitespace-pre-wrap">{aiInsights}</p>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="neu-soft">
-            <CardHeader>
-              <CardTitle>Assistente IA - Pergunte Qualquer Coisa</CardTitle>
-              <CardDescription>
-                Faça perguntas sobre cirurgias, produtos, tendências e otimizações
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input placeholder="Ex: Quais produtos têm maior rotatividade?" />
-                <Button disabled={aiLoading}>
-                  {aiLoading ? 'Processando...' : 'Perguntar'}
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setModalAberto(false)}>
+                  Fechar
                 </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
