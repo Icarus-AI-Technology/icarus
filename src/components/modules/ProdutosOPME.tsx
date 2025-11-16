@@ -332,7 +332,7 @@ export function ProdutosOPME() {
 
     try {
       const { error } = await supabase
-        .from('products')
+        .from('produtos')
         .insert([{
           code: formData.code,
           name: formData.name,
@@ -397,7 +397,7 @@ export function ProdutosOPME() {
 
     try {
       const { error } = await supabase
-        .from('products')
+        .from('produtos')
         .update({
           code: formData.code,
           name: formData.name,
@@ -441,7 +441,7 @@ export function ProdutosOPME() {
 
     try {
       const { error } = await supabase
-        .from('products')
+        .from('produtos')
         .delete()
         .eq('id', product.id)
 
@@ -468,7 +468,7 @@ export function ProdutosOPME() {
 
     try {
       const { error } = await supabase
-        .from('products')
+        .from('produtos')
         .update({ active: !product.active })
         .eq('id', product.id)
 
