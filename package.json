@@ -14,7 +14,11 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "figma:connect": "figma connect",
+    "figma:publish": "figma connect publish",
+    "figma:parse": "figma connect parse",
+    "figma:list": "figma connect list"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
@@ -34,6 +38,7 @@
     "lucide-react": "^0.446.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.49.2",
     "react-router-dom": "^6.26.1",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.5.2",
@@ -41,6 +46,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@figma/code-connect": "^1.0.0",
     "@playwright/test": "^1.47.2",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
