@@ -1,6 +1,18 @@
 import { useState } from 'react'
 import { icarusBrain, type AIResponse } from '@/lib/services/ai/icarus-brain'
 
+/**
+ * Hook para integração com IcarusBrain (IA do ICARUS)
+ *
+ * FASE 1: Usa implementação mock para deploy estável
+ * FASE 2: Migrar para @/lib/ai/icarus-brain (Claude API real)
+ *
+ * Serviços disponíveis:
+ * - predict: Previsões (demanda, preços)
+ * - analyze: Análises (risco, qualidade)
+ * - recommend: Recomendações (produtos)
+ * - optimize: Otimizações (rotas)
+ */
 export function useIcarusBrain() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
