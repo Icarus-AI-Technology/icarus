@@ -46,6 +46,19 @@ describe('formatters', () => {
     })
   })
 
+  describe('formatDateTime', () => {
+    it('should format Date objects with time', () => {
+      const date = new Date('2025-01-15T14:30:00')
+      const formatted = formatDateTime(date)
+      expect(formatted).toContain('2025')
+      expect(formatted).toContain('14:30')
+    })
+
+    it('should return "-" for invalid dates', () => {
+      expect(formatDateTime('invalid-date')).toBe('-')
+    })
+  })
+
   describe('formatPercentage', () => {
     it('should format percentages', () => {
       expect(formatPercentage(25.5)).toBe('25.5%')
@@ -73,6 +86,32 @@ describe('formatters', () => {
 
     it('should return null for invalid input', () => {
       expect(parseInteger('abc')).toBe(null)
+    })
+  })
+
+  describe('isInRange', () => {
+    it('should return true for values within range', () => {
+      expect(isInRange(5, 0, 10)).toBe(true)
+      expect(isInRange(0, 0, 10)).toBe(true)
+      expect(isInRange(10, 0, 10)).toBe(true)
+    })
+
+    it('should return false for values outside range', () => {
+      expect(isInRange(-1, 0, 10)).toBe(false)
+      expect(isInRange(11, 0, 10)).toBe(false)
+    })
+  })
+
+  describe('daysBetween', () => {
+    it('should calculate days between two dates', () => {
+      const date1 = new Date('2025-01-01')
+      const date2 = new Date('2025-01-10')
+      expect(daysBetween(date1, date2)).toBeGreaterThanOrEqual(9)
+    })
+
+    it('should work with string dates', () => {
+      const days = daysBetween('2025-01-01', '2025-01-05')
+      expect(days).toBeGreaterThanOrEqual(4)
     })
   })
 

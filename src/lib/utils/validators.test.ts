@@ -50,6 +50,27 @@ describe('validators', () => {
       expect(validateQuantity('0').valid).toBe(false)
       expect(validateQuantity('-5').valid).toBe(false)
     })
+
+    it('should validate with max quantity', () => {
+      const result1 = validateQuantity('50', 100)
+      expect(result1.valid).toBe(true)
+
+      const result2 = validateQuantity('150', 100)
+      expect(result2.valid).toBe(false)
+      expect(result2.error).toContain('exceder')
+    })
+
+    it('should reject invalid quantity strings', () => {
+      const result = validateQuantity('abc')
+      expect(result.valid).toBe(false)
+      expect(result.error).toContain('inválida')
+    })
+
+    it('should reject empty quantity', () => {
+      const result = validateQuantity('')
+      expect(result.valid).toBe(false)
+      expect(result.error).toContain('vazia')
+    })
   })
 
   describe('isValidCNPJ', () => {
@@ -95,6 +116,18 @@ describe('validators', () => {
 
     it('should reject invalid phones', () => {
       expect(isValidPhone('123')).toBe(false)
+    })
+  })
+
+  describe('isValidDate', () => {
+    it('should validate valid dates', () => {
+      expect(isValidDate('2025-01-15')).toBe(true)
+      expect(isValidDate('2025-12-31')).toBe(true)
+    })
+
+    it('should reject invalid dates', () => {
+      expect(isValidDate('invalid-date')).toBe(false)
+      expect(isValidDate('2025-13-01')).toBe(false)
     })
   })
 
