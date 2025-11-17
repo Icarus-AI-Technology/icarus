@@ -205,10 +205,6 @@ export function Cirurgias() {
     { month: 'Dez', cirurgias: 24 },
   ]
 
-  useEffect(() => {
-    loadData()
-  }, [isConfigured])
-
   const loadData = async () => {
     setLoading(true)
 
@@ -269,6 +265,10 @@ export function Cirurgias() {
     }
   }
 
+  useEffect(() => {
+    loadData()
+  }, [isConfigured, loadData])
+
   const handleCreate = async () => {
     if (!formData.patient_name || !formData.doctor_id || !formData.hospital_id ||
         !formData.surgery_type || !formData.scheduled_date || !formData.scheduled_time) {
@@ -302,7 +302,7 @@ export function Cirurgias() {
     }
 
     try {
-      const { data, error } = await supabase  
+      const { error } = await supabase  
     
         .from('cirurgias')
         .insert([{

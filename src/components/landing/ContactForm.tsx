@@ -218,6 +218,7 @@ export function ContactForm() {
           <Label htmlFor="tamanho_empresa">Tamanho da Empresa</Label>
           <select
             id="tamanho_empresa"
+            aria-label="Tamanho da Empresa"
             value={formData.tamanho_empresa}
             onChange={(e) =>
               setFormData({ ...formData, tamanho_empresa: e.target.value })
@@ -236,6 +237,7 @@ export function ContactForm() {
           <Label htmlFor="segmento">Segmento</Label>
           <select
             id="segmento"
+            aria-label="Segmento"
             value={formData.segmento}
             onChange={(e) => setFormData({ ...formData, segmento: e.target.value })}
             className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -292,6 +294,7 @@ export function ContactForm() {
         <Label htmlFor="como_conheceu">Como conheceu o Icarus?</Label>
         <select
           id="como_conheceu"
+          aria-label="Como conheceu o Icarus?"
           value={formData.como_conheceu}
           onChange={(e) =>
             setFormData({ ...formData, como_conheceu: e.target.value })

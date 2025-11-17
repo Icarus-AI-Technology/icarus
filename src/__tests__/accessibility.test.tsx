@@ -54,7 +54,7 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
     });
 
     it('deve ter contraste adequado em variante primary', () => {
-      const { container } = render(
+      render(
         <KPICard
           title="Teste"
           value="100"
