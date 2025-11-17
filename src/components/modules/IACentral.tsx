@@ -6,8 +6,10 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Brain, Zap, TrendingUp, Clock } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
 
 type StatusServico = 'ativo' | 'pausado' | 'treinando' | 'erro'
@@ -234,45 +236,34 @@ export default function IACentral() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="neomorphic border-green-200">
-          <CardHeader className="pb-2">
-            <CardDescription>Serviços Ativos</CardDescription>
-            <CardTitle className="text-3xl text-green-600">{servicosAtivos}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-green-600">de {servicos.length} serviços totais</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Serviços Ativos"
+          value={servicosAtivos}
+          icon={Brain}
+          variant="success"
+        />
 
-        <Card className="neomorphic border-blue-200">
-          <CardHeader className="pb-2">
-            <CardDescription>Precisão Média</CardDescription>
-            <CardTitle className="text-3xl text-blue-600">{precisaoMedia}%</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-blue-600">Todos os modelos</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Precisão Média"
+          value={`${precisaoMedia}%`}
+          icon={Zap}
+          variant="primary"
+        />
 
-        <Card className="neomorphic">
-          <CardHeader className="pb-2">
-            <CardDescription>Predições (Hoje)</CardDescription>
-            <CardTitle className="text-3xl">{predicoesHoje}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">+18% vs ontem</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Predições (Hoje)"
+          value={predicoesHoje}
+          icon={TrendingUp}
+          trend={{ value: 18, direction: 'up' }}
+          variant="default"
+        />
 
-        <Card className="neomorphic border-purple-200">
-          <CardHeader className="pb-2">
-            <CardDescription>Tempo Médio Resposta</CardDescription>
-            <CardTitle className="text-3xl text-purple-600">{tempoMedioResposta}ms</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-purple-600">Performance excelente</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Tempo Médio Resposta"
+          value={`${tempoMedioResposta}ms`}
+          icon={Clock}
+          variant="default"
+        />
       </div>
 
       {/* Tabs */}

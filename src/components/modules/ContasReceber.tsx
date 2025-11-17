@@ -188,7 +188,7 @@ export function ContasReceber() {
 
     try {
       const { data, error } = await supabase
-        .from('accounts_receivable')
+        .from('contas_receber')
         .select('*')
         .order('due_date', { ascending: true })
 
@@ -272,7 +272,7 @@ export function ContasReceber() {
       const newAmountPaid = selectedReceivable.amount_paid + paymentAmount
 
       const { error } = await supabase
-        .from('accounts_receivable')
+        .from('contas_receber')
         .update({
           amount_paid: newAmountPaid,
           status: newAmountPaid >= selectedReceivable.amount ? 'paid' : 'partial'

@@ -213,7 +213,7 @@ export function Financeiro() {
 
       // Fetch invoices
       const { data: invoicesData, error: invoicesError } = await supabase
-        .from('invoices')
+        .from('notas_fiscais')
         .select('*')
         .gte('issue_date', startDate.toISOString())
         .lte('issue_date', endDate.toISOString())
@@ -223,7 +223,7 @@ export function Financeiro() {
 
       // Fetch accounts receivable
       const { data: receivablesData, error: receivablesError } = await supabase
-        .from('accounts_receivable')
+        .from('contas_receber')
         .select('*')
         .order('due_date', { ascending: true })
 
