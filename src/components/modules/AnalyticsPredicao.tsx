@@ -6,12 +6,12 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { formatCurrency } from '@/lib/utils'
 
-type TipoPredicao = 'demanda' | 'receita' | 'churn' | 'inadimplencia' | 'estoque'
+// Tipo não utilizado - prefixar com _
+type _TipoPredicao = 'demanda' | 'receita' | 'churn' | 'inadimplencia' | 'estoque'
 type ConfiancaIA = 'baixa' | 'media' | 'alta' | 'muito_alta'
 
 interface PredicaoDemanda {

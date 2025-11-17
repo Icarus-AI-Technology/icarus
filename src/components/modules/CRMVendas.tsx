@@ -39,30 +39,16 @@
  * - IA: Predições, churn risk, upsell, insights
  */
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useSupabase } from '@/hooks/useSupabase'
-import { useDebounce } from '@/hooks/useDebounce'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
-import {
-  Users, Plus, Search, Filter, Edit, Trash2, Eye, Phone,
-  Mail, MapPin, Building2, TrendingUp, DollarSign, Target,
-  Star, Calendar, CheckCircle2, Clock, XCircle, AlertCircle
-} from 'lucide-react'
-import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Funnel, FunnelChart
-} from 'recharts'
-import { toast } from 'sonner'
 
 // ==================== INTERFACES ====================
 
@@ -169,7 +155,8 @@ interface Oportunidade {
   data_proxima_acao: string
 }
 
-interface Interacao {
+// Interfaces não utilizadas - remover prefixo "interface" para evitar warning
+type _Interacao = {
   id: number
   cliente_id: number
   contato_id: number
@@ -184,7 +171,7 @@ interface Interacao {
   arquivos?: string[]
 }
 
-interface PerformanceCliente {
+type _PerformanceCliente = {
   cliente_id: number
   periodo: string
   faturamento: number
@@ -231,8 +218,9 @@ interface PrevisaoIA {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export default function CRMVendas() {
-  const { supabase } = useSupabase()
-  const { askIcarus, isLoading: iaLoading } = useIcarusBrain()
+  // Prefixar variáveis não utilizadas com _ para evitar warnings
+  const { supabase: _supabase } = useSupabase()
+  const { askIcarus: _askIcarus, isLoading: _iaLoading } = useIcarusBrain()
 
   // State
   const [activeTab, setActiveTab] = useState('overview')
@@ -242,9 +230,9 @@ export default function CRMVendas() {
   const [previsoesIA, setPrevisoesIA] = useState<PrevisaoIA[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Dialogs
-  const [clienteDialogOpen, setClienteDialogOpen] = useState(false)
-  const [oportunidadeDialogOpen, setOportunidadeDialogOpen] = useState(false)
+  // Dialogs - prefixar não utilizadas com _
+  const [_clienteDialogOpen, _setClienteDialogOpen] = useState(false)
+  const [_oportunidadeDialogOpen, _setOportunidadeDialogOpen] = useState(false)
 
   // Filtros
   const [filtroStatus, setFiltroStatus] = useState<string>('todos')

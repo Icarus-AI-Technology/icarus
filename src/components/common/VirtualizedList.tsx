@@ -75,6 +75,7 @@ export function VirtualizedList<T>({
 /**
  * Hook to calculate optimal list height based on container
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useVirtualizedListHeight(
   itemHeight: number,
   maxItems: number = 10,

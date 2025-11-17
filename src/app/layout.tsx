@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers/Providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   title: 'ICARUS v5.0 - ERP Moderno e Inteligente',
   description: 'Sistema ERP com IA integrada, design neumórfico e 58 módulos completos',

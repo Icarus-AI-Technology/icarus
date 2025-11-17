@@ -50,7 +50,8 @@ interface CadastroItem {
 }
 
 export function Cadastros() {
-  const { supabase } = useSupabase()
+  // Prefixar variável não utilizada com _
+  const { supabase: _supabase } = useSupabase()
 
   // State
   const [loading, setLoading] = useState(true)

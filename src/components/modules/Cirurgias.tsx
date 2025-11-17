@@ -207,6 +207,7 @@ export function Cirurgias() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured])
 
   const loadData = async () => {
@@ -299,7 +300,7 @@ export function Cirurgias() {
     }
 
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('cirurgias')
         .insert([{
           patient_name: formData.patient_name,
@@ -487,7 +488,8 @@ export function Cirurgias() {
     }
   }
 
-  const getStatusIcon = (status: SurgeryStatus) => {
+  // Função não utilizada - prefixar com _ para evitar warning
+  const _getStatusIcon = (status: SurgeryStatus) => {
     switch (status) {
       case 'scheduled':
       case 'confirmed':

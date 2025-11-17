@@ -1,140 +1,197 @@
-# 🚀 ICARUS v5.0 - Claude Code Context
+# 🤖 CLAUDE.md - Contexto Claude Code
 
-**Sistema**: ERP Enterprise neumórfico para OPME (Órteses, Próteses e Materiais Especiais)
-**Versão**: 5.0.3
-**Status**: 🟢 Production-Ready
-**Arquitetura**: React 18 + TypeScript + Supabase + AI
+> **LEIA PRIMEIRO** antes de desenvolver em ICARUS v5.0
 
 ---
 
-## 📋 Quick Reference
+## 📘 Sobre o Projeto
 
-### Stack Tecnológico
+**ICARUS v5.0** é um sistema ERP enterprise completo para gestão OPME (Órteses, Próteses e Materiais Especiais) com:
+
+- **58 módulos funcionais** de gestão completa
+- **12 serviços de IA** (IcarusBrain) para previsões e insights
+- **OraclusX Design System** - Design neumórfico 3D enterprise
+- **Supabase PostgreSQL** - Database com RLS multi-tenant
+- **React 18 + TypeScript 5 + Vite 6**
+- **Tailwind CSS 4** com temas neumórficos
+
+---
+
+## 🏗️ Arquitetura
+
+```
+icarus-v5.0/
+├── src/
+│   ├── components/
+│   │   ├── ui/              # OraclusX Design System (175+ componentes)
+│   │   ├── layout/          # Layout (Sidebar, Header, Footer)
+│   │   └── modules/         # 58 módulos ERP
+│   ├── lib/
+│   │   ├── ai/              # IcarusBrain (12 serviços IA)
+│   │   ├── supabase/        # Client + Types
+│   │   └── utils.ts         # Utilitários
+│   ├── hooks/               # Custom React hooks
+│   ├── pages/               # Páginas de rota
+│   └── types/               # TypeScript types
+└── docs/                    # Documentação completa
+```
+
+---
+
+## 🎨 OraclusX Design System
+
+### Paleta de Cores
+
 ```typescript
-{
-  frontend: "React 18.3.1 + TypeScript 5.6.3 + Vite 6.0.0",
-  styling: "Tailwind CSS 4.0.0 + shadcn/ui",
-  database: "Supabase PostgreSQL 15",
-  designSystem: "OraclusX DS (Neumorphism)",
-  ai: ["Claude Sonnet 4.5", "GPT-4", "TensorFlow.js"],
-  deployment: "Vercel + GitHub Actions"
+const colors = {
+  primary: '#6366F1',    // Indigo - Ações principais
+  success: '#10B981',    // Green - Sucesso
+  warning: '#F59E0B',    // Amber - Avisos
+  danger: '#EF4444',     // Red - Erros/Exclusões
+}
+```
+
+### Componentes Neumórficos
+
+```tsx
+import { Card, Button } from '@/components/ui'
+
+// Card com efeito neumórfico soft
+<Card className="neu-soft">
+  <Button variant="default">Salvar</Button>
+</Card>
+
+// Card com efeito neumórfico hard (mais pronunciado)
+<Card className="neu-hard">
+  <Button variant="success">Confirmar</Button>
+</Card>
+
+// Card com efeito inset (côncavo)
+<Card className="neu-inset">
+  <Button variant="warning">Atenção</Button>
+</Card>
+```
+
+### Classes Disponíveis
+
+- `neu-soft` - Sombra suave 3D
+- `neu-hard` - Sombra forte 3D
+- `neu-inset` - Efeito côncavo (pressionado)
+- `neu-hover` - Efeito hover interativo
+
+---
+
+## 🧠 IcarusBrain - IA Integrada
+
+### Serviços Disponíveis
+
+1. **Previsão de Demanda** - Forecast 30 dias
+2. **Score de Inadimplência** - Análise de risco
+3. **Recomendação de Produtos** - Cross-sell/Up-sell
+4. **Otimização de Estoque** - Ponto de reposição
+5. **Análise de Sentimento** - NPS e feedback
+6. **Detecção de Anomalias** - Fraudes e erros
+7. **Precificação Dinâmica** - Sugestões de preço
+8. **Churn Prediction** - Risco de cancelamento
+9. **Lead Scoring** - Qualificação de leads
+10. **Gestão de Crédito** - Limite automático
+11. **Roteamento Inteligente** - Logística otimizada
+12. **Assistente Virtual** - Chat com IA
+
+### Uso Básico
+
+```typescript
+import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+
+function MyComponent() {
+  const { predict, analyze, recommend } = useIcarusBrain()
+
+  // Previsão de demanda
+  const forecast = await predict('demanda', {
+    produto_id: '123',
+    periodo: 30
+  })
+
+  // Score de inadimplência
+  const score = await analyze('inadimplencia', {
+    cliente_id: '456'
+  })
+
+  // Recomendações
+  const produtos = await recommend('produtos', {
+    cliente_id: '789',
+    contexto: 'cross-sell'
+  })
 }
 ```
 
 ---
 
-## 🎨 OraclusX Design System - REGRAS CRÍTICAS
+## 🗄️ Supabase - Database
 
-### ✅ SEMPRE Fazer
+### Configuração
 
-1. **Componentes Base**
-   - Usar `@/components/ui/input` (shadcn/ui Input)
-   - Usar `@/components/ui/button` (shadcn/ui Button)
-   - Usar `@/components/ui/card` para containers
+```bash
+# .env.local
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
 
-2. **Paleta Universal**
-   ```css
-   --primary: #6366F1  /* Indigo - COR ÚNICA DE BOTÕES */
-   --background: #F9FAFB /* Light mode */
-   --foreground: #1F2937 /* Texto dark */
-   ```
-
-3. **Layout Responsivo**
-   ```tsx
-   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-     {/* 3 colunas desktop, 2 tablet, 1 mobile */}
-   </div>
-   ```
-
-4. **Acessibilidade**
-   - aria-label em botões de ícone
-   - Contraste mínimo 4.5:1
-   - Focus visible (outline 2px)
-
-### ❌ NUNCA Fazer
-
-- ❌ Usar `<input>` ou `<button>` HTML nativo
-- ❌ Aplicar sombra (box-shadow) em inputs/buttons
-- ❌ Usar cores fora da paleta definida
-- ❌ Hardcoded de URLs ou credenciais
-- ❌ TypeScript `any` sem justificativa
-
----
-
-## 🧠 IA Integrada (IcarusBrain)
-
-### Serviços Disponíveis
+### Uso
 
 ```typescript
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+import { supabase } from '@/lib/supabase/client'
 
-// Em qualquer componente
-const { predict, analyze, recommend } = useIcarusBrain()
+// Query simples
+const { data, error } = await supabase
+  .from('produtos')
+  .select('*')
+  .eq('ativo', true)
 
-// Prever demanda de produto
-const forecast = await predict('demanda', {
-  produto_id: '123',
-  dias: 30
-})
-
-// Analisar inadimplência
-const score = await analyze('inadimplencia', {
-  cliente_id: '456'
-})
-
-// Recomendar produtos
-const produtos = await recommend('produtos', {
-  cliente_id: '789',
-  limite: 5
-})
+// Realtime subscription
+const channel = supabase
+  .channel('vendas')
+  .on('postgres_changes',
+    { event: 'INSERT', schema: 'public', table: 'vendas' },
+    (payload) => console.log(payload)
+  )
+  .subscribe()
 ```
 
 ---
 
-## 🗂️ 58 Módulos - Estrutura
+## 📦 Módulos ERP (58 Total)
 
-### Localização dos Módulos
-```
-src/components/modules/
-├── Dashboard.tsx
-├── Cirurgias.tsx           ⭐ Referência de qualidade
-├── EstoqueIA.tsx
-├── Compras.tsx
-└── ... (55 módulos restantes)
-```
+### Categorias
 
-### Padrão de Cada Módulo
+1. **Vendas** (12 módulos)
+   - Pedidos, Orçamentos, Propostas, Contratos...
+
+2. **Estoque** (8 módulos)
+   - Produtos, Movimentações, Inventário...
+
+3. **Financeiro** (10 módulos)
+   - Contas a Receber/Pagar, Fluxo de Caixa...
+
+4. **CRM** (8 módulos)
+   - Clientes, Leads, Oportunidades...
+
+5. **Compras** (6 módulos)
+   - Fornecedores, Cotações, Ordens de Compra...
+
+6. **Gestão** (14 módulos)
+   - Relatórios, Dashboard, Analytics...
+
+### Estrutura de Módulo
 
 ```typescript
-// src/components/modules/[Nome].tsx
-import { Card } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-
-export function ModuloNome() {
+// src/components/modules/vendas/Pedidos.tsx
+export function Pedidos() {
   return (
-    <div className="p-6">
-      {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card className="neu-card">
-          {/* KPI 1 */}
-        </Card>
-      </div>
-
-      {/* Abas */}
-      <Tabs defaultValue="aba1">
-        <TabsList>
-          <TabsTrigger value="aba1">Aba 1</TabsTrigger>
-          <TabsTrigger value="aba2">Aba 2</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="aba1">
-          {/* Conteúdo aba 1 */}
-        </TabsContent>
-
-        <TabsContent value="aba2">
-          {/* Conteúdo aba 2 */}
-        </TabsContent>
-      </Tabs>
+    <div className="space-y-6">
+      <Card className="neu-soft">
+        {/* Conteúdo do módulo */}
+      </Card>
     </div>
   )
 }
@@ -142,164 +199,90 @@ export function ModuloNome() {
 
 ---
 
-## 📊 Supabase - Padrões
-
-### Fetching Data
-
-```typescript
-import { useSupabase } from '@/hooks/useSupabase'
-
-function useProdutos() {
-  const { supabase } = useSupabase()
-  const [produtos, setProdutos] = useState<Produto[]>([])
-
-  useEffect(() => {
-    async function fetch() {
-      const { data, error } = await supabase
-        .from('produtos')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        console.error(error)
-        return
-      }
-
-      if (data) setProdutos(data)
-    }
-
-    fetch()
-  }, [])
-
-  return { produtos }
-}
-```
-
-### Mutations
-
-```typescript
-async function createProduto(data: ProdutoInput) {
-  const { error } = await supabase
-    .from('produtos')
-    .insert([data])
-
-  if (error) throw error
-}
-
-async function updateProduto(id: string, data: Partial<ProdutoInput>) {
-  const { error } = await supabase
-    .from('produtos')
-    .update(data)
-    .eq('id', id)
-
-  if (error) throw error
-}
-
-async function deleteProduto(id: string) {
-  const { error } = await supabase
-    .from('produtos')
-    .delete()
-    .eq('id', id)
-
-  if (error) throw error
-}
-```
-
----
-
-## 🧪 Testes - Template
-
-```typescript
-// [Component].test.tsx
-import { render, screen } from '@testing-library/react'
-import { ComponentName } from './ComponentName'
-
-describe('ComponentName', () => {
-  it('should render correctly', () => {
-    render(<ComponentName />)
-    expect(screen.getByRole('heading')).toBeInTheDocument()
-  })
-
-  it('should handle user interaction', async () => {
-    const onClick = jest.fn()
-    render(<ComponentName onClick={onClick} />)
-
-    // ... teste de interação
-  })
-})
-```
-
----
-
-## 📚 Skills Disponíveis
-
-**Leia antes de desenvolver:**
-- `/skills/oraclusx-ds/SKILL.md` - Padrões OraclusX DS
-- `/skills/icarus-module/SKILL.md` - Como criar módulos
-- `/skills/ai-integration/SKILL.md` - Integrar IA
-- `/skills/supabase/SKILL.md` - Patterns Supabase
-
----
-
-## 🎯 Como Trabalhar com Claude Code
-
-### Bons Prompts
-
-**✅ Específico**
-```
-Crie componente ProdutoForm usando OraclusX DS:
-- shadcn/ui Input e Button
-- Grid responsivo 3/2/1
-- Validação Zod
-- Integração Supabase
-```
-
-**✅ Com Contexto**
-```
-No módulo Estoque IA, adicione previsão de demanda:
-- IcarusBrain service
-- Gráfico Recharts
-- Confidence score visual
-- Salvar no Supabase
-```
-
-**❌ Vago**
-```
-Crie um formulário
-```
-
-### Comandos Úteis
+## 🧪 Testes
 
 ```bash
-# Dev
-npm run dev
-
-# Build
-npm run build
-
-# Test
+# Unit tests
 npm test
 
-# Supabase
-npx supabase start
-npx supabase db push
+# Coverage
+npm run test:coverage
 
-# Code Connect
-npx figma connect publish
+# E2E
+npm run test:e2e
+```
+
+**Meta**: 85% coverage (atual: 65%)
+
+---
+
+## 🚀 Deploy
+
+### Vercel (Recomendado)
+
+```bash
+vercel
+```
+
+### Manual
+
+```bash
+npm run build
+# Deploy pasta dist/
 ```
 
 ---
 
-## ⚡ Atalhos
+## 📝 Regras de Desenvolvimento
 
-- **Ver módulo específico**: `/docs/modulos/ICARUS-MOD-[NOME].md`
-- **Design System**: `/docs/design-system/ORACLUSX-DS.md`
-- **API Reference**: `/docs/api/API-REFERENCE.md`
-- **Troubleshooting**: `/docs/TROUBLESHOOTING.md`
+**SEMPRE leia `.clinerules` antes de desenvolver!**
+
+### Principais Regras
+
+1. **TypeScript estrito** - Sem `any`, usar tipos explícitos
+2. **Componentes funcionais** - Hooks, não classes
+3. **Neumorphism** - Usar classes `neu-*` em todos os cards/botões
+4. **Responsivo** - Mobile-first, breakpoints Tailwind
+5. **Acessibilidade** - WCAG 2.1 AA (aria-labels, keyboard nav)
+6. **Performance** - Code splitting, lazy loading
+7. **Testes** - Mínimo 65% coverage para PR
 
 ---
 
-**Versão**: 2.0.0
-**Atualizado**: 2025-11-15
+## 🔧 Ferramentas
 
-🚀 **Pronto para codificar!**
+- **Claude Code** - Assistente IA de desenvolvimento
+- **ESLint** - Linting TypeScript
+- **Prettier** - Formatação de código
+- **Husky** - Git hooks
+- **GitHub Actions** - CI/CD
+
+---
+
+## 📚 Recursos
+
+- **Documentação**: `/docs/`
+- **Troubleshooting**: `TROUBLESHOOTING.md`
+- **Changelog**: `CHANGELOG.md`
+- **Skills**: `SKILL_*.md`
+
+---
+
+## 🆘 Ajuda
+
+### Problemas Comuns
+
+1. **Erro Supabase** → Verificar `.env.local`
+2. **Build falha** → `rm -rf node_modules && npm install`
+3. **Types errados** → `npm run type-check`
+
+### Contato
+
+- **Issues**: GitHub Issues
+- **Docs**: `/docs/`
+
+---
+
+**v5.0.3** | Release: 2025-11-15
+
+🎯 **Use este documento como referência principal ao desenvolver com Claude Code!**

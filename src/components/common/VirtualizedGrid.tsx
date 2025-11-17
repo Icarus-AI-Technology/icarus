@@ -111,6 +111,7 @@ export function VirtualizedGrid<T>({
 /**
  * Hook to calculate responsive column count based on container width
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useResponsiveColumns(
   containerWidth: number,
   itemWidth: number,

@@ -24,9 +24,9 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
       const button = container.querySelector('button');
       
       if (button) {
-        const styles = window.getComputedStyle(button);
-        const bgColor = styles.backgroundColor;
-        const textColor = styles.color;
+        const _styles = window.getComputedStyle(button);
+        const bgColor = _styles.backgroundColor;
+        const textColor = _styles.color;
         
         // Verificar se background é indigo
         expect(bgColor).toContain('rgb(99, 102, 241)');
