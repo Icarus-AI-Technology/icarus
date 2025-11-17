@@ -38,16 +38,13 @@ export function LoginPage() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/20 mb-4">
               <Brain className="w-10 h-10 text-white" strokeWidth={1.5} />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Icarus v5.0</h1>
-            <p className="text-white/70 text-sm">Gestão elevada pela IA</p>
-          </div>
+ <h1 className="text-white mb-2" style={{ fontSize: '1.875rem', fontWeight: 700 }}>Icarus v5.0</h1>  <p className="text-white/70" style={{ fontSize: '0.875rem' }}>Gestão elevada pela IA</p>           </div>
 
           {/* Login Form */}
           <form onSubmit={handleLogin} className="space-y-6">
             {/* Email Input */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white text-sm font-medium">
-                Email
+ <Label htmlFor="email" className="text-white" style={{ fontSize: '0.875rem', fontWeight: 500 }}>                 Email
               </Label>
               <Input
                 id="email"
@@ -62,8 +59,7 @@ export function LoginPage() {
 
             {/* Password Input */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-white text-sm font-medium">
-                Senha
+ <Label htmlFor="password" className="text-white" style={{ fontSize: '0.875rem', fontWeight: 500 }}>                 Senha
               </Label>
               <Input
                 id="password"
@@ -80,8 +76,7 @@ export function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-[#4dd4d4] to-[#5b7af5] hover:from-[#3cc4c4] hover:to-[#4a69e4] text-white font-medium h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50"
-            >
+ className="w-full bg-gradient-to-r from-[#4dd4d4] to-[#5b7af5] hover:from-[#3cc4c4] hover:to-[#4a69e4] text-white h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50" style={{ fontWeight: 500 }}             >
               <LogIn className="w-5 h-5 mr-2" />
               {loading ? 'Entrando...' : 'Entrar no Sistema'}
             </Button>
@@ -89,22 +84,19 @@ export function LoginPage() {
 
           {/* Development Quick Access */}
           <div className="mt-8 pt-6 border-t border-white/10">
-            <p className="text-white/50 text-xs text-center mb-4">
-              Acesso rápido (desenvolvimento)
+ <p className="text-white/50 text-center mb-4" style={{ fontSize: '0.75rem' }}>               Acesso rápido (desenvolvimento)
             </p>
             <div className="grid grid-cols-2 gap-3">
               <Button
                 variant="outline"
                 onClick={() => handleQuickAccess('admin')}
-                className="bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white rounded-lg h-10 text-sm"
-              >
+ className="bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white rounded-lg h-10" style={{ fontSize: '0.875rem' }}               >
                 Admin
               </Button>
               <Button
                 variant="outline"
                 onClick={() => handleQuickAccess('analista')}
-                className="bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white rounded-lg h-10 text-sm"
-              >
+ className="bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white rounded-lg h-10" style={{ fontSize: '0.875rem' }}               >
                 Analista
               </Button>
             </div>
@@ -114,28 +106,23 @@ export function LoginPage() {
           <div className="mt-6 text-center">
             <button
               type="button"
-              className="text-white/70 hover:text-white text-sm underline underline-offset-4 transition-colors"
-            >
+ className="text-white/70 hover:text-white underline underline-offset-4 transition-colors" style={{ fontSize: '0.875rem' }}             >
               Esqueceu sua senha?
             </button>
           </div>
 
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-white/10 text-center">
-            <p className="text-white/40 text-xs">
-              © 2025{' '}
-              <span className="text-[#4dd4d4] font-medium">IcarusAI Technology</span>
-            </p>
-            <p className="text-white/30 text-xs mt-1">
-              Todos os direitos reservados.
+ <p className="text-white/40" style={{ fontSize: '0.75rem' }}>               © 2025{' '}
+ <span className="text-[#4dd4d4]" style={{ fontWeight: 500 }}>IcarusAI Technology</span>             </p>
+ <p className="text-white/30 mt-1" style={{ fontSize: '0.75rem' }}>               Todos os direitos reservados.
             </p>
           </div>
         </div>
 
         {/* Additional Info */}
         <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-2 text-white/60 text-sm">
-            <Zap className="w-4 h-4 text-[#4dd4d4]" />
+ <div className="inline-flex items-center gap-2 text-white/60" style={{ fontSize: '0.875rem' }}>             <Zap className="w-4 h-4 text-[#4dd4d4]" />
             <span>Powered by AI • Seguro • Rápido</span>
           </div>
         </div>
