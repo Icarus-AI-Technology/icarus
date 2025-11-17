@@ -19,7 +19,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="space-y-2 w-full">
         {label && (
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{ fontSize: 'var(--font-sm)', fontWeight: 'var(--font-medium)' }} className="block text-gray-700 dark:text-gray-300">
             {label}
           </label>
         )}
@@ -29,7 +29,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={cn(
             // Base styles
             'w-full px-4 py-3 rounded-xl',
-            'text-sm text-gray-900 dark:text-gray-100',
+            'text-gray-900 dark:text-gray-100',
             'bg-gray-50 dark:bg-gray-900',
             'min-h-[120px]',
             'resize-y',
@@ -49,6 +49,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             'disabled:opacity-60 disabled:cursor-not-allowed',
             className
           )}
+          style={{ fontSize: 'var(--font-sm)' }}
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={error ? 'error-message' : helperText ? 'helper-text' : undefined}
           {...props}
@@ -57,7 +58,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {error && (
           <p 
             id="error-message"
-            className="text-sm text-red-500 flex items-center gap-1.5"
+            style={{ fontSize: 'var(--font-sm)' }}
+            className="text-red-500 flex items-center gap-1.5"
             role="alert"
           >
             <AlertCircle className="size-4" />
@@ -68,7 +70,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {helperText && !error && (
           <p 
             id="helper-text"
-            className="text-sm text-gray-500 dark:text-gray-400"
+            style={{ fontSize: 'var(--font-sm)' }}
+            className="text-gray-500 dark:text-gray-400"
           >
             {helperText}
           </p>
