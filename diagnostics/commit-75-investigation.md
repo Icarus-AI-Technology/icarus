@@ -26,8 +26,11 @@ Este commit adiciona um grande volume de código ao projeto ICARUS v5.0, incluin
 
 - [x] Clonar repositório e identificar commit
 - [x] Extrair metadados do commit (SHA, autor, data, mensagem)
-- [x] Criar branch de diagnóstico `copilot/diagnose-75`
+- [x] Criar branch de diagnóstico `copilot/copilotdiagnose-75`
 - [x] Criar estrutura de arquivos de diagnóstico
+- [x] Adicionar script de verificações locais (`run-local-checks.sh`)
+- [x] Adicionar configuração de CI (`ci-inspector.yml`)
+- [x] Push dos arquivos para repositório remoto
 - [ ] Executar verificações locais (lint, build, test)
 - [ ] Analisar logs de CI/CD se disponíveis
 - [ ] Identificar possíveis problemas ou regressões
