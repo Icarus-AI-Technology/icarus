@@ -225,7 +225,7 @@ export function Cirurgias() {
     try {
       // Fetch surgeries with joins
       const { data: surgeriesData, error: surgeriesError } = await supabase
-        .from('surgeries')
+        .from('cirurgias')
         .select(`
           *,
           doctor:doctors(id, name, specialty),
@@ -237,7 +237,7 @@ export function Cirurgias() {
 
       // Fetch doctors
       const { data: doctorsData, error: doctorsError } = await supabase
-        .from('doctors')
+        .from('medicos')
         .select('*')
         .order('name')
 
@@ -245,7 +245,7 @@ export function Cirurgias() {
 
       // Fetch hospitals
       const { data: hospitalsData, error: hospitalsError } = await supabase
-        .from('hospitals')
+        .from('hospitais')
         .select('*')
         .order('name')
 
@@ -300,7 +300,7 @@ export function Cirurgias() {
 
     try {
       const { data, error } = await supabase
-        .from('surgeries')
+        .from('cirurgias')
         .insert([{
           patient_name: formData.patient_name,
           doctor_id: formData.doctor_id,
@@ -358,7 +358,7 @@ export function Cirurgias() {
 
     try {
       const { error } = await supabase
-        .from('surgeries')
+        .from('cirurgias')
         .update({
           patient_name: formData.patient_name,
           doctor_id: formData.doctor_id,
@@ -398,7 +398,7 @@ export function Cirurgias() {
 
     try {
       const { error } = await supabase
-        .from('surgeries')
+        .from('cirurgias')
         .delete()
         .eq('id', surgery.id)
 
@@ -425,7 +425,7 @@ export function Cirurgias() {
 
     try {
       const { error } = await supabase
-        .from('surgeries')
+        .from('cirurgias')
         .update({ status: newStatus })
         .eq('id', surgery.id)
 

@@ -6,9 +6,11 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { BarChart3, TrendingUp, TrendingDown, Target } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
 
 type CategoriaKPI = 'vendas' | 'financeiro' | 'operacional' | 'marketing' | 'qualidade'
@@ -295,45 +297,33 @@ export default function KPIDashboard() {
 
       {/* KPIs Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="neomorphic">
-          <CardHeader className="pb-2">
-            <CardDescription>Total de KPIs</CardDescription>
-            <CardTitle className="text-3xl">{kpis.length}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">Monitorados ativamente</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Total de KPIs"
+          value={kpis.length}
+          icon={BarChart3}
+          variant="default"
+        />
 
-        <Card className="neomorphic border-green-200">
-          <CardHeader className="pb-2">
-            <CardDescription>KPIs Acima da Meta</CardDescription>
-            <CardTitle className="text-3xl text-green-600">{kpisAcimaMeta}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-green-600">≥ 100% atingimento</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="KPIs Acima da Meta"
+          value={kpisAcimaMeta}
+          icon={TrendingUp}
+          variant="success"
+        />
 
-        <Card className="neomorphic border-red-200">
-          <CardHeader className="pb-2">
-            <CardDescription>KPIs Abaixo da Meta</CardDescription>
-            <CardTitle className="text-3xl text-red-600">{kpisMetaNaoAtingida}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-red-600">&lt; 90% atingimento</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="KPIs Abaixo da Meta"
+          value={kpisMetaNaoAtingida}
+          icon={TrendingDown}
+          variant="danger"
+        />
 
-        <Card className="neomorphic border-blue-200">
-          <CardHeader className="pb-2">
-            <CardDescription>Atingimento Médio</CardDescription>
-            <CardTitle className="text-3xl text-blue-600">{atingimentoMedio}%</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-blue-600">Todas as categorias</p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Atingimento Médio"
+          value={`${atingimentoMedio}%`}
+          icon={Target}
+          variant="primary"
+        />
       </div>
 
       {/* Tabs */}
