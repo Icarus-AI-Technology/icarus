@@ -335,22 +335,27 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 COMMENT ON FUNCTION registrar_auditoria() IS 'Registra automaticamente ações de auditoria nas tabelas';
 
 -- Criar triggers de auditoria para tabelas principais
+DROP TRIGGER IF EXISTS trigger_auditoria_produtos ON produtos;
 CREATE TRIGGER trigger_auditoria_produtos
   AFTER INSERT OR UPDATE OR DELETE ON produtos
   FOR EACH ROW EXECUTE FUNCTION registrar_auditoria();
 
+DROP TRIGGER IF EXISTS trigger_auditoria_clientes ON clientes;
 CREATE TRIGGER trigger_auditoria_clientes
   AFTER INSERT OR UPDATE OR DELETE ON clientes
   FOR EACH ROW EXECUTE FUNCTION registrar_auditoria();
 
+DROP TRIGGER IF EXISTS trigger_auditoria_cirurgias ON cirurgias;
 CREATE TRIGGER trigger_auditoria_cirurgias
   AFTER INSERT OR UPDATE OR DELETE ON cirurgias
   FOR EACH ROW EXECUTE FUNCTION registrar_auditoria();
 
+DROP TRIGGER IF EXISTS trigger_auditoria_contas_receber ON contas_receber;
 CREATE TRIGGER trigger_auditoria_contas_receber
   AFTER INSERT OR UPDATE OR DELETE ON contas_receber
   FOR EACH ROW EXECUTE FUNCTION registrar_auditoria();
 
+DROP TRIGGER IF EXISTS trigger_auditoria_contas_pagar ON contas_pagar;
 CREATE TRIGGER trigger_auditoria_contas_pagar
   AFTER INSERT OR UPDATE OR DELETE ON contas_pagar
   FOR EACH ROW EXECUTE FUNCTION registrar_auditoria();
