@@ -1,27 +1,8 @@
-// Supabase Edge Function para envio de emails de leads
-// Deploy: npx supabase functions deploy send-lead-email
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
-import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const RECIPIENT_EMAIL = 'dax@newortho.com.br'
-
-interface Lead {
-  nome_completo: string
-  email: string
-  telefone: string
-  empresa: string
-  cargo: string
-  tamanho_empresa: string
-  segmento: string
-  principal_desafio: string
-  interesse_em: string[]
-  como_conheceu: string
-  mensagem: string
-}
-
-serve(async (req) => {
-  // Handle CORS
+Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', {
       headers: {
@@ -33,212 +14,63 @@ serve(async (req) => {
   }
 
   try {
-    const lead: Lead = await req.json()
+    const lead = await req.json()
 
-    // Format email HTML
     const emailHtml = `
       <!DOCTYPE html>
       <html>
         <head>
           <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Novo Lead - Icarus v5.0</title>
-          <style>
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-              line-height: 1.6;
-              color: #333;
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 20px;
-            }
-            .header {
-              background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-              color: white;
-              padding: 30px;
-              border-radius: 10px 10px 0 0;
-              text-align: center;
-            }
-            .content {
-              background: #f9fafb;
-              padding: 30px;
-              border-radius: 0 0 10px 10px;
-            }
-            .field {
-              margin-bottom: 20px;
-              background: white;
-              padding: 15px;
-              border-radius: 8px;
-              border-left: 4px solid #6366F1;
-            }
-            .field-label {
-              font-weight: 600;
-              color: #4F46E5;
-              margin-bottom: 5px;
-              font-size: 14px;
-              text-transform: uppercase;
-            }
-            .field-value {
-              color: #1F2937;
-              font-size: 16px;
-            }
-            .tags {
-              display: flex;
-              flex-wrap: wrap;
-              gap: 8px;
-              margin-top: 8px;
-            }
-            .tag {
-              background: #EEF2FF;
-              color: #4F46E5;
-              padding: 4px 12px;
-              border-radius: 20px;
-              font-size: 14px;
-              font-weight: 500;
-            }
-            .footer {
-              margin-top: 30px;
-              padding-top: 20px;
-              border-top: 2px solid #E5E7EB;
-              text-align: center;
-              color: #6B7280;
-              font-size: 14px;
-            }
-            .urgency {
-              background: #FEF2F2;
-              border-left-color: #EF4444;
-              border-left-width: 4px;
-              padding: 15px;
-              border-radius: 8px;
-              margin-bottom: 20px;
-            }
-            .urgency-title {
-              color: #DC2626;
-              font-weight: 600;
-              margin-bottom: 5px;
-            }
-          </style>
         </head>
-        <body>
-          <div class="header">
-            <h1 style="margin: 0; font-size: 28px;">🚀 Novo Lead - Icarus v5.0</h1>
-            <p style="margin: 10px 0 0 0; opacity: 0.9;">Formulário de contato do site</p>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="margin: 0;">🚀 Novo Lead - Icarus v5.0</h1>
           </div>
           
-          <div class="content">
-            <div class="urgency">
-              <div class="urgency-title">⚡ Lead Quente - Ação Recomendada</div>
-              <div style="color: #991B1B; font-size: 14px;">
-                Responda dentro de 24 horas para maximizar a conversão
+          <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px;">
+            <div style="background: #FEF2F2; border-left: 4px solid #EF4444; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+              <div style="color: #DC2626; font-weight: 600;">⚡ Lead Quente - Ação Recomendada</div>
+              <div style="color: #991B1B; font-size: 14px;">Responda dentro de 24 horas</div>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6366F1; margin-bottom: 15px;">
+              <div style="font-weight: 600; color: #4F46E5; font-size: 14px; margin-bottom: 5px;">NOME COMPLETO</div>
+              <div style="color: #1F2937;">${lead.nome_completo}</div>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6366F1; margin-bottom: 15px;">
+              <div style="font-weight: 600; color: #4F46E5; font-size: 14px; margin-bottom: 5px;">EMAIL</div>
+              <div style="color: #1F2937;"><a href="mailto:${lead.email}" style="color: #4F46E5;">${lead.email}</a></div>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6366F1; margin-bottom: 15px;">
+              <div style="font-weight: 600; color: #4F46E5; font-size: 14px; margin-bottom: 5px;">TELEFONE</div>
+              <div style="color: #1F2937;">${lead.telefone}</div>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6366F1; margin-bottom: 15px;">
+              <div style="font-weight: 600; color: #4F46E5; font-size: 14px; margin-bottom: 5px;">EMPRESA</div>
+              <div style="color: #1F2937;">${lead.empresa}</div>
+            </div>
+
+            ${lead.interesse_em && lead.interesse_em.length > 0 ? `
+            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6366F1; margin-bottom: 15px;">
+              <div style="font-weight: 600; color: #4F46E5; font-size: 14px; margin-bottom: 5px;">ÁREAS DE INTERESSE</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                ${lead.interesse_em.map((i: string) => `<span style="background: #EEF2FF; color: #4F46E5; padding: 4px 12px; border-radius: 20px; font-size: 14px;">${i}</span>`).join('')}
               </div>
             </div>
+            ` : ''}
 
-            <div class="field">
-              <div class="field-label">Nome Completo</div>
-              <div class="field-value">${lead.nome_completo}</div>
+            ${lead.mensagem ? `
+            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #6366F1; margin-bottom: 15px;">
+              <div style="font-weight: 600; color: #4F46E5; font-size: 14px; margin-bottom: 5px;">MENSAGEM</div>
+              <div style="color: #1F2937;">${lead.mensagem}</div>
             </div>
+            ` : ''}
 
-            <div class="field">
-              <div class="field-label">Email</div>
-              <div class="field-value">
-                <a href="mailto:${lead.email}" style="color: #4F46E5; text-decoration: none;">${lead.email}</a>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-label">Telefone/WhatsApp</div>
-              <div class="field-value">
-                <a href="https://wa.me/${lead.telefone.replace(/\D/g, '')}" style="color: #4F46E5; text-decoration: none;">
-                  ${lead.telefone}
-                </a>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-label">Empresa</div>
-              <div class="field-value">${lead.empresa}</div>
-            </div>
-
-            ${
-              lead.cargo
-                ? `
-            <div class="field">
-              <div class="field-label">Cargo</div>
-              <div class="field-value">${lead.cargo}</div>
-            </div>
-            `
-                : ''
-            }
-
-            ${
-              lead.tamanho_empresa
-                ? `
-            <div class="field">
-              <div class="field-label">Tamanho da Empresa</div>
-              <div class="field-value">${lead.tamanho_empresa}</div>
-            </div>
-            `
-                : ''
-            }
-
-            ${
-              lead.segmento
-                ? `
-            <div class="field">
-              <div class="field-label">Segmento</div>
-              <div class="field-value">${lead.segmento}</div>
-            </div>
-            `
-                : ''
-            }
-
-            ${
-              lead.principal_desafio
-                ? `
-            <div class="field">
-              <div class="field-label">Principal Desafio</div>
-              <div class="field-value">${lead.principal_desafio}</div>
-            </div>
-            `
-                : ''
-            }
-
-            ${
-              lead.interesse_em && lead.interesse_em.length > 0
-                ? `
-            <div class="field">
-              <div class="field-label">Áreas de Interesse</div>
-              <div class="tags">
-                ${lead.interesse_em.map((interesse) => `<span class="tag">${interesse}</span>`).join('')}
-              </div>
-            </div>
-            `
-                : ''
-            }
-
-            ${
-              lead.como_conheceu
-                ? `
-            <div class="field">
-              <div class="field-label">Como Conheceu</div>
-              <div class="field-value">${lead.como_conheceu}</div>
-            </div>
-            `
-                : ''
-            }
-
-            ${
-              lead.mensagem
-                ? `
-            <div class="field">
-              <div class="field-label">Mensagem Adicional</div>
-              <div class="field-value">${lead.mensagem}</div>
-            </div>
-            `
-                : ''
-            }
-
-            <div class="footer">
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #E5E7EB; text-center; color: #6B7280; font-size: 14px;">
               <strong>Icarus v5.0</strong> - Gestão elevada pela IA<br>
               © 2025 IcarusAI Technology
             </div>
@@ -247,43 +79,27 @@ serve(async (req) => {
       </html>
     `
 
-    // Send email using Resend
-    const resendResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: 'Icarus v5.0 <leads@icarus.com>',
-        to: [RECIPIENT_EMAIL],
-        subject: `🚀 Novo Lead: ${lead.empresa} - ${lead.nome_completo}`,
-        html: emailHtml,
-      }),
+    const { data, error } = await resend.emails.send({
+      from: 'Icarus v5.0 <onboarding@resend.dev>',
+      to: ['dax@newortho.com.br'],
+      subject: `🚀 Novo Lead: ${lead.empresa} - ${lead.nome_completo}`,
+      html: emailHtml,
     })
 
-    if (!resendResponse.ok) {
-      const error = await resendResponse.text()
-      throw new Error(`Failed to send email: ${error}`)
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        status: 400,
+      })
     }
 
-    const result = await resendResponse.json()
-
-    return new Response(JSON.stringify({ success: true, id: result.id }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
+    return new Response(JSON.stringify({ success: true, id: data?.id }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       status: 200,
     })
   } catch (error) {
-    console.error('Error:', error)
-
     return new Response(JSON.stringify({ error: error.message }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       status: 500,
     })
   }
