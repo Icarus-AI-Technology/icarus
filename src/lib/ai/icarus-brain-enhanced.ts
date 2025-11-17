@@ -52,10 +52,10 @@ export interface PredictParams {
   contexto?: string
   usuario_id?: string
   tipo?: 'cross-sell' | 'up-sell' | 'similar'
-  dados_historicos?: any[]
-  metricas?: any
+  dados_historicos?: unknown[]
+  metricas?: unknown
   feedback?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface PredictResult {
@@ -65,15 +65,15 @@ export interface PredictResult {
   score?: number
   risco?: 'baixo' | 'medio' | 'alto'
   resposta?: string
-  acoes?: any[]
-  items?: any[]
+  acoes?: Array<{ tipo?: string; descricao?: string; link?: string }>
+  items?: Array<{ produto_id?: string; nome?: string; score?: number; motivo?: string; tipo?: string }>
   fatores?: Array<{ fator: string; impacto: number }>
   recomendacao?: string
   tendencia?: 'alta' | 'baixa' | 'estavel'
-  [key: string]: any
+  [key: string]: unknown
 }
 
-export interface AIResponse<T = any> {
+export interface AIResponse<T = unknown> {
   success: boolean
   data?: T
   error?: string
