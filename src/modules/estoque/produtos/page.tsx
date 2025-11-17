@@ -9,7 +9,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { Header } from '@/components/layouts/Header'
 import { useProducts } from './hooks/useProducts'
 import { productSchema } from './schemas/product.schema'
-import type { ProductFormData } from './types/product.types'
+import type { Product, ProductFormData } from './types/product.types'
 
 export default function ProdutosPage() {
   const [activeTab, setActiveTab] = useState<'list' | 'form'>('list')
@@ -67,7 +67,7 @@ export default function ProdutosPage() {
   }
 
   // Handle edit
-  const handleEdit = (product: any) => {
+  const handleEdit = (product: Product) => {
     setEditingId(product.id)
     setValue('code', product.code)
     setValue('name', product.name)
@@ -252,7 +252,7 @@ export default function ProdutosPage() {
                 />
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as any)}
+                  onChange={(e) => setStatusFilter(e.target.value as 'all' | 'true' | 'false')}
                   className="
                     bg-gray-900/50 backdrop-blur-sm
                     px-4 py-3 rounded-xl

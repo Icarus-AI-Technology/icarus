@@ -46,9 +46,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useSupabase } from '@/hooks/useSupabase'
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 // ==================== INTERFACES ====================
@@ -286,9 +283,6 @@ interface PrevisaoCompraIA {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export default function ComprasGestao() {
-  const { supabase } = useSupabase()
-  const { askIcarus, isLoading: iaLoading } = useIcarusBrain()
-
   // State
   const [activeTab, setActiveTab] = useState('overview')
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([])
@@ -297,10 +291,6 @@ export default function ComprasGestao() {
   const [alertas, setAlertas] = useState<AlertaCompras[]>([])
   const [previsoesIA, setPrevisoesIA] = useState<PrevisaoCompraIA[]>([])
   const [loading, setLoading] = useState(true)
-
-  // Dialogs
-  const [cotacaoDialogOpen, setCotacaoDialogOpen] = useState(false)
-  const [pedidoDialogOpen, setPedidoDialogOpen] = useState(false)
 
   // Filtros
   const [filtroStatus, setFiltroStatus] = useState<string>('todos')

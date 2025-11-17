@@ -24,7 +24,7 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
       const button = container.querySelector('button');
       
       if (button) {
-        const styles = window.getComputedStyle(button);
+        const _styles = window.getComputedStyle(button);
         const bgColor = styles.backgroundColor;
         const textColor = styles.color;
         
@@ -40,7 +40,7 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
       const button = container.querySelector('button');
       
       if (button) {
-        const styles = window.getComputedStyle(button);
+        const _styles = window.getComputedStyle(button);
         // Verificar se tem outline ou ring no focus
         expect(button.className).toContain('focus-visible:outline-none');
         expect(button.className).toContain('focus-visible:ring');
@@ -75,7 +75,7 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
       
       const card = container.querySelector('[class*="bg-[#6366F1]"]');
       if (card) {
-        const styles = window.getComputedStyle(card);
+        const _styles = window.getComputedStyle(card);
         const bgColor = styles.backgroundColor;
         const textColor = styles.color;
         
@@ -136,7 +136,7 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
       
       const span = container.querySelector('span');
       if (span) {
-        const styles = window.getComputedStyle(span);
+        const _styles = window.getComputedStyle(span);
         const textColor = styles.color;
         
         // Verificar se texto é branco (ou muito claro)

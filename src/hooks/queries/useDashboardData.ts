@@ -207,7 +207,8 @@ export function useDashboardStats() {
 
         // Group by category
         const categoryDistribution = (products || []).reduce((acc, product) => {
-          const categoryName = (product as any).categorias_produtos?.nome || 'Outros'
+          const productWithCategory = product as typeof product & { categorias_produtos?: { nome: string } }
+          const categoryName = productWithCategory.categorias_produtos?.nome || 'Outros'
           if (!acc[categoryName]) {
             acc[categoryName] = { total: 0, value: 0 }
           }

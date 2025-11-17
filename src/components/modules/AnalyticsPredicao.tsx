@@ -4,14 +4,11 @@
  * Descrição: Análises preditivas com IA - Forecasting, tendências e cenários
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { formatCurrency, formatDate } from '@/lib/utils'
-
-type TipoPredicao = 'demanda' | 'receita' | 'churn' | 'inadimplencia' | 'estoque'
+import { formatCurrency } from '@/lib/utils'
 type ConfiancaIA = 'baixa' | 'media' | 'alta' | 'muito_alta'
 
 interface PredicaoDemanda {

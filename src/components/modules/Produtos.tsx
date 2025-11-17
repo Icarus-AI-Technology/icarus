@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 import {
   Package,
@@ -47,10 +46,6 @@ interface Produto {
   created_at: string
 }
 
-interface AIForecast {
-  valores: number[]
-  confidence: number
-}
 
 // ==========================================
 // COMPONENT
@@ -61,7 +56,6 @@ export function Produtos() {
   // STATE E HOOKS
   // ==========================================
 
-  const { supabase } = useSupabase()
   const { predict, chat } = useIcarusBrain()
 
   const [activeTab, setActiveTab] = useState('overview')

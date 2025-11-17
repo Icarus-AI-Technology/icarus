@@ -22,7 +22,7 @@ export function LoginPage() {
     }, 1000)
   }
 
-  const handleQuickAccess = (role: 'admin' | 'analista') => {
+  const handleQuickAccess = (_role: 'admin' | 'analista') => {
     // Development quick access
     navigate('/dashboard')
   }

@@ -38,7 +38,7 @@ export interface KPICardProps {
  */
 export const KPICard: React.FC<KPICardProps> = ({
   title,
-  value,
+  _value,
   icon,
   trend,
   variant = 'default',

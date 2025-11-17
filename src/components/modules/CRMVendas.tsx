@@ -39,30 +39,14 @@
  * - IA: Predições, churn risk, upsell, insights
  */
 
-import { useEffect, useState, useMemo } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useEffect, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useSupabase } from '@/hooks/useSupabase'
-import { useDebounce } from '@/hooks/useDebounce'
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
-import {
-  Users, Plus, Search, Filter, Edit, Trash2, Eye, Phone,
-  Mail, MapPin, Building2, TrendingUp, DollarSign, Target,
-  Star, Calendar, CheckCircle2, Clock, XCircle, AlertCircle
-} from 'lucide-react'
-import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Funnel, FunnelChart
-} from 'recharts'
-import { toast } from 'sonner'
 
 // ==================== INTERFACES ====================
 
@@ -75,7 +59,6 @@ type EstagioOportunidade = 'prospeccao' | 'qualificacao' | 'proposta' | 'negocia
 type ProbabilidadeOportunidade = 10 | 25 | 50 | 75 | 90 | 100 | 0
 
 type TipoContato = 'decisor' | 'influenciador' | 'tecnico' | 'operacional'
-type TipoInteracao = 'reuniao' | 'call' | 'email' | 'proposta' | 'visita' | 'whatsapp'
 
 interface Cliente {
   id: number
@@ -169,30 +152,6 @@ interface Oportunidade {
   data_proxima_acao: string
 }
 
-interface Interacao {
-  id: number
-  cliente_id: number
-  contato_id: number
-  tipo: TipoInteracao
-  assunto: string
-  descricao: string
-  data: string
-  duracao_minutos?: number
-  responsavel: string
-  resultado: string
-  proxima_acao?: string
-  arquivos?: string[]
-}
-
-interface PerformanceCliente {
-  cliente_id: number
-  periodo: string
-  faturamento: number
-  cirurgias: number
-  produtos_vendidos: number
-  ticket_medio: number
-  crescimento_vs_anterior: number
-}
 
 interface AlertaCRM {
   id: number
@@ -231,9 +190,6 @@ interface PrevisaoIA {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export default function CRMVendas() {
-  const { supabase } = useSupabase()
-  const { askIcarus, isLoading: iaLoading } = useIcarusBrain()
-
   // State
   const [activeTab, setActiveTab] = useState('overview')
   const [clientes, setClientes] = useState<Cliente[]>([])
@@ -241,10 +197,6 @@ export default function CRMVendas() {
   const [alertas, setAlertas] = useState<AlertaCRM[]>([])
   const [previsoesIA, setPrevisoesIA] = useState<PrevisaoIA[]>([])
   const [loading, setLoading] = useState(true)
-
-  // Dialogs
-  const [clienteDialogOpen, setClienteDialogOpen] = useState(false)
-  const [oportunidadeDialogOpen, setOportunidadeDialogOpen] = useState(false)
 
   // Filtros
   const [filtroStatus, setFiltroStatus] = useState<string>('todos')

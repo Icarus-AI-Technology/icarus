@@ -7,13 +7,13 @@
  * - API integration POST /api/contact
  * - Toast notifications
  */
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { Textarea } from '@/components/ui/Textarea'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 import { Send, Mail, Phone, User, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { contactSchema, submitContact, type ContactFormData } from '@/lib/api/contact'
