@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
@@ -205,7 +205,7 @@ export function Cirurgias() {
     { month: 'Dez', cirurgias: 24 },
   ]
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true)
 
     if (!isConfigured) {
@@ -263,7 +263,7 @@ export function Cirurgias() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [isConfigured, supabase])
 
   useEffect(() => {
     loadData()
