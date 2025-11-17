@@ -69,10 +69,10 @@ export default function ContactPage() {
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <h1 style={{ fontSize: 'var(--font-4xl)', fontWeight: 'var(--font-bold)' }} className="text-gray-900 dark:text-gray-100 mb-4">
             Entre em Contato
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p style={{ fontSize: 'var(--font-lg)' }} className="text-gray-600 dark:text-gray-400">
             Preencha o formulário abaixo e entraremos em contato em breve
           </p>
         </div>
@@ -190,30 +190,30 @@ export default function ContactPage() {
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card variant="bordered" padding="md" className="text-center">
             <Mail className="size-8 text-[#6366F1] mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
               Email
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p style={{ fontSize: 'var(--font-sm)' }} className="text-gray-600 dark:text-gray-400">
               contato@icarus.ai
             </p>
           </Card>
 
           <Card variant="bordered" padding="md" className="text-center">
             <Phone className="size-8 text-[#6366F1] mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
               Telefone
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p style={{ fontSize: 'var(--font-sm)' }} className="text-gray-600 dark:text-gray-400">
               (11) 98765-4321
             </p>
           </Card>
 
           <Card variant="bordered" padding="md" className="text-center">
             <MessageSquare className="size-8 text-[#6366F1] mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
               WhatsApp
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p style={{ fontSize: 'var(--font-sm)' }} className="text-gray-600 dark:text-gray-400">
               (11) 98765-4321
             </p>
           </Card>
