@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Database, AlertCircle, CheckCircle2, XCircle, Loader2 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/button'
 import { supabase, supabaseConfig } from '@/lib/config/supabase-client'
 
