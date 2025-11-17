@@ -1,6 +1,7 @@
 /**
- * Supabase Database Types - ICARUS v5.0
- * Extended schema for complete OPME management system
+ * Tipos do Banco de Dados Supabase - ICARUS v5.0
+ * Schema completo para sistema de gestão OPME
+ * Idioma: PT-BR
  */
 
 export type Json =
@@ -15,83 +16,150 @@ export interface Database {
   public: {
     Tables: {
       // ============ CORE ============
-      users: {
+      empresas: {
         Row: {
           id: string
-          email: string
-          full_name: string
-          avatar_url: string | null
-          role: 'admin' | 'manager' | 'user' | 'viewer'
-          tenant_id: string
-          active: boolean
-          created_at: string
-          updated_at: string
+          nome: string
+          cnpj: string
+          plano: 'inicial' | 'profissional' | 'empresarial'
+          ativo: boolean
+          configuracoes: Json
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          email: string
-          full_name: string
-          avatar_url?: string | null
-          role?: 'admin' | 'manager' | 'user' | 'viewer'
-          tenant_id: string
-          active?: boolean
-          created_at?: string
-          updated_at?: string
+          nome: string
+          cnpj: string
+          plano?: 'inicial' | 'profissional' | 'empresarial'
+          ativo?: boolean
+          configuracoes?: Json
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
-          id?: string
-          email?: string
-          full_name?: string
-          avatar_url?: string | null
-          role?: 'admin' | 'manager' | 'user' | 'viewer'
-          tenant_id?: string
-          active?: boolean
-          updated_at?: string
+          nome?: string
+          cnpj?: string
+          plano?: 'inicial' | 'profissional' | 'empresarial'
+          ativo?: boolean
+          configuracoes?: Json
+          atualizado_em?: string
         }
       }
 
-      tenants: {
+      usuarios: {
         Row: {
           id: string
-          name: string
-          cnpj: string
-          plan: 'starter' | 'professional' | 'enterprise'
-          active: boolean
-          settings: Json
-          created_at: string
-          updated_at: string
+          email: string
+          nome_completo: string
+          avatar_url: string | null
+          papel: 'admin' | 'gerente' | 'usuario' | 'visualizador'
+          empresa_id: string
+          ativo: boolean
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          name: string
-          cnpj: string
-          plan?: 'starter' | 'professional' | 'enterprise'
-          active?: boolean
-          settings?: Json
-          created_at?: string
-          updated_at?: string
+          email: string
+          nome_completo: string
+          avatar_url?: string | null
+          papel?: 'admin' | 'gerente' | 'usuario' | 'visualizador'
+          empresa_id: string
+          ativo?: boolean
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
-          name?: string
-          cnpj?: string
-          plan?: 'starter' | 'professional' | 'enterprise'
-          active?: boolean
-          settings?: Json
-          updated_at?: string
+          email?: string
+          nome_completo?: string
+          avatar_url?: string | null
+          papel?: 'admin' | 'gerente' | 'usuario' | 'visualizador'
+          ativo?: boolean
+          atualizado_em?: string
         }
       }
 
       // ============ PRODUTOS ============
+      categorias: {
+        Row: {
+          id: string
+          empresa_id: string
+          nome: string
+          descricao: string | null
+          categoria_pai_id: string | null
+          ativo: boolean
+          criado_em: string
+        }
+        Insert: {
+          id?: string
+          empresa_id: string
+          nome: string
+          descricao?: string | null
+          categoria_pai_id?: string | null
+          ativo?: boolean
+          criado_em?: string
+        }
+        Update: {
+          nome?: string
+          descricao?: string | null
+          categoria_pai_id?: string | null
+          ativo?: boolean
+        }
+      }
+
+      fornecedores: {
+        Row: {
+          id: string
+          empresa_id: string
+          cnpj: string
+          razao_social: string
+          nome_fantasia: string | null
+          contato: string | null
+          email: string | null
+          telefone: string | null
+          endereco: Json
+          ativo: boolean
+          criado_em: string
+          atualizado_em: string
+        }
+        Insert: {
+          id?: string
+          empresa_id: string
+          cnpj: string
+          razao_social: string
+          nome_fantasia?: string | null
+          contato?: string | null
+          email?: string | null
+          telefone?: string | null
+          endereco?: Json
+          ativo?: boolean
+          criado_em?: string
+          atualizado_em?: string
+        }
+        Update: {
+          cnpj?: string
+          razao_social?: string
+          nome_fantasia?: string | null
+          contato?: string | null
+          email?: string | null
+          telefone?: string | null
+          endereco?: Json
+          ativo?: boolean
+          atualizado_em?: string
+        }
+      }
+
       produtos: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           codigo: string
           nome: string
           descricao: string | null
           categoria_id: string | null
           tipo: 'OPME' | 'Consignado' | 'Compra'
-          anvisa_registro: string | null
+          registro_anvisa: string | null
           fabricante_id: string | null
           unidade_medida: string
           preco_custo: number
@@ -102,30 +170,30 @@ export interface Database {
           ativo: boolean
           foto_url: string | null
           metadados: Json
-          created_at: string
-          updated_at: string
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           codigo: string
           nome: string
           descricao?: string | null
           categoria_id?: string | null
           tipo: 'OPME' | 'Consignado' | 'Compra'
-          anvisa_registro?: string | null
+          registro_anvisa?: string | null
           fabricante_id?: string | null
           unidade_medida: string
-          preco_custo: number
-          preco_venda: number
+          preco_custo?: number
+          preco_venda?: number
           margem_lucro?: number
           estoque_minimo?: number
           estoque_atual?: number
           ativo?: boolean
           foto_url?: string | null
           metadados?: Json
-          created_at?: string
-          updated_at?: string
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           codigo?: string
@@ -133,7 +201,7 @@ export interface Database {
           descricao?: string | null
           categoria_id?: string | null
           tipo?: 'OPME' | 'Consignado' | 'Compra'
-          anvisa_registro?: string | null
+          registro_anvisa?: string | null
           fabricante_id?: string | null
           unidade_medida?: string
           preco_custo?: number
@@ -144,34 +212,7 @@ export interface Database {
           ativo?: boolean
           foto_url?: string | null
           metadados?: Json
-          updated_at?: string
-        }
-      }
-
-      categorias: {
-        Row: {
-          id: string
-          tenant_id: string
-          nome: string
-          descricao: string | null
-          parent_id: string | null
-          ativo: boolean
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          tenant_id: string
-          nome: string
-          descricao?: string | null
-          parent_id?: string | null
-          ativo?: boolean
-          created_at?: string
-        }
-        Update: {
-          nome?: string
-          descricao?: string | null
-          parent_id?: string | null
-          ativo?: boolean
+          atualizado_em?: string
         }
       }
 
@@ -179,7 +220,7 @@ export interface Database {
       clientes: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           tipo: 'hospital' | 'clinica' | 'medico'
           cnpj_cpf: string
           nome: string
@@ -188,15 +229,15 @@ export interface Database {
           email: string | null
           telefone: string | null
           endereco: Json
-          credito_limite: number
+          limite_credito: number
           credito_disponivel: number
           ativo: boolean
-          created_at: string
-          updated_at: string
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           tipo: 'hospital' | 'clinica' | 'medico'
           cnpj_cpf: string
           nome: string
@@ -205,11 +246,11 @@ export interface Database {
           email?: string | null
           telefone?: string | null
           endereco?: Json
-          credito_limite?: number
+          limite_credito?: number
           credito_disponivel?: number
           ativo?: boolean
-          created_at?: string
-          updated_at?: string
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           tipo?: 'hospital' | 'clinica' | 'medico'
@@ -220,10 +261,10 @@ export interface Database {
           email?: string | null
           telefone?: string | null
           endereco?: Json
-          credito_limite?: number
+          limite_credito?: number
           credito_disponivel?: number
           ativo?: boolean
-          updated_at?: string
+          atualizado_em?: string
         }
       }
 
@@ -231,7 +272,7 @@ export interface Database {
       cirurgias: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           numero: string
           paciente_nome: string
           paciente_cpf: string | null
@@ -243,12 +284,12 @@ export interface Database {
           valor_total: number
           observacoes: string | null
           metadados: Json
-          created_at: string
-          updated_at: string
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           numero: string
           paciente_nome: string
           paciente_cpf?: string | null
@@ -260,8 +301,8 @@ export interface Database {
           valor_total?: number
           observacoes?: string | null
           metadados?: Json
-          created_at?: string
-          updated_at?: string
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           numero?: string
@@ -275,7 +316,7 @@ export interface Database {
           valor_total?: number
           observacoes?: string | null
           metadados?: Json
-          updated_at?: string
+          atualizado_em?: string
         }
       }
 
@@ -289,7 +330,7 @@ export interface Database {
           preco_total: number
           lote: string | null
           validade: string | null
-          created_at: string
+          criado_em: string
         }
         Insert: {
           id?: string
@@ -300,7 +341,7 @@ export interface Database {
           preco_total: number
           lote?: string | null
           validade?: string | null
-          created_at?: string
+          criado_em?: string
         }
         Update: {
           quantidade?: number
@@ -315,7 +356,7 @@ export interface Database {
       contas_receber: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           numero: string
           cliente_id: string
           cirurgia_id: string | null
@@ -327,12 +368,12 @@ export interface Database {
           status: 'pendente' | 'pago' | 'vencido' | 'cancelado'
           forma_pagamento: string | null
           observacoes: string | null
-          created_at: string
-          updated_at: string
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           numero: string
           cliente_id: string
           cirurgia_id?: string | null
@@ -344,8 +385,8 @@ export interface Database {
           status?: 'pendente' | 'pago' | 'vencido' | 'cancelado'
           forma_pagamento?: string | null
           observacoes?: string | null
-          created_at?: string
-          updated_at?: string
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           valor?: number
@@ -355,14 +396,14 @@ export interface Database {
           status?: 'pendente' | 'pago' | 'vencido' | 'cancelado'
           forma_pagamento?: string | null
           observacoes?: string | null
-          updated_at?: string
+          atualizado_em?: string
         }
       }
 
       contas_pagar: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           numero: string
           fornecedor_id: string
           valor: number
@@ -374,12 +415,12 @@ export interface Database {
           forma_pagamento: string | null
           categoria: string | null
           observacoes: string | null
-          created_at: string
-          updated_at: string
+          criado_em: string
+          atualizado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           numero: string
           fornecedor_id: string
           valor: number
@@ -391,8 +432,8 @@ export interface Database {
           forma_pagamento?: string | null
           categoria?: string | null
           observacoes?: string | null
-          created_at?: string
-          updated_at?: string
+          criado_em?: string
+          atualizado_em?: string
         }
         Update: {
           valor?: number
@@ -403,50 +444,7 @@ export interface Database {
           forma_pagamento?: string | null
           categoria?: string | null
           observacoes?: string | null
-          updated_at?: string
-        }
-      }
-
-      // ============ FORNECEDORES ============
-      fornecedores: {
-        Row: {
-          id: string
-          tenant_id: string
-          cnpj: string
-          razao_social: string
-          nome_fantasia: string | null
-          contato: string | null
-          email: string | null
-          telefone: string | null
-          endereco: Json
-          ativo: boolean
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          tenant_id: string
-          cnpj: string
-          razao_social: string
-          nome_fantasia?: string | null
-          contato?: string | null
-          email?: string | null
-          telefone?: string | null
-          endereco?: Json
-          ativo?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          cnpj?: string
-          razao_social?: string
-          nome_fantasia?: string | null
-          contato?: string | null
-          email?: string | null
-          telefone?: string | null
-          endereco?: Json
-          ativo?: boolean
-          updated_at?: string
+          atualizado_em?: string
         }
       }
 
@@ -454,7 +452,7 @@ export interface Database {
       movimentacoes_estoque: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           produto_id: string
           tipo: 'entrada' | 'saida' | 'ajuste' | 'transferencia'
           quantidade: number
@@ -467,11 +465,11 @@ export interface Database {
           referencia_id: string | null
           observacoes: string | null
           usuario_id: string
-          created_at: string
+          criado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           produto_id: string
           tipo: 'entrada' | 'saida' | 'ajuste' | 'transferencia'
           quantidade: number
@@ -484,7 +482,7 @@ export interface Database {
           referencia_id?: string | null
           observacoes?: string | null
           usuario_id: string
-          created_at?: string
+          criado_em?: string
         }
         Update: {
           quantidade?: number
@@ -497,87 +495,175 @@ export interface Database {
       }
 
       // ============ ANALYTICS / IA ============
-      icarus_predictions: {
+      icarus_previsoes: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           tipo: string
           entidade_id: string | null
-          input_data: Json
-          prediction_data: Json
-          confidence: number
-          created_at: string
+          dados_entrada: Json
+          dados_previsao: Json
+          confianca: number
+          criado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           tipo: string
           entidade_id?: string | null
-          input_data: Json
-          prediction_data: Json
-          confidence: number
-          created_at?: string
+          dados_entrada: Json
+          dados_previsao: Json
+          confianca: number
+          criado_em?: string
         }
         Update: {
-          prediction_data?: Json
-          confidence?: number
+          dados_previsao?: Json
+          confianca?: number
         }
       }
 
-      icarus_logs: {
+      icarus_registros: {
         Row: {
           id: string
-          tenant_id: string
+          empresa_id: string
           usuario_id: string | null
-          action: string
-          entity_type: string | null
-          entity_id: string | null
-          details: Json
-          ip_address: string | null
-          user_agent: string | null
-          created_at: string
+          acao: string
+          tipo_entidade: string | null
+          entidade_id: string | null
+          detalhes: Json
+          endereco_ip: string | null
+          navegador: string | null
+          criado_em: string
         }
         Insert: {
           id?: string
-          tenant_id: string
+          empresa_id: string
           usuario_id?: string | null
-          action: string
-          entity_type?: string | null
-          entity_id?: string | null
-          details?: Json
-          ip_address?: string | null
-          user_agent?: string | null
-          created_at?: string
+          acao: string
+          tipo_entidade?: string | null
+          entidade_id?: string | null
+          detalhes?: Json
+          endereco_ip?: string | null
+          navegador?: string | null
+          criado_em?: string
         }
         Update: {
-          details?: Json
+          detalhes?: Json
         }
       }
     }
 
     Views: {
-      [_ in never]: never
+      produtos_estoque_baixo: {
+        Row: {
+          id: string
+          empresa_id: string
+          codigo: string
+          nome: string
+          estoque_atual: number
+          estoque_minimo: number
+          deficit: number
+          categoria: string | null
+        }
+      }
+
+      contas_receber_vencidas: {
+        Row: {
+          id: string
+          empresa_id: string
+          numero: string
+          cliente_id: string
+          cliente_nome: string
+          valor: number
+          valor_pago: number
+          saldo_devedor: number
+          data_vencimento: string
+          dias_vencido: number
+        }
+      }
+
+      cirurgias_proximas: {
+        Row: {
+          id: string
+          empresa_id: string
+          numero: string
+          paciente_nome: string
+          tipo_cirurgia: string
+          data_cirurgia: string
+          hospital: string
+          medico: string
+          valor_total: number
+          status: string
+        }
+      }
     }
 
     Functions: {
-      get_dashboard_stats: {
-        Args: { tenant_id: string }
+      obter_estatisticas_dashboard: {
+        Args: { id_empresa: string }
         Returns: Json
       }
-      calculate_inventory_value: {
-        Args: { tenant_id: string }
+      calcular_valor_estoque: {
+        Args: { id_empresa: string }
         Returns: number
       }
     }
 
     Enums: {
-      user_role: 'admin' | 'manager' | 'user' | 'viewer'
-      tenant_plan: 'starter' | 'professional' | 'enterprise'
-      produto_tipo: 'OPME' | 'Consignado' | 'Compra'
-      cliente_tipo: 'hospital' | 'clinica' | 'medico'
-      cirurgia_status: 'agendada' | 'confirmada' | 'realizada' | 'cancelada'
-      financeiro_status: 'pendente' | 'pago' | 'vencido' | 'cancelado'
-      estoque_tipo: 'entrada' | 'saida' | 'ajuste' | 'transferencia'
+      papel_usuario: 'admin' | 'gerente' | 'usuario' | 'visualizador'
+      plano_empresa: 'inicial' | 'profissional' | 'empresarial'
+      tipo_produto: 'OPME' | 'Consignado' | 'Compra'
+      tipo_cliente: 'hospital' | 'clinica' | 'medico'
+      status_cirurgia: 'agendada' | 'confirmada' | 'realizada' | 'cancelada'
+      status_financeiro: 'pendente' | 'pago' | 'vencido' | 'cancelado'
+      tipo_movimentacao: 'entrada' | 'saida' | 'ajuste' | 'transferencia'
     }
   }
 }
+
+// Tipos auxiliares para uso na aplicação
+export type Empresa = Database['public']['Tables']['empresas']['Row']
+export type NovaEmpresa = Database['public']['Tables']['empresas']['Insert']
+export type AtualizarEmpresa = Database['public']['Tables']['empresas']['Update']
+
+export type Usuario = Database['public']['Tables']['usuarios']['Row']
+export type NovoUsuario = Database['public']['Tables']['usuarios']['Insert']
+export type AtualizarUsuario = Database['public']['Tables']['usuarios']['Update']
+
+export type Produto = Database['public']['Tables']['produtos']['Row']
+export type NovoProduto = Database['public']['Tables']['produtos']['Insert']
+export type AtualizarProduto = Database['public']['Tables']['produtos']['Update']
+
+export type Cliente = Database['public']['Tables']['clientes']['Row']
+export type NovoCliente = Database['public']['Tables']['clientes']['Insert']
+export type AtualizarCliente = Database['public']['Tables']['clientes']['Update']
+
+export type Cirurgia = Database['public']['Tables']['cirurgias']['Row']
+export type NovaCirurgia = Database['public']['Tables']['cirurgias']['Insert']
+export type AtualizarCirurgia = Database['public']['Tables']['cirurgias']['Update']
+
+export type ContaReceber = Database['public']['Tables']['contas_receber']['Row']
+export type NovaContaReceber = Database['public']['Tables']['contas_receber']['Insert']
+export type AtualizarContaReceber = Database['public']['Tables']['contas_receber']['Update']
+
+export type ContaPagar = Database['public']['Tables']['contas_pagar']['Row']
+export type NovaContaPagar = Database['public']['Tables']['contas_pagar']['Insert']
+export type AtualizarContaPagar = Database['public']['Tables']['contas_pagar']['Update']
+
+export type MovimentacaoEstoque = Database['public']['Tables']['movimentacoes_estoque']['Row']
+export type NovaMovimentacaoEstoque = Database['public']['Tables']['movimentacoes_estoque']['Insert']
+
+export type PrevisaoIcarus = Database['public']['Tables']['icarus_previsoes']['Row']
+export type NovaPrevisaoIcarus = Database['public']['Tables']['icarus_previsoes']['Insert']
+
+export type RegistroAuditoria = Database['public']['Tables']['icarus_registros']['Row']
+export type NovoRegistroAuditoria = Database['public']['Tables']['icarus_registros']['Insert']
+
+// Enums
+export type PapelUsuario = Database['public']['Enums']['papel_usuario']
+export type PlanoEmpresa = Database['public']['Enums']['plano_empresa']
+export type TipoProduto = Database['public']['Enums']['tipo_produto']
+export type TipoCliente = Database['public']['Enums']['tipo_cliente']
+export type StatusCirurgia = Database['public']['Enums']['status_cirurgia']
+export type StatusFinanceiro = Database['public']['Enums']['status_financeiro']
+export type TipoMovimentacao = Database['public']['Enums']['tipo_movimentacao']
