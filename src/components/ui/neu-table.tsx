@@ -6,7 +6,7 @@ export interface Column<T> {
   key: string;
   label: string;
   sortable?: boolean;
-  render?: (value: any, row: T, index: number) => React.ReactNode;
+  render?: (value: unknown, row: T, index: number) => React.ReactNode;
   className?: string;
   headerClassName?: string;
 }
@@ -55,7 +55,7 @@ type SortConfig = {
  *   striped
  * />
  */
-export function NeuTable<T extends Record<string, any>>({
+export function NeuTable<T extends Record<string, unknown>>({
   data,
   columns,
   onRowClick,

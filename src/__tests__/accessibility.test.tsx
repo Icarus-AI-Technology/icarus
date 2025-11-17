@@ -125,7 +125,7 @@ describe('Acessibilidade WCAG 2.1 AA', () => {
       const span = container.querySelector('span');
       if (span) {
         const _styles = window.getComputedStyle(span);
-        const textColor = styles.color;
+        const textColor = _styles.color;
         
         // Verificar se texto é branco (ou muito claro)
         const rgb = textColor.match(/\d+/g);

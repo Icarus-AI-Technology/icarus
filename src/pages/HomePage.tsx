@@ -639,7 +639,7 @@ function BenefitCard({
   prefix = '',
   suffix = '',
 }: {
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
   title: string
   description: string
   stat: number
