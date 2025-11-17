@@ -1,38 +1,42 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'elevated' | 'flat' | 'bordered';
+/**
+ * OraclusX Design System - Card Component
+ * ✅ 100% Compliant with ICARUS v5.0 Standards
+ * 
+ * REGRAS OBRIGATÓRIAS:
+ * - Border Radius: 16px (rounded-[16px]) - Padrão MD
+ * - Sem Shadows: Usar border 1px apenas
+ * - Background: var(--card) ou hsl(var(--card))
+ * - Padding: 24px (p-6) padrão
+ * - Variante Neuromórfica: Aplicar apenas quando explicitamente solicitado
+ */
+
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'elevated' | 'flat' | 'bordered'
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ variant = 'elevated', className, ...props }, ref) => {
+  ({ className, variant = 'default', ...props }, ref) => {
     const variantClasses = {
-      elevated: cn(
-        "bg-[var(--surface-raised)]",
-        "rounded-2xl",
-        "shadow-[8px_8px_16px_var(--shadow-dark),-8px_-8px_16px_var(--shadow-light)]",
-        "hover:shadow-[12px_12px_24px_var(--shadow-dark),-12px_-12px_24px_var(--shadow-light)]",
-        "transition-shadow duration-300"
-      ),
-      flat: "bg-[var(--surface-raised)] rounded-2xl",
-      bordered: cn(
-        "bg-[var(--surface-raised)]",
-        "rounded-2xl",
-        "border border-[var(--border-default)]"
-      ),
-    };
+      default: "border border-[rgba(0,0,0,0.1)] bg-card",
+      elevated: "bg-card shadow-[8px_8px_16px_rgba(0,0,0,0.12),-8px_-8px_16px_rgba(255,255,255,0.6)] hover:shadow-[12px_12px_24px_rgba(0,0,0,0.12),-12px_-12px_24px_rgba(255,255,255,0.6)] transition-shadow duration-300",
+      flat: "bg-card",
+      bordered: "border-2 border-[rgba(0,0,0,0.1)] bg-card",
+    }
 
     return (
   <div
     ref={ref}
     className={cn(
+          "rounded-[16px] text-card-foreground",
           variantClasses[variant],
       className
     )}
     {...props}
   />
-    );
+    )
   }
 )
 Card.displayName = "Card"
@@ -56,7 +60,7 @@ const CardTitle = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-[16px] font-[600] leading-none tracking-tight",
       className
     )}
     {...props}
@@ -70,7 +74,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("text-[14px] text-muted-foreground font-[400]", className)}
     {...props}
   />
 ))

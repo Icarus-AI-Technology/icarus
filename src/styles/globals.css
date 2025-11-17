@@ -125,6 +125,78 @@
 }
 
 /* ==========================================
+   ⚡ REGRA UNIVERSAL ORACLUSX DS: BACKGROUND INDIGO = TEXTO BRANCO
+   Aplicação automática em 100% do sistema
+   Data: Novembro 2025
+   ========================================== */
+
+@layer base {
+  /* 📝 TEXTO - Sempre branco em backgrounds indigo */
+  .bg-\[\#6366F1\],
+  .bg-\[\#6366F1\] *,
+  [style*="background-color: #6366F1"] *,
+  [style*="backgroundColor: #6366F1"] * {
+    color: #FFFFFF !important;
+  }
+
+  /* Modo Escuro - mesma regra */
+  .dark .bg-\[\#6366F1\],
+  .dark .bg-\[\#6366F1\] *,
+  .dark [style*="background-color: #6366F1"] *,
+  .dark [style*="backgroundColor: #6366F1"] * {
+    color: #FFFFFF !important;
+  }
+
+  /* 🎨 ÍCONES SVG - Traços brancos sem preenchimento */
+  .bg-\[\#6366F1\] svg,
+  .bg-\[\#6366F1\] svg *,
+  [style*="backgroundColor: #6366F1"] svg,
+  [style*="backgroundColor: #6366F1"] svg * {
+    stroke: #FFFFFF !important;
+    fill: none !important;
+    color: #FFFFFF !important;
+    stroke-width: 2 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+  }
+
+  /* Modo Escuro - mesmas regras */
+  .dark .bg-\[\#6366F1\] svg,
+  .dark .bg-\[\#6366F1\] svg *,
+  .dark [style*="backgroundColor: #6366F1"] svg,
+  .dark [style*="backgroundColor: #6366F1"] svg * {
+    stroke: #FFFFFF !important;
+    fill: none !important;
+    color: #FFFFFF !important;
+  }
+
+  /* 🏷️ BADGES - Texto branco em badges dentro de indigo */
+  .bg-\[\#6366F1\] .badge,
+  .bg-\[\#6366F1\] [class*="badge"],
+  [style*="backgroundColor: #6366F1"] .badge {
+    color: #FFFFFF !important;
+  }
+
+  /* 📋 PLACEHOLDERS - Branco semi-transparente */
+  .bg-\[\#6366F1\] input::placeholder,
+  .bg-\[\#6366F1\] textarea::placeholder,
+  [style*="backgroundColor: #6366F1"] input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  /* 🔗 LINKS - Branco com underline */
+  .bg-\[\#6366F1\] a,
+  [style*="backgroundColor: #6366F1"] a {
+    color: #FFFFFF !important;
+    text-decoration: underline !important;
+  }
+
+  .bg-\[\#6366F1\] a:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+}
+
+/* ==========================================
    NEOMORPHIC CLASSES - OraclusX Design System
    ========================================== */
 
