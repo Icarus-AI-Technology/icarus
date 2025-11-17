@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import { captureError } from '@/lib/sentry/config'
 

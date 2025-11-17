@@ -4,7 +4,7 @@
  * Descrição: Gestão de qualidade, certificações ANVISA/ISO e controle de fornecedores
  */
 import { useState } from 'react'
-import { CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { TabsTrigger } from '@/components/ui/tabs'
+import { CardTitle } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { TabsTrigger } from '@/components/ui/Tabs'
