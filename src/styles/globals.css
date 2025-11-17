@@ -30,6 +30,43 @@
     --warning: 38 92% 50%;              /* #F59E0B - Amber */
     --error: 4 90% 58%;                 /* #EF4444 - Red */
     --info: 217 91% 60%;                /* #3B82F6 - Blue */
+
+    /* OraclusX DS - Neuromorphic Surfaces */
+    --background-primary: #F3F4F6;       /* Cinza claro (fundo principal) */
+    --background-secondary: #FFFFFF;     /* Branco (cards/containers) */
+    --background-tertiary: #E5E7EB;      /* Cinza médio claro */
+    --surface-raised: #F3F4F6;           /* Superfície elevada */
+    --surface-inset: #E5E7EB;           /* Superfície rebaixada */
+    
+    /* OraclusX DS - Text Colors */
+    --text-primary: #111827;            /* Quase preto (títulos) */
+    --text-secondary: #4B5563;           /* Cinza escuro (corpo) */
+    --text-tertiary: #6B7280;            /* Cinza médio (labels) */
+    --text-disabled: #9CA3AF;           /* Cinza claro (desabilitado) */
+    --text-on-primary: #FFFFFF;         /* Branco (texto sobre indigo) */
+    
+    /* OraclusX DS - Borders */
+    --border-default: #D1D5DB;          /* Cinza médio */
+    --border-light: #E5E7EB;             /* Cinza claro */
+    --border-strong: #9CA3AF;           /* Cinza escuro */
+    
+    /* OraclusX DS - Neuromorphic Shadows */
+    --shadow-light: rgba(255, 255, 255, 0.8);  /* Sombra clara (luz) */
+    --shadow-dark: rgba(0, 0, 0, 0.15);         /* Sombra escura (profundidade) */
+    
+    /* OraclusX DS - Semantic Colors */
+    --success-color: #10B981;
+    --success-bg: #D1FAE5;
+    --success-border: #6EE7B7;
+    --error-color: #EF4444;
+    --error-bg: #FEE2E2;
+    --error-border: #FCA5A5;
+    --warning-color: #F59E0B;
+    --warning-bg: #FEF3C7;
+    --warning-border: #FCD34D;
+    --info-color: #3B82F6;
+    --info-bg: #DBEAFE;
+    --info-border: #93C5FD;
   }
 
   .dark {
@@ -52,6 +89,29 @@
     --border: 215 28% 25%;              /* #334155 */
     --input: 215 28% 25%;
     --ring: 239 84% 67%;
+
+    /* OraclusX DS - Dark Mode Surfaces */
+    --background-primary: #1F2937;      /* Cinza escuro (fundo principal) */
+    --background-secondary: #111827;    /* Quase preto (cards/containers) */
+    --background-tertiary: #374151;     /* Cinza médio escuro */
+    --surface-raised: #1F2937;          /* Superfície elevada */
+    --surface-inset: #111827;           /* Superfície rebaixada */
+    
+    /* OraclusX DS - Dark Mode Text Colors */
+    --text-primary: #F9FAFB;            /* Quase branco (títulos) */
+    --text-secondary: #D1D5DB;          /* Cinza claro (corpo) */
+    --text-tertiary: #9CA3AF;           /* Cinza médio (labels) */
+    --text-disabled: #6B7280;           /* Cinza escuro (desabilitado) */
+    --text-on-primary: #FFFFFF;         /* Branco (texto sobre indigo) */
+    
+    /* OraclusX DS - Dark Mode Borders */
+    --border-default: #374151;          /* Cinza médio escuro */
+    --border-light: #4B5563;            /* Cinza médio */
+    --border-strong: #6B7280;           /* Cinza claro */
+    
+    /* OraclusX DS - Dark Mode Shadows */
+    --shadow-light: rgba(255, 255, 255, 0.05);  /* Sombra clara (luz) */
+    --shadow-dark: rgba(0, 0, 0, 0.5);          /* Sombra escura (profundidade) */
   }
 }
 
@@ -230,6 +290,116 @@
 
   .animate-pulse-soft {
     animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+/* ==========================================
+   🎯 REGRA UNIVERSAL ORACLUSX DS: BACKGROUND INDIGO = TEXTO BRANCO
+   Aplicação automática em 100% do sistema
+   ========================================== */
+
+@layer base {
+  /* ────────────────────────────────────────────────────────────────────────
+     📝 TEXTO - Sempre branco em backgrounds indigo
+     ──────────────────────────────────────────────────────────────────────── */
+  
+  .bg-\[#6366F1\],
+  .bg-\[#6366F1\] *,
+  [style*="background-color: #6366F1"] *,
+  [style*="backgroundColor: '#6366F1'"] *,
+  .bg-primary:not(.text-gray-*):not(.text-black):not(.text-foreground) {
+    color: #FFFFFF !important;
+  }
+  
+  /* Modo Escuro - Texto branco (mesma regra) */
+  .dark .bg-\[#6366F1\],
+  .dark .bg-\[#6366F1\] *,
+  .dark [style*="background-color: #6366F1"] *,
+  .dark [style*="backgroundColor: '#6366F1'"] * {
+    color: #FFFFFF !important;
+  }
+  
+  /* ────────────────────────────────────────────────────────────────────────
+     🎨 ÍCONES SVG - Traços brancos sem preenchimento
+     ──────────────────────────────────────────────────────────────────────── */
+  
+  .bg-\[#6366F1\] svg,
+  .bg-\[#6366F1\] svg *,
+  [style*="backgroundColor: '#6366F1'"] svg,
+  [style*="backgroundColor: '#6366F1'"] svg *,
+  .bg-primary svg:not([stroke="none"]) {
+    stroke: #FFFFFF !important;
+    fill: none !important;
+    color: #FFFFFF !important;
+  }
+  
+  /* Modo Escuro - mesmas regras */
+  .dark .bg-\[#6366F1\] svg,
+  .dark .bg-\[#6366F1\] svg *,
+  .dark [style*="backgroundColor: '#6366F1'"] svg,
+  .dark [style*="backgroundColor: '#6366F1'"] svg * {
+    stroke: #FFFFFF !important;
+    fill: none !important;
+    color: #FFFFFF !important;
+  }
+  
+  /* ────────────────────────────────────────────────────────────────────────
+     🏷️ BADGES - Texto branco em badges dentro de indigo
+     ──────────────────────────────────────────────────────────────────────── */
+  
+  .bg-\[#6366F1\] .badge,
+  .bg-\[#6366F1\] [class*="badge"],
+  [style*="backgroundColor: '#6366F1'"] .badge {
+    color: #FFFFFF !important;
+  }
+  
+  /* ────────────────────────────────────────────────────────────────────────
+     📋 PLACEHOLDERS - Branco semi-transparente
+     ──────────────────────────────────────────────────────────────────────── */
+  
+  .bg-\[#6366F1\] input::placeholder,
+  .bg-\[#6366F1\] textarea::placeholder,
+  [style*="backgroundColor: '#6366F1'"] input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+  
+  /* ────────────────────────────────────────────────────────────────────────
+     🔗 LINKS - Branco com underline
+     ──────────────────────────────────────────────────────────────────────── */
+  
+  .bg-\[#6366F1\] a,
+  [style*="backgroundColor: '#6366F1'"] a {
+    color: #FFFFFF !important;
+    text-decoration: underline !important;
+  }
+  
+  .bg-\[#6366F1\] a:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────────────
+     📊 KPI CARDS - Altura fixa 140px
+     ──────────────────────────────────────────────────────────────────────── */
+  
+  div[class*="grid-cols-"] > .neomorphic-card,
+  div[class*="grid-cols-"] > [class*="neu-card"] {
+    min-height: 140px !important;
+    max-height: 140px !important;
+    height: 140px !important;
+    padding: 1.5rem !important; /* 24px */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+  
+  @media (max-width: 767px) {
+    div[class*="grid-cols-"] > .neomorphic-card,
+    div[class*="grid-cols-"] > [class*="neu-card"] {
+      min-height: 160px !important;
+      max-height: 160px !important;
+      height: 160px !important;
+    }
   }
 }
 
