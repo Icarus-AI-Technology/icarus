@@ -39,18 +39,18 @@ export function useDashboardKPIs() {
       try {
         // Fetch surgeries today
         const today = new Date().toISOString().split('T')[0]
-        const { data: surgeries, error: surgeriesError } = await supabase
-          .from('surgeries')
+        const { data: surgeries, error: surgeriesError} = await supabase
+          .from('cirurgias')
           .select('*')
-          .eq('scheduled_date', today)
+          .eq('data_agendada', today)
 
         if (surgeriesError) throw surgeriesError
 
         // Fetch critical stock products
         const { data: products, error: productsError } = await supabase
-          .from('products')
+          .from('produtos')
           .select('*')
-          .lt('stock_quantity', 10) // Simplified: products with stock < 10
+          .lt('quantidade_estoque', 10) // Simplified: products with stock < 10
 
         if (productsError) throw productsError
 
@@ -156,17 +156,17 @@ export function useDashboardStats() {
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
 
         const { data: invoices, error: invoicesError } = await supabase
-          .from('invoices')
-          .select('total_amount, issue_date')
-          .gte('issue_date', sixMonthsAgo.toISOString())
+          .from('notas_fiscais')
+          .select('valor_total, data_emissao')
+          .gte('data_emissao', sixMonthsAgo.toISOString())
           .eq('status', 'paid')
 
         if (invoicesError) throw invoicesError
 
         // Group by month
         const revenueByMonth = (invoices || []).reduce((acc, inv) => {
-          const month = new Date(inv.issue_date).toLocaleDateString('pt-BR', { month: 'short' })
-          acc[month] = (acc[month] || 0) + inv.total_amount
+          const month = new Date(inv.data_emissao).toLocaleDateString('pt-BR', { month: 'short' })
+          acc[month] = (acc[month] || 0) + inv.valor_total
           return acc
         }, {} as Record<string, number>)
 
@@ -180,15 +180,15 @@ export function useDashboardStats() {
         startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay())
 
         const { data: surgeries, error: surgeriesError } = await supabase
-          .from('surgeries')
-          .select('scheduled_date')
-          .gte('scheduled_date', startOfWeek.toISOString())
+          .from('cirurgias')
+          .select('data_agendada')
+          .gte('data_agendada', startOfWeek.toISOString())
 
         if (surgeriesError) throw surgeriesError
 
         // Group by day of week
         const surgeriesByDay = (surgeries || []).reduce((acc, surgery) => {
-          const day = new Date(surgery.scheduled_date).toLocaleDateString('pt-BR', { weekday: 'short' })
+          const day = new Date(surgery.data_agendada).toLocaleDateString('pt-BR', { weekday: 'short' })
           acc[day] = (acc[day] || 0) + 1
           return acc
         }, {} as Record<string, number>)
@@ -200,20 +200,20 @@ export function useDashboardStats() {
 
         // 3. Product category distribution
         const { data: products, error: productsError } = await supabase
-          .from('products')
-          .select('category_id, categories(name), sale_price, stock_quantity')
+          .from('produtos')
+          .select('categoria_id, categorias_produtos(nome), preco_venda, quantidade_estoque')
 
         if (productsError) throw productsError
 
         // Group by category
         const categoryDistribution = (products || []).reduce((acc, product) => {
-          const categoryName = (product as any).categories?.name || 'Outros'
+          const categoryName = (product as any).categorias_produtos?.nome || 'Outros'
           if (!acc[categoryName]) {
             acc[categoryName] = { total: 0, value: 0 }
           }
-          acc[categoryName].total += (product.sale_price * product.stock_quantity)
+          acc[categoryName].total += (product.preco_venda * product.quantidade_estoque)
           return acc
-        }, {} as Record<string, { total: number, value: number }>)
+        }, {} as Record<string, { total: number, value: 0 }>)
 
         const totalValue = Object.values(categoryDistribution).reduce((sum, cat) => sum + cat.total, 0)
         const colors = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#3B82F6', '#EC4899']

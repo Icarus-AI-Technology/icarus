@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { KPICard } from '@/components/ui/KPICard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency } from '@/lib/utils/formatters'
@@ -49,90 +50,44 @@ export function Dashboard() {
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Cirurgias Hoje */}
-        <Card className="neu-card">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Cirurgias Hoje
-            </CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{kpis?.surgeriesToday || 0}</div>
-            <div className="flex items-center text-xs text-muted-foreground mt-1">
-              {(kpis?.surgeriesChange || 0) > 0 ? (
-                <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-              ) : (
-                <TrendingDown className="h-3 w-3 text-red-500 mr-1" />
-              )}
-              <span className={(kpis?.surgeriesChange || 0) > 0 ? 'text-green-500' : 'text-red-500'}>
-                {(kpis?.surgeriesChange || 0) > 0 ? '+' : ''}{kpis?.surgeriesChange || 0}
-              </span>
-              <span className="ml-1">desde ontem</span>
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Cirurgias Hoje"
+          value={kpis?.surgeriesToday || 0}
+          icon={Calendar}
+          trend={{
+            value: Math.abs(kpis?.surgeriesChange || 0),
+            direction: (kpis?.surgeriesChange || 0) > 0 ? 'up' : (kpis?.surgeriesChange || 0) < 0 ? 'down' : 'stable'
+          }}
+          variant="default"
+        />
 
         {/* Estoque Crítico */}
-        <Card className="neu-card">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Estoque Crítico
-            </CardTitle>
-            <AlertCircle className="h-4 w-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{kpis?.criticalStock || 0}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Produtos abaixo do mínimo
-            </p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Estoque Crítico"
+          value={kpis?.criticalStock || 0}
+          icon={AlertCircle}
+          variant="danger"
+        />
 
         {/* Faturamento */}
-        <Card className="neu-card">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Faturamento
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(kpis?.revenue || 0)}</div>
-            <div className="flex items-center text-xs text-muted-foreground mt-1">
-              <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-              <span className="text-green-500">+{kpis?.revenueChange || 0}%</span>
-              <span className="ml-1">vs mês anterior</span>
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Faturamento"
+          value={formatCurrency(kpis?.revenue || 0)}
+          icon={DollarSign}
+          trend={{
+            value: kpis?.revenueChange || 0,
+            direction: 'up'
+          }}
+          variant="success"
+        />
 
         {/* IA Status */}
-        <Card className="neu-card">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              IcarusBrain
-            </CardTitle>
-            <Brain className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              {(kpis?.aiStatus || 'offline') === 'online' ? (
-                <>
-                  <CheckCircle2 className="h-6 w-6 text-green-500" />
-                  <span className="text-xl font-bold">Online</span>
-                </>
-              ) : (
-                <>
-                  <Clock className="h-6 w-6 text-yellow-500" />
-                  <span className="text-xl font-bold">Offline</span>
-                </>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Sistema de IA ativo
-            </p>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="IcarusBrain"
+          value={(kpis?.aiStatus || 'offline') === 'online' ? 'Online' : 'Offline'}
+          icon={Brain}
+          variant="primary"
+        />
       </div>
 
       {/* Tabs */}

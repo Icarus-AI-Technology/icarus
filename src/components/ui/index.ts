@@ -1,4 +1,7 @@
 export { Button } from './Button'
 export { Input } from './Input'
-export { Card, KPICard } from './Card'
+export { Card } from './Card'
+export { NeomorphicCard } from './NeomorphicCard'
+export { NeomorphicIconBox } from './NeomorphicIconBox'
+export { KPICard } from './KPICard'
 export { Loading, LoadingOverlay } from './Loading'

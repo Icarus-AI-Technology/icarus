@@ -168,18 +168,18 @@ O ICARUS v5.0 possui **58 módulos integrados** que cobrem todas as áreas de um
 
 ### Tabelas Principais (12):
 
-1. **companies** - Empresas/Distribuidoras
-2. **profiles** - Perfis usuários
-3. **product_categories** - Categorias OPME
-4. **manufacturers** - Fabricantes
-5. **products** - Produtos OPME
-6. **hospitals** - Hospitais (Clientes B2B)
-7. **doctors** - Médicos
-8. **surgeries** - Cirurgias/Procedimentos
-9. **surgery_items** - Itens usados
-10. **invoices** - Notas Fiscais
-11. **accounts_receivable** - Contas a Receber
-12. **stock_movements** - Movimentações Estoque
+1. **empresas** - Empresas/Distribuidoras
+2. **perfis** - Perfis usuários
+3. **categorias_produtos** - Categorias OPME
+4. **fabricantes** - Fabricantes
+5. **produtos** - Produtos OPME
+6. **hospitais** - Hospitais (Clientes B2B)
+7. **medicos** - Médicos
+8. **cirurgias** - Cirurgias/Procedimentos
+9. **itens_cirurgia** - Itens usados
+10. **notas_fiscais** - Notas Fiscais
+11. **contas_receber** - Contas a Receber
+12. **movimentacoes_estoque** - Movimentações Estoque
 
 **Status**: ✅ RLS Habilitado | ✅ Dados Demo Carregados
 
