@@ -76,8 +76,12 @@ export function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
- className="w-full bg-gradient-to-r from-[#6366F1] to-[#4F46E5] hover:from-[#5558E3] hover:to-[#4338CA] text-white h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50" style={{ fontWeight: 500 }}             >
-              <LogIn className="w-5 h-5 mr-2" />
+className="w-full bg-gradient-to-r from-[#6366F1] to-[#4F46E5] hover:from-[#5558E3] hover:to-[#4338CA] text-white h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50" style={{ fontWeight: 500 }}             >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
               {loading ? 'Entrando...' : 'Entrar no Sistema'}
             </Button>
           </form>
