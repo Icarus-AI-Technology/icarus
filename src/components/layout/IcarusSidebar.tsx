@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, ChevronRight, Search, X } from 'lucide-react'
 import { navigationConfig } from '@/lib/data/navigation'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/Input'
+import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
 export function IcarusSidebar() {

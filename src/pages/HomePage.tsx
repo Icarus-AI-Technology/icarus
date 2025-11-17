@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { ContactForm } from '@/components/landing/ContactForm'
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel'
 import { useCountUp } from '@/hooks/useCountUp'

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/Card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 interface ModuleLoadingSkeletonProps {
   title: string

@@ -6,9 +6,9 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 type StatusEntrega = 'agendada' | 'coletada' | 'em_transito' | 'entregue' | 'falha' | 'devolvida'

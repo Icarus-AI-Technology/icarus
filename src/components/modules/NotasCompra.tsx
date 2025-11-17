@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 type StatusNF = 'pendente' | 'recebido_parcial' | 'recebido_total' | 'divergencia' | 'cancelada'

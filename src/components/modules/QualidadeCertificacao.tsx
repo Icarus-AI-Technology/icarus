@@ -5,6 +5,6 @@
  */
 import { useState } from 'react'
 import { CardTitle } from '@/components/ui/Card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { TabsTrigger } from '@/components/ui/Tabs'

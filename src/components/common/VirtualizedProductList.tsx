@@ -7,8 +7,8 @@
 
 import { VirtualizedList } from './VirtualizedList'
 import { Card, CardContent } from '@/components/ui/Card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 import { formatCurrency } from '@/lib/utils/formatters'
 import { Package, Edit, Trash2 } from 'lucide-react'
 
