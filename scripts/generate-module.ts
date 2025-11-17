@@ -239,7 +239,7 @@ const modulesToGenerate: ModuleConfig[] = [
 console.log('Gerando módulos ICARUS...\n')
 
 modulesToGenerate.forEach((config) => {
-  const code = generateModuleCode(config)
+  const _code = generateModuleCode(config)
   const filename = `src/components/modules/${config.name}.tsx`
 
   console.log(`✓ Gerado: ${filename}`)

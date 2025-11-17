@@ -40,7 +40,6 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
@@ -124,13 +123,12 @@ interface DashboardData {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export function DashboardPrincipal() {
-  const { supabase } = useSupabase()
-  const { predict, chat, isLoading: aiLoading } = useIcarusBrain()
+  const { chat, isLoading: aiLoading } = useIcarusBrain()
 
   // Estados
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d'>('30d')
+  const [selectedPeriod, _setSelectedPeriod] = useState<'7d' | '30d' | '90d'>('30d')
   const [aiInsight, setAiInsight] = useState<string>('')
 
   // ==================== EFEITOS ====================

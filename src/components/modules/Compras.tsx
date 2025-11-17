@@ -27,7 +27,6 @@ import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   ShoppingCart, Plus, Search, Filter, Eye, Send, CheckCircle2,
-  Package, TrendingUp, DollarSign, Clock, Truck, XCircle
 } from 'lucide-react'
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -200,6 +199,7 @@ export function Compras() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured])
 
   const loadData = async () => {

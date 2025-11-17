@@ -33,7 +33,7 @@ interface KPICardProps {
   color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple'
 }
 
-export function KPICard({ label, value, icon, trend, color = 'blue' }: KPICardProps) {
+export function KPICard({ label, _value, icon, trend, color = 'blue' }: KPICardProps) {
   const colorClasses = {
     blue: 'bg-blue-500/10 text-blue-400',
     green: 'bg-green-500/10 text-green-400',

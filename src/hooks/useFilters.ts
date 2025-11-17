@@ -24,7 +24,7 @@ interface UseFiltersReturn<T> {
  * Automatically filters data based on search term and filter values
  * Uses useMemo for performance optimization
  */
-export function useFilters<T extends Record<string, any>>({
+export function useFilters<T extends Record<string, unknown>>({
   data,
   searchFields,
   filterFields = []

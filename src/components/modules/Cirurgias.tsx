@@ -224,7 +224,8 @@ export function Cirurgias() {
 
     try {
       // Fetch surgeries with joins
-      const { data: surgeriesData, error: surgeriesError } = await supabase
+      const { data: surgeriesData, error: surgeriesError } = await supabase  
+    
         .from('cirurgias')
         .select(`
           *,
@@ -236,7 +237,8 @@ export function Cirurgias() {
       if (surgeriesError) throw surgeriesError
 
       // Fetch doctors
-      const { data: doctorsData, error: doctorsError } = await supabase
+      const { data: doctorsData, error: doctorsError } = await supabase  
+    
         .from('medicos')
         .select('*')
         .order('name')
@@ -244,7 +246,8 @@ export function Cirurgias() {
       if (doctorsError) throw doctorsError
 
       // Fetch hospitals
-      const { data: hospitalsData, error: hospitalsError } = await supabase
+      const { data: hospitalsData, error: hospitalsError } = await supabase  
+    
         .from('hospitais')
         .select('*')
         .order('name')
@@ -299,7 +302,8 @@ export function Cirurgias() {
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase  
+    
         .from('cirurgias')
         .insert([{
           patient_name: formData.patient_name,
@@ -357,7 +361,8 @@ export function Cirurgias() {
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await supabase  
+    
         .from('cirurgias')
         .update({
           patient_name: formData.patient_name,
@@ -397,7 +402,8 @@ export function Cirurgias() {
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await supabase  
+    
         .from('cirurgias')
         .delete()
         .eq('id', surgery.id)
@@ -424,7 +430,8 @@ export function Cirurgias() {
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await supabase  
+    
         .from('cirurgias')
         .update({ status: newStatus })
         .eq('id', surgery.id)
@@ -487,7 +494,7 @@ export function Cirurgias() {
     }
   }
 
-  const getStatusIcon = (status: SurgeryStatus) => {
+  const _getStatusIcon = (status: SurgeryStatus) => {
     switch (status) {
       case 'scheduled':
       case 'confirmed':
@@ -520,7 +527,7 @@ export function Cirurgias() {
     confirmed: surgeries.filter(s => s.status === 'confirmed').length,
     inProgress: surgeries.filter(s => s.status === 'in_progress').length,
     completed: surgeries.filter(s => s.status === 'completed').length,
-    totalValue: surgeries.reduce((sum, s) => sum + s.estimated_value, 0)
+    totalValue: surgeries.reduce((sum, s) => sum + s.estimated__value, 0)
   }
 
   if (loading) {
@@ -795,7 +802,7 @@ export function Cirurgias() {
                 className="pl-9"
               />
             </div>
-            <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
+            <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as SurgeryStatus | 'all')}>
               <SelectTrigger className="w-full md:w-48">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />

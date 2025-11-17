@@ -123,7 +123,7 @@ export class ProductService {
    * UPDATE - Update product
    */
   static async update(id: string, data: Partial<ProductFormData>): Promise<Product> {
-    const updateData: any = {}
+    const updateData: Record<string, string | number | boolean | null> = {}
 
     if (data.code !== undefined) updateData.codigo = data.code
     if (data.name !== undefined) updateData.nome = data.name
@@ -225,7 +225,11 @@ export class ProductService {
   /**
    * REALTIME - Subscribe to changes
    */
-  static subscribe(callback: (payload: any) => void) {
+  static subscribe(callback: (payload: {
+    eventType: 'INSERT' | 'UPDATE' | 'DELETE'
+    new: Record<string, unknown>
+    old: Record<string, unknown>
+  }) => void) {
     const channel = supabase
       .channel('produtos-changes')
       .on(

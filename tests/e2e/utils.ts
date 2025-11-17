@@ -6,13 +6,13 @@ import type { Page, Locator } from '@playwright/test';
  */
 export function getByTestId(pageOrLocator: Page | Locator, id: string) {
   // page.getByTestId exists in Playwright >=1.28; keep robust fallback
-  // @ts-expect-error - Playwright version compatibility
-  if (typeof (pageOrLocator as any).getByTestId === 'function') {
-    // @ts-expect-error - Playwright version compatibility
-    return (pageOrLocator as any).getByTestId(id);
+  const locatorWithTestId = pageOrLocator as unknown as { getByTestId?: (id: string) => Locator }
+
+  if (typeof locatorWithTestId.getByTestId === 'function') {
+    return locatorWithTestId.getByTestId(id);
   }
   // fallback
-  return (pageOrLocator as any).locator(`[data-testid="${id}"]`);
+  return pageOrLocator.locator(`[data-testid="${id}"]`);
 }
 
 /**

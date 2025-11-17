@@ -68,7 +68,7 @@ export function ModuleTemplate() {
   // ==========================================
 
   const { supabase } = useSupabase()
-  const { predict, chat } = useIcarusBrain()
+  const { chat } = useIcarusBrain()
 
   const [activeTab, setActiveTab] = useState('overview')
   const [loading, setLoading] = useState(true)
@@ -77,8 +77,8 @@ export function ModuleTemplate() {
   // KPI States
   const [kpi1, setKpi1] = useState(0)
   const [kpi2, setKpi2] = useState(0)
-  const [kpi3, setKpi3] = useState(0)
-  const [kpi4, setKpi4] = useState(0)
+  const [kpi3] = useState(0)
+  const [kpi4] = useState(0)
 
   // ==========================================
   // 2. EFFECTS
@@ -86,7 +86,7 @@ export function ModuleTemplate() {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [fetchData])
 
   // ==========================================
   // 3. DATA FETCHING

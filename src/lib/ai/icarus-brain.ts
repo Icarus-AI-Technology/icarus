@@ -25,7 +25,7 @@ export type AIServiceType =
   | 'roteamento'        // Intelligent routing
   | 'assistente'        // Virtual assistant
 
-export interface PredictParams {
+export interface PredictParams extends Record<string, unknown> {
   produto_id?: string
   cliente_id?: string
   dias?: number
@@ -34,22 +34,34 @@ export interface PredictParams {
   contexto?: string
   usuario_id?: string
   tipo?: 'cross-sell' | 'up-sell' | 'similar'
-  [key: string]: any
 }
 
-export interface PredictResult {
+export interface ActionItem {
+  descricao: string
+  prioridade?: 'baixa' | 'media' | 'alta'
+  prazo?: string
+}
+
+export interface RecommendationItem {
+  produto_id?: string
+  nome?: string
+  score?: number
+  motivo?: string
+  tipo?: string
+}
+
+export interface PredictResult extends Record<string, unknown> {
   valores?: number[]
   previsoes?: Array<{ data: string; quantidade: number; confianca: number }>
   confidence?: number
   score?: number
   risco?: 'baixo' | 'medio' | 'alto'
   resposta?: string
-  acoes?: any[]
-  items?: any[]
+  acoes?: ActionItem[]
+  items?: RecommendationItem[]
   fatores?: Array<{ fator: string; impacto: number }>
   recomendacao?: string
   tendencia?: 'alta' | 'baixa' | 'estavel'
-  [key: string]: any
 }
 
 class IcarusBrain {
@@ -92,7 +104,7 @@ class IcarusBrain {
   /**
    * Gera recomendações usando IA
    */
-  async recommend(tipo: string, params: PredictParams): Promise<any[]> {
+  async recommend(tipo: string, params: PredictParams): Promise<RecommendationItem[]> {
     const result = await this.predict(`recomendacao_${tipo}`, params)
     return result.items || []
   }

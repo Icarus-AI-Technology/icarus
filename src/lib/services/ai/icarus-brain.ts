@@ -4,16 +4,22 @@
  * Serviços de IA integrados para otimizar operações de OPME
  */
 
+export interface HistoricalDataPoint {
+  date: string
+  quantity: number
+  [key: string]: unknown
+}
+
 export interface PredictionRequest {
   productId?: string
   days?: number
-  historicalData?: any[]
+  historicalData?: HistoricalDataPoint[]
 }
 
 export interface AnalysisRequest {
   customerId?: string
   invoiceId?: string
-  data?: any
+  data?: Record<string, unknown>
 }
 
 export interface RecommendationRequest {
@@ -22,7 +28,7 @@ export interface RecommendationRequest {
   limit?: number
 }
 
-export interface AIResponse<T = any> {
+export interface AIResponse<T = Record<string, unknown>> {
   success: boolean
   data?: T
   error?: string
@@ -139,7 +145,7 @@ class IcarusBrainService {
   /**
    * Otimização de rotas de logística
    */
-  async optimizeRoutes(warehouses: any[], deliveries: any[]): Promise<AIResponse> {
+  async optimizeRoutes(warehouses: Record<string, unknown>[], deliveries: Record<string, unknown>[]): Promise<AIResponse> {
     // Mock implementation
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -170,7 +176,7 @@ class IcarusBrainService {
   /**
    * Análise de qualidade de produtos
    */
-  async analyzeQuality(productId: string, metrics: any): Promise<AIResponse> {
+  async analyzeQuality(productId: string, _metrics: Record<string, unknown>): Promise<AIResponse> {
     // Mock implementation
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -202,7 +208,7 @@ class IcarusBrainService {
   /**
    * Previsão de preços
    */
-  async predictPricing(productId: string, marketData: any): Promise<AIResponse> {
+  async predictPricing(productId: string, _marketData: Record<string, unknown>): Promise<AIResponse> {
     // Mock implementation
     return new Promise((resolve) => {
       setTimeout(() => {

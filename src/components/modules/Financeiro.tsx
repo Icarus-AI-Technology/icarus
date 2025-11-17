@@ -16,12 +16,11 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
-  DollarSign, TrendingUp, TrendingDown, CreditCard, AlertCircle,
+  DollarSign, TrendingUp, CreditCard, AlertCircle,
   Calendar, Download, Filter, Search, CheckCircle2, Clock,
-  XCircle, BarChart3, PieChart as PieChartIcon
 } from 'lucide-react'
 import {
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
+  BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'sonner'
@@ -190,6 +189,7 @@ export function Financeiro() {
 
   useEffect(() => {
     loadFinancialData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured, periodFilter])
 
   const loadFinancialData = async () => {

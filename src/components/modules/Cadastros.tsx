@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
 import { formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
@@ -50,8 +49,6 @@ interface CadastroItem {
 }
 
 export function Cadastros() {
-  const { supabase } = useSupabase()
-
   // State
   const [loading, setLoading] = useState(true)
   const [cadastros, setCadastros] = useState<CadastroItem[]>([])

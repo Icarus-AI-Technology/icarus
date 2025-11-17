@@ -1,6 +1,38 @@
 import { useState } from 'react'
 import { icarusBrain, type AIResponse } from '@/lib/services/ai/icarus-brain'
 
+interface DemandParams {
+  productId?: string
+  period?: number
+  [key: string]: unknown
+}
+
+interface PricingParams {
+  productId: string
+  marketData: Record<string, unknown>
+  [key: string]: unknown
+}
+
+interface AnalysisParams {
+  productId?: string
+  metrics?: Record<string, unknown>
+  [key: string]: unknown
+}
+
+interface RecommendParams {
+  customerId?: string
+  context?: string
+  [key: string]: unknown
+}
+
+interface OptimizeParams {
+  warehouses: unknown[]
+  deliveries: unknown[]
+  [key: string]: unknown
+}
+
+type PredictParams = DemandParams | PricingParams
+
 /**
  * Hook para integração com IcarusBrain (IA do ICARUS)
  *
@@ -17,7 +49,7 @@ export function useIcarusBrain() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const predict = async (type: 'demand' | 'pricing', params: any): Promise<AIResponse | null> => {
+  const predict = async (type: 'demand' | 'pricing', params: PredictParams): Promise<AIResponse | null> => {
     setLoading(true)
     setError(null)
 
@@ -45,7 +77,7 @@ export function useIcarusBrain() {
     }
   }
 
-  const analyze = async (type: 'default-risk' | 'quality', params: any): Promise<AIResponse | null> => {
+  const analyze = async (type: 'default-risk' | 'quality', params: AnalysisParams): Promise<AIResponse | null> => {
     setLoading(true)
     setError(null)
 
@@ -73,7 +105,7 @@ export function useIcarusBrain() {
     }
   }
 
-  const recommend = async (type: 'products', params: any): Promise<AIResponse | null> => {
+  const recommend = async (type: 'products', params: RecommendParams): Promise<AIResponse | null> => {
     setLoading(true)
     setError(null)
 
@@ -89,7 +121,7 @@ export function useIcarusBrain() {
     }
   }
 
-  const optimize = async (type: 'routes', params: any): Promise<AIResponse | null> => {
+  const optimize = async (type: 'routes', params: OptimizeParams): Promise<AIResponse | null> => {
     setLoading(true)
     setError(null)
 

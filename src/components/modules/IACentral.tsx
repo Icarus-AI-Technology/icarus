@@ -5,12 +5,12 @@
  */
 
 import React, { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Brain, Zap, TrendingUp, Clock } from 'lucide-react'
-import { formatCurrency } from '@/lib/utils'
+
 
 type StatusServico = 'ativo' | 'pausado' | 'treinando' | 'erro'
 type TipoModelo = 'classificacao' | 'regressao' | 'clustering' | 'forecasting' | 'nlp'

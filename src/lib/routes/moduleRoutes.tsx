@@ -1,5 +1,4 @@
 import { lazy } from 'react'
-import type { LucideIcon } from 'lucide-react'
 
 // Lazy load modules for better performance
 const Dashboard = lazy(() => import('@/components/modules/Dashboard').then(m => ({ default: m.Dashboard })))

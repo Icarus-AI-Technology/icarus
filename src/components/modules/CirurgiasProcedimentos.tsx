@@ -25,22 +25,18 @@
  * - 🟢 Verde: Concluído
  */
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { useSupabase } from '@/hooks/useSupabase'
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 // ==================== INTERFACES ====================
 
 type StatusFluxo = 'pendente' | 'processando' | 'concluido'
 type TipoCirurgia = 'eletiva' | 'urgencia'
-type StatusFaturamento = 'nao_faturado' | 'parcial' | 'total'
 
 interface EtapaFluxo {
   id: string
@@ -117,22 +113,7 @@ interface MaterialCotacao {
   observacao?: string
 }
 
-interface TabelaPreco {
-  id: number
-  tipo: 'fixa' | 'flexivel'
-  nome: string
-  convenio_id?: number
-  hospital_id?: number
-  produtos: ProdutoTabela[]
-  vigencia_inicio: string
-  vigencia_fim?: string
-}
 
-interface ProdutoTabela {
-  produto_id: number
-  produto_nome: string
-  preco: number
-}
 
 interface AgendamentoOutlook {
   id: number
@@ -233,9 +214,6 @@ interface KPIsCirurgia {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export function CirurgiasProcedimentos() {
-  const { supabase } = useSupabase()
-  const { predict, chat, isLoading: aiLoading } = useIcarusBrain()
-
   // Estados principais
   const [cirurgias, setCirurgias] = useState<CirurgiaCard[]>([])
   const [kpis, setKPIs] = useState<KPIsCirurgia>({
@@ -257,9 +235,6 @@ export function CirurgiasProcedimentos() {
   const [modalAberto, setModalAberto] = useState(false)
   const [abaModal, setAbaModal] = useState('detalhes')
 
-  // Upload
-  const [uploadingFile, setUploadingFile] = useState(false)
-
   // ==================== COLUNAS KANBAN ====================
 
   const colunas = [
@@ -270,33 +245,9 @@ export function CirurgiasProcedimentos() {
     { id: 'pos_cirurgico', nome: 'Pós-Cirúrgico', cor: 'bg-indigo-100 border-indigo-300' },
   ]
 
-  // ==================== ETAPAS DO FLUXO (Gráfico Horizontal) ====================
-
-  const etapasFluxoCompleto = [
-    'Pré-cirúrgico',
-    'Tabela Preços',
-    'Análise',
-    'Autorização',
-    'Agendamento',
-    'Logística',
-    'Cirurgia',
-    'Logística Reversa',
-    'Pós-cirúrgico',
-    'Análise',
-    'Monitoramento',
-    'Autorização Faturamento',
-    'Faturamento',
-  ]
-
-  // ==================== EFEITOS ====================
-
-  useEffect(() => {
-    loadCirurgias()
-  }, [filtroTipo, filtroStatus])
-
   // ==================== FUNÇÕES DE DADOS ====================
 
-  const loadCirurgias = async () => {
+  const loadCirurgias = () => {
     setLoading(true)
     try {
       // Mock data completo
@@ -525,6 +476,12 @@ export function CirurgiasProcedimentos() {
     }
   }
 
+  // ==================== EFEITOS ====================
+
+  useEffect(() => {
+    loadCirurgias()
+  }, [filtroTipo, filtroStatus, loadCirurgias])
+
   const calculateKPIs = (data: CirurgiaCard[]) => {
     const hoje = new Date()
     const inicioSemana = new Date(hoje.setDate(hoje.getDate() - hoje.getDay()))
@@ -585,21 +542,6 @@ export function CirurgiasProcedimentos() {
     setCirurgiaSelecionada(cirurgia)
     setAbaModal('detalhes')
     setModalAberto(true)
-  }
-
-  const handleUploadArquivo = async (tipo: string, file: File) => {
-    setUploadingFile(true)
-    try {
-      // Simular upload (em produção: Supabase Storage)
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      console.log(`Arquivo ${file.name} uploaded como ${tipo}`)
-      // Recarregar dados
-      await loadCirurgias()
-    } catch (error) {
-      console.error('Erro no upload:', error)
-    } finally {
-      setUploadingFile(false)
-    }
   }
 
   const handleToggleUrgencia = (cirurgiaId: number) => {
@@ -701,7 +643,7 @@ export function CirurgiasProcedimentos() {
       <Card className="neu-soft">
         <CardContent className="pt-6">
           <div className="flex flex-wrap gap-4">
-            <Select value={filtroTipo} onValueChange={(v: any) => setFiltroTipo(v)}>
+            <Select value={filtroTipo} onValueChange={(v) => setFiltroTipo(v as 'todas' | 'eletiva' | 'urgencia')}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue />
               </SelectTrigger>
@@ -712,7 +654,7 @@ export function CirurgiasProcedimentos() {
               </SelectContent>
             </Select>
 
-            <Select value={filtroStatus} onValueChange={(v: any) => setFiltroStatus(v)}>
+            <Select value={filtroStatus} onValueChange={(v) => setFiltroStatus(v as 'todos' | StatusFluxo)}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue />
               </SelectTrigger>

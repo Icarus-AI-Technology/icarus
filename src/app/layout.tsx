@@ -1,15 +1,11 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import { Providers } from '@/components/providers/Providers'
+import { metadata } from './metadata'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'ICARUS v5.0 - ERP Moderno e Inteligente',
-  description: 'Sistema ERP com IA integrada, design neumórfico e 58 módulos completos',
-  keywords: 'ERP, IA, Gestão Empresarial, OraclusX, IcarusBrain',
-}
+export { metadata }
 
 export default function RootLayout({
   children,

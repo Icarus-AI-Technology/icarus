@@ -38,27 +38,15 @@
  * - IA: Predições, reabastecimento, insights
  */
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useSupabase } from '@/hooks/useSupabase'
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
-import {
-  Package, AlertTriangle, TrendingUp, Brain, RefreshCw,
-  ArrowUp, ArrowDown, ChevronRight
-} from 'lucide-react'
-import {
-  BarChart, Bar, LineChart, Line, XAxis, YAxis,
-  CartesianGrid, Tooltip, ResponsiveContainer, Cell
-} from 'recharts'
-import { toast } from 'sonner'
 
 // ==================== INTERFACES ====================
 
@@ -197,9 +185,6 @@ interface KPIsEstoque {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export function EstoqueIA() {
-  const { supabase } = useSupabase()
-  const { predict, analyze, recommend, chat, isLoading: aiLoading } = useIcarusBrain()
-
   // Estados
   const [produtos, setProdutos] = useState<ProdutoEstoque[]>([])
   const [movimentacoes, setMovimentacoes] = useState<MovimentacaoEstoque[]>([])
@@ -228,12 +213,12 @@ export function EstoqueIA() {
   // Modal
   const [produtoSelecionado, setProdutoSelecionado] = useState<ProdutoEstoque | null>(null)
   const [modalAberto, setModalAberto] = useState(false)
-  const [abaModal, setAbaModal] = useState('detalhes')
 
   // ==================== EFEITOS ====================
 
   useEffect(() => {
     loadEstoque()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -241,6 +226,7 @@ export function EstoqueIA() {
       gerarPrevisoes()
       gerarSugestoes()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [produtos])
 
   // ==================== FUNÇÕES DE DADOS ====================
@@ -946,7 +932,7 @@ Forneça:
                 ))}
               </SelectContent>
             </Select>
-            <Select value={urgenciaFilter} onValueChange={(v: any) => setUrgenciaFilter(v)}>
+            <Select value={urgenciaFilter} onValueChange={(v) => setUrgenciaFilter(v as 'todas' | UrgenciaEstoque)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -958,7 +944,7 @@ Forneça:
                 <SelectItem value="alto">🔵 Alto</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={validadeFilter} onValueChange={(v: any) => setValidadeFilter(v)}>
+            <Select value={validadeFilter} onValueChange={(v) => setValidadeFilter(v as 'todos' | StatusValidade)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

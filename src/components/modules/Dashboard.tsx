@@ -6,12 +6,12 @@ import { formatCurrency } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { useDashboardKPIs, useDashboardStats } from '@/hooks/queries/useDashboardData'
 import {
-  Calendar, Package, DollarSign, TrendingUp, TrendingDown,
-  AlertCircle, CheckCircle2, Clock, Brain
+  Calendar, DollarSign,
+  AlertCircle, Brain
 } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 
 export function Dashboard() {
