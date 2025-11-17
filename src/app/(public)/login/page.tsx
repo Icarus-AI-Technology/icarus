@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useAuth } from '@/contexts/AuthContext'
-import { Button, Input, Card } from '@/components/ui'
+import { Button, Input } from '@/components/ui'
 import { LogIn, UserPlus, Lock } from 'lucide-react'
 
 const loginSchema = z.object({
@@ -70,21 +70,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1419] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-br from-[#0F172A] via-[#1a1f4d] to-[#0F172A] flex items-center justify-center p-6">
       <div className="w-full max-w-md space-y-6">
 
         {/* Logo / Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-100 mb-2">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#6366F1] to-indigo-700 flex items-center justify-center shadow-lg shadow-[#6366F1]/50">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h1 className="text-4xl font-bold text-white mb-2">
             ICARUS v5.0
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-300">
             ERP Moderno, Inteligente e Neumórfico
           </p>
         </div>
 
         {/* Main Card */}
-        <Card>
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl">
           {/* Tabs */}
           <div className="flex gap-2 border-b border-white/10 mb-6">
             <button
@@ -95,7 +100,7 @@ export default function LoginPage() {
               className={`
                 px-4 py-2 font-medium transition-colors
                 ${mode === 'login'
-                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  ? 'text-[#6366F1] border-b-2 border-[#6366F1]'
                   : 'text-gray-400 hover:text-gray-300'
                 }
               `}
@@ -111,7 +116,7 @@ export default function LoginPage() {
               className={`
                 px-4 py-2 font-medium transition-colors
                 ${mode === 'signup'
-                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  ? 'text-[#6366F1] border-b-2 border-[#6366F1]'
                   : 'text-gray-400 hover:text-gray-300'
                 }
               `}
@@ -154,7 +159,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setMode('reset')}
-                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-sm text-[#6366F1] hover:text-[#4F46E5] transition-colors"
                 >
                   Esqueceu a senha?
                 </button>
@@ -221,7 +226,7 @@ export default function LoginPage() {
           {mode === 'reset' && (
             <form onSubmit={resetForm.handleSubmit(handleReset)} className="space-y-4">
               <div className="mb-4">
-                <Lock className="w-12 h-12 mx-auto text-blue-400 mb-2" />
+                <Lock className="w-12 h-12 mx-auto text-[#6366F1] mb-2" />
                 <h3 className="text-lg font-semibold text-gray-100 text-center">
                   Recuperar Senha
                 </h3>
@@ -259,18 +264,18 @@ export default function LoginPage() {
               </div>
             </form>
           )}
-        </Card>
+        </div>
 
         {/* Demo Credentials (Development only) */}
         {process.env.NODE_ENV === 'development' && (
-          <Card className="bg-yellow-500/5 border-yellow-500/20">
+          <div className="bg-yellow-500/5 backdrop-blur-sm border border-yellow-500/20 rounded-2xl p-6 shadow-xl">
             <h4 className="text-yellow-400 font-medium text-sm mb-2">
               🔧 Modo Desenvolvimento
             </h4>
             <p className="text-yellow-300 text-xs">
               Crie uma conta ou use as credenciais após registro
             </p>
-          </Card>
+          </div>
         )}
 
         {/* Footer */}

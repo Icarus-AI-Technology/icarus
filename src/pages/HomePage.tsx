@@ -190,7 +190,7 @@ export function HomePage() {
             {/* Login Button */}
             <Button
               onClick={() => navigate('/login')}
-              className="bg-[#6366F1] hover:bg-[#4F46E5] text-white shadow-lg shadow-[#6366F1]/30 hover:shadow-xl hover:shadow-[#6366F1]/40 transition-all duration-300"
+              className="bg-gradient-to-br from-[#6366F1] to-indigo-700 hover:from-[#4F46E5] hover:to-indigo-800 text-white shadow-lg shadow-[#6366F1]/50 hover:shadow-xl hover:shadow-[#6366F1]/60 transition-all duration-300"
             >
               Entrar no Sistema
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -339,7 +339,7 @@ export function HomePage() {
                   <div className="w-2 h-2 rounded-full bg-red-500" />
                 </div>
                 <div>
-                  <p className="text-gray-400 line-through decoration-red-500 decoration-2">
+                  <p className="text-gray-400 line-through decoration-red-500 decoration-1">
                     {pain}
                   </p>
                   <p className="text-green-400 mt-2" style={{ fontSize: '0.875rem', fontWeight: 500 }}>

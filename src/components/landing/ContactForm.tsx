@@ -223,7 +223,7 @@ export function ContactForm() {
             onChange={(e) =>
               setFormData({ ...formData, tamanho_empresa: e.target.value })
             }
-            className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="w-full h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]/50 shadow-lg transition-all duration-300"
           >
             <option value="">Selecione</option>
             <option value="pequena">Pequena (1-50 funcionários)</option>
@@ -240,7 +240,7 @@ export function ContactForm() {
             aria-label="Segmento"
             value={formData.segmento}
             onChange={(e) => setFormData({ ...formData, segmento: e.target.value })}
-            className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="w-full h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]/50 shadow-lg transition-all duration-300"
           >
             <option value="">Selecione</option>
             <option value="opme">OPME</option>
@@ -275,15 +275,15 @@ export function ContactForm() {
           {interests.map((interest) => (
             <label
               key={interest}
-              className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl cursor-pointer hover:border-[#6366F1]/50 hover:bg-white/10 transition-all duration-300 shadow-lg"
             >
               <input
                 type="checkbox"
                 checked={formData.interesse_em.includes(interest)}
                 onChange={() => handleInterestToggle(interest)}
-                className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+                className="w-4 h-4 text-[#6366F1] bg-transparent border-gray-300 rounded focus:ring-[#6366F1] focus:ring-2"
               />
-              <span className="text-sm text-gray-700">{interest}</span>
+              <span className="text-sm text-gray-300">{interest}</span>
             </label>
           ))}
         </div>
@@ -299,7 +299,7 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, como_conheceu: e.target.value })
           }
-          className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="w-full h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]/50 shadow-lg transition-all duration-300"
         >
           <option value="">Selecione</option>
           <option value="google">Google</option>
@@ -329,7 +329,7 @@ export function ContactForm() {
           type="submit"
           disabled={loading}
           size="lg"
-          className="min-w-[200px]"
+          className="min-w-[200px] bg-gradient-to-br from-[#6366F1] to-indigo-700 hover:from-[#4F46E5] hover:to-indigo-800 text-white shadow-lg shadow-[#6366F1]/50 hover:shadow-xl hover:shadow-[#6366F1]/60 transition-all duration-300"
         >
           {loading ? (
             <>
