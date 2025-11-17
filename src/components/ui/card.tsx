@@ -27,15 +27,15 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     }
 
     return (
-  <div
-    ref={ref}
-    className={cn(
+      <div
+        ref={ref}
+        className={cn(
           "rounded-[16px] text-card-foreground",
           variantClasses[variant],
-      className
-    )}
-    {...props}
-  />
+          className
+        )}
+        {...props}
+      />
     )
   }
 )
