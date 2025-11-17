@@ -1,0 +1,221 @@
+# CI Inspector - Configuração de Jobs para Reproduzir CI Localmente
+# Este arquivo contém exemplos de jobs do GitHub Actions que podem ser usados
+# para reproduzir as verificações de CI localmente
+
+# ====================================
+# EXEMPLO: GitHub Actions Workflow
+# ====================================
+
+# Salve este conteúdo em .github/workflows/ci-diagnostics.yml para executar no CI
+# ou use como referência para reproduzir localmente
+
+name: CI Diagnostics - Commit b6312289
+
+on:
+  push:
+    branches: [ copilot/diagnose-75 ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  # ====================================
+  # Job 1: Instalação e Lint
+  # ====================================
+  lint:
+    name: 🔍 Lint e Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Run TypeScript check
+        run: npx tsc --noEmit
+        continue-on-error: true
+
+  # ====================================
+  # Job 2: Testes Unitários
+  # ====================================
+  test-unit:
+    name: 🧪 Testes Unitários
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test -- --run --coverage
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: ./coverage/coverage-final.json
+
+  # ====================================
+  # Job 3: Build
+  # ====================================
+  build:
+    name: 🏗️ Build de Produção
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      
+      - name: Check bundle size
+        run: |
+          echo "Bundle size:"
+          du -sh dist/
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 7
+
+  # ====================================
+  # Job 4: Testes E2E (Playwright)
+  # ====================================
+  test-e2e:
+    name: 🎭 Testes E2E
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # ====================================
+  # Job 5: Análise de Segurança
+  # ====================================
+  security:
+    name: 🔒 Análise de Segurança
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run npm audit
+        run: npm audit --production
+        continue-on-error: true
+      
+      - name: Check for dependency vulnerabilities
+        run: |
+          echo "Verificando vulnerabilidades conhecidas..."
+          npm audit --audit-level=moderate
+        continue-on-error: true
+
+# ====================================
+# REPRODUZIR LOCALMENTE
+# ====================================
+
+# Para reproduzir estes jobs localmente:
+#
+# 1. Lint e Type Check:
+#    npm ci
+#    npm run lint
+#    npx tsc --noEmit
+#
+# 2. Testes Unitários:
+#    npm ci
+#    npm test -- --run --coverage
+#
+# 3. Build:
+#    npm ci
+#    npm run build
+#    du -sh dist/
+#
+# 4. Testes E2E:
+#    npm ci
+#    npx playwright install --with-deps
+#    npm run test:e2e
+#
+# 5. Auditoria de Segurança:
+#    npm audit --production
+#
+# Ou simplesmente execute:
+#    cd diagnostics
+#    chmod +x run-local-checks.sh
+#    ./run-local-checks.sh
+
+# ====================================
+# VARIÁVEIS DE AMBIENTE NECESSÁRIAS
+# ====================================
+
+# Certifique-se de ter um arquivo .env na raiz do projeto com:
+# VITE_SUPABASE_URL=sua_url_supabase
+# VITE_SUPABASE_ANON_KEY=sua_chave_anonima
+
+# Copie de .env.example se necessário:
+#    cp .env.example .env
+#    # Edite .env com suas credenciais

@@ -278,7 +278,7 @@ export default function KPIDashboard() {
           <p className="text-muted-foreground">Dashboard consolidado de KPIs estratégicos em tempo real</p>
         </div>
         <div className="flex gap-2">
-          <Select value={categoria} onValueChange={(v) => setCategoria(v as any)}>
+          <Select value={categoria} onValueChange={(v) => setCategoria(v as CategoriaKPI | 'todas')}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>

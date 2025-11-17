@@ -11,7 +11,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Select,
@@ -27,7 +26,7 @@ import { validateAmount } from '@/lib/utils/validators'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   DollarSign, Calendar, AlertCircle, CheckCircle2, Clock,
-  TrendingDown, Search, Filter, Download, Eye, CreditCard
+  Search, Filter, Download, Eye, CreditCard
 } from 'lucide-react'
 import {
   BarChart, Bar, PieChart, Pie, Cell, LineChart, Line,
@@ -52,14 +51,6 @@ interface Receivable {
   created_at: string
 }
 
-interface Payment {
-  id: string
-  receivable_id: string
-  amount: number
-  payment_date: string
-  payment_method: string
-  notes?: string
-}
 
 export function ContasReceber() {
   const { supabase, isConfigured } = useSupabase()
@@ -169,6 +160,7 @@ export function ContasReceber() {
 
   useEffect(() => {
     loadReceivables()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured])
 
   const loadReceivables = async () => {
@@ -283,6 +275,7 @@ export function ContasReceber() {
 
       toast.success('Pagamento registrado com sucesso!')
       loadReceivables()
+     
       resetPaymentForm()
       setIsPaymentDialogOpen(false)
       setSelectedReceivable(null)

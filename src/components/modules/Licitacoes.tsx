@@ -5,12 +5,6 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Select,
@@ -19,18 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   FileSpreadsheet, TrendingUp, Clock, CheckCircle2, XCircle,
-  AlertTriangle, Plus, Search, Filter, Download, Eye, Calendar,
+  AlertTriangle, Plus, Search, Download, Eye, Calendar,
   Building2, FileText, Award, Target
 } from 'lucide-react'
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'sonner'
 
@@ -81,7 +74,6 @@ const STATUS_COLORS = {
 }
 
 export function Licitacoes() {
-  const { supabase } = useSupabase()
 
   // State
   const [loading, setLoading] = useState(true)
@@ -251,17 +243,17 @@ export function Licitacoes() {
     {
       modality: 'Pregão',
       value: licitacoes.filter(l => l.modality === 'pregao')
-        .reduce((sum, l) => sum + l.estimated_value, 0) / 1000
+        .reduce((sum, l) => sum + l.estimated__value, 0) / 1000
     },
     {
       modality: 'Concorrência',
       value: licitacoes.filter(l => l.modality === 'concorrencia')
-        .reduce((sum, l) => sum + l.estimated_value, 0) / 1000
+        .reduce((sum, l) => sum + l.estimated__value, 0) / 1000
     },
     {
       modality: 'Tomada de Preços',
       value: licitacoes.filter(l => l.modality === 'tomada_precos')
-        .reduce((sum, l) => sum + l.estimated_value, 0) / 1000
+        .reduce((sum, l) => sum + l.estimated__value, 0) / 1000
     }
   ].filter(item => item.value > 0)
 

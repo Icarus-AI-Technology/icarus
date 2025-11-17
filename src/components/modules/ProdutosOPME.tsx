@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Textarea } from '@/components/ui/Textarea'
 import {
   Dialog,
   DialogContent,
@@ -27,8 +27,8 @@ import { formatCurrency } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   Package, Plus, Search, Filter, Edit, Trash2, Eye,
-  AlertTriangle, TrendingUp, BarChart3, Grid, List,
-  Tag, Building2, DollarSign, Archive
+  AlertTriangle, TrendingUp, Grid, List,
+  Tag, DollarSign, Archive
 } from 'lucide-react'
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -237,6 +237,7 @@ export function ProdutosOPME() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured])
 
   const loadData = async () => {
@@ -353,6 +354,7 @@ export function ProdutosOPME() {
 
       toast.success('Produto cadastrado com sucesso!')
       loadData()
+     
       resetForm()
       setIsCreateDialogOpen(false)
     } catch (error) {
@@ -418,6 +420,7 @@ export function ProdutosOPME() {
 
       toast.success('Produto atualizado com sucesso!')
       loadData()
+     
       resetForm()
       setIsEditDialogOpen(false)
       setSelectedProduct(null)
@@ -449,6 +452,7 @@ export function ProdutosOPME() {
 
       toast.success('Produto excluído com sucesso!')
       loadData()
+     
     } catch (error) {
       console.error('Error deleting product:', error)
       toast.error('Erro ao excluir produto')
@@ -476,6 +480,7 @@ export function ProdutosOPME() {
 
       toast.success(`Produto ${product.active ? 'desativado' : 'ativado'} com sucesso!`)
       loadData()
+     
     } catch (error) {
       console.error('Error toggling product status:', error)
       toast.error('Erro ao alterar status do produto')

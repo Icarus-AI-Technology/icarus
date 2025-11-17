@@ -8,8 +8,7 @@ interface IcarusLayoutProps {
 }
 
 export function IcarusLayout({ children }: IcarusLayoutProps) {
-  // Variável não utilizada - prefixar com _
-  const [_sidebarWidth, _setSidebarWidth] = useState(256)
+  const [sidebarWidth, _setSidebarWidth] = useState(256)
 
   return (
     <div className="min-h-screen bg-background">

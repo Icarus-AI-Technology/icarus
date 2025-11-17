@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Textarea } from '@/components/ui/Textarea'
 import {
   Dialog,
   DialogContent,
@@ -27,7 +27,7 @@ import { formatCurrency, formatDate, formatDateTime } from '@/lib/utils/formatte
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   FileText, Plus, Search, Filter, Download, Eye, Send,
-  CheckCircle2, XCircle, Clock, AlertCircle, FileCode, Printer
+  CheckCircle2, XCircle, AlertCircle, FileCode, Printer
 } from 'lucide-react'
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -57,16 +57,6 @@ interface Invoice {
   created_at: string
 }
 
-interface InvoiceItem {
-  id: string
-  invoice_id: string
-  product_id: string
-  product_name: string
-  quantity: number
-  unit_price: number
-  total: number
-  tax_rate: number
-}
 
 export function FaturamentoNFe() {
   const { supabase, isConfigured } = useSupabase()
@@ -189,6 +179,7 @@ export function FaturamentoNFe() {
 
   useEffect(() => {
     loadInvoices()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured])
 
   const loadInvoices = async () => {

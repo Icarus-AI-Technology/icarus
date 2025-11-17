@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Textarea } from '@/components/ui/Textarea'
 import {
   Dialog,
   DialogContent,
@@ -24,15 +24,14 @@ import {
 import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
-import { validateQuantity } from '@/lib/utils/validators'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   ClipboardCheck, Plus, Search, Filter, Eye, CheckCircle2,
-  AlertTriangle, TrendingUp, Calendar, Users, BarChart3
+  AlertTriangle, TrendingUp, Calendar
 } from 'lucide-react'
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  BarChart, Bar, LineChart, Line, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'sonner'
 
@@ -198,6 +197,7 @@ export function Inventario() {
 
   useEffect(() => {
     loadInventories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfigured])
 
   const loadInventories = async () => {

@@ -45,7 +45,7 @@ export default function LoginPage() {
       setError(null)
       await signIn(data.email, data.password)
     } catch (err: unknown) {
-      setError((err as Error).message || 'Erro ao fazer login')
+      setError(err instanceof Error ? err.message : 'Erro ao fazer login')
     }
   }
 
@@ -55,7 +55,7 @@ export default function LoginPage() {
       await signUp(data.email, data.password)
       setMode('login')
     } catch (err: unknown) {
-      setError((err as Error).message || 'Erro ao criar conta')
+      setError(err instanceof Error ? err.message : 'Erro ao criar conta')
     }
   }
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
       await resetPassword(data.email)
       setMode('login')
     } catch (err: unknown) {
-      setError((err as Error).message || 'Erro ao enviar email')
+      setError(err instanceof Error ? err.message : 'Erro ao enviar email')
     }
   }
 

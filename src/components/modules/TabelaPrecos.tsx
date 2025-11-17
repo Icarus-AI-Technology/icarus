@@ -4,14 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Select,
@@ -20,17 +13,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
-import { formatCurrency, formatDate, formatPercent } from '@/lib/utils/formatters'
+import { formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   DollarSign, TrendingUp, Percent, FileSpreadsheet, Plus,
-  Search, Filter, Download, Eye, Edit, Trash2, Copy, CheckCircle2
+  Search, Download, Eye, Edit, Trash2, Copy
 } from 'lucide-react'
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'sonner'
 
@@ -54,29 +46,14 @@ interface PriceTable {
   updated_at: string
 }
 
-interface PriceTableItem {
-  id: string
-  price_table_id: string
-  product_id: string
-  product_code: string
-  product_name: string
-  base_price: number
-  sale_price: number
-  margin: number
-  min_price: number
-  max_price: number
-}
 
 const COLORS = ['#6366F1', '#10B981', '#F59E0B', '#EF4444']
 
 export function TabelaPrecos() {
-  const { supabase } = useSupabase()
 
   // State
   const [loading, setLoading] = useState(true)
   const [priceTables, setPriceTables] = useState<PriceTable[]>([])
-  const [selectedTable, setSelectedTable] = useState<PriceTable | null>(null)
-  const [tableItems, setTableItems] = useState<PriceTableItem[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
