@@ -6,9 +6,9 @@ import type { Page, Locator } from '@playwright/test';
  */
 export function getByTestId(pageOrLocator: Page | Locator, id: string) {
   // page.getByTestId exists in Playwright >=1.28; keep robust fallback
-  // @ts-ignore
+  // @ts-expect-error - Playwright version compatibility
   if (typeof (pageOrLocator as any).getByTestId === 'function') {
-    // @ts-ignore
+    // @ts-expect-error - Playwright version compatibility
     return (pageOrLocator as any).getByTestId(id);
   }
   // fallback
