@@ -7,18 +7,52 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- ============ ENUMS ============
-CREATE TYPE papel_usuario AS ENUM ('admin', 'gerente', 'usuario', 'visualizador');
-CREATE TYPE plano_empresa AS ENUM ('inicial', 'profissional', 'empresarial');
-CREATE TYPE tipo_produto AS ENUM ('OPME', 'Consignado', 'Compra');
-CREATE TYPE tipo_cliente AS ENUM ('hospital', 'clinica', 'medico');
-CREATE TYPE status_cirurgia AS ENUM ('agendada', 'confirmada', 'realizada', 'cancelada');
-CREATE TYPE status_financeiro AS ENUM ('pendente', 'pago', 'vencido', 'cancelado');
-CREATE TYPE tipo_movimentacao AS ENUM ('entrada', 'saida', 'ajuste', 'transferencia');
+DO $$ BEGIN
+  CREATE TYPE papel_usuario AS ENUM ('admin', 'gerente', 'usuario', 'visualizador');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE plano_empresa AS ENUM ('inicial', 'profissional', 'empresarial');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE tipo_produto AS ENUM ('OPME', 'Consignado', 'Compra');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE tipo_cliente AS ENUM ('hospital', 'clinica', 'medico');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE status_cirurgia AS ENUM ('agendada', 'confirmada', 'realizada', 'cancelada');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE status_financeiro AS ENUM ('pendente', 'pago', 'vencido', 'cancelado');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE tipo_movimentacao AS ENUM ('entrada', 'saida', 'ajuste', 'transferencia');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- ============ TABELAS PRINCIPAIS ============
 
 -- Empresas (Multi-tenancy)
-CREATE TABLE empresas (
+CREATE TABLE IF NOT EXISTS empresas (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   nome TEXT NOT NULL,
   cnpj TEXT UNIQUE NOT NULL,
@@ -33,7 +67,7 @@ COMMENT ON TABLE empresas IS 'Empresas cadastradas no sistema (multi-tenancy)';
 COMMENT ON COLUMN empresas.plano IS 'Plano contratado: inicial, profissional ou empresarial';
 
 -- Usuários
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email TEXT UNIQUE NOT NULL,
   nome_completo TEXT NOT NULL,
@@ -51,7 +85,7 @@ COMMENT ON COLUMN usuarios.papel IS 'Nível de acesso: admin, gerente, usuario o
 -- ============ PRODUTOS ============
 
 -- Categorias
-CREATE TABLE categorias (
+CREATE TABLE IF NOT EXISTS categorias (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   nome TEXT NOT NULL,
@@ -64,7 +98,7 @@ CREATE TABLE categorias (
 COMMENT ON TABLE categorias IS 'Categorias de produtos (hierárquica)';
 
 -- Fornecedores
-CREATE TABLE fornecedores (
+CREATE TABLE IF NOT EXISTS fornecedores (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   cnpj TEXT NOT NULL,
@@ -83,7 +117,7 @@ CREATE TABLE fornecedores (
 COMMENT ON TABLE fornecedores IS 'Fornecedores de produtos OPME';
 
 -- Produtos
-CREATE TABLE produtos (
+CREATE TABLE IF NOT EXISTS produtos (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   codigo TEXT NOT NULL,
@@ -113,7 +147,7 @@ COMMENT ON COLUMN produtos.registro_anvisa IS 'Número do registro ANVISA do pro
 -- ============ CLIENTES ============
 
 -- Clientes (Hospitais, Clínicas, Médicos)
-CREATE TABLE clientes (
+CREATE TABLE IF NOT EXISTS clientes (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   tipo tipo_cliente NOT NULL,
@@ -138,7 +172,7 @@ COMMENT ON COLUMN clientes.tipo IS 'Tipo de cliente: hospital, clinica ou medico
 -- ============ CIRURGIAS ============
 
 -- Cirurgias
-CREATE TABLE cirurgias (
+CREATE TABLE IF NOT EXISTS cirurgias (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   numero TEXT NOT NULL,
@@ -161,7 +195,7 @@ COMMENT ON TABLE cirurgias IS 'Cirurgias agendadas e realizadas';
 COMMENT ON COLUMN cirurgias.status IS 'Status: agendada, confirmada, realizada ou cancelada';
 
 -- Produtos utilizados em cirurgias
-CREATE TABLE cirurgias_produtos (
+CREATE TABLE IF NOT EXISTS cirurgias_produtos (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   cirurgia_id UUID NOT NULL REFERENCES cirurgias(id) ON DELETE CASCADE,
   produto_id UUID NOT NULL REFERENCES produtos(id),
@@ -178,7 +212,7 @@ COMMENT ON TABLE cirurgias_produtos IS 'Produtos OPME utilizados em cada cirurgi
 -- ============ FINANCEIRO ============
 
 -- Contas a Receber
-CREATE TABLE contas_receber (
+CREATE TABLE IF NOT EXISTS contas_receber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   numero TEXT NOT NULL,
@@ -201,7 +235,7 @@ COMMENT ON TABLE contas_receber IS 'Contas a receber de clientes';
 COMMENT ON COLUMN contas_receber.status IS 'Status: pendente, pago, vencido ou cancelado';
 
 -- Contas a Pagar
-CREATE TABLE contas_pagar (
+CREATE TABLE IF NOT EXISTS contas_pagar (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   numero TEXT NOT NULL,
@@ -225,7 +259,7 @@ COMMENT ON TABLE contas_pagar IS 'Contas a pagar para fornecedores';
 -- ============ ESTOQUE ============
 
 -- Movimentações de Estoque
-CREATE TABLE movimentacoes_estoque (
+CREATE TABLE IF NOT EXISTS movimentacoes_estoque (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   produto_id UUID NOT NULL REFERENCES produtos(id),
@@ -249,7 +283,7 @@ COMMENT ON COLUMN movimentacoes_estoque.tipo IS 'Tipo: entrada, saida, ajuste ou
 -- ============ ANALYTICS / IA ============
 
 -- Previsões do IcarusBrain
-CREATE TABLE icarus_previsoes (
+CREATE TABLE IF NOT EXISTS icarus_previsoes (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   tipo TEXT NOT NULL,
@@ -265,7 +299,7 @@ COMMENT ON COLUMN icarus_previsoes.tipo IS 'Tipo de previsão: demanda, inadimpl
 COMMENT ON COLUMN icarus_previsoes.confianca IS 'Nível de confiança da previsão (0 a 1)';
 
 -- Logs de Auditoria
-CREATE TABLE icarus_registros (
+CREATE TABLE IF NOT EXISTS icarus_registros (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
   usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
@@ -284,55 +318,55 @@ COMMENT ON COLUMN icarus_registros.acao IS 'Ação realizada (criar, atualizar, 
 -- ============ ÍNDICES ============
 
 -- Usuários
-CREATE INDEX idx_usuarios_empresa ON usuarios(empresa_id);
-CREATE INDEX idx_usuarios_email ON usuarios(email);
-CREATE INDEX idx_usuarios_ativo ON usuarios(ativo);
+CREATE INDEX IF NOT EXISTS idx_usuarios_empresa ON usuarios(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_usuarios_email ON usuarios(email);
+CREATE INDEX IF NOT EXISTS idx_usuarios_ativo ON usuarios(ativo);
 
 -- Produtos
-CREATE INDEX idx_produtos_empresa ON produtos(empresa_id);
-CREATE INDEX idx_produtos_codigo ON produtos(codigo);
-CREATE INDEX idx_produtos_categoria ON produtos(categoria_id);
-CREATE INDEX idx_produtos_ativo ON produtos(ativo);
+CREATE INDEX IF NOT EXISTS idx_produtos_empresa ON produtos(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_produtos_codigo ON produtos(codigo);
+CREATE INDEX IF NOT EXISTS idx_produtos_categoria ON produtos(categoria_id);
+CREATE INDEX IF NOT EXISTS idx_produtos_ativo ON produtos(ativo);
 
 -- Clientes
-CREATE INDEX idx_clientes_empresa ON clientes(empresa_id);
-CREATE INDEX idx_clientes_cnpj_cpf ON clientes(cnpj_cpf);
-CREATE INDEX idx_clientes_tipo ON clientes(tipo);
-CREATE INDEX idx_clientes_ativo ON clientes(ativo);
+CREATE INDEX IF NOT EXISTS idx_clientes_empresa ON clientes(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_clientes_cnpj_cpf ON clientes(cnpj_cpf);
+CREATE INDEX IF NOT EXISTS idx_clientes_tipo ON clientes(tipo);
+CREATE INDEX IF NOT EXISTS idx_clientes_ativo ON clientes(ativo);
 
 -- Cirurgias
-CREATE INDEX idx_cirurgias_empresa ON cirurgias(empresa_id);
-CREATE INDEX idx_cirurgias_data ON cirurgias(data_cirurgia);
-CREATE INDEX idx_cirurgias_status ON cirurgias(status);
-CREATE INDEX idx_cirurgias_hospital ON cirurgias(hospital_id);
-CREATE INDEX idx_cirurgias_medico ON cirurgias(medico_id);
+CREATE INDEX IF NOT EXISTS idx_cirurgias_empresa ON cirurgias(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_cirurgias_data ON cirurgias(data_cirurgia);
+CREATE INDEX IF NOT EXISTS idx_cirurgias_status ON cirurgias(status);
+CREATE INDEX IF NOT EXISTS idx_cirurgias_hospital ON cirurgias(hospital_id);
+CREATE INDEX IF NOT EXISTS idx_cirurgias_medico ON cirurgias(medico_id);
 
 -- Financeiro
-CREATE INDEX idx_contas_receber_empresa ON contas_receber(empresa_id);
-CREATE INDEX idx_contas_receber_status ON contas_receber(status);
-CREATE INDEX idx_contas_receber_vencimento ON contas_receber(data_vencimento);
-CREATE INDEX idx_contas_receber_cliente ON contas_receber(cliente_id);
+CREATE INDEX IF NOT EXISTS idx_contas_receber_empresa ON contas_receber(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_contas_receber_status ON contas_receber(status);
+CREATE INDEX IF NOT EXISTS idx_contas_receber_vencimento ON contas_receber(data_vencimento);
+CREATE INDEX IF NOT EXISTS idx_contas_receber_cliente ON contas_receber(cliente_id);
 
-CREATE INDEX idx_contas_pagar_empresa ON contas_pagar(empresa_id);
-CREATE INDEX idx_contas_pagar_status ON contas_pagar(status);
-CREATE INDEX idx_contas_pagar_vencimento ON contas_pagar(data_vencimento);
-CREATE INDEX idx_contas_pagar_fornecedor ON contas_pagar(fornecedor_id);
+CREATE INDEX IF NOT EXISTS idx_contas_pagar_empresa ON contas_pagar(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_contas_pagar_status ON contas_pagar(status);
+CREATE INDEX IF NOT EXISTS idx_contas_pagar_vencimento ON contas_pagar(data_vencimento);
+CREATE INDEX IF NOT EXISTS idx_contas_pagar_fornecedor ON contas_pagar(fornecedor_id);
 
 -- Estoque
-CREATE INDEX idx_movimentacoes_empresa ON movimentacoes_estoque(empresa_id);
-CREATE INDEX idx_movimentacoes_produto ON movimentacoes_estoque(produto_id);
-CREATE INDEX idx_movimentacoes_tipo ON movimentacoes_estoque(tipo);
-CREATE INDEX idx_movimentacoes_data ON movimentacoes_estoque(criado_em);
+CREATE INDEX IF NOT EXISTS idx_movimentacoes_empresa ON movimentacoes_estoque(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_movimentacoes_produto ON movimentacoes_estoque(produto_id);
+CREATE INDEX IF NOT EXISTS idx_movimentacoes_tipo ON movimentacoes_estoque(tipo);
+CREATE INDEX IF NOT EXISTS idx_movimentacoes_data ON movimentacoes_estoque(criado_em);
 
 -- Analytics
-CREATE INDEX idx_previsoes_empresa ON icarus_previsoes(empresa_id);
-CREATE INDEX idx_previsoes_tipo ON icarus_previsoes(tipo);
-CREATE INDEX idx_previsoes_entidade ON icarus_previsoes(entidade_id);
+CREATE INDEX IF NOT EXISTS idx_previsoes_empresa ON icarus_previsoes(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_previsoes_tipo ON icarus_previsoes(tipo);
+CREATE INDEX IF NOT EXISTS idx_previsoes_entidade ON icarus_previsoes(entidade_id);
 
-CREATE INDEX idx_registros_empresa ON icarus_registros(empresa_id);
-CREATE INDEX idx_registros_acao ON icarus_registros(acao);
-CREATE INDEX idx_registros_usuario ON icarus_registros(usuario_id);
-CREATE INDEX idx_registros_data ON icarus_registros(criado_em);
+CREATE INDEX IF NOT EXISTS idx_registros_empresa ON icarus_registros(empresa_id);
+CREATE INDEX IF NOT EXISTS idx_registros_acao ON icarus_registros(acao);
+CREATE INDEX IF NOT EXISTS idx_registros_usuario ON icarus_registros(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_registros_data ON icarus_registros(criado_em);
 
 -- ============ FUNÇÕES ============
 
@@ -348,27 +382,35 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION atualizar_timestamp_atualizacao() IS 'Atualiza automaticamente o campo atualizado_em';
 
 -- Criar triggers para atualizado_em
+DROP TRIGGER IF EXISTS trigger_empresas_atualizacao ON empresas;
 CREATE TRIGGER trigger_empresas_atualizacao BEFORE UPDATE ON empresas
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_usuarios_atualizacao ON usuarios;
 CREATE TRIGGER trigger_usuarios_atualizacao BEFORE UPDATE ON usuarios
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_produtos_atualizacao ON produtos;
 CREATE TRIGGER trigger_produtos_atualizacao BEFORE UPDATE ON produtos
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_clientes_atualizacao ON clientes;
 CREATE TRIGGER trigger_clientes_atualizacao BEFORE UPDATE ON clientes
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_cirurgias_atualizacao ON cirurgias;
 CREATE TRIGGER trigger_cirurgias_atualizacao BEFORE UPDATE ON cirurgias
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_fornecedores_atualizacao ON fornecedores;
 CREATE TRIGGER trigger_fornecedores_atualizacao BEFORE UPDATE ON fornecedores
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_contas_receber_atualizacao ON contas_receber;
 CREATE TRIGGER trigger_contas_receber_atualizacao BEFORE UPDATE ON contas_receber
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
+DROP TRIGGER IF EXISTS trigger_contas_pagar_atualizacao ON contas_pagar;
 CREATE TRIGGER trigger_contas_pagar_atualizacao BEFORE UPDATE ON contas_pagar
   FOR EACH ROW EXECUTE FUNCTION atualizar_timestamp_atualizacao();
 
@@ -463,6 +505,7 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION atualizar_estoque_produto() IS 'Atualiza automaticamente o estoque do produto após movimentação';
 
 -- Trigger para atualizar estoque automaticamente
+DROP TRIGGER IF EXISTS trigger_atualizar_estoque ON movimentacoes_estoque;
 CREATE TRIGGER trigger_atualizar_estoque
   AFTER INSERT ON movimentacoes_estoque
   FOR EACH ROW
@@ -484,6 +527,7 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION calcular_margem_lucro() IS 'Calcula automaticamente a margem de lucro do produto';
 
 -- Trigger para calcular margem de lucro
+DROP TRIGGER IF EXISTS trigger_calcular_margem ON produtos;
 CREATE TRIGGER trigger_calcular_margem
   BEFORE INSERT OR UPDATE ON produtos
   FOR EACH ROW
