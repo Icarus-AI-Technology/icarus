@@ -1,103 +1,67 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import { HTMLAttributes } from 'react'
 
-/**
- * OraclusX Design System - Card Component
- * ✅ 100% Compliant with ICARUS v5.0 Standards
- * 
- * REGRAS OBRIGATÓRIAS:
- * - Border Radius: 16px (rounded-[16px]) - Padrão MD
- * - Sem Shadows: Usar border 1px apenas
- * - Background: var(--card) ou hsl(var(--card))
- * - Padding: 24px (p-6) padrão
- * - Variante Neuromórfica: Aplicar apenas quando explicitamente solicitado
- */
-
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'elevated' | 'flat' | 'bordered'
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
 }
 
-const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = 'default', ...props }, ref) => {
-    const variantClasses = {
-      default: "border border-[rgba(0,0,0,0.1)] bg-card",
-      elevated: "bg-card shadow-[8px_8px_16px_rgba(0,0,0,0.12),-8px_-8px_16px_rgba(255,255,255,0.6)] hover:shadow-[12px_12px_24px_rgba(0,0,0,0.12),-12px_-12px_24px_rgba(255,255,255,0.6)] transition-shadow duration-300",
-      flat: "bg-card",
-      bordered: "border-2 border-[rgba(0,0,0,0.1)] bg-card",
-    }
+export function Card({ children, className = '', ...props }: CardProps) {
+  return (
+    <div
+      className={`
+        bg-gradient-to-br from-gray-900/90 to-gray-800/90
+        backdrop-blur-sm
+        border border-white/10
+        rounded-2xl p-6
+        shadow-[5px_5px_15px_rgba(0,0,0,0.5),-5px_-5px_15px_rgba(255,255,255,0.03)]
+        ${className}
+      `}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
 
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "rounded-[16px] text-card-foreground",
-          variantClasses[variant],
-          className
-        )}
-        {...props}
-      />
-    )
+interface KPICardProps {
+  label: string
+  value: string | number
+  icon: React.ReactNode
+  trend?: {
+    value: number
+    isPositive: boolean
   }
-)
-Card.displayName = "Card"
+  color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple'
+}
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
+export function KPICard({ label, value, icon, trend, color = 'blue' }: KPICardProps) {
+  const colorClasses = {
+    blue: 'bg-blue-500/10 text-blue-400',
+    green: 'bg-green-500/10 text-green-400',
+    yellow: 'bg-yellow-500/10 text-yellow-400',
+    red: 'bg-red-500/10 text-red-400',
+    purple: 'bg-purple-500/10 text-purple-400',
+  }
 
-const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "text-[16px] font-[600] leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
-CardTitle.displayName = "CardTitle"
+  return (
+    <Card className="hover:border-blue-500/30 transition-all duration-200">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-gray-400 text-sm">{label}</p>
+          <p className="text-2xl font-bold text-gray-100 mt-2">{value}</p>
+        </div>
+        <div className={`p-3 rounded-xl ${colorClasses[color]}`}>
+          {icon}
+        </div>
+      </div>
 
-const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-[14px] text-muted-foreground font-[400]", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-))
-CardFooter.displayName = "CardFooter"
-
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+      {trend && (
+        <div className="flex items-center gap-1 mt-4 text-sm">
+          <span className={trend.isPositive ? 'text-green-400' : 'text-red-400'}>
+            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
+          </span>
+          <span className="text-gray-500">vs mês anterior</span>
+        </div>
+      )}
+    </Card>
+  )
+}
