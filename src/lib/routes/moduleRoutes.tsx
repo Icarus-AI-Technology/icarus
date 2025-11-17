@@ -16,6 +16,7 @@ const TabelaPrecos = lazy(() => import('@/components/modules/TabelaPrecos').then
 const Licitacoes = lazy(() => import('@/components/modules/Licitacoes').then(m => ({ default: m.Licitacoes })))
 const Cadastros = lazy(() => import('@/components/modules/Cadastros').then(m => ({ default: m.Cadastros })))
 const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
+const ContactPage = lazy(() => import('@/pages/Contact'))
 
 export interface ModuleComponentMap {
   [key: string]: React.LazyExoticComponent<() => JSX.Element>
@@ -50,6 +51,7 @@ export const moduleComponents: ModuleComponentMap = {
 
   // Dev Tools
   'showcase': ShowcasePage,
+  'contato': ContactPage,
 }
 
 /**
