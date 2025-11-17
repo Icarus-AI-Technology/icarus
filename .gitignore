@@ -31,3 +31,7 @@ dist-ssr
 # Playwright
 /playwright-report/
 /test-results/
+
+# Coverage
+coverage/
+.nyc_output/
