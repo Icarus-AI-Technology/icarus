@@ -226,7 +226,7 @@ export default function GestaoContabil() {
   const totalPassivo = planoContas
     .filter(c => c.natureza === 'passivo' && c.tipo === 'sintetica' && c.nivel === 1)
     .reduce((sum, c) => sum + c.saldo_credor, 0)
-  const patrimonio Liquido = planoContas
+  const patrimonioLiquido = planoContas
     .filter(c => c.natureza === 'patrimonio_liquido' && c.tipo === 'sintetica' && c.nivel === 1)
     .reduce((sum, c) => sum + c.saldo_credor, 0)
   const lancamentosMes = lancamentos.length

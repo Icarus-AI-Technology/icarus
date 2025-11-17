@@ -77,7 +77,7 @@ export function SupabaseConnectionTest() {
     await new Promise(resolve => setTimeout(resolve, 300))
 
     try {
-      const { error } = await supabase.from('companies').select('count').limit(1)
+      const { error } = await supabase.from('empresas').select('count').limit(1)
 
       if (error) {
         updateTest(1, {
@@ -128,7 +128,7 @@ export function SupabaseConnectionTest() {
 
     try {
       const { data, error } = await supabase
-        .from('companies')
+        .from('empresas')
         .select('id, name')
         .limit(1)
 
