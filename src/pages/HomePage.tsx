@@ -563,7 +563,7 @@ export function HomePage() {
             <div>
               <h4 className="mb-4 text-white" style={{ fontWeight: 600 }}>Contato</h4>
               <ul className="space-y-2 text-gray-400" style={{ fontSize: '0.875rem' }}>
-                <li>dax@newortho.com.br</li>
+                <li>sac@icarusai.com.br</li>
                 <li>Suporte 24/7 disponível</li>
               </ul>
             </div>
