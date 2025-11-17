@@ -52,7 +52,7 @@ export function LoginPage() {
                 placeholder="seu.email@empresa.com.br"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[#4dd4d4] focus:ring-[#4dd4d4] h-12 rounded-xl"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[#6366F1] focus:ring-[#6366F1] h-12 rounded-xl"
                 required
               />
             </div>
@@ -67,7 +67,7 @@ export function LoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[#4dd4d4] focus:ring-[#4dd4d4] h-12 rounded-xl"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[#6366F1] focus:ring-[#6366F1] h-12 rounded-xl"
                 required
               />
             </div>
@@ -76,7 +76,7 @@ export function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
- className="w-full bg-gradient-to-r from-[#4dd4d4] to-[#5b7af5] hover:from-[#3cc4c4] hover:to-[#4a69e4] text-white h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50" style={{ fontWeight: 500 }}             >
+ className="w-full bg-gradient-to-r from-[#6366F1] to-[#4F46E5] hover:from-[#5558E3] hover:to-[#4338CA] text-white h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50" style={{ fontWeight: 500 }}             >
               <LogIn className="w-5 h-5 mr-2" />
               {loading ? 'Entrando...' : 'Entrar no Sistema'}
             </Button>
@@ -114,7 +114,7 @@ export function LoginPage() {
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-white/10 text-center">
  <p className="text-white/40" style={{ fontSize: '0.75rem' }}>               © 2025{' '}
- <span className="text-[#4dd4d4]" style={{ fontWeight: 500 }}>IcarusAI Technology</span>             </p>
+ <span className="text-[#6366F1]" style={{ fontWeight: 500 }}>IcarusAI Technology</span>             </p>
  <p className="text-white/30 mt-1" style={{ fontSize: '0.75rem' }}>               Todos os direitos reservados.
             </p>
           </div>
@@ -122,7 +122,7 @@ export function LoginPage() {
 
         {/* Additional Info */}
         <div className="mt-6 text-center">
- <div className="inline-flex items-center gap-2 text-white/60" style={{ fontSize: '0.875rem' }}>             <Zap className="w-4 h-4 text-[#4dd4d4]" />
+ <div className="inline-flex items-center gap-2 text-white/60" style={{ fontSize: '0.875rem' }}>             <Zap className="w-4 h-4 text-[#6366F1]" />
             <span>Powered by AI • Seguro • Rápido</span>
           </div>
         </div>

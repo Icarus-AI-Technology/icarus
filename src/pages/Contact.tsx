@@ -10,8 +10,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 import { Send, Mail, Phone, User, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react'
@@ -78,7 +78,7 @@ export default function ContactPage() {
         </div>
 
         {/* Card Neuromórfico */}
-        <Card variant="elevated" padding="lg">
+        <Card variant="elevated">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <CardHeader>
               <CardTitle>Formulário de Contato</CardTitle>
@@ -188,7 +188,7 @@ export default function ContactPage() {
 
         {/* Informações de contato adicionais */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card variant="bordered" padding="md" className="text-center">
+          <Card variant="bordered" className="text-center p-6">
             <Mail className="size-8 text-[#6366F1] mx-auto mb-3" />
             <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
               Email
@@ -198,7 +198,7 @@ export default function ContactPage() {
             </p>
           </Card>
 
-          <Card variant="bordered" padding="md" className="text-center">
+          <Card variant="bordered" className="text-center p-6">
             <Phone className="size-8 text-[#6366F1] mx-auto mb-3" />
             <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
               Telefone
@@ -208,7 +208,7 @@ export default function ContactPage() {
             </p>
           </Card>
 
-          <Card variant="bordered" padding="md" className="text-center">
+          <Card variant="bordered" className="text-center p-6">
             <MessageSquare className="size-8 text-[#6366F1] mx-auto mb-3" />
             <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
               WhatsApp
