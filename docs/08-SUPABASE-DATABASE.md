@@ -49,7 +49,7 @@ Este documento é um **resumo executivo**. Para o **guia completo de patterns**,
 ```sql
 -- Auth
 auth.users
-public.profiles
+public.perfis
 
 -- Core Business
 public.produtos

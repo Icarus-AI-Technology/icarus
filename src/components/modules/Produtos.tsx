@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { KPICard } from '@/components/ui/KPICard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -269,70 +270,38 @@ export function Produtos() {
           ========================================== */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Total Produtos */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Total Produtos</p>
-                <p className="text-2xl font-bold mt-1">
-                  {formatNumber(totalProdutos)}
-                </p>
-                <p className="text-xs text-green-600 mt-1">↑ 8 novos este mês</p>
-              </div>
-              <Package className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Total Produtos"
+          value={formatNumber(totalProdutos)}
+          icon={Package}
+          trend={{ value: 8, direction: 'up' }}
+          variant="default"
+        />
 
         {/* Valor Estoque */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Valor em Estoque</p>
-                <p className="text-2xl font-bold mt-1">
-                  {formatCurrency(valorEstoque)}
-                </p>
-                <p className="text-xs text-green-600 mt-1">↑ 12.5%</p>
-              </div>
-              <DollarSign className="h-8 w-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Valor em Estoque"
+          value={formatCurrency(valorEstoque)}
+          icon={DollarSign}
+          trend={{ value: 12.5, direction: 'up' }}
+          variant="success"
+        />
 
         {/* Produtos Ativos */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Produtos Ativos</p>
-                <p className="text-2xl font-bold mt-1">
-                  {formatNumber(produtosAtivos)}
-                </p>
-                <p className="text-xs text-gray-600 mt-1">
-                  {Math.round((produtosAtivos / totalProdutos) * 100)}% do total
-                </p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-purple-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Produtos Ativos"
+          value={formatNumber(produtosAtivos)}
+          icon={TrendingUp}
+          variant="default"
+        />
 
         {/* Baixo Estoque */}
-        <Card className="neu-card">
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-600">Baixo Estoque</p>
-                <p className="text-2xl font-bold mt-1">
-                  {formatNumber(produtosBaixoEstoque)}
-                </p>
-                <p className="text-xs text-red-600 mt-1">Requer atenção</p>
-              </div>
-              <AlertTriangle className="h-8 w-8 text-red-600" />
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Baixo Estoque"
+          value={formatNumber(produtosBaixoEstoque)}
+          icon={AlertTriangle}
+          variant="danger"
+        />
       </div>
 
       {/* ==========================================
