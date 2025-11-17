@@ -204,7 +204,7 @@ export function FaturamentoNFe() {
 
     try {
       const { data, error } = await supabase
-        .from('invoices')
+        .from('notas_fiscais')
         .select('*')
         .order('issue_date', { ascending: false })
 
