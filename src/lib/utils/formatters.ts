@@ -27,15 +27,28 @@ export const formatCurrencyDetailed = (value: number): string => {
 
 /**
  * Format date string to Brazilian locale (DD/MM/YYYY)
+ * Handles ISO date strings (YYYY-MM-DD) correctly regardless of timezone
  */
 export const formatDate = (date: string | Date): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date
+  let dateObj: Date
+
+  if (typeof date === 'string') {
+    // Parse ISO date string (YYYY-MM-DD) using UTC to avoid timezone issues
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const [year, month, day] = date.split('-').map(Number)
+      dateObj = new Date(Date.UTC(year, month - 1, day))
+    } else {
+      dateObj = new Date(date)
+    }
+  } else {
+    dateObj = date
+  }
 
   if (isNaN(dateObj.getTime())) {
     return '-'
   }
 
-  return dateObj.toLocaleDateString('pt-BR')
+  return dateObj.toLocaleDateString('pt-BR', { timeZone: 'UTC' })
 }
 
 /**

@@ -19,7 +19,8 @@ interface ModuleConfig {
   tabs: string[]
 }
 
-const moduleTemplates: Record<string, Partial<ModuleConfig>> = {
+// Template de módulos - prefixar com _ para evitar warning
+const _moduleTemplates: Record<string, Partial<ModuleConfig>> = {
   assistencial: {
     category: 'Assistencial',
     tabs: ['overview', 'list', 'reports', 'ai'],
@@ -244,7 +245,7 @@ modulesToGenerate.forEach((config) => {
 
   console.log(`✓ Gerado: ${filename}`)
   // Em produção, você escreveria o arquivo aqui:
-  // fs.writeFileSync(filename, code)
+  // fs.writeFileSync(filename, _code)
 })
 
 console.log('\n✅ Módulos gerados com sucesso!')
