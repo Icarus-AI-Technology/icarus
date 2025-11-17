@@ -3,7 +3,7 @@ import {
   ShoppingCart, FileText, Settings, BarChart3, Truck, Shield,
   Brain, Zap, Webhook, TrendingUp, UserCog, FileSpreadsheet,
   Activity, Bell, MessageSquare, Video, Fingerprint, Workflow,
-  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye
+  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye, Mail
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
@@ -534,6 +534,15 @@ export const navigationConfig: NavigationCategory[] = [
         icon: Eye,
         category: 'Dev Tools',
         description: 'Demonstração interativa de todos os componentes',
+        isImplemented: true
+      },
+      {
+        id: 'contato',
+        path: '/contato',
+        name: 'Contato',
+        icon: Mail,
+        category: 'Dev Tools',
+        description: 'Formulário de contato com validação Zod',
         isImplemented: true
       }
     ]
