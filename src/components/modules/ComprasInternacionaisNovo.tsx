@@ -34,20 +34,6 @@ interface Importacao {
   invoice_number?: string
 }
 
-interface ItemImportacao {
-  id: string
-  importacao_id: string
-  produto_nome: string
-  ncm: string
-  quantidade: number
-  valor_unitario_usd: number
-  valor_total_usd: number
-  aliquota_ii: number
-  aliquota_ipi: number
-  aliquota_pis: number
-  aliquota_cofins: number
-}
-
 export default function ComprasInternacionaisNovo() {
   const [activeTab, setActiveTab] = useState('overview')
 

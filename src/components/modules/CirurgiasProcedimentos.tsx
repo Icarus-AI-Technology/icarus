@@ -25,7 +25,7 @@
  * - 🟢 Verde: Concluído
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
@@ -247,7 +247,7 @@ export function CirurgiasProcedimentos() {
 
   // ==================== FUNÇÕES DE DADOS ====================
 
-  const loadCirurgias = () => {
+  const loadCirurgias = useCallback(() => {
     setLoading(true)
     try {
       // Mock data completo
@@ -474,7 +474,7 @@ export function CirurgiasProcedimentos() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filtroTipo, filtroStatus])
 
   // ==================== EFEITOS ====================
 
