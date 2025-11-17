@@ -6,9 +6,9 @@
 
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { KPICard } from '@/components/ui/KPICard';
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/ui/input';
 import { Calendar, Package } from 'lucide-react';
 
 describe('Acessibilidade WCAG 2.1 AA', () => {
