@@ -15,6 +15,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
+    "validate:orx": "vitest run src/__tests__/accessibility.test.tsx",
     "figma:connect": "figma connect",
     "figma:publish": "figma connect publish",
     "figma:parse": "figma connect parse",

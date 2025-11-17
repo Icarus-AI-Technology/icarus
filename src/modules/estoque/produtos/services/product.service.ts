@@ -7,22 +7,22 @@ export class ProductService {
    */
   static async create(data: ProductFormData): Promise<Product> {
     const { data: product, error } = await supabase
-      .from('products')
+      .from('produtos')
       .insert({
-        code: data.code,
-        name: data.name,
-        description: data.description || null,
-        category_id: data.category_id || null,
-        price: data.price,
-        cost: data.cost,
-        stock: data.stock,
-        min_stock: data.min_stock,
-        unit: data.unit,
-        active: data.active,
+        codigo: data.code,
+        nome: data.name,
+        descricao: data.description || null,
+        categoria_id: data.category_id || null,
+        preco_venda: data.price,
+        preco_custo: data.cost,
+        quantidade_estoque: data.stock,
+        estoque_minimo: data.min_stock,
+        unidade: data.unit,
+        status: data.active ? 'active' : 'inactive',
       })
       .select(`
         *,
-        category:categories(*)
+        categoria:categorias_produtos(*)
       `)
       .single()
 
@@ -39,28 +39,28 @@ export class ProductService {
    */
   static async list(filters?: ProductFilters): Promise<Product[]> {
     let query = supabase
-      .from('products')
+      .from('produtos')
       .select(`
         *,
-        category:categories(*)
+        categoria:categorias_produtos(*)
       `)
-      .order('created_at', { ascending: false })
+      .order('criado_em', { ascending: false })
 
     // Apply search filter
     if (filters?.search) {
       query = query.or(
-        `name.ilike.%${filters.search}%,code.ilike.%${filters.search}%,description.ilike.%${filters.search}%`
+        `nome.ilike.%${filters.search}%,codigo.ilike.%${filters.search}%,descricao.ilike.%${filters.search}%`
       )
     }
 
     // Apply category filter
     if (filters?.category_id) {
-      query = query.eq('category_id', filters.category_id)
+      query = query.eq('categoria_id', filters.category_id)
     }
 
     // Apply active filter
     if (filters?.active !== undefined) {
-      query = query.eq('active', filters.active)
+      query = query.eq('status', filters.active ? 'active' : 'inactive')
     }
 
     const { data, error } = await query
@@ -78,10 +78,10 @@ export class ProductService {
    */
   static async getById(id: string): Promise<Product> {
     const { data, error } = await supabase
-      .from('products')
+      .from('produtos')
       .select(`
         *,
-        category:categories(*)
+        categoria:categorias_produtos(*)
       `)
       .eq('id', id)
       .single()
@@ -99,12 +99,12 @@ export class ProductService {
    */
   static async getByCode(code: string): Promise<Product | null> {
     const { data, error } = await supabase
-      .from('products')
+      .from('produtos')
       .select(`
         *,
-        category:categories(*)
+        categoria:categorias_produtos(*)
       `)
-      .eq('code', code)
+      .eq('codigo', code)
       .single()
 
     if (error) {
@@ -125,24 +125,24 @@ export class ProductService {
   static async update(id: string, data: Partial<ProductFormData>): Promise<Product> {
     const updateData: any = {}
 
-    if (data.code !== undefined) updateData.code = data.code
-    if (data.name !== undefined) updateData.name = data.name
-    if (data.description !== undefined) updateData.description = data.description || null
-    if (data.category_id !== undefined) updateData.category_id = data.category_id || null
-    if (data.price !== undefined) updateData.price = data.price
-    if (data.cost !== undefined) updateData.cost = data.cost
-    if (data.stock !== undefined) updateData.stock = data.stock
-    if (data.min_stock !== undefined) updateData.min_stock = data.min_stock
-    if (data.unit !== undefined) updateData.unit = data.unit
-    if (data.active !== undefined) updateData.active = data.active
+    if (data.code !== undefined) updateData.codigo = data.code
+    if (data.name !== undefined) updateData.nome = data.name
+    if (data.description !== undefined) updateData.descricao = data.description || null
+    if (data.category_id !== undefined) updateData.categoria_id = data.category_id || null
+    if (data.price !== undefined) updateData.preco_venda = data.price
+    if (data.cost !== undefined) updateData.preco_custo = data.cost
+    if (data.stock !== undefined) updateData.quantidade_estoque = data.stock
+    if (data.min_stock !== undefined) updateData.estoque_minimo = data.min_stock
+    if (data.unit !== undefined) updateData.unidade = data.unit
+    if (data.active !== undefined) updateData.status = data.active ? 'active' : 'inactive'
 
     const { data: product, error } = await supabase
-      .from('products')
+      .from('produtos')
       .update(updateData)
       .eq('id', id)
       .select(`
         *,
-        category:categories(*)
+        categoria:categorias_produtos(*)
       `)
       .single()
 
@@ -159,7 +159,7 @@ export class ProductService {
    */
   static async delete(id: string): Promise<void> {
     const { error } = await supabase
-      .from('products')
+      .from('produtos')
       .delete()
       .eq('id', id)
 
@@ -227,13 +227,13 @@ export class ProductService {
    */
   static subscribe(callback: (payload: any) => void) {
     const channel = supabase
-      .channel('products-changes')
+      .channel('produtos-changes')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'products',
+          table: 'produtos',
         },
         callback
       )
