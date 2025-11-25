@@ -63,6 +63,20 @@ export default {
           500: '#EF4444',
           foreground: '#FFFFFF',
         },
+        error: {
+          DEFAULT: '#EF4444',
+          50: '#FEF2F2',
+          100: '#FEE2E2',
+          500: '#EF4444',
+          foreground: '#FFFFFF',
+        },
+        info: {
+          DEFAULT: '#3B82F6',
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          500: '#3B82F6',
+          foreground: '#FFFFFF',
+        },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
