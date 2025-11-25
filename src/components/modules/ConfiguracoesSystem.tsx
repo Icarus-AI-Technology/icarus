@@ -39,16 +39,16 @@ export default function ConfiguracoesSystem() {
                 { imposto: 'COFINS', aliquota: '9.65' },
                 { imposto: 'IPI', aliquota: '10.0' }
               ].map(item => (
-                <div key={item.imposto} className="p-3 border rounded-lg">
+                <div key={item.imposto} className="p-3 border border-border rounded-lg neu-soft">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold">{item.imposto}</span>
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
-                        className="w-20 p-1 border rounded text-center"
+                        className="neu-input w-20 text-center"
                         defaultValue={item.aliquota}
                       />
-                      <span className="text-sm">%</span>
+                      <span className="text-sm text-muted-foreground">%</span>
                     </div>
                   </div>
                 </div>
@@ -69,29 +69,29 @@ export default function ConfiguracoesSystem() {
                 { categoria: 'Cardiologia', margem_min: '12', margem_max: '25' },
                 { categoria: 'Neurocirurgia', margem_min: '18', margem_max: '35' }
               ].map(item => (
-                <div key={item.categoria} className="p-3 border rounded-lg">
+                <div key={item.categoria} className="p-3 border border-border rounded-lg neu-soft">
                   <div className="font-semibold mb-2">{item.categoria}</div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-gray-600">Margem Mínima</label>
+                      <label className="text-xs text-muted-foreground">Margem Mínima</label>
                       <div className="flex items-center gap-2">
                         <input
                           type="number"
-                          className="w-full p-1 border rounded"
+                          className="neu-input"
                           defaultValue={item.margem_min}
                         />
-                        <span className="text-sm">%</span>
+                        <span className="text-sm text-muted-foreground">%</span>
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs text-gray-600">Margem Máxima</label>
+                      <label className="text-xs text-muted-foreground">Margem Máxima</label>
                       <div className="flex items-center gap-2">
                         <input
                           type="number"
-                          className="w-full p-1 border rounded"
+                          className="neu-input"
                           defaultValue={item.margem_max}
                         />
-                        <span className="text-sm">%</span>
+                        <span className="text-sm text-muted-foreground">%</span>
                       </div>
                     </div>
                   </div>
@@ -114,10 +114,10 @@ export default function ConfiguracoesSystem() {
                 { regra: 'Notificar estoque baixo (< 10 und)', ativo: true },
                 { regra: 'Reajuste automático de preços', ativo: false }
               ].map((item, idx) => (
-                <div key={idx} className="p-3 border rounded-lg flex justify-between items-center">
+                <div key={idx} className="p-3 border border-border rounded-lg flex justify-between items-center neu-soft">
                   <span className="font-semibold">{item.regra}</span>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" defaultChecked={item.ativo} />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" className="neu-checkbox" defaultChecked={item.ativo} />
                     <span className="text-sm">{item.ativo ? 'Ativo' : 'Inativo'}</span>
                   </label>
                 </div>
@@ -133,17 +133,17 @@ export default function ConfiguracoesSystem() {
               <CardTitle>🎛️ Parâmetros Gerais</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 border rounded-lg">
+              <div className="p-3 border border-border rounded-lg neu-soft">
                 <label className="font-semibold block mb-2">Dias para Vencimento de Nota</label>
-                <input type="number" className="w-full p-2 border rounded" defaultValue="30" />
+                <input type="number" className="neu-input" defaultValue="30" />
               </div>
-              <div className="p-3 border rounded-lg">
+              <div className="p-3 border border-border rounded-lg neu-soft">
                 <label className="font-semibold block mb-2">Limite de Crédito Padrão</label>
-                <input type="number" className="w-full p-2 border rounded" defaultValue="100000" />
+                <input type="number" className="neu-input" defaultValue="100000" />
               </div>
-              <div className="p-3 border rounded-lg">
+              <div className="p-3 border border-border rounded-lg neu-soft">
                 <label className="font-semibold block mb-2">Dias de Garantia Padrão</label>
-                <input type="number" className="w-full p-2 border rounded" defaultValue="365" />
+                <input type="number" className="neu-input" defaultValue="365" />
               </div>
               <Button className="w-full">Salvar Parâmetros</Button>
             </CardContent>

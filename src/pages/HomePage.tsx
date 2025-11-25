@@ -40,42 +40,42 @@ export function HomePage() {
       title: 'IA Integrada',
       description:
         'Previsão de demanda, análise de inadimplência e recomendações inteligentes em tempo real.',
-      color: 'from-purple-500 to-indigo-600',
+      gradient: 'from-primary to-accent',
     },
     {
       icon: BarChart3,
       title: 'Dashboard Inteligente',
       description:
         'Visualize seus KPIs mais importantes em tempo real com análises preditivas.',
-      color: 'from-blue-500 to-cyan-600',
+      gradient: 'from-info to-primary',
     },
     {
       icon: Zap,
       title: 'Automação Total',
       description:
         'Automatize processos repetitivos e ganhe até 70% de produtividade.',
-      color: 'from-yellow-500 to-orange-600',
+      gradient: 'from-warning to-orange-600',
     },
     {
       icon: Shield,
       title: 'Segurança Enterprise',
       description:
         'Dados criptografados, backup automático e conformidade com LGPD.',
-      color: 'from-green-500 to-emerald-600',
+      gradient: 'from-success to-emerald-600',
     },
     {
       icon: Target,
       title: 'Especializado em OPME',
       description:
         'Desenvolvido especificamente para gestão de Órteses, Próteses e Materiais Especiais.',
-      color: 'from-pink-500 to-rose-600',
+      gradient: 'from-pink-500 to-error',
     },
     {
       icon: TrendingUp,
       title: 'ROI Comprovado',
       description:
         'Clientes reportam redução de custos de até 45% nos primeiros 6 meses.',
-      color: 'from-indigo-500 to-purple-600',
+      gradient: 'from-accent to-primary',
     },
   ]
 
@@ -156,15 +156,15 @@ export function HomePage() {
   const ctaFade = useFadeIn({ threshold: 0.3 })
 
   return (
-    <div className="min-h-screen bg-[#0F172A] relative overflow-hidden">
-      {/* Animated background glow */}
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Animated background glow - OraclusX Style */}
       <div className="fixed inset-0 pointer-events-none">
         <div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-[#6366F1] rounded-full opacity-10 blur-[120px] animate-pulse"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full opacity-10 blur-[120px] animate-pulse"
           style={{ transform: `translateY(${scrollY * 0.2}px)` }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-600 rounded-full opacity-10 blur-[120px] animate-pulse"
+          className="absolute top-1/3 right-1/4 w-96 h-96 bg-accent rounded-full opacity-10 blur-[120px] animate-pulse"
           style={{
             transform: `translateY(${scrollY * 0.3}px)`,
             animationDelay: '1s',
@@ -172,25 +172,25 @@ export function HomePage() {
         />
       </div>
 
-      {/* Header / Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#1E293B]/80 backdrop-blur-xl border-b border-white/10">
+      {/* Header / Navbar - Neumorphic Glass */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-xl border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#6366F1] to-indigo-700 flex items-center justify-center shadow-lg shadow-[#6366F1]/50">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 neu-soft">
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-white" style={{ fontSize: '1.125rem', fontWeight: 700 }}>Icarus v5.0</h1>
-                <p className="text-gray-400" style={{ fontSize: '0.75rem' }}>Gestão elevada pela IA</p>
+                <h1 className="text-foreground font-bold text-lg">Icarus v5.0</h1>
+                <p className="text-muted-foreground text-xs">Gestão elevada pela IA</p>
               </div>
             </div>
 
             {/* Login Button */}
             <Button
               onClick={() => navigate('/login')}
-              className="bg-gradient-to-br from-[#6366F1] to-indigo-700 hover:from-[#4F46E5] hover:to-indigo-800 text-white shadow-lg shadow-[#6366F1]/50 hover:shadow-xl hover:shadow-[#6366F1]/60 transition-all duration-300"
+              className="bg-gradient-to-br from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
@@ -206,7 +206,7 @@ export function HomePage() {
       {/* Hero Section */}
       <section
         ref={heroFade.ref}
-        className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#1a1f4d] relative transition-all duration-1000 ${
+        className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-muted to-background relative transition-all duration-1000 ${
           heroFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -214,23 +214,23 @@ export function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#6366F1]/20 text-indigo-300 border border-[#6366F1]/30 animate-pulse" style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20 animate-pulse text-sm font-medium neu-soft">
                 <Sparkles className="w-4 h-4" />
                 <span>ERP Enterprise com Inteligência Artificial</span>
               </div>
 
-              <h1 className="text-white leading-tight" style={{ fontSize: 'clamp(3rem, 5vw, 3.75rem)', fontWeight: 700 }}>
+              <h1 className="text-foreground leading-tight text-5xl lg:text-6xl font-bold">
                 Transforme sua
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] via-indigo-400 to-purple-500 animate-gradient">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary animate-gradient">
                   {' '}
                   Gestão OPME{' '}
                 </span>
                 com IA
               </h1>
 
-              <p className="text-gray-300 leading-relaxed" style={{ fontSize: '1.25rem' }}>
-                Sistema ERP completo especializado em OPME, com <strong className="text-white">58 módulos</strong> integrados,{' '}
-                <strong className="text-white">inteligência artificial</strong> e design moderno. Gerencie cirurgias, estoque,
+              <p className="text-muted-foreground leading-relaxed text-xl">
+                Sistema ERP completo especializado em OPME, com <strong className="text-foreground">58 módulos</strong> integrados,{' '}
+                <strong className="text-foreground">inteligência artificial</strong> e design moderno. Gerencie cirurgias, estoque,
                 financeiro e muito mais em uma única plataforma.
               </p>
 
@@ -241,8 +241,7 @@ export function HomePage() {
                     const contactSection = document.getElementById('contato')
                     contactSection?.scrollIntoView({ behavior: 'smooth' })
                   }}
-                  className="px-8 py-6 bg-gradient-to-r from-[#6366F1] to-indigo-700 hover:from-[#4F46E5] hover:to-indigo-800 text-white shadow-xl shadow-[#6366F1]/40 hover:shadow-2xl hover:shadow-[#6366F1]/50 hover:scale-105 transition-all duration-300"
-                  style={{ fontSize: '1.125rem' }}
+                  className="px-8 py-6 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:scale-105 transition-all duration-300 text-lg"
                 >
                   Solicitar Demonstração
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -251,8 +250,7 @@ export function HomePage() {
                   size="lg"
                   variant="outline"
                   onClick={() => navigate('/login')}
-                  className="px-8 py-6 border-2 border-white/20 text-white hover:bg-white/10 hover:scale-105 transition-all duration-300"
-                  style={{ fontSize: '1.125rem' }}
+                  className="px-8 py-6 border-2 border-border text-foreground hover:bg-muted hover:scale-105 transition-all duration-300 text-lg neu-soft"
                 >
                   Já sou cliente
                 </Button>
@@ -266,47 +264,47 @@ export function HomePage() {
               </div>
             </div>
 
-            {/* Visual Content with Glow Effect */}
+            {/* Visual Content with Neumorphic Glow Effect */}
             <div className="relative">
-              <div className="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 relative overflow-hidden group">
+              <div className="bg-card/50 backdrop-blur-sm p-8 rounded-3xl border border-border relative overflow-hidden group neu-soft">
                 {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#6366F1]/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-[#6366F1]/20 via-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 relative overflow-hidden">
-                  <Brain className="w-32 h-32 text-[#6366F1] animate-pulse relative z-10" />
+                <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 flex items-center justify-center border border-border relative overflow-hidden neu-pressed">
+                  <Brain className="w-32 h-32 text-primary animate-pulse relative z-10" />
 
                   {/* Animated rings */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 border-2 border-[#6366F1]/30 rounded-full animate-ping" />
+                    <div className="w-48 h-48 border-2 border-primary/30 rounded-full animate-ping" />
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-64 h-64 border-2 border-[#6366F1]/20 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
+                    <div className="w-64 h-64 border-2 border-primary/20 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
                   </div>
                 </div>
               </div>
 
-              {/* Floating Stats Cards */}
-              <div className="absolute -top-4 -right-4 bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 animate-bounce">
+              {/* Floating Stats Cards - Neumorphic */}
+              <div className="absolute -top-4 -right-4 bg-card/90 backdrop-blur-sm p-4 rounded-xl border border-border animate-bounce neu-soft">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center border border-green-500/30">
-                    <TrendingUp className="w-5 h-5 text-green-400" />
+                  <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center border border-success/30">
+                    <TrendingUp className="w-5 h-5 text-success" />
                   </div>
                   <div>
-                    <p className="text-white" style={{ fontSize: '0.875rem', fontWeight: 600 }}>+45%</p>
-                    <p className="text-gray-400" style={{ fontSize: '0.75rem' }}>ROI</p>
+                    <p className="text-foreground text-sm font-semibold">+45%</p>
+                    <p className="text-muted-foreground text-xs">ROI</p>
                   </div>
                 </div>
               </div>
 
-              {/* Demo Video Button */}
-              <div className="absolute -bottom-4 -left-4 bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 hover:bg-white/20 transition-all cursor-pointer group/play">
+              {/* Demo Video Button - Neumorphic */}
+              <div className="absolute -bottom-4 -left-4 bg-card/90 backdrop-blur-sm p-4 rounded-xl border border-border hover:bg-card transition-all cursor-pointer group/play neu-soft">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#6366F1]/80 flex items-center justify-center group-hover/play:bg-[#6366F1] transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center group-hover/play:bg-primary transition-colors">
                     <Play className="w-5 h-5 text-white fill-white" />
                   </div>
                   <div>
-                    <p className="text-white" style={{ fontSize: '0.875rem', fontWeight: 600 }}>Ver Demo</p>
-                    <p className="text-gray-400" style={{ fontSize: '0.75rem' }}>2 min</p>
+                    <p className="text-foreground text-sm font-semibold">Ver Demo</p>
+                    <p className="text-muted-foreground text-xs">2 min</p>
                   </div>
                 </div>
               </div>
@@ -315,19 +313,19 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Pain Points Section */}
+      {/* Pain Points Section - Neumorphic Cards */}
       <section
         ref={painPointsFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#1E293B] transition-all duration-1000 delay-100 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-muted transition-all duration-1000 delay-100 ${
           painPointsFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-white mb-4" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+            <h2 className="text-foreground mb-4 text-4xl font-bold">
               Problemas que Resolvemos
             </h2>
-            <p className="text-gray-300" style={{ fontSize: '1.25rem' }}>
+            <p className="text-muted-foreground text-xl">
               Acabamos com as dores de cabeça da gestão OPME
             </p>
           </div>
@@ -336,17 +334,17 @@ export function HomePage() {
             {painPoints.map((pain, index) => (
               <div
                 key={index}
-                className="flex items-start gap-4 p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#6366F1]/50 hover:scale-105 transition-all duration-300"
+                className="flex items-start gap-4 p-6 rounded-xl bg-card border border-border hover:border-primary/50 hover:scale-105 transition-all duration-300 neu-soft"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-1 border border-red-500/30">
-                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                <div className="w-6 h-6 rounded-full bg-error/20 flex items-center justify-center flex-shrink-0 mt-1 border border-error/30">
+                  <div className="w-2 h-2 rounded-full bg-error" />
                 </div>
                 <div>
-                  <p className="text-gray-400 line-through decoration-red-500 decoration-1">
+                  <p className="text-muted-foreground line-through decoration-error decoration-1">
                     {pain}
                   </p>
-                  <p className="text-green-400 mt-2" style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                  <p className="text-success mt-2 text-sm font-medium">
                     ✓ Resolvido com Icarus
                   </p>
                 </div>
@@ -356,19 +354,19 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section - Neumorphic Cards */}
       <section
         ref={featuresFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#0F172A] to-[#1a1f4d] transition-all duration-1000 delay-150 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background to-muted transition-all duration-1000 delay-150 ${
           featuresFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-white mb-4" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+            <h2 className="text-foreground mb-4 text-4xl font-bold">
               Funcionalidades Poderosas
             </h2>
-            <p className="text-gray-300" style={{ fontSize: '1.25rem' }}>
+            <p className="text-muted-foreground text-xl">
               Tudo que você precisa em um único sistema
             </p>
           </div>
@@ -379,18 +377,18 @@ export function HomePage() {
               return (
                 <div
                   key={index}
-                  className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:scale-105 hover:border-[#6366F1]/50 transition-all duration-300 group"
+                  className="bg-card backdrop-blur-sm p-8 rounded-2xl border border-border hover:scale-105 hover:border-primary/50 transition-all duration-300 group neu-soft"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div
-                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
                   >
                     <Icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-white mb-3" style={{ fontSize: '1.25rem', fontWeight: 700 }}>
+                  <h3 className="text-foreground mb-3 text-xl font-bold">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -403,16 +401,16 @@ export function HomePage() {
       {/* Benefits Section with Animated Counters */}
       <section
         ref={benefitsFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#1E293B] transition-all duration-1000 delay-200 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-muted transition-all duration-1000 delay-200 ${
           benefitsFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-white mb-4" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+            <h2 className="text-foreground mb-4 text-4xl font-bold">
               Resultados Reais
             </h2>
-            <p className="text-gray-300" style={{ fontSize: '1.25rem' }}>
+            <p className="text-muted-foreground text-xl">
               Veja o impacto que o Icarus pode ter no seu negócio
             </p>
           </div>
@@ -439,16 +437,16 @@ export function HomePage() {
       {/* Testimonials Section */}
       <section
         ref={testimonialsFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#0F172A] to-[#1a1f4d] transition-all duration-1000 delay-100 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background to-muted transition-all duration-1000 delay-100 ${
           testimonialsFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-white mb-4" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+            <h2 className="text-foreground mb-4 text-4xl font-bold">
               O que Nossos Clientes Dizem
             </h2>
-            <p className="text-gray-300" style={{ fontSize: '1.25rem' }}>
+            <p className="text-muted-foreground text-xl">
               Depoimentos reais de quem usa o Icarus diariamente
             </p>
           </div>
@@ -457,12 +455,12 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Differentials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#6366F1] to-purple-700 text-white">
+      {/* Differentials Section - Primary Gradient with Neumorphic Cards */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary to-accent text-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="mb-4" style={{ fontSize: '2.25rem', fontWeight: 700 }}>Por que Escolher o Icarus?</h2>
-            <p className="text-indigo-100" style={{ fontSize: '1.25rem' }}>
+            <h2 className="mb-4 text-4xl font-bold">Por que Escolher o Icarus?</h2>
+            <p className="text-white/80 text-xl">
               Diferenciais que fazem a diferença
             </p>
           </div>
@@ -479,8 +477,8 @@ export function HomePage() {
                     <Icon className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h3 className="mb-3" style={{ fontSize: '1.25rem', fontWeight: 700 }}>{diff.title}</h3>
-                    <p className="text-indigo-100 leading-relaxed">
+                    <h3 className="mb-3 text-xl font-bold">{diff.title}</h3>
+                    <p className="text-white/80 leading-relaxed">
                       {diff.description}
                     </p>
                   </div>
@@ -494,42 +492,42 @@ export function HomePage() {
       {/* CTA Section */}
       <section
         ref={ctaFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#0F172A] to-[#1E293B] transition-all duration-1000 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background to-muted transition-all duration-1000 ${
           ctaFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-white mb-6" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+          <h2 className="text-foreground mb-6 text-4xl font-bold">
             Pronto para Transformar sua Gestão?
           </h2>
-          <p className="text-gray-300 mb-8" style={{ fontSize: '1.25rem' }}>
+          <p className="text-muted-foreground mb-8 text-xl">
             Junte-se a centenas de empresas que já estão elevando sua gestão com IA
           </p>
           <div className="flex items-center justify-center gap-6 mb-12 flex-wrap">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-green-400" />
-              <span className="text-gray-300">Sem permanência mínima</span>
+              <CheckCircle2 className="w-6 h-6 text-success" />
+              <span className="text-muted-foreground">Sem permanência mínima</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-green-400" />
-              <span className="text-gray-300">Demonstração gratuita</span>
+              <CheckCircle2 className="w-6 h-6 text-success" />
+              <span className="text-muted-foreground">Demonstração gratuita</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-green-400" />
-              <span className="text-gray-300">Suporte incluído</span>
+              <CheckCircle2 className="w-6 h-6 text-success" />
+              <span className="text-muted-foreground">Suporte incluído</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Form Section */}
-      <section id="contato" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#1E293B]">
+      <section id="contato" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-white mb-4" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+            <h2 className="text-foreground mb-4 text-4xl font-bold">
               Solicite uma Demonstração
             </h2>
-            <p className="text-gray-300" style={{ fontSize: '1.25rem' }}>
+            <p className="text-muted-foreground text-xl">
               Preencha o formulário e nossa equipe entrará em contato
             </p>
           </div>
@@ -538,22 +536,22 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#0F172A] text-white py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+      {/* Footer - Neumorphic */}
+      <footer className="bg-card text-foreground py-12 px-4 sm:px-6 lg:px-8 border-t border-border">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#6366F1] to-indigo-700 flex items-center justify-center shadow-lg shadow-[#6366F1]/50">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 neu-soft">
                   <Brain className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold" style={{ fontSize: '1.125rem', fontWeight: 700 }}>Icarus v5.0</h3>
-                  <p className="text-gray-400" style={{ fontSize: '0.875rem' }}>Gestão elevada pela IA</p>
+                  <h3 className="font-bold text-lg">Icarus v5.0</h3>
+                  <p className="text-muted-foreground text-sm">Gestão elevada pela IA</p>
                 </div>
               </div>
-              <p className="text-gray-400" style={{ fontSize: '0.875rem' }}>
+              <p className="text-muted-foreground text-sm">
                 Sistema ERP Enterprise especializado em OPME, com inteligência
                 artificial integrada.
               </p>
@@ -561,8 +559,8 @@ export function HomePage() {
 
             {/* Contact */}
             <div>
-              <h4 className="mb-4 text-white" style={{ fontWeight: 600 }}>Contato</h4>
-              <ul className="space-y-2 text-gray-400" style={{ fontSize: '0.875rem' }}>
+              <h4 className="mb-4 text-foreground font-semibold">Contato</h4>
+              <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>sac@icarusai.com.br</li>
                 <li>Suporte 24/7 disponível</li>
               </ul>
@@ -570,12 +568,12 @@ export function HomePage() {
 
             {/* Links */}
             <div>
-              <h4 className="mb-4 text-white" style={{ fontWeight: 600 }}>Links Rápidos</h4>
-              <ul className="space-y-2 text-gray-400" style={{ fontSize: '0.875rem' }}>
+              <h4 className="mb-4 text-foreground font-semibold">Links Rápidos</h4>
+              <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
                   <button
                     onClick={() => navigate('/login')}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-foreground transition-colors"
                   >
                     Entrar no Sistema
                   </button>
@@ -586,7 +584,7 @@ export function HomePage() {
                       const contactSection = document.getElementById('contato')
                       contactSection?.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-foreground transition-colors"
                   >
                     Solicitar Demonstração
                   </button>
@@ -595,7 +593,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-white/10 text-center text-gray-400" style={{ fontSize: '0.875rem' }}>
+          <div className="pt-8 border-t border-border text-center text-muted-foreground text-sm">
             <p>© 2025 IcarusAI Technology. Todos os direitos reservados.</p>
           </div>
         </div>
@@ -626,15 +624,15 @@ function AnimatedStat({ value, suffix = '', label }: { value: number; suffix?: s
 
   return (
     <div ref={ref}>
-      <p className="text-white" style={{ fontSize: '1.875rem', fontWeight: 700 }}>
+      <p className="text-foreground text-3xl font-bold">
         {count}{suffix}
       </p>
-      <p className="text-gray-400" style={{ fontSize: '0.875rem' }}>{label}</p>
+      <p className="text-muted-foreground text-sm">{label}</p>
     </div>
   )
 }
 
-// Benefit Card Component with Counter
+// Benefit Card Component with Counter - Neumorphic
 function BenefitCard({
   icon: Icon,
   title,
@@ -655,18 +653,18 @@ function BenefitCard({
   return (
     <div
       ref={ref}
-      className="text-center p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-105 hover:border-[#6366F1]/50 transition-all duration-300 group"
+      className="text-center p-8 bg-card backdrop-blur-sm rounded-2xl border border-border hover:scale-105 hover:border-primary/50 transition-all duration-300 group neu-soft"
     >
-      <div className="w-16 h-16 rounded-full bg-[#6366F1]/20 flex items-center justify-center mx-auto mb-6 border border-[#6366F1]/30 group-hover:scale-110 transition-transform duration-300">
-        <Icon className="w-8 h-8 text-[#6366F1]" />
+      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/30 group-hover:scale-110 transition-transform duration-300">
+        <Icon className="w-8 h-8 text-primary" />
       </div>
-      <p className="text-[#6366F1] mb-3" style={{ fontSize: '2.25rem', fontWeight: 700 }}>
+      <p className="text-primary mb-3 text-4xl font-bold">
         {prefix}{count}{suffix}
       </p>
-      <h3 className="text-white mb-2" style={{ fontSize: '1.125rem', fontWeight: 600 }}>
+      <h3 className="text-foreground mb-2 text-lg font-semibold">
         {title}
       </h3>
-      <p className="text-gray-400" style={{ fontSize: '0.875rem' }}>{description}</p>
+      <p className="text-muted-foreground text-sm">{description}</p>
     </div>
   )
 }

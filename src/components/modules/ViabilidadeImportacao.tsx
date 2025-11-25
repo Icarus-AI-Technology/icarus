@@ -389,98 +389,98 @@ export default function ViabilidadeImportacao() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Simule a viabilidade de importação informando os dados abaixo:
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="form-row">
                     <label className="text-sm font-semibold">Preço FOB (USD)</label>
-                    <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                    <input type="number" className="neu-input" placeholder="0.00" />
                   </div>
-                  <div>
+                  <div className="form-row">
                     <label className="text-sm font-semibold">Frete (USD)</label>
-                    <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                    <input type="number" className="neu-input" placeholder="0.00" />
                   </div>
-                  <div>
+                  <div className="form-row">
                     <label className="text-sm font-semibold">Seguro (USD)</label>
-                    <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                    <input type="number" className="neu-input" placeholder="0.00" />
                   </div>
-                  <div>
+                  <div className="form-row">
                     <label className="text-sm font-semibold">Taxa de Câmbio (R$)</label>
-                    <input type="number" className="w-full p-2 border rounded mt-1" placeholder="5.00" />
+                    <input type="number" className="neu-input" placeholder="5.00" />
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
+                <div className="border-t border-border pt-4">
                   <h4 className="font-semibold mb-3">Alíquotas de Impostos (%)</h4>
                   <div className="grid grid-cols-3 gap-3">
-                    <div>
-                      <label className="text-xs text-gray-600">II</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="16.0" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">II</label>
+                      <input type="number" className="neu-input" placeholder="16.0" />
                     </div>
-                    <div>
-                      <label className="text-xs text-gray-600">IPI</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="10.0" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">IPI</label>
+                      <input type="number" className="neu-input" placeholder="10.0" />
                     </div>
-                    <div>
-                      <label className="text-xs text-gray-600">PIS</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="2.1" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">PIS</label>
+                      <input type="number" className="neu-input" placeholder="2.1" />
                     </div>
-                    <div>
-                      <label className="text-xs text-gray-600">COFINS</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="9.65" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">COFINS</label>
+                      <input type="number" className="neu-input" placeholder="9.65" />
                     </div>
-                    <div>
-                      <label className="text-xs text-gray-600">ICMS</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="18.0" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">ICMS</label>
+                      <input type="number" className="neu-input" placeholder="18.0" />
                     </div>
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
+                <div className="border-t border-border pt-4">
                   <h4 className="font-semibold mb-3">Despesas Operacionais (R$)</h4>
                   <div className="grid grid-cols-3 gap-3">
-                    <div>
-                      <label className="text-xs text-gray-600">Desembaraço</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">Desembaraço</label>
+                      <input type="number" className="neu-input" placeholder="0.00" />
                     </div>
-                    <div>
-                      <label className="text-xs text-gray-600">Armazenagem</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">Armazenagem</label>
+                      <input type="number" className="neu-input" placeholder="0.00" />
                     </div>
-                    <div>
-                      <label className="text-xs text-gray-600">Transporte</label>
-                      <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                    <div className="form-row">
+                      <label className="text-xs text-muted-foreground">Transporte</label>
+                      <input type="number" className="neu-input" placeholder="0.00" />
                     </div>
                   </div>
                 </div>
 
-                <div>
+                <div className="form-row">
                   <label className="text-sm font-semibold">Preço Mercado Nacional (R$)</label>
-                  <input type="number" className="w-full p-2 border rounded mt-1" placeholder="0.00" />
+                  <input type="number" className="neu-input" placeholder="0.00" />
                 </div>
 
                 <Button className="w-full" size="lg">Calcular Viabilidade</Button>
 
-                <Card className="p-4 bg-blue-50">
+                <Card className="p-4 bg-info/10 neu-soft">
                   <h4 className="font-semibold mb-3">Resultado da Análise</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span>Custo Total Importado:</span>
+                      <span className="text-muted-foreground">Custo Total Importado:</span>
                       <span className="font-bold">R$ 0,00</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Preço Mercado Nacional:</span>
+                      <span className="text-muted-foreground">Preço Mercado Nacional:</span>
                       <span className="font-bold">R$ 0,00</span>
                     </div>
-                    <div className="flex justify-between text-lg border-t pt-2">
+                    <div className="flex justify-between text-lg border-t border-border pt-2">
                       <span className="font-semibold">Economia:</span>
-                      <span className="font-bold text-green-600">R$ 0,00</span>
+                      <span className="font-bold text-success">R$ 0,00</span>
                     </div>
                     <div className="flex justify-between text-lg">
                       <span className="font-semibold">Margem de Segurança:</span>
-                      <span className="font-bold text-blue-600">0.0%</span>
+                      <span className="font-bold text-info">0.0%</span>
                     </div>
                   </div>
                 </Card>
