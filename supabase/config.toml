@@ -1,7 +1,7 @@
 # ICARUS v5.0 - Supabase Configuration
 # Arquivo de configuração do Supabase CLI
 
-project_id = "oshgkugagyixutiqyjsq"
+project_id = "gvbkviozlhxorjoavmky"
 
 [api]
 enabled = true
