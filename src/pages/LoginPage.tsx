@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
-import { Brain, Zap, Shield, Sparkles, Eye, EyeOff } from 'lucide-react'
+import { Brain, Shield, Sparkles, Eye, EyeOff } from 'lucide-react'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -184,18 +184,6 @@ export function LoginPage() {
                 Todos os direitos reservados.
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* Feature Badges - Neumorphic */}
-        <div className="mt-6 flex justify-center gap-4">
-          <div className="flex items-center gap-2 px-4 py-2 bg-card/80 backdrop-blur-sm rounded-full border border-border text-sm text-muted-foreground neu-soft">
-            <Zap className="w-4 h-4 text-primary" />
-            <span>Powered by AI</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-card/80 backdrop-blur-sm rounded-full border border-border text-sm text-muted-foreground neu-soft">
-            <Shield className="w-4 h-4 text-success" />
-            <span>Seguro</span>
           </div>
         </div>
 
