@@ -432,7 +432,7 @@ Forneça:
       a_vencer: 'text-blue-600 bg-blue-100',
       vencido: 'text-orange-600 bg-orange-100',
     }
-    return colors[status as keyof typeof colors] || 'text-gray-600 bg-gray-100'
+    return colors[status as keyof typeof colors] || 'text-muted-foreground bg-muted'
   }
 
   const getPrioridadeColor = (prioridade: string) => {
@@ -442,7 +442,7 @@ Forneça:
       alta: 'text-orange-700 bg-orange-50 border-orange-200',
       critica: 'text-red-700 bg-red-50 border-red-200',
     }
-    return colors[prioridade as keyof typeof colors] || 'text-gray-700 bg-gray-50 border-gray-200'
+    return colors[prioridade as keyof typeof colors] || 'text-muted-foreground bg-muted border-border'
   }
 
   const getUrgenciaColor = (urgencia: string) => {
@@ -451,7 +451,7 @@ Forneça:
       medio: 'text-yellow-600',
       alto: 'text-red-600',
     }
-    return colors[urgencia as keyof typeof colors] || 'text-gray-600'
+    return colors[urgencia as keyof typeof colors] || 'text-muted-foreground'
   }
 
   const getVariacaoIcon = (valor: number) => {

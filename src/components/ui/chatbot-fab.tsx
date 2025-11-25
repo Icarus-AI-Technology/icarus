@@ -58,7 +58,7 @@ export const ChatbotFab = React.forwardRef<HTMLButtonElement, ChatbotFabProps>(
             className={cn(
               'absolute bottom-full mb-2 right-0',
               'px-3 py-2 rounded-lg',
-              'bg-gray-900 text-white text-sm whitespace-nowrap',
+              'bg-popover text-popover-foreground text-sm whitespace-nowrap shadow-lg',
               'opacity-0 pointer-events-none transition-opacity',
               'group-hover:opacity-100'
             )}
