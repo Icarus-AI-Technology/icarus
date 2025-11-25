@@ -1,0 +1,322 @@
+# ICARUS Auditor - GitHub Actions Workflow
+# Executa auditoria automatizada do projeto
+
+name: ICARUS Audit
+
+on:
+  # Agendamento semanal (Segunda as 8h UTC)
+  schedule:
+    - cron: '0 8 * * 1'
+
+  # Em push para branches principais
+  push:
+    branches:
+      - main
+      - develop
+
+  # Em pull requests
+  pull_request:
+    branches:
+      - main
+      - develop
+
+  # Execucao manual
+  workflow_dispatch:
+    inputs:
+      areas:
+        description: 'Areas para auditar (comma-separated ou "all")'
+        required: false
+        default: 'all'
+      full_report:
+        description: 'Gerar relatorio completo'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+
+jobs:
+  # Job 1: Auditoria de Frontend
+  audit-frontend:
+    name: Frontend Audit
+    runs-on: ubuntu-latest
+    outputs:
+      score: ${{ steps.audit.outputs.score }}
+      issues: ${{ steps.audit.outputs.issues }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript Check
+        id: typescript
+        run: |
+          pnpm run type-check 2>&1 | tee typescript-output.txt || true
+          ERRORS=$(grep -c "error TS" typescript-output.txt || echo "0")
+          echo "ts_errors=$ERRORS" >> $GITHUB_OUTPUT
+
+      - name: ESLint Check
+        id: eslint
+        run: |
+          pnpm run lint 2>&1 | tee eslint-output.txt || true
+          ERRORS=$(grep -c "error" eslint-output.txt || echo "0")
+          WARNINGS=$(grep -c "warning" eslint-output.txt || echo "0")
+          echo "lint_errors=$ERRORS" >> $GITHUB_OUTPUT
+          echo "lint_warnings=$WARNINGS" >> $GITHUB_OUTPUT
+
+      - name: Build Check
+        id: build
+        run: |
+          pnpm run build 2>&1 | tee build-output.txt
+          BUILD_SIZE=$(du -sk dist/ | cut -f1)
+          echo "build_size=$BUILD_SIZE" >> $GITHUB_OUTPUT
+
+      - name: Count Any Types
+        id: any_types
+        run: |
+          ANY_COUNT=$(grep -r ": any" src/ --include="*.ts" --include="*.tsx" | wc -l || echo "0")
+          echo "any_count=$ANY_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Calculate Score
+        id: audit
+        run: |
+          TS_ERRORS=${{ steps.typescript.outputs.ts_errors }}
+          LINT_ERRORS=${{ steps.eslint.outputs.lint_errors }}
+          ANY_COUNT=${{ steps.any_types.outputs.any_count }}
+          BUILD_SIZE=${{ steps.build.outputs.build_size }}
+
+          # Calcular penalidades
+          PENALTY=$((TS_ERRORS * 5 + LINT_ERRORS * 2 + ANY_COUNT * 1))
+          SCORE=$((100 - PENALTY))
+          SCORE=$((SCORE < 0 ? 0 : SCORE))
+
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+          echo "issues=$((TS_ERRORS + LINT_ERRORS + ANY_COUNT))" >> $GITHUB_OUTPUT
+
+          echo "Frontend Score: $SCORE/100"
+
+  # Job 2: Auditoria de Seguranca
+  audit-security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    outputs:
+      score: ${{ steps.audit.outputs.score }}
+      issues: ${{ steps.audit.outputs.issues }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: npm audit
+        id: npm_audit
+        run: |
+          pnpm audit --audit-level=high 2>&1 | tee audit-output.txt || true
+          CRITICAL=$(grep -c "critical" audit-output.txt || echo "0")
+          HIGH=$(grep -c "high" audit-output.txt || echo "0")
+          echo "critical=$CRITICAL" >> $GITHUB_OUTPUT
+          echo "high=$HIGH" >> $GITHUB_OUTPUT
+
+      - name: Check for hardcoded secrets
+        id: secrets
+        run: |
+          SECRETS=$(grep -rn "sk-\|eyJ\|password=\|secret=" src/ --include="*.ts" --include="*.tsx" | wc -l || echo "0")
+          echo "secrets_found=$SECRETS" >> $GITHUB_OUTPUT
+
+      - name: Check .gitignore
+        id: gitignore
+        run: |
+          if grep -q "\.env" .gitignore; then
+            echo "env_ignored=true" >> $GITHUB_OUTPUT
+          else
+            echo "env_ignored=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Calculate Score
+        id: audit
+        run: |
+          CRITICAL=${{ steps.npm_audit.outputs.critical }}
+          HIGH=${{ steps.npm_audit.outputs.high }}
+          SECRETS=${{ steps.secrets.outputs.secrets_found }}
+          ENV_IGNORED=${{ steps.gitignore.outputs.env_ignored }}
+
+          PENALTY=$((CRITICAL * 30 + HIGH * 15 + SECRETS * 30))
+          if [ "$ENV_IGNORED" = "false" ]; then
+            PENALTY=$((PENALTY + 15))
+          fi
+
+          SCORE=$((100 - PENALTY))
+          SCORE=$((SCORE < 0 ? 0 : SCORE))
+
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+          echo "issues=$((CRITICAL + HIGH + SECRETS))" >> $GITHUB_OUTPUT
+
+          echo "Security Score: $SCORE/100"
+
+  # Job 3: Auditoria de Dependencies
+  audit-dependencies:
+    name: Dependencies Audit
+    runs-on: ubuntu-latest
+    outputs:
+      score: ${{ steps.audit.outputs.score }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Check outdated
+        id: outdated
+        run: |
+          pnpm outdated 2>&1 | tee outdated-output.txt || true
+          OUTDATED=$(wc -l < outdated-output.txt || echo "0")
+          echo "outdated_count=$OUTDATED" >> $GITHUB_OUTPUT
+
+      - name: Calculate Score
+        id: audit
+        run: |
+          OUTDATED=${{ steps.outdated.outputs.outdated_count }}
+          PENALTY=$((OUTDATED > 20 ? 10 : OUTDATED / 2))
+          SCORE=$((100 - PENALTY))
+
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+
+  # Job 4: Gerar Relatorio
+  generate-report:
+    name: Generate Report
+    runs-on: ubuntu-latest
+    needs: [audit-frontend, audit-security, audit-dependencies]
+    if: always()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Calculate Overall Score
+        id: overall
+        run: |
+          FRONTEND=${{ needs.audit-frontend.outputs.score || 0 }}
+          SECURITY=${{ needs.audit-security.outputs.score || 0 }}
+          DEPS=${{ needs.audit-dependencies.outputs.score || 0 }}
+
+          # Pesos simplificados (ajustar conforme necessario)
+          OVERALL=$(( (FRONTEND * 30 + SECURITY * 50 + DEPS * 20) / 100 ))
+
+          if [ $OVERALL -ge 90 ]; then
+            GRADE="A"
+            STATUS="PASSED"
+          elif [ $OVERALL -ge 80 ]; then
+            GRADE="B"
+            STATUS="PASSED"
+          elif [ $OVERALL -ge 70 ]; then
+            GRADE="C"
+            STATUS="WARNING"
+          elif [ $OVERALL -ge 60 ]; then
+            GRADE="D"
+            STATUS="WARNING"
+          else
+            GRADE="F"
+            STATUS="FAILED"
+          fi
+
+          echo "overall_score=$OVERALL" >> $GITHUB_OUTPUT
+          echo "grade=$GRADE" >> $GITHUB_OUTPUT
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+
+      - name: Create Summary
+        run: |
+          echo "# ICARUS Audit Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Overall Score** | ${{ steps.overall.outputs.overall_score }}/100 |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Grade** | ${{ steps.overall.outputs.grade }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Status** | ${{ steps.overall.outputs.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Scores by Area" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Area | Score |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend | ${{ needs.audit-frontend.outputs.score || 'N/A' }}/100 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security | ${{ needs.audit-security.outputs.score || 'N/A' }}/100 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependencies | ${{ needs.audit-dependencies.outputs.score || 'N/A' }}/100 |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const score = '${{ steps.overall.outputs.overall_score }}';
+            const grade = '${{ steps.overall.outputs.grade }}';
+            const status = '${{ steps.overall.outputs.status }}';
+
+            const statusEmoji = status === 'PASSED' ? '✅' : status === 'WARNING' ? '⚠️' : '❌';
+
+            const body = `## ${statusEmoji} ICARUS Audit Report
+
+            | Metric | Value |
+            |--------|-------|
+            | **Overall Score** | ${score}/100 |
+            | **Grade** | ${grade} |
+            | **Status** | ${status} |
+
+            ### Scores by Area
+            | Area | Score |
+            |------|-------|
+            | Frontend | ${{ needs.audit-frontend.outputs.score || 'N/A' }}/100 |
+            | Security | ${{ needs.audit-security.outputs.score || 'N/A' }}/100 |
+            | Dependencies | ${{ needs.audit-dependencies.outputs.score || 'N/A' }}/100 |
+
+            ---
+            *Generated by ICARUS Auditor*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail if critical issues
+        if: needs.audit-security.outputs.score < 60
+        run: |
+          echo "Security score is below threshold (60). Failing build."
+          exit 1
