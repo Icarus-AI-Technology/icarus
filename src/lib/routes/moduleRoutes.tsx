@@ -16,6 +16,8 @@ const Licitacoes = lazy(() => import('@/components/modules/Licitacoes').then(m =
 const Cadastros = lazy(() => import('@/components/modules/Cadastros').then(m => ({ default: m.Cadastros })))
 const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
 const ContactPage = lazy(() => import('@/pages/Contact'))
+const IntegrationsDashboard = lazy(() => import('@/components/modules/IntegrationsDashboard').then(m => ({ default: m.IntegrationsDashboard })))
+const AuditorChecklistIntegrations = lazy(() => import('@/components/modules/AuditorChecklistIntegrations').then(m => ({ default: m.AuditorChecklistIntegrations })))
 
 export interface ModuleComponentMap {
   [key: string]: React.LazyExoticComponent<() => JSX.Element>
@@ -47,6 +49,10 @@ export const moduleComponents: ModuleComponentMap = {
 
   // Cadastros & Gestão
   'cadastros': Cadastros,
+
+  // Integrações
+  'integrations-dashboard': IntegrationsDashboard,
+  'auditor-checklist-integrations': AuditorChecklistIntegrations,
 
   // Dev Tools
   'showcase': ShowcasePage,
