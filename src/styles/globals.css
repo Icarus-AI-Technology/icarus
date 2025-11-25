@@ -262,11 +262,7 @@
   }
 
   .form-row label {
-    @apply text-sm font-medium text-gray-700;
-  }
-
-  .dark .form-row label {
-    @apply text-gray-300;
+    @apply text-sm font-medium text-foreground;
   }
 
   /* Hover states for neomorphic elements */

@@ -111,7 +111,7 @@ export default function ProdutosPage() {
   if (loading && !products.length) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-[#0f1419]">
+        <div className="min-h-screen bg-background">
           <Header />
           <Loading text="Carregando produtos..." />
         </div>
@@ -122,14 +122,14 @@ export default function ProdutosPage() {
   if (error) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-[#0f1419]">
+        <div className="min-h-screen bg-background">
           <Header />
           <div className="p-6">
             <div className="max-w-7xl mx-auto">
               <Card className="bg-red-500/10 border-red-500/20">
                 <h2 className="text-red-400 font-bold text-lg">Erro ao carregar dados</h2>
                 <p className="text-red-300 mt-2">{error.message}</p>
-                <p className="text-gray-400 text-sm mt-4">
+                <p className="text-muted-foreground text-sm mt-4">
                   Verifique se o Supabase está configurado corretamente em .env.local
                 </p>
               </Card>
@@ -142,7 +142,7 @@ export default function ProdutosPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#0f1419]">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="p-6">
           <div className="max-w-7xl mx-auto space-y-6">
@@ -150,8 +150,8 @@ export default function ProdutosPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-100">Produtos</h1>
-            <p className="text-gray-400 mt-1">Gerencie seu cadastro de produtos</p>
+            <h1 className="text-2xl font-bold text-foreground">Produtos</h1>
+            <p className="text-muted-foreground mt-1">Gerencie seu cadastro de produtos</p>
           </div>
           <Button
             onClick={() => {
@@ -208,7 +208,7 @@ export default function ProdutosPage() {
                 px-4 py-2 font-medium transition-colors
                 ${activeTab === 'list'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-gray-400 hover:text-gray-300'
+                  : 'text-muted-foreground hover:text-foreground'
                 }
               `}
             >
@@ -220,7 +220,7 @@ export default function ProdutosPage() {
                 px-4 py-2 font-medium transition-colors
                 ${activeTab === 'form'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-gray-400 hover:text-gray-300'
+                  : 'text-muted-foreground hover:text-foreground'
                 }
               `}
             >
@@ -241,10 +241,10 @@ export default function ProdutosPage() {
                   onKeyDown={(e) => e.key === 'Enter' && handleApplyFilters()}
                   className="
                     flex-1
-                    bg-gray-900/50 backdrop-blur-sm
+                    bg-card/50 backdrop-blur-sm
                     px-4 py-3 rounded-xl
                     border border-white/10
-                    text-gray-100 placeholder-gray-500
+                    text-foreground placeholder-muted-foreground
                     shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
                     focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
                     transition-all duration-200
@@ -254,10 +254,10 @@ export default function ProdutosPage() {
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as 'all' | 'true' | 'false')}
                   className="
-                    bg-gray-900/50 backdrop-blur-sm
+                    bg-card/50 backdrop-blur-sm
                     px-4 py-3 rounded-xl
                     border border-white/10
-                    text-gray-100
+                    text-foreground
                     shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
                     focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
                     transition-all duration-200
@@ -276,24 +276,24 @@ export default function ProdutosPage() {
               {/* Table */}
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-800/50 border-b border-white/10">
+                  <thead className="bg-muted/50 border-b border-white/10">
                     <tr>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
+                      <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
                         Código
                       </th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
+                      <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
                         Nome
                       </th>
-                      <th className="px-4 py-3 text-right text-sm font-medium text-gray-400">
+                      <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">
                         Preço
                       </th>
-                      <th className="px-4 py-3 text-right text-sm font-medium text-gray-400">
+                      <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">
                         Estoque
                       </th>
-                      <th className="px-4 py-3 text-center text-sm font-medium text-gray-400">
+                      <th className="px-4 py-3 text-center text-sm font-medium text-muted-foreground">
                         Status
                       </th>
-                      <th className="px-4 py-3 text-right text-sm font-medium text-gray-400">
+                      <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">
                         Ações
                       </th>
                     </tr>
@@ -301,20 +301,20 @@ export default function ProdutosPage() {
                   <tbody className="divide-y divide-white/5">
                     {products.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                        <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                           Nenhum produto encontrado
                         </td>
                       </tr>
                     ) : (
                       products.map((product) => (
                         <tr key={product.id} className="hover:bg-white/5 transition-colors">
-                          <td className="px-4 py-3 text-sm text-gray-300">
+                          <td className="px-4 py-3 text-sm text-foreground">
                             {product.code}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-300">
+                          <td className="px-4 py-3 text-sm text-foreground">
                             {product.name}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-300 text-right">
+                          <td className="px-4 py-3 text-sm text-foreground text-right">
                             {new Intl.NumberFormat('pt-BR', {
                               style: 'currency',
                               currency: 'BRL'
@@ -324,7 +324,7 @@ export default function ProdutosPage() {
                             <span className={
                               product.stock <= product.min_stock
                                 ? 'text-yellow-400 font-medium'
-                                : 'text-gray-300'
+                                : 'text-foreground'
                             }>
                               {product.stock}
                             </span>
@@ -392,7 +392,7 @@ export default function ProdutosPage() {
 
               {/* Descrição full width */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Descrição
                 </label>
                 <textarea
@@ -400,10 +400,10 @@ export default function ProdutosPage() {
                   rows={4}
                   placeholder="Descrição do produto..."
                   className={`
-                    bg-gray-900/50 backdrop-blur-sm
+                    bg-card/50 backdrop-blur-sm
                     w-full px-4 py-3 rounded-xl
                     border ${errors.description ? 'border-red-500/50' : 'border-white/10'}
-                    text-gray-100 placeholder-gray-500
+                    text-foreground placeholder-muted-foreground
                     shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
                     focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
                     resize-none
@@ -468,16 +468,16 @@ export default function ProdutosPage() {
                 />
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Status
                   </label>
                   <select
                     {...register('active')}
                     className="
-                      bg-gray-900/50 backdrop-blur-sm
+                      bg-card/50 backdrop-blur-sm
                       w-full px-4 py-3 rounded-xl
                       border border-white/10
-                      text-gray-100
+                      text-foreground
                       shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.03)]
                       focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
                       transition-all duration-200
