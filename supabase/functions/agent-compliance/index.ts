@@ -1,21 +1,34 @@
 // Supabase Edge Function para Agente de Compliance ICARUS
 // Deploy: npx supabase functions deploy agent-compliance
+// Updated: 2025-11-25 - Security fixes applied
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+
+// Import shared utilities
+import { getCorsHeaders, handleCorsPreflightRequest, jsonResponse, errorResponse } from '../_shared/cors.ts'
+import { verifyAuth, getUserEmpresaId } from '../_shared/supabase.ts'
 
 // Secrets configuradas no Supabase Dashboard
 const OPENAI_API_KEY = Deno.env.get('OPENAI_MEDICAL_MODEL')
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+// Rate limiting store
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = { windowMs: 60000, maxRequests: 20 }
 
-interface ComplianceCheckRequest {
-  tipo: 'produto' | 'cirurgia' | 'lote' | 'processo'
-  dados: Record<string, unknown>
-  empresaId?: string
-}
+// Zod Schema for input validation
+const ComplianceCheckRequestSchema = z.object({
+  tipo: z.enum(['produto', 'cirurgia', 'lote', 'processo'], {
+    errorMap: () => ({ message: 'Tipo deve ser: produto, cirurgia, lote ou processo' }),
+  }),
+  dados: z.record(z.unknown()),
+  empresaId: z.string().uuid().optional(),
+})
+
+type ComplianceCheckRequest = z.infer<typeof ComplianceCheckRequestSchema>
 
 interface ComplianceIssue {
   codigo: string
@@ -64,34 +77,106 @@ const COMPLIANCE_RULES = `
 4. Direito de exclusao respeitado apos periodo regulatorio
 `
 
+/**
+ * Check rate limit for a user
+ */
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now()
+  const record = rateLimitStore.get(identifier)
+
+  if (!record || record.resetAt < now) {
+    rateLimitStore.set(identifier, { count: 1, resetAt: now + RATE_LIMIT.windowMs })
+    return true
+  }
+
+  if (record.count >= RATE_LIMIT.maxRequests) {
+    return false
+  }
+
+  record.count++
+  return true
+}
+
 serve(async (req) => {
-  // Handle CORS
+  const requestId = crypto.randomUUID()
+
+  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-      },
-    })
+    return handleCorsPreflightRequest(req)
   }
 
   try {
-    const { tipo, dados, empresaId } = await req.json() as ComplianceCheckRequest
+    // 1. Verify authentication
+    const { user, error: authError, supabase } = await verifyAuth(req)
+    if (authError || !user) {
+      console.warn('Auth failed:', { requestId, error: authError })
+      return errorResponse('Nao autorizado', req, 401, requestId)
+    }
+
+    // 2. Check rate limit
+    if (!checkRateLimit(user.id)) {
+      console.warn('Rate limit exceeded:', { requestId, userId: user.id })
+      return new Response(
+        JSON.stringify({ error: 'Muitas requisicoes. Tente novamente em 1 minuto.', requestId }),
+        {
+          status: 429,
+          headers: {
+            ...getCorsHeaders(req),
+            'Content-Type': 'application/json',
+            'Retry-After': '60',
+          },
+        }
+      )
+    }
+
+    // 3. Parse and validate input
+    let body: unknown
+    try {
+      body = await req.json()
+    } catch {
+      return errorResponse('JSON invalido', req, 400, requestId)
+    }
+
+    const parseResult = ComplianceCheckRequestSchema.safeParse(body)
+    if (!parseResult.success) {
+      console.warn('Validation error:', { requestId, errors: parseResult.error.errors })
+      return new Response(
+        JSON.stringify({
+          error: 'Erro de validacao',
+          details: parseResult.error.errors.map(e => ({ field: e.path.join('.'), message: e.message })),
+          requestId,
+        }),
+        {
+          status: 400,
+          headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    const { tipo, dados } = parseResult.data
+
+    // 4. Get user's empresa_id
+    const empresaId = parseResult.data.empresaId || await getUserEmpresaId(supabase, user.id)
 
     let response: ComplianceResponse
 
     // Try OpenAI for advanced analysis if available
     if (OPENAI_API_KEY) {
-      response = await analyzeWithAI(tipo, dados)
+      try {
+        response = await analyzeWithAI(tipo, dados)
+      } catch (aiError) {
+        console.error('AI analysis failed, using rules:', { requestId, error: aiError })
+        response = analyzeWithRules(tipo, dados)
+      }
     } else {
       // Fallback to rule-based analysis
       response = analyzeWithRules(tipo, dados)
     }
 
     // Save compliance check to database
+    const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     try {
-      await supabase
+      await serviceClient
         .from('agentes_ia_compliance')
         .insert({
           empresa_id: empresaId,
@@ -100,23 +185,22 @@ serve(async (req) => {
           resultado: response,
           score: response.score,
           conforme: response.conforme,
+          aprovado: response.aprovado,
         })
     } catch (dbError) {
-      console.error('Database error:', dbError)
+      console.error('Database error:', { requestId, error: dbError instanceof Error ? dbError.message : 'unknown' })
     }
 
-    return new Response(JSON.stringify(response), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      status: 200,
-    })
+    return jsonResponse(response, req, 200)
+
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Unhandled error:', {
+      requestId,
+      error: error instanceof Error ? { name: error.name, message: error.message } : 'unknown',
+    })
 
     return new Response(JSON.stringify({
-      error: error instanceof Error ? error.message : 'Erro interno',
+      error: 'Erro interno do servidor',
       conforme: false,
       score: 0,
       problemas: [{
@@ -129,12 +213,10 @@ serve(async (req) => {
       alertas: ['Verificacao de compliance falhou'],
       aprovado: false,
       timestamp: new Date().toISOString(),
+      requestId,
     }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
       status: 500,
+      headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
     })
   }
 })

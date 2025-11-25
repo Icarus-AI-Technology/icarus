@@ -1,8 +1,15 @@
 // Supabase Edge Function para GPT Researcher ICARUS
 // Deploy: npx supabase functions deploy gpt-researcher
+// Updated: 2025-11-25 - Security fixes applied
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+
+// Import shared utilities
+import { getCorsHeaders, handleCorsPreflightRequest, jsonResponse, errorResponse } from '../_shared/cors.ts'
+import { validatePromptSecurity } from '../_shared/validation.ts'
+import { verifyAuth, getUserEmpresaId } from '../_shared/supabase.ts'
 
 // Secrets configuradas no Supabase Dashboard
 const OPENAI_API_KEY = Deno.env.get('OPENAI_MEDICAL_MODEL')
@@ -10,14 +17,19 @@ const BRAVE_SEARCH_API_KEY = Deno.env.get('BRAVE_SEARCH_API_KEY')
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+// Rate limiting store
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = { windowMs: 60000, maxRequests: 10 } // More restrictive for research
 
-interface ResearchRequest {
-  query: string
-  maxSources?: number
-  language?: string
-  empresaId?: string
-}
+// Zod Schema for input validation
+const ResearchRequestSchema = z.object({
+  query: z.string().min(1, 'Query nao pode ser vazia').max(1000, 'Query muito longa'),
+  maxSources: z.number().int().min(1).max(10).default(5),
+  language: z.string().max(10).default('pt-BR'),
+  empresaId: z.string().uuid().optional(),
+})
+
+type ResearchRequest = z.infer<typeof ResearchRequestSchema>
 
 interface SearchResult {
   title: string
@@ -33,20 +45,93 @@ interface ResearchResponse {
   timestamp: string
 }
 
+/**
+ * Check rate limit for a user
+ */
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now()
+  const record = rateLimitStore.get(identifier)
+
+  if (!record || record.resetAt < now) {
+    rateLimitStore.set(identifier, { count: 1, resetAt: now + RATE_LIMIT.windowMs })
+    return true
+  }
+
+  if (record.count >= RATE_LIMIT.maxRequests) {
+    return false
+  }
+
+  record.count++
+  return true
+}
+
 serve(async (req) => {
-  // Handle CORS
+  const requestId = crypto.randomUUID()
+
+  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-      },
-    })
+    return handleCorsPreflightRequest(req)
   }
 
   try {
-    const { query, maxSources = 5, language = 'pt-BR', empresaId } = await req.json() as ResearchRequest
+    // 1. Verify authentication
+    const { user, error: authError, supabase } = await verifyAuth(req)
+    if (authError || !user) {
+      console.warn('Auth failed:', { requestId, error: authError })
+      return errorResponse('Nao autorizado', req, 401, requestId)
+    }
+
+    // 2. Check rate limit
+    if (!checkRateLimit(user.id)) {
+      console.warn('Rate limit exceeded:', { requestId, userId: user.id })
+      return new Response(
+        JSON.stringify({ error: 'Muitas requisicoes. Tente novamente em 1 minuto.', requestId }),
+        {
+          status: 429,
+          headers: {
+            ...getCorsHeaders(req),
+            'Content-Type': 'application/json',
+            'Retry-After': '60',
+          },
+        }
+      )
+    }
+
+    // 3. Parse and validate input
+    let body: unknown
+    try {
+      body = await req.json()
+    } catch {
+      return errorResponse('JSON invalido', req, 400, requestId)
+    }
+
+    const parseResult = ResearchRequestSchema.safeParse(body)
+    if (!parseResult.success) {
+      console.warn('Validation error:', { requestId, errors: parseResult.error.errors })
+      return new Response(
+        JSON.stringify({
+          error: 'Erro de validacao',
+          details: parseResult.error.errors.map(e => ({ field: e.path.join('.'), message: e.message })),
+          requestId,
+        }),
+        {
+          status: 400,
+          headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    const { query, maxSources, language } = parseResult.data
+
+    // 4. Security: Check for prompt injection in query
+    const securityCheck = validatePromptSecurity(query)
+    if (!securityCheck.valid) {
+      console.warn('Prompt injection attempt:', { requestId, userId: user.id, reason: securityCheck.reason })
+      return errorResponse('Query invalida', req, 400, requestId)
+    }
+
+    // 5. Get user's empresa_id
+    const empresaId = parseResult.data.empresaId || await getUserEmpresaId(supabase, user.id)
 
     // Generate search queries
     const searchQueries = await generateSearchQueries(query)
@@ -75,8 +160,9 @@ serve(async (req) => {
     const researchId = crypto.randomUUID()
 
     // Save research to database
+    const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     try {
-      await supabase
+      await serviceClient
         .from('chatbot_pesquisas_gpt')
         .insert({
           id: researchId,
@@ -88,7 +174,7 @@ serve(async (req) => {
           num_fontes: uniqueResults.length,
         })
     } catch (dbError) {
-      console.error('Database error:', dbError)
+      console.error('Database error:', { requestId, error: dbError instanceof Error ? dbError.message : 'unknown' })
     }
 
     const response: ResearchResponse = {
@@ -99,36 +185,30 @@ serve(async (req) => {
       timestamp: new Date().toISOString(),
     }
 
-    return new Response(JSON.stringify(response), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      status: 200,
-    })
+    return jsonResponse(response, req, 200)
+
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Unhandled error:', {
+      requestId,
+      error: error instanceof Error ? { name: error.name, message: error.message } : 'unknown',
+    })
 
     return new Response(JSON.stringify({
-      error: error instanceof Error ? error.message : 'Erro interno',
-      id: crypto.randomUUID(),
+      error: 'Erro interno do servidor',
+      id: requestId,
       query: '',
       sources: [],
       synthesis: 'Nao foi possivel realizar a pesquisa. Por favor, tente novamente.',
       timestamp: new Date().toISOString(),
     }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
       status: 500,
+      headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
     })
   }
 })
 
 async function generateSearchQueries(query: string): Promise<string[]> {
   if (!OPENAI_API_KEY) {
-    // Return original query if no API key
     return [query]
   }
 
@@ -209,7 +289,6 @@ async function synthesizeResults(
   }
 
   if (!OPENAI_API_KEY) {
-    // Return basic summary without AI
     return `Encontrados ${results.length} resultados para "${query}":\n\n` +
       results.map((r, i) => `${i + 1}. ${r.title}\n   ${r.snippet}`).join('\n\n')
   }
@@ -274,7 +353,6 @@ function deduplicateResults(results: SearchResult[]): SearchResult[] {
 }
 
 function getMockSearchResults(query: string): SearchResult[] {
-  // Mock results for development without API keys
   const mockResults: SearchResult[] = [
     {
       title: 'ANVISA - Dispositivos Medicos',
@@ -303,7 +381,6 @@ function getMockSearchResults(query: string): SearchResult[] {
     },
   ]
 
-  // Filter based on query keywords
   const queryLower = query.toLowerCase()
   const filtered = mockResults.filter(r =>
     r.title.toLowerCase().includes(queryLower) ||
