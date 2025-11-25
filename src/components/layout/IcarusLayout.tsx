@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react'
 import { IcarusSidebar } from './IcarusSidebar'
 import { IcarusTopbar } from './IcarusTopbar'
 import { IcarusBreadcrumbs } from './IcarusBreadcrumbs'
+import { ChatWidget } from '@/components/chat/ChatWidget'
 
 interface IcarusLayoutProps {
   children: ReactNode
@@ -33,6 +34,9 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
           {children}
         </div>
       </main>
+
+      {/* Chat Widget - Assistente Virtual ICARUS */}
+      <ChatWidget position="bottom-right" />
     </div>
   )
 }
