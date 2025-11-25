@@ -264,13 +264,34 @@ export function displayHardGateBanner(result: ValidationResult): void {
     banner.textContent = `✅ ORX Gate: APROVADO - 100% Coverage`;
   } else {
     const errorCount = result.violations.filter(v => v.severity === 'error').length;
-    banner.innerHTML = `
-      🚨 ORX Gate: REPROVADO - ${errorCount} Violações
-      <div style="font-size: 12px; margin-top: 4px; font-weight: normal;">
-        ${result.violations.slice(0, 3).map(v => `• ${v.message}`).join('<br>')}
-        ${result.violations.length > 3 ? `<br>... e mais ${result.violations.length - 3} violações` : ''}
-      </div>
-    `;
+
+    // Create header text (safe - no user input)
+    const headerText = document.createTextNode(`🚨 ORX Gate: REPROVADO - ${errorCount} Violações`);
+    banner.appendChild(headerText);
+
+    // Create details div
+    const detailsDiv = document.createElement('div');
+    detailsDiv.style.cssText = 'font-size: 12px; margin-top: 4px; font-weight: normal;';
+
+    // Add violation messages safely using textContent
+    result.violations.slice(0, 3).forEach((v, index) => {
+      if (index > 0) {
+        detailsDiv.appendChild(document.createElement('br'));
+      }
+      const messageSpan = document.createElement('span');
+      messageSpan.textContent = `• ${v.message}`;
+      detailsDiv.appendChild(messageSpan);
+    });
+
+    // Add "and more" text if needed
+    if (result.violations.length > 3) {
+      detailsDiv.appendChild(document.createElement('br'));
+      const moreSpan = document.createElement('span');
+      moreSpan.textContent = `... e mais ${result.violations.length - 3} violações`;
+      detailsDiv.appendChild(moreSpan);
+    }
+
+    banner.appendChild(detailsDiv);
   }
 
   document.body.appendChild(banner);
