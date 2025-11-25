@@ -689,7 +689,7 @@ export function CirurgiasProcedimentos() {
                     {getCirurgiasPorColuna(coluna.id).map(cirurgia => (
                       <Card
                         key={cirurgia.id}
-                        className="cursor-pointer hover:shadow-lg transition-shadow bg-white"
+                        className="cursor-pointer hover:shadow-lg transition-shadow neu-soft"
                         onClick={() => handleAbrirDetalhes(cirurgia)}
                       >
                         <CardContent className="p-4">

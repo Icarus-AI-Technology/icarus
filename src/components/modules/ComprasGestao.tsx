@@ -1058,7 +1058,7 @@ export default function ComprasGestao() {
                         <p className="text-xs font-semibold text-gray-700 mb-2">Itens Solicitados ({cotacao.itens.length})</p>
                         <div className="space-y-1">
                           {cotacao.itens.map(item => (
-                            <div key={item.id} className="text-sm flex justify-between bg-gray-50 p-2 rounded">
+                            <div key={item.id} className="text-sm flex justify-between bg-muted p-2 rounded">
                               <span>{item.quantidade_solicitada}x {item.descricao}</span>
                               <span className="text-gray-500">Entrega: {formatDate(item.prazo_entrega_desejado)}</span>
                             </div>
@@ -1075,7 +1075,7 @@ export default function ComprasGestao() {
                           <div className="space-y-2">
                             {cotacao.cotacoes_recebidas.map(cot => (
                               <div key={cot.id} className={`p-3 rounded border ${
-                                cot.selecionada ? 'bg-green-50 border-green-300' : 'bg-white border-gray-200'
+                                cot.selecionada ? 'bg-green-50 border-green-300' : 'bg-card border-border'
                               }`}>
                                 <div className="flex justify-between items-center">
                                   <div>
@@ -1435,8 +1435,8 @@ export default function ComprasGestao() {
 
                       {/* Análise de Estoque */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-3 bg-gray-50 rounded border">
-                          <p className="text-xs text-gray-600 mb-1">Estoque Atual vs Mínimo</p>
+                        <div className="p-3 bg-muted rounded border border-border">
+                          <p className="text-xs text-muted-foreground mb-1">Estoque Atual vs Mínimo</p>
                           <p className="text-xl font-bold">
                             {previsao.estoque_atual} / {previsao.estoque_minimo}
                           </p>

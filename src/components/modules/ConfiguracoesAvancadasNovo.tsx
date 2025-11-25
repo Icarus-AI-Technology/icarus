@@ -33,17 +33,17 @@ export default function ConfiguracoesAvancadasNovo() {
               <CardTitle>Configurações Gerais</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
+              <div className="form-row">
                 <label className="font-semibold">Nome da Empresa</label>
-                <input className="w-full p-2 border rounded" defaultValue="ICARUS OPME Ltda" />
+                <input className="neu-input" defaultValue="ICARUS OPME Ltda" />
               </div>
-              <div className="space-y-2">
+              <div className="form-row">
                 <label className="font-semibold">CNPJ</label>
-                <input className="w-full p-2 border rounded" defaultValue="12.345.678/0001-90" />
+                <input className="neu-input" defaultValue="12.345.678/0001-90" />
               </div>
-              <div className="space-y-2">
+              <div className="form-row">
                 <label className="font-semibold">Endereço</label>
-                <input className="w-full p-2 border rounded" defaultValue="Av. Paulista, 1000 - São Paulo/SP" />
+                <input className="neu-input" defaultValue="Av. Paulista, 1000 - São Paulo/SP" />
               </div>
               <Button>Salvar Alterações</Button>
             </CardContent>
@@ -57,10 +57,10 @@ export default function ConfiguracoesAvancadasNovo() {
             </CardHeader>
             <CardContent className="space-y-3">
               {['Supabase', 'Claude AI', 'SEFAZ', 'ANVISA'].map(integ => (
-                <div key={integ} className="p-3 border rounded-lg flex justify-between items-center">
+                <div key={integ} className="p-3 border border-border rounded-lg flex justify-between items-center neu-soft">
                   <div>
                     <div className="font-semibold">{integ}</div>
-                    <div className="text-xs text-gray-600">Configurar conexão</div>
+                    <div className="text-xs text-muted-foreground">Configurar conexão</div>
                   </div>
                   <Button size="sm" variant="outline">⚙️ Configurar</Button>
                 </div>
@@ -76,10 +76,10 @@ export default function ConfiguracoesAvancadasNovo() {
             </CardHeader>
             <CardContent className="space-y-3">
               {['Email', 'SMS', 'Push', 'WhatsApp'].map(tipo => (
-                <div key={tipo} className="p-3 border rounded-lg flex justify-between items-center">
+                <div key={tipo} className="p-3 border border-border rounded-lg flex justify-between items-center neu-soft">
                   <span className="font-semibold">{tipo}</span>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" defaultChecked />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" className="neu-checkbox" defaultChecked />
                     <span className="text-sm">Ativo</span>
                   </label>
                 </div>
@@ -94,15 +94,15 @@ export default function ConfiguracoesAvancadasNovo() {
               <CardTitle>🔒 Segurança</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 border rounded-lg">
+              <div className="p-3 border border-border rounded-lg neu-soft">
                 <div className="font-semibold mb-2">Autenticação em Dois Fatores</div>
                 <Button size="sm" variant="outline">Ativar 2FA</Button>
               </div>
-              <div className="p-3 border rounded-lg">
+              <div className="p-3 border border-border rounded-lg neu-soft">
                 <div className="font-semibold mb-2">Política de Senhas</div>
                 <Button size="sm" variant="outline">Configurar</Button>
               </div>
-              <div className="p-3 border rounded-lg">
+              <div className="p-3 border border-border rounded-lg neu-soft">
                 <div className="font-semibold mb-2">Logs de Auditoria</div>
                 <Button size="sm" variant="outline">Visualizar</Button>
               </div>

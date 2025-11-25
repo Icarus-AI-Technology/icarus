@@ -65,14 +65,14 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 style={{ fontSize: 'var(--font-4xl)', fontWeight: 'var(--font-bold)' }} className="text-gray-900 dark:text-gray-100 mb-4">
+          <h1 style={{ fontSize: 'var(--font-4xl)', fontWeight: 'var(--font-bold)' }} className="text-foreground mb-4">
             Entre em Contato
           </h1>
-          <p style={{ fontSize: 'var(--font-lg)' }} className="text-gray-600 dark:text-gray-400">
+          <p style={{ fontSize: 'var(--font-lg)' }} className="text-muted-foreground">
             Preencha o formulário abaixo e entraremos em contato em breve
           </p>
         </div>
@@ -90,7 +90,7 @@ export default function ContactPage() {
             <CardContent className="space-y-6">
               {/* Nome */}
               <div className="relative">
-                <div className="absolute left-3 top-11 text-gray-400">
+                <div className="absolute left-3 top-11 text-muted-foreground">
                   <User className="size-5" />
                 </div>
                 <Input
@@ -105,7 +105,7 @@ export default function ContactPage() {
 
               {/* Email */}
               <div className="relative">
-                <div className="absolute left-3 top-11 text-gray-400">
+                <div className="absolute left-3 top-11 text-muted-foreground">
                   <Mail className="size-5" />
                 </div>
                 <Input
@@ -121,7 +121,7 @@ export default function ContactPage() {
 
               {/* Telefone */}
               <div className="relative">
-                <div className="absolute left-3 top-11 text-gray-400">
+                <div className="absolute left-3 top-11 text-muted-foreground">
                   <Phone className="size-5" />
                 </div>
                 <Input
@@ -138,7 +138,7 @@ export default function ContactPage() {
 
               {/* Mensagem */}
               <div className="relative">
-                <div className="absolute left-3 top-11 text-gray-400">
+                <div className="absolute left-3 top-11 text-muted-foreground">
                   <MessageSquare className="size-5" />
                 </div>
                 <Textarea
@@ -189,31 +189,31 @@ export default function ContactPage() {
         {/* Informações de contato adicionais */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card variant="bordered" className="text-center p-6">
-            <Mail className="size-8 text-[#6366F1] mx-auto mb-3" />
-            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
+            <Mail className="size-8 text-primary mx-auto mb-3" />
+            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-foreground mb-1">
               Email
             </h3>
-            <p style={{ fontSize: 'var(--font-sm)' }} className="text-gray-600 dark:text-gray-400">
+            <p style={{ fontSize: 'var(--font-sm)' }} className="text-muted-foreground">
               contato@icarus.ai
             </p>
           </Card>
 
           <Card variant="bordered" className="text-center p-6">
-            <Phone className="size-8 text-[#6366F1] mx-auto mb-3" />
-            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
+            <Phone className="size-8 text-primary mx-auto mb-3" />
+            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-foreground mb-1">
               Telefone
             </h3>
-            <p style={{ fontSize: 'var(--font-sm)' }} className="text-gray-600 dark:text-gray-400">
+            <p style={{ fontSize: 'var(--font-sm)' }} className="text-muted-foreground">
               (11) 98765-4321
             </p>
           </Card>
 
           <Card variant="bordered" className="text-center p-6">
-            <MessageSquare className="size-8 text-[#6366F1] mx-auto mb-3" />
-            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-gray-900 dark:text-gray-100 mb-1">
+            <MessageSquare className="size-8 text-primary mx-auto mb-3" />
+            <h3 style={{ fontWeight: 'var(--font-semibold)' }} className="text-foreground mb-1">
               WhatsApp
             </h3>
-            <p style={{ fontSize: 'var(--font-sm)' }} className="text-gray-600 dark:text-gray-400">
+            <p style={{ fontSize: 'var(--font-sm)' }} className="text-muted-foreground">
               (11) 98765-4321
             </p>
           </Card>

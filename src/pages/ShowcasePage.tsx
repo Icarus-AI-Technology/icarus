@@ -29,14 +29,14 @@ export default function ShowcasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             ICARUS v5.0 Showcase
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Demonstração interativa de todos os componentes Neumorphism
           </p>
         </div>
@@ -48,7 +48,7 @@ export default function ShowcasePage() {
           <div className="space-y-8">
             {/* Primary Actions */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Ações Principais</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Ações Principais</h3>
               <div className="flex flex-wrap gap-4">
                 <NeuButton variant="primary" size="sm">
                   Small Primary
@@ -67,7 +67,7 @@ export default function ShowcasePage() {
 
             {/* Soft Variant */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Neumorphic Soft</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Neumorphic Soft</h3>
               <div className="flex flex-wrap gap-4">
                 <NeuButton variant="soft">
                   Soft Default
@@ -94,7 +94,7 @@ export default function ShowcasePage() {
 
             {/* Loading States */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Estados de Loading</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Estados de Loading</h3>
               <div className="flex flex-wrap gap-4">
                 <NeuButton
                   variant="soft"
@@ -114,7 +114,7 @@ export default function ShowcasePage() {
 
             {/* Danger Actions */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Ações Destrutivas</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Ações Destrutivas</h3>
               <div className="flex flex-wrap gap-4">
                 <NeuButton
                   variant="danger"
@@ -130,7 +130,7 @@ export default function ShowcasePage() {
 
             {/* Secondary & Pressed */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Secundárias e Pressionadas</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Secundárias e Pressionadas</h3>
               <div className="flex flex-wrap gap-4">
                 <NeuButton variant="secondary">
                   Secundário
@@ -150,25 +150,25 @@ export default function ShowcasePage() {
           <div className="space-y-6">
             {/* Elevations */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Níveis de Elevação</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Níveis de Elevação</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <NeuCard variant="soft" elevation="low" padding="md">
                   <h4 className="font-semibold mb-2">Elevação Baixa</h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Para elementos secundários e footers
                   </p>
                 </NeuCard>
 
                 <NeuCard variant="soft" elevation="medium" padding="md">
                   <h4 className="font-semibold mb-2">Elevação Média</h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Padrão - 80% dos casos de uso
                   </p>
                 </NeuCard>
 
                 <NeuCard variant="soft" elevation="high" padding="md">
                   <h4 className="font-semibold mb-2">Elevação Alta</h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Modais, popovers, elementos principais
                   </p>
                 </NeuCard>
@@ -177,25 +177,25 @@ export default function ShowcasePage() {
 
             {/* Variants */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Variantes</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Variantes</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <NeuCard variant="soft" padding="md">
                   <h4 className="font-semibold mb-2">Soft (Padrão)</h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Sombras externas, aparece elevado
                   </p>
                 </NeuCard>
 
                 <NeuCard variant="pressed" padding="md">
                   <h4 className="font-semibold mb-2">Pressed</h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Sombras internas, aparece afundado
                   </p>
                 </NeuCard>
 
                 <NeuCard variant="flat" padding="md">
                   <h4 className="font-semibold mb-2">Flat</h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Sem sombras, apenas border
                   </p>
                 </NeuCard>
@@ -204,7 +204,7 @@ export default function ShowcasePage() {
 
             {/* Padding Options */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Opções de Padding</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Opções de Padding</h3>
               <div className="space-y-4">
                 <NeuCard variant="soft" padding="sm">
                   <p className="text-sm">Padding Small (sm)</p>
@@ -223,13 +223,13 @@ export default function ShowcasePage() {
 
             {/* Card com Ícone 3D */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Card com Ícone 3D</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Card com Ícone 3D</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <NeuCard variant="soft" elevation="medium" padding="lg">
                   <div className="flex items-center gap-4">
                     <Icon3D name="wallet" size="lg" />
                     <div>
-                      <p className="text-sm text-gray-600">Saldo</p>
+                      <p className="text-sm text-muted-foreground">Saldo</p>
                       <p className="text-xl font-bold">R$ 125.430</p>
                     </div>
                   </div>
@@ -239,7 +239,7 @@ export default function ShowcasePage() {
                   <div className="flex items-center gap-4">
                     <Icon3D name="package" size="lg" />
                     <div>
-                      <p className="text-sm text-gray-600">Estoque</p>
+                      <p className="text-sm text-muted-foreground">Estoque</p>
                       <p className="text-xl font-bold">1.234</p>
                     </div>
                   </div>
@@ -249,7 +249,7 @@ export default function ShowcasePage() {
                   <div className="flex items-center gap-4">
                     <Icon3D name="users" size="lg" />
                     <div>
-                      <p className="text-sm text-gray-600">Clientes</p>
+                      <p className="text-sm text-muted-foreground">Clientes</p>
                       <p className="text-xl font-bold">456</p>
                     </div>
                   </div>
@@ -259,7 +259,7 @@ export default function ShowcasePage() {
                   <div className="flex items-center gap-4">
                     <Icon3D name="chart" size="lg" />
                     <div>
-                      <p className="text-sm text-gray-600">Vendas</p>
+                      <p className="text-sm text-muted-foreground">Vendas</p>
                       <p className="text-xl font-bold">R$ 89.500</p>
                     </div>
                   </div>
@@ -276,7 +276,7 @@ export default function ShowcasePage() {
           <div className="space-y-6 max-w-2xl">
             {/* Basic Input */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Input Básico</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Input Básico</h3>
               <NeuInput
                 label="Nome do Produto"
                 placeholder="Ex: Prótese de Joelho"
@@ -286,7 +286,7 @@ export default function ShowcasePage() {
 
             {/* Input with Helper Text */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Input com Helper Text</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Input com Helper Text</h3>
               <NeuInput
                 label="Código"
                 placeholder="PRO-001"
@@ -296,7 +296,7 @@ export default function ShowcasePage() {
 
             {/* Input with Validation */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Input com Validação</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Input com Validação</h3>
               <NeuInput
                 label="Nome"
                 placeholder="Digite seu nome"
@@ -312,7 +312,7 @@ export default function ShowcasePage() {
 
             {/* Disabled Input */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Input Desabilitado</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Input Desabilitado</h3>
               <NeuInput
                 label="Campo Desabilitado"
                 placeholder="Não editável"
@@ -323,7 +323,7 @@ export default function ShowcasePage() {
 
             {/* Different Types */}
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-700">Tipos de Input</h3>
+              <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Tipos de Input</h3>
               <div className="space-y-4">
                 <NeuInput
                   label="Email"
@@ -405,7 +405,7 @@ export default function ShowcasePage() {
         {/* Usage Guide */}
         <NeuCard variant="soft" elevation="medium" padding="lg">
           <h2 className="text-2xl font-bold mb-4">📖 Guia de Uso</h2>
-          <div className="space-y-4 text-sm text-gray-700">
+          <div className="space-y-4 text-sm text-muted-foreground">
             <p>
               <strong>NeuButton:</strong> Use variant="soft" para ações principais,
               "danger" para destrutivas, "secondary" para cancelar.
@@ -426,7 +426,7 @@ export default function ShowcasePage() {
         </NeuCard>
 
         {/* Footer */}
-        <div className="text-center text-gray-500 text-sm py-8">
+        <div className="text-center text-muted-foreground text-sm py-8">
           <p>ICARUS v5.0 - Design System Neumorphism</p>
           <p className="mt-2">
             Desenvolvido com ❤️ usando Code Connect + Claude Code

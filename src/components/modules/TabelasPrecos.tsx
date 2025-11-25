@@ -387,42 +387,42 @@ export default function TabelasPrecos() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   Simule diferentes cenários de precificação e calcule markup/margem.
                 </p>
 
-                <Card className="p-4 bg-gray-50">
+                <Card className="p-4 bg-muted neu-soft">
                   <div className="space-y-3">
-                    <div>
+                    <div className="form-row">
                       <label className="text-sm font-semibold">Preço de Custo</label>
                       <input
                         type="number"
-                        className="w-full p-2 border rounded mt-1"
+                        className="neu-input"
                         placeholder="R$ 0,00"
                       />
                     </div>
 
-                    <div>
+                    <div className="form-row">
                       <label className="text-sm font-semibold">Markup Desejado (%)</label>
                       <input
                         type="number"
-                        className="w-full p-2 border rounded mt-1"
+                        className="neu-input"
                         placeholder="0.00"
                       />
                     </div>
 
-                    <div className="border-t pt-3">
+                    <div className="border-t border-border pt-3">
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm">Preço de Venda:</span>
-                        <span className="font-bold text-lg text-blue-600">R$ 0,00</span>
+                        <span className="text-sm text-muted-foreground">Preço de Venda:</span>
+                        <span className="font-bold text-lg text-info">R$ 0,00</span>
                       </div>
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm">Margem de Lucro:</span>
-                        <span className="font-bold text-green-600">R$ 0,00</span>
+                        <span className="text-sm text-muted-foreground">Margem de Lucro:</span>
+                        <span className="font-bold text-success">R$ 0,00</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm">Margem %:</span>
-                        <span className="font-bold text-purple-600">0.00%</span>
+                        <span className="text-sm text-muted-foreground">Margem %:</span>
+                        <span className="font-bold text-accent">0.00%</span>
                       </div>
                     </div>
 
@@ -430,9 +430,9 @@ export default function TabelasPrecos() {
                   </div>
                 </Card>
 
-                <Card className="p-4">
+                <Card className="p-4 neu-soft">
                   <h4 className="font-semibold mb-3">💡 Dicas de Precificação</h4>
-                  <ul className="space-y-2 text-sm text-gray-700">
+                  <ul className="space-y-2 text-sm text-muted-foreground">
                     <li>• Markup médio do mercado OPME: 15-30%</li>
                     <li>• Considere custos indiretos na precificação</li>
                     <li>• Margem mínima recomendada: 10%</li>
