@@ -35,3 +35,4 @@ dist-ssr
 # Coverage
 coverage/
 .nyc_output/
+supabase/functions/.env
