@@ -378,7 +378,7 @@ export default function NotasCompra() {
                           </div>
                         </div>
 
-                        <div className="p-3 bg-white rounded border border-red-300">
+                        <div className="p-3 neu-soft rounded border border-red-300">
                           <p className="text-xs font-semibold text-red-900 mb-2">Divergências Identificadas:</p>
                           {nota.divergencias?.map((div, idx) => (
                             <p key={idx} className="text-sm text-red-800 mb-1">• {div}</p>
@@ -389,7 +389,7 @@ export default function NotasCompra() {
                           <p className="text-xs font-semibold mb-2">Itens</p>
                           {nota.itens.map(item => (
                             <div key={item.id} className={`text-sm p-2 rounded mb-1 ${
-                              item.status === 'divergente' ? 'bg-red-100 border border-red-300' : 'bg-white'
+                              item.status === 'divergente' ? 'bg-red-100 border border-red-300' : 'bg-card'
                             }`}>
                               <div className="flex justify-between">
                                 <span>{item.produto}</span>

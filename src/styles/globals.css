@@ -265,6 +265,74 @@
     @apply text-sm font-medium text-foreground;
   }
 
+  /* Neumorphic Input - Inset effect for form inputs */
+  .neu-input {
+    @apply w-full px-4 py-2.5 rounded-xl;
+    @apply bg-background text-foreground;
+    @apply border border-border;
+    @apply transition-all duration-200;
+    @apply placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+  }
+
+  .neu-input:focus {
+    box-shadow: inset 1px 1px 2px var(--shadow-dark),
+                inset -1px -1px 2px var(--shadow-light),
+                0 0 0 2px hsl(var(--primary) / 0.2);
+  }
+
+  /* Neumorphic Checkbox */
+  .neu-checkbox {
+    @apply w-5 h-5 rounded-md cursor-pointer;
+    @apply appearance-none;
+    @apply border border-border;
+    @apply bg-background;
+    @apply transition-all duration-200;
+    box-shadow: inset 1px 1px 2px var(--shadow-dark),
+                inset -1px -1px 2px var(--shadow-light);
+  }
+
+  .neu-checkbox:checked {
+    @apply bg-primary border-primary;
+    box-shadow: 2px 2px 4px var(--shadow-dark),
+                -2px -2px 4px var(--shadow-light);
+  }
+
+  .neu-checkbox:checked::after {
+    content: '✓';
+    @apply flex items-center justify-center text-white text-xs font-bold;
+  }
+
+  .neu-checkbox:focus {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Neumorphic Select */
+  .neu-select {
+    @apply w-full px-4 py-2.5 rounded-xl;
+    @apply bg-background text-foreground;
+    @apply border border-border;
+    @apply transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10L6 8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+  }
+
+  .neu-select:focus {
+    box-shadow: inset 1px 1px 2px var(--shadow-dark),
+                inset -1px -1px 2px var(--shadow-light),
+                0 0 0 2px hsl(var(--primary) / 0.2);
+  }
+
   /* Hover states for neomorphic elements */
   .neu-soft:hover {
     box-shadow: 10px 10px 20px rgba(174, 174, 192, 0.25),

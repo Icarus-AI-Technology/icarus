@@ -1285,7 +1285,7 @@ export default function CRMVendas() {
                                     ))}
                                   </ul>
                                 </div>
-                                <div className="mt-3 p-3 bg-white rounded border border-orange-300">
+                                <div className="mt-3 p-3 bg-card rounded border border-orange-300 neu-soft">
                                   <p className="text-xs text-orange-700 font-semibold mb-1">🎯 Ação Preventiva Recomendada:</p>
                                   <p className="text-sm text-orange-900">{previsao.churn_acao_preventiva}</p>
                                 </div>
@@ -1322,7 +1322,7 @@ export default function CRMVendas() {
                               {previsao.oportunidades_upsell.length > 0 ? (
                                 <div className="space-y-2">
                                   {previsao.oportunidades_upsell.map((opp, idx) => (
-                                    <div key={idx} className="p-2 bg-white rounded border border-green-300">
+                                    <div key={idx} className="p-2 bg-card rounded border border-green-300 neu-soft">
                                       <p className="text-sm font-semibold text-green-900">{opp.produto}</p>
                                       <div className="flex justify-between mt-1">
                                         <span className="text-xs text-green-700">Prob: {opp.probabilidade}%</span>
