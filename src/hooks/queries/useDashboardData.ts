@@ -37,20 +37,20 @@ export function useDashboardKPIs() {
       }
 
       try {
-        // Fetch surgeries today
+        // Fetch surgeries today - only count needed, select minimal fields
         const today = new Date().toISOString().split('T')[0]
         const { data: surgeries, error: surgeriesError} = await supabase
           .from('cirurgias')
-          .select('*')
+          .select('id, status')
           .eq('data_agendada', today)
 
         if (surgeriesError) throw surgeriesError
 
-        // Fetch critical stock products
+        // Fetch critical stock products - only count needed, select minimal fields
         const { data: products, error: productsError } = await supabase
           .from('produtos')
-          .select('*')
-          .lt('quantidade_estoque', 10) // Simplified: products with stock < 10
+          .select('id, quantidade_estoque')
+          .lt('quantidade_estoque', 10) // Products with stock < 10
 
         if (productsError) throw productsError
 
