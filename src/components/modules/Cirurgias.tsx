@@ -1,4 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
@@ -33,13 +35,23 @@ import {
   CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { toast } from 'sonner'
+import {
+  cirurgiaSchema,
+  nameToInitials,
+  type CirurgiaFormData,
+} from './schemas/cirurgia.schema'
 
 type SurgeryStatus = 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
 
 interface Surgery {
   id: string
   surgery_number: string
-  patient_name: string
+  /** @deprecated Use paciente_iniciais - LGPD compliance */
+  patient_name?: string
+  /** LGPD Compliant: Patient initials only (e.g., "J.S.") */
+  paciente_iniciais: string
+  /** Hospital's internal patient reference */
+  paciente_ref_hospital?: string | null
   doctor_id: string
   doctor_name?: string
   hospital_id: string
@@ -79,9 +91,11 @@ export function Cirurgias() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [selectedSurgery, setSelectedSurgery] = useState<Surgery | null>(null)
 
-  // Form state
+  // Form state with Zod validation
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [formData, setFormData] = useState({
-    patient_name: '',
+    paciente_iniciais: '',
+    paciente_ref_hospital: '',
     doctor_id: '',
     hospital_id: '',
     surgery_type: '',
@@ -90,6 +104,34 @@ export function Cirurgias() {
     notes: '',
     estimated_value: ''
   })
+
+  // Validate form data with Zod schema
+  const validateForm = (): boolean => {
+    const result = cirurgiaSchema.safeParse({
+      paciente_iniciais: formData.paciente_iniciais,
+      paciente_ref_hospital: formData.paciente_ref_hospital || null,
+      doctor_id: formData.doctor_id,
+      hospital_id: formData.hospital_id,
+      surgery_type: formData.surgery_type,
+      scheduled_date: formData.scheduled_date,
+      scheduled_time: formData.scheduled_time,
+      estimated_value: formData.estimated_value ? parseFloat(formData.estimated_value) : 0,
+      notes: formData.notes || null,
+    })
+
+    if (!result.success) {
+      const errors: Record<string, string> = {}
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as string
+        errors[field] = err.message
+      })
+      setFormErrors(errors)
+      return false
+    }
+
+    setFormErrors({})
+    return true
+  }
 
   // Mock data
   const mockDoctors: Doctor[] = [
@@ -105,11 +147,13 @@ export function Cirurgias() {
     { id: '3', name: 'Hospital Sírio-Libanês', city: 'São Paulo' }
   ]
 
+  // Mock data - LGPD Compliant (using initials only)
   const mockSurgeries: Surgery[] = [
     {
       id: '1',
       surgery_number: 'CIR-2025-001',
-      patient_name: 'João da Silva',
+      paciente_iniciais: 'J.S.',
+      paciente_ref_hospital: 'HSC-2025-001',
       doctor_id: '1',
       doctor_name: 'Dr. Carlos Silva',
       hospital_id: '1',
@@ -125,7 +169,8 @@ export function Cirurgias() {
     {
       id: '2',
       surgery_number: 'CIR-2025-002',
-      patient_name: 'Maria Santos',
+      paciente_iniciais: 'M.S.',
+      paciente_ref_hospital: 'HAE-2025-042',
       doctor_id: '2',
       doctor_name: 'Dr. Ana Santos',
       hospital_id: '2',
@@ -141,7 +186,8 @@ export function Cirurgias() {
     {
       id: '3',
       surgery_number: 'CIR-2025-003',
-      patient_name: 'Pedro Oliveira',
+      paciente_iniciais: 'P.O.',
+      paciente_ref_hospital: 'HSL-2025-103',
       doctor_id: '3',
       doctor_name: 'Dr. Pedro Costa',
       hospital_id: '3',
@@ -157,7 +203,8 @@ export function Cirurgias() {
     {
       id: '4',
       surgery_number: 'CIR-2025-004',
-      patient_name: 'Ana Costa',
+      paciente_iniciais: 'A.C.',
+      paciente_ref_hospital: 'HSC-2025-002',
       doctor_id: '1',
       doctor_name: 'Dr. Carlos Silva',
       hospital_id: '1',
@@ -173,7 +220,8 @@ export function Cirurgias() {
     {
       id: '5',
       surgery_number: 'CIR-2025-005',
-      patient_name: 'Carlos Ferreira',
+      paciente_iniciais: 'C.F.',
+      paciente_ref_hospital: 'HAE-2025-043',
       doctor_id: '4',
       doctor_name: 'Dra. Maria Oliveira',
       hospital_id: '2',
@@ -270,18 +318,19 @@ export function Cirurgias() {
   }, [isConfigured, loadData])
 
   const handleCreate = async () => {
-    if (!formData.patient_name || !formData.doctor_id || !formData.hospital_id ||
-        !formData.surgery_type || !formData.scheduled_date || !formData.scheduled_time) {
-      toast.error('Preencha todos os campos obrigatórios')
+    // Validate form with Zod schema
+    if (!validateForm()) {
+      toast.error('Preencha todos os campos corretamente')
       return
     }
 
     if (!isConfigured) {
-      // Mock create
+      // Mock create - LGPD compliant (initials only)
       const newSurgery: Surgery = {
         id: String(surgeries.length + 1),
         surgery_number: `CIR-2025-${String(surgeries.length + 1).padStart(3, '0')}`,
-        patient_name: formData.patient_name,
+        paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
+        paciente_ref_hospital: formData.paciente_ref_hospital || null,
         doctor_id: formData.doctor_id,
         doctor_name: doctors.find(d => d.id === formData.doctor_id)?.name,
         hospital_id: formData.hospital_id,
@@ -302,11 +351,12 @@ export function Cirurgias() {
     }
 
     try {
-      const { error } = await supabase  
-    
+      const { error } = await supabase
+
         .from('cirurgias')
         .insert([{
-          patient_name: formData.patient_name,
+          paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
+          paciente_ref_hospital: formData.paciente_ref_hospital || null,
           doctor_id: formData.doctor_id,
           hospital_id: formData.hospital_id,
           surgery_type: formData.surgery_type,
@@ -333,13 +383,20 @@ export function Cirurgias() {
   const handleUpdate = async () => {
     if (!selectedSurgery) return
 
+    // Validate form with Zod schema
+    if (!validateForm()) {
+      toast.error('Preencha todos os campos corretamente')
+      return
+    }
+
     if (!isConfigured) {
-      // Mock update
+      // Mock update - LGPD compliant
       const updatedSurgeries = surgeries.map(s =>
         s.id === selectedSurgery.id
           ? {
               ...s,
-              patient_name: formData.patient_name,
+              paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
+              paciente_ref_hospital: formData.paciente_ref_hospital || null,
               doctor_id: formData.doctor_id,
               doctor_name: doctors.find(d => d.id === formData.doctor_id)?.name,
               hospital_id: formData.hospital_id,
@@ -361,11 +418,12 @@ export function Cirurgias() {
     }
 
     try {
-      const { error } = await supabase  
-    
+      const { error } = await supabase
+
         .from('cirurgias')
         .update({
-          patient_name: formData.patient_name,
+          paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
+          paciente_ref_hospital: formData.paciente_ref_hospital || null,
           doctor_id: formData.doctor_id,
           hospital_id: formData.hospital_id,
           surgery_type: formData.surgery_type,
@@ -449,7 +507,8 @@ export function Cirurgias() {
   const openEditDialog = (surgery: Surgery) => {
     setSelectedSurgery(surgery)
     setFormData({
-      patient_name: surgery.patient_name,
+      paciente_iniciais: surgery.paciente_iniciais,
+      paciente_ref_hospital: surgery.paciente_ref_hospital || '',
       doctor_id: surgery.doctor_id,
       hospital_id: surgery.hospital_id,
       surgery_type: surgery.surgery_type,
@@ -458,6 +517,7 @@ export function Cirurgias() {
       notes: surgery.notes || '',
       estimated_value: String(surgery.estimated_value)
     })
+    setFormErrors({})
     setIsEditDialogOpen(true)
   }
 
@@ -468,7 +528,8 @@ export function Cirurgias() {
 
   const resetForm = () => {
     setFormData({
-      patient_name: '',
+      paciente_iniciais: '',
+      paciente_ref_hospital: '',
       doctor_id: '',
       hospital_id: '',
       surgery_type: '',
@@ -477,6 +538,7 @@ export function Cirurgias() {
       notes: '',
       estimated_value: ''
     })
+    setFormErrors({})
   }
 
   const getStatusBadge = (status: SurgeryStatus) => {
@@ -511,9 +573,10 @@ export function Cirurgias() {
   const filteredSurgeries = useMemo(() => {
     return surgeries.filter(surgery => {
       const matchesSearch =
-        surgery.patient_name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        surgery.paciente_iniciais.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
         surgery.surgery_number.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-        surgery.surgery_type.toLowerCase().includes(debouncedSearch.toLowerCase())
+        surgery.surgery_type.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        (surgery.paciente_ref_hospital?.toLowerCase().includes(debouncedSearch.toLowerCase()) ?? false)
 
       const matchesStatus = statusFilter === 'all' || surgery.status === statusFilter
 
@@ -565,16 +628,39 @@ export function Cirurgias() {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
+              {/* LGPD Notice */}
+              <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900 text-sm">
+                <strong>LGPD:</strong> Apenas iniciais do paciente. Exemplo: "J.S." para João Silva
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="patient_name">Nome do Paciente *</Label>
+                  <Label htmlFor="paciente_iniciais">Iniciais do Paciente * (LGPD)</Label>
                   <Input
-                    id="patient_name"
-                    value={formData.patient_name}
-                    onChange={(e) => setFormData({ ...formData, patient_name: e.target.value })}
-                    placeholder="Nome completo"
+                    id="paciente_iniciais"
+                    value={formData.paciente_iniciais}
+                    onChange={(e) => setFormData({ ...formData, paciente_iniciais: e.target.value.toUpperCase() })}
+                    placeholder="Ex: J.S."
+                    maxLength={10}
+                    className={formErrors.paciente_iniciais ? 'border-red-500' : ''}
+                  />
+                  {formErrors.paciente_iniciais && (
+                    <p className="text-sm text-red-500">{formErrors.paciente_iniciais}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="paciente_ref_hospital">Ref. Hospital (opcional)</Label>
+                  <Input
+                    id="paciente_ref_hospital"
+                    value={formData.paciente_ref_hospital}
+                    onChange={(e) => setFormData({ ...formData, paciente_ref_hospital: e.target.value })}
+                    placeholder="ID interno do hospital"
+                    maxLength={50}
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="surgery_type">Tipo de Cirurgia *</Label>
                   <Input
@@ -582,6 +668,20 @@ export function Cirurgias() {
                     value={formData.surgery_type}
                     onChange={(e) => setFormData({ ...formData, surgery_type: e.target.value })}
                     placeholder="Ex: Angioplastia"
+                    className={formErrors.surgery_type ? 'border-red-500' : ''}
+                  />
+                  {formErrors.surgery_type && (
+                    <p className="text-sm text-red-500">{formErrors.surgery_type}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="estimated_value_create">Valor Estimado (R$)</Label>
+                  <Input
+                    id="estimated_value_create"
+                    type="number"
+                    value={formData.estimated_value}
+                    onChange={(e) => setFormData({ ...formData, estimated_value: e.target.value })}
+                    placeholder="0.00"
                   />
                 </div>
               </div>
@@ -831,8 +931,11 @@ export function Cirurgias() {
                 >
                   <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                      <div className="font-medium">{surgery.patient_name}</div>
+                      <div className="font-medium">Paciente: {surgery.paciente_iniciais}</div>
                       <div className="text-sm text-muted-foreground">{surgery.surgery_number}</div>
+                      {surgery.paciente_ref_hospital && (
+                        <div className="text-xs text-muted-foreground">Ref: {surgery.paciente_ref_hospital}</div>
+                      )}
                     </div>
                     <div>
                       <div className="text-sm">{surgery.surgery_type}</div>
@@ -890,21 +993,56 @@ export function Cirurgias() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
+            {/* LGPD Notice */}
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900 text-sm">
+              <strong>LGPD:</strong> Apenas iniciais do paciente. Exemplo: "J.S." para João Silva
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit_patient_name">Nome do Paciente *</Label>
+                <Label htmlFor="edit_paciente_iniciais">Iniciais do Paciente * (LGPD)</Label>
                 <Input
-                  id="edit_patient_name"
-                  value={formData.patient_name}
-                  onChange={(e) => setFormData({ ...formData, patient_name: e.target.value })}
+                  id="edit_paciente_iniciais"
+                  value={formData.paciente_iniciais}
+                  onChange={(e) => setFormData({ ...formData, paciente_iniciais: e.target.value.toUpperCase() })}
+                  maxLength={10}
+                  className={formErrors.paciente_iniciais ? 'border-red-500' : ''}
+                />
+                {formErrors.paciente_iniciais && (
+                  <p className="text-sm text-red-500">{formErrors.paciente_iniciais}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit_paciente_ref_hospital">Ref. Hospital (opcional)</Label>
+                <Input
+                  id="edit_paciente_ref_hospital"
+                  value={formData.paciente_ref_hospital}
+                  onChange={(e) => setFormData({ ...formData, paciente_ref_hospital: e.target.value })}
+                  maxLength={50}
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit_surgery_type">Tipo de Cirurgia *</Label>
                 <Input
                   id="edit_surgery_type"
                   value={formData.surgery_type}
                   onChange={(e) => setFormData({ ...formData, surgery_type: e.target.value })}
+                  className={formErrors.surgery_type ? 'border-red-500' : ''}
+                />
+                {formErrors.surgery_type && (
+                  <p className="text-sm text-red-500">{formErrors.surgery_type}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit_estimated_value_top">Valor Estimado (R$)</Label>
+                <Input
+                  id="edit_estimated_value_top"
+                  type="number"
+                  value={formData.estimated_value}
+                  onChange={(e) => setFormData({ ...formData, estimated_value: e.target.value })}
                 />
               </div>
             </div>
@@ -1014,10 +1152,20 @@ export function Cirurgias() {
           </DialogHeader>
           {selectedSurgery && (
             <div className="space-y-4 py-4">
+              {/* LGPD Notice */}
+              <div className="p-2 bg-blue-50 dark:bg-blue-950/20 rounded border border-blue-200 dark:border-blue-900 text-xs">
+                LGPD: Apenas iniciais do paciente armazenadas
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-muted-foreground">Paciente</Label>
-                  <div className="text-lg font-medium">{selectedSurgery.patient_name}</div>
+                  <Label className="text-muted-foreground">Paciente (Iniciais)</Label>
+                  <div className="text-lg font-medium">{selectedSurgery.paciente_iniciais}</div>
+                  {selectedSurgery.paciente_ref_hospital && (
+                    <div className="text-sm text-muted-foreground">
+                      Ref: {selectedSurgery.paciente_ref_hospital}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <Label className="text-muted-foreground">Status</Label>
