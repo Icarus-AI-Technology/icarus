@@ -35,3 +35,15 @@ export {
   brasilApi,
   cfm,
 } from './brasil-apis';
+
+// Validators
+export {
+  getEnvConfig,
+  validateMicrosoft365,
+  validatePluggy,
+  validateSefaz,
+  validateAnvisa,
+  validateOtherApis,
+  calculateCategoryScore,
+  runFullAudit,
+} from './validators';
