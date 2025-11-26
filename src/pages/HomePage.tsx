@@ -212,7 +212,7 @@ export function HomePage() {
                   boxShadow: '0 8px 20px rgba(99, 102, 241, 0.4)'
                 }}
               >
-                <BrainCircuit className="w-7 h-7 text-white" strokeWidth={2} />
+                <BrainCircuit className="w-8 h-8 text-white" strokeWidth={2.5} />
               </div>
               <div>
                 <h1 className="text-foreground font-bold text-lg">Icarus v5.0</h1>
@@ -299,7 +299,7 @@ export function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6366F1]/20 to-[#2DD4BF]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
                 <div className="aspect-square rounded-2xl bg-[#1A1F35] flex items-center justify-center relative overflow-hidden neu-pressed">
-                  <BrainCircuit className="w-32 h-32 text-[#818CF8] animate-pulse relative z-10" />
+                  <BrainCircuit className="w-32 h-32 text-[#818CF8] animate-pulse relative z-10" strokeWidth={1.5} />
 
                   {/* Animated rings */}
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -311,11 +311,16 @@ export function HomePage() {
                 </div>
               </div>
 
-              {/* Floating Stats Cards - Neumorphic com ícone gradiente */}
+              {/* Floating Stats Cards - Neumorphic Padrão */}
               <div className="absolute -top-4 -right-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl animate-bounce neu-elevated">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#10B981] to-[#2DD4BF] flex items-center justify-center shadow-lg shadow-[#10B981]/30">
-                    <TrendingUp className="w-6 h-6 text-white" strokeWidth={2} />
+                  <div 
+                    className="w-12 h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center"
+                    style={{ 
+                      boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
+                    }}
+                  >
+                    <TrendingUp className="w-7 h-7 text-[#10B981]" strokeWidth={2.5} />
                   </div>
                   <div>
                     <p className="text-white text-sm font-semibold">+45%</p>
@@ -324,11 +329,16 @@ export function HomePage() {
                 </div>
               </div>
 
-              {/* Demo Video Button - Neumorphic com ícone quadrado gradiente */}
+              {/* Demo Video Button - Neumorphic Padrão */}
               <div className="absolute -bottom-4 -left-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play neu-elevated">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF] flex items-center justify-center shadow-lg shadow-[#6366F1]/30 group-hover/play:scale-110 transition-transform">
-                    <Play className="w-6 h-6 text-white fill-white" />
+                  <div 
+                    className="w-12 h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center group-hover/play:scale-110 transition-transform"
+                    style={{ 
+                      boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
+                    }}
+                  >
+                    <Play className="w-7 h-7 text-[#8B5CF6]" strokeWidth={2.5} />
                   </div>
                   <div>
                     <p className="text-white text-sm font-semibold">Ver Demo</p>
@@ -402,14 +412,14 @@ export function HomePage() {
                   className="bg-[#15192B] backdrop-blur-sm p-8 rounded-2xl hover:scale-105 transition-all duration-300 group neu-card"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
+                  {/* Minicard Padrão: fundo #1A1F35 + inset shadow + ícone colorido */}
                   <div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                    className="w-14 h-14 rounded-xl bg-[#1A1F35] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
                     style={{ 
-                      background: `linear-gradient(135deg, ${feature.gradientFrom}, ${feature.gradientTo})`,
-                      boxShadow: `0 8px 20px ${feature.gradientFrom}40`
+                      boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
                     }}
                   >
-                    <Icon className="w-7 h-7 text-white" strokeWidth={2} />
+                    <Icon className="w-8 h-8" style={{ color: feature.gradientFrom }} strokeWidth={2.5} />
                   </div>
                   <h3 className="text-white mb-3 text-xl font-bold">
                     {feature.title}
@@ -500,14 +510,14 @@ export function HomePage() {
                   key={index}
                   className="flex gap-6 p-8 rounded-2xl bg-[#15192B] backdrop-blur-sm hover:scale-105 transition-all duration-300 differential-card"
                 >
+                  {/* Minicard Padrão com ícone colorido */}
                   <div 
-                    className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                    className="w-14 h-14 rounded-xl bg-[#1A1F35] flex items-center justify-center flex-shrink-0"
                     style={{ 
-                      background: `linear-gradient(135deg, ${diff.gradientFrom}, ${diff.gradientTo})`,
-                      boxShadow: `0 8px 20px ${diff.gradientFrom}40`
+                      boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
                     }}
                   >
-                    <Icon className="w-7 h-7 text-white" strokeWidth={2} />
+                    <Icon className="w-8 h-8" style={{ color: diff.gradientFrom }} strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="mb-3 text-xl font-bold text-white">{diff.title}</h3>
@@ -583,7 +593,7 @@ export function HomePage() {
                     boxShadow: '0 8px 20px rgba(99, 102, 241, 0.4)'
                   }}
                 >
-                  <BrainCircuit className="w-7 h-7 text-white" strokeWidth={2} />
+                  <BrainCircuit className="w-8 h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg text-white">Icarus v5.0</h3>
@@ -671,7 +681,7 @@ function AnimatedStat({ value, suffix = '', label }: { value: number; suffix?: s
   )
 }
 
-// Benefit Card Component with Counter - Neumorphic com ícones coloridos
+// Benefit Card Component with Counter - Neumorphic Padrão
 function BenefitCard({
   icon: Icon,
   title,
@@ -681,7 +691,7 @@ function BenefitCard({
   suffix = '',
   iconColor = '#818CF8',
 }: {
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>
   title: string
   description: string
   stat: number
@@ -696,14 +706,14 @@ function BenefitCard({
       ref={ref}
       className="text-center p-8 bg-[#15192B] backdrop-blur-sm rounded-2xl hover:scale-105 transition-all duration-300 group neu-card"
     >
+      {/* Minicard Padrão: fundo #1A1F35 + inset shadow + ícone colorido */}
       <div 
-        className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"
+        className="w-16 h-16 rounded-xl bg-[#1A1F35] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"
         style={{ 
-          backgroundColor: `${iconColor}15`,
-          boxShadow: `inset 4px 4px 8px rgba(0,0,0,0.3), inset -3px -3px 6px rgba(255,255,255,0.02)`
+          boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
         }}
       >
-        <Icon className="w-8 h-8" style={{ color: iconColor }} />
+        <Icon className="w-9 h-9" style={{ color: iconColor }} strokeWidth={2.5} />
       </div>
       <p className="text-gradient mb-3 text-4xl font-bold">
         {prefix}{count}{suffix}
