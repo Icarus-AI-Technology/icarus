@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useSupabase } from '@/hooks/useSupabase'
-import { BrainCircuit, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft, AlertTriangle } from 'lucide-react'
+import { BrainCircuit, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft } from 'lucide-react'
 
 export function LoginPage() {
   const navigate = useNavigate()

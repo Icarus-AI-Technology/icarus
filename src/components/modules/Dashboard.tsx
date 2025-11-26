@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import { formatCurrency } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { useDashboardKPIs, useDashboardStats } from '@/hooks/queries/useDashboardData'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useTheme } from '@/hooks/useTheme'
 import {
   Calendar, DollarSign, AlertCircle, BrainCircuit,
   TrendingUp, Clock, Star, Activity, BarChart2, PieChart as PieChartIcon
@@ -67,8 +67,8 @@ export function Dashboard() {
   // Cores do tema
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
   const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
-  const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
-  const cardBg = isDark ? 'bg-[#15192B]' : 'bg-white'
+  const _textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
+  const _cardBg = isDark ? 'bg-[#15192B]' : 'bg-white'
   const inputBg = isDark ? 'bg-[#1A1F35]' : 'bg-slate-100'
   const chartGridColor = isDark ? '#252B44' : '#E2E8F0'
   const chartLabelColor = isDark ? '#64748B' : '#64748B'

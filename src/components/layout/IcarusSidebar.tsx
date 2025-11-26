@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, ChevronRight, Search, Menu, BrainCircuit } from 'lucide-react'
 import { navigationConfig } from '@/lib/data/navigation'
 import { cn } from '@/lib/utils'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useTheme } from '@/hooks/useTheme'
 
 // Paleta de cores para ícones (sem repetição por categoria)
 const categoryColors: Record<string, string> = {
@@ -56,9 +56,9 @@ export function IcarusSidebar() {
 
   // Theme colors
   const bgSidebar = isDark ? '#15192B' : '#FFFFFF'
-  const bgInput = isDark ? '#1A1F35' : '#F1F5F9'
+  const _bgInput = isDark ? '#1A1F35' : '#F1F5F9'
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
-  const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
+  const _textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
   const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
   const borderColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
   const neuShadow = isDark 

@@ -1,5 +1,5 @@
 import { Bell, Search, Settings, User, Moon, Sun, LogOut } from 'lucide-react'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useTheme } from '@/hooks/useTheme'
 import {
   DropdownMenu,
   DropdownMenuContent,

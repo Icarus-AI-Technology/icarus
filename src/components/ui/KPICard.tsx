@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { NeomorphicCard } from './NeomorphicCard';
 import { LucideIcon, TrendingUp, TrendingDown, Minus } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/hooks/useTheme';
 
 export interface KPICardProps {
   title: string;

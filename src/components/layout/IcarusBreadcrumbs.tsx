@@ -1,7 +1,7 @@
 import { useLocation, Link } from 'react-router-dom'
 import { ChevronRight, Home } from 'lucide-react'
 import { getAllRoutes } from '@/lib/data/navigation'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useTheme } from '@/hooks/useTheme'
 
 export function IcarusBreadcrumbs() {
   const location = useLocation()

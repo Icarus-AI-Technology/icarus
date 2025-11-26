@@ -3,7 +3,7 @@ import { IcarusSidebar } from './IcarusSidebar'
 import { IcarusTopbar } from './IcarusTopbar'
 import { IcarusBreadcrumbs } from './IcarusBreadcrumbs'
 import { ChatWidget } from '@/components/chat/ChatWidget'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useTheme } from '@/hooks/useTheme'
 
 interface IcarusLayoutProps {
   children: ReactNode

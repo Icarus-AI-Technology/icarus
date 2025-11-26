@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { AlertCircle, Rocket, BrainCircuit, Database, BarChart3 } from 'lucide-react'
 import { LucideIcon } from 'lucide-react'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useTheme } from '@/hooks/useTheme'
 
 interface ModulePlaceholderProps {
   title: string
@@ -45,7 +45,7 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
   const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
   const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
-  const bgCard = isDark ? '#15192B' : '#FFFFFF'
+  const _bgCard = isDark ? '#15192B' : '#FFFFFF'
   const bgInput = isDark ? '#1A1F35' : '#F1F5F9'
   
   const neuShadowOuter = isDark 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/hooks/useTheme';
 
 export interface NeomorphicCardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'elevated' | 'inset' | 'flat';
