@@ -49,42 +49,48 @@ export function HomePage() {
       title: 'IA Integrada',
       description:
         'Previsão de demanda, análise de inadimplência e recomendações inteligentes em tempo real.',
-      gradient: 'from-primary to-accent',
+      gradientFrom: '#6366F1',
+      gradientTo: '#2DD4BF',
     },
     {
       icon: BarChart3,
       title: 'Dashboard Inteligente',
       description:
         'Visualize seus KPIs mais importantes em tempo real com análises preditivas.',
-      gradient: 'from-info to-primary',
+      gradientFrom: '#3B82F6',
+      gradientTo: '#6366F1',
     },
     {
       icon: Zap,
       title: 'Automação Total',
       description:
         'Automatize processos repetitivos e ganhe até 70% de produtividade.',
-      gradient: 'from-warning to-warning/70',
+      gradientFrom: '#F59E0B',
+      gradientTo: '#EF4444',
     },
     {
       icon: Shield,
       title: 'Segurança Enterprise',
       description:
         'Dados criptografados, backup automático e conformidade com LGPD.',
-      gradient: 'from-success to-success/70',
+      gradientFrom: '#10B981',
+      gradientTo: '#2DD4BF',
     },
     {
       icon: Target,
       title: 'Especializado em OPME',
       description:
         'Desenvolvido especificamente para gestão de Órteses, Próteses e Materiais Especiais.',
-      gradient: 'from-error/80 to-error',
+      gradientFrom: '#EF4444',
+      gradientTo: '#F59E0B',
     },
     {
       icon: TrendingUp,
       title: 'ROI Comprovado',
       description:
         'Clientes reportam redução de custos de até 45% nos primeiros 6 meses.',
-      gradient: 'from-accent to-primary',
+      gradientFrom: '#2DD4BF',
+      gradientTo: '#6366F1',
     },
   ]
 
@@ -95,6 +101,7 @@ export function HomePage() {
       description: 'Reduza em até 70% o tempo gasto em tarefas administrativas',
       stat: 70,
       suffix: '%',
+      iconColor: '#6366F1', // Indigo
     },
     {
       icon: TrendingUp,
@@ -103,6 +110,7 @@ export function HomePage() {
       stat: 45,
       prefix: '+',
       suffix: '%',
+      iconColor: '#2DD4BF', // Teal
     },
     {
       icon: Users,
@@ -110,6 +118,7 @@ export function HomePage() {
       description: 'Melhore o atendimento com acesso rápido a informações',
       stat: 98,
       suffix: '%',
+      iconColor: '#8B5CF6', // Purple
     },
     {
       icon: Award,
@@ -117,6 +126,7 @@ export function HomePage() {
       description: '100% em conformidade com regulamentações e normas',
       stat: 100,
       suffix: '%',
+      iconColor: '#3B82F6', // Blue
     },
   ]
 
@@ -135,24 +145,32 @@ export function HomePage() {
       title: 'IcarusBrain',
       description:
         'Motor de IA proprietário que aprende com seus dados e oferece insights personalizados.',
+      gradientFrom: '#6366F1',
+      gradientTo: '#8B5CF6',
     },
     {
       icon: HeadphonesIcon,
       title: 'Suporte 24/7',
       description:
         'Equipe especializada disponível 24 horas por dia, 7 dias por semana.',
+      gradientFrom: '#2DD4BF',
+      gradientTo: '#10B981',
     },
     {
       icon: Sparkles,
-      title: 'OraclusX Design System',
+      title: 'Dark Glass Medical',
       description:
         'Interface moderna e intuitiva com design neumórfico que encanta usuários.',
+      gradientFrom: '#8B5CF6',
+      gradientTo: '#6366F1',
     },
     {
       icon: Shield,
       title: 'Infraestrutura Supabase',
       description:
         'Banco de dados PostgreSQL escalável e seguro com backup automático.',
+      gradientFrom: '#3B82F6',
+      gradientTo: '#2DD4BF',
     },
   ]
 
@@ -187,8 +205,14 @@ export function HomePage() {
           <div className="flex items-center justify-between h-16">
             {/* Logo com Gradiente */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center btn-gradient">
-                <BrainCircuit className="w-6 h-6 text-white" />
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)',
+                  boxShadow: '0 8px 20px rgba(99, 102, 241, 0.4)'
+                }}
+              >
+                <BrainCircuit className="w-7 h-7 text-white" strokeWidth={2} />
               </div>
               <div>
                 <h1 className="text-foreground font-bold text-lg">Icarus v5.0</h1>
@@ -196,10 +220,10 @@ export function HomePage() {
               </div>
             </div>
 
-            {/* Login Button */}
+            {/* Login Button com Gradiente 3D */}
             <Button
               onClick={() => navigate('/login')}
-              className="bg-gradient-to-br from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300"
+              className="bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF] hover:from-[#818CF8] hover:via-[#A78BFA] hover:to-[#5EEAD4] text-white shadow-[0_6px_20px_rgba(99,102,241,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.5)] hover:translate-y-[-2px] transition-all duration-300"
             >
               <LogIn className="w-5 h-5 mr-2" />
               Entrar no Sistema
@@ -287,11 +311,11 @@ export function HomePage() {
                 </div>
               </div>
 
-              {/* Floating Stats Cards - Neumorphic */}
+              {/* Floating Stats Cards - Neumorphic com ícone gradiente */}
               <div className="absolute -top-4 -right-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl animate-bounce neu-elevated">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-[#10B981]/20 flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-[#10B981]" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#10B981] to-[#2DD4BF] flex items-center justify-center shadow-lg shadow-[#10B981]/30">
+                    <TrendingUp className="w-6 h-6 text-white" strokeWidth={2} />
                   </div>
                   <div>
                     <p className="text-white text-sm font-semibold">+45%</p>
@@ -300,11 +324,11 @@ export function HomePage() {
                 </div>
               </div>
 
-              {/* Demo Video Button - Neumorphic */}
+              {/* Demo Video Button - Neumorphic com ícone quadrado gradiente */}
               <div className="absolute -bottom-4 -left-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play neu-elevated">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full btn-gradient flex items-center justify-center group-hover/play:scale-110 transition-transform">
-                    <Play className="w-5 h-5 text-white fill-white" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF] flex items-center justify-center shadow-lg shadow-[#6366F1]/30 group-hover/play:scale-110 transition-transform">
+                    <Play className="w-6 h-6 text-white fill-white" />
                   </div>
                   <div>
                     <p className="text-white text-sm font-semibold">Ver Demo</p>
@@ -379,9 +403,13 @@ export function HomePage() {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div
-                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${feature.gradientFrom}, ${feature.gradientTo})`,
+                      boxShadow: `0 8px 20px ${feature.gradientFrom}40`
+                    }}
                   >
-                    <Icon className="w-7 h-7 text-white" />
+                    <Icon className="w-7 h-7 text-white" strokeWidth={2} />
                   </div>
                   <h3 className="text-white mb-3 text-xl font-bold">
                     {feature.title}
@@ -425,6 +453,7 @@ export function HomePage() {
                   stat={benefit.stat}
                   prefix={benefit.prefix}
                   suffix={benefit.suffix}
+                  iconColor={benefit.iconColor}
                 />
               )
             })}
@@ -471,8 +500,14 @@ export function HomePage() {
                   key={index}
                   className="flex gap-6 p-8 rounded-2xl bg-[#15192B] backdrop-blur-sm hover:scale-105 transition-all duration-300 differential-card"
                 >
-                  <div className="w-14 h-14 rounded-xl bg-[#1A1F35] flex items-center justify-center flex-shrink-0 neu-pressed">
-                    <Icon className="w-7 h-7 text-[#818CF8]" />
+                  <div 
+                    className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${diff.gradientFrom}, ${diff.gradientTo})`,
+                      boxShadow: `0 8px 20px ${diff.gradientFrom}40`
+                    }}
+                  >
+                    <Icon className="w-7 h-7 text-white" strokeWidth={2} />
                   </div>
                   <div>
                     <h3 className="mb-3 text-xl font-bold text-white">{diff.title}</h3>
@@ -541,8 +576,14 @@ export function HomePage() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center btn-gradient">
-                  <BrainCircuit className="w-6 h-6 text-white" />
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)',
+                    boxShadow: '0 8px 20px rgba(99, 102, 241, 0.4)'
+                  }}
+                >
+                  <BrainCircuit className="w-7 h-7 text-white" strokeWidth={2} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg text-white">Icarus v5.0</h3>
@@ -630,7 +671,7 @@ function AnimatedStat({ value, suffix = '', label }: { value: number; suffix?: s
   )
 }
 
-// Benefit Card Component with Counter - Neumorphic
+// Benefit Card Component with Counter - Neumorphic com ícones coloridos
 function BenefitCard({
   icon: Icon,
   title,
@@ -638,13 +679,15 @@ function BenefitCard({
   stat,
   prefix = '',
   suffix = '',
+  iconColor = '#818CF8',
 }: {
-  icon: React.ComponentType<{ className?: string }>
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>
   title: string
   description: string
   stat: number
   prefix?: string
   suffix?: string
+  iconColor?: string
 }) {
   const { count, ref } = useCountUp({ end: stat, duration: 2500 })
 
@@ -653,8 +696,14 @@ function BenefitCard({
       ref={ref}
       className="text-center p-8 bg-[#15192B] backdrop-blur-sm rounded-2xl hover:scale-105 transition-all duration-300 group neu-card"
     >
-      <div className="w-16 h-16 rounded-full bg-[#1A1F35] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 neu-pressed">
-        <Icon className="w-8 h-8 text-[#818CF8]" />
+      <div 
+        className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"
+        style={{ 
+          backgroundColor: `${iconColor}15`,
+          boxShadow: `inset 4px 4px 8px rgba(0,0,0,0.3), inset -3px -3px 6px rgba(255,255,255,0.02)`
+        }}
+      >
+        <Icon className="w-8 h-8" style={{ color: iconColor }} />
       </div>
       <p className="text-gradient mb-3 text-4xl font-bold">
         {prefix}{count}{suffix}
