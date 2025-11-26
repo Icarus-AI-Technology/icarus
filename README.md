@@ -75,6 +75,10 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
 }
 ```
 
+### 🔄 Compatibilidade
+
+- **Next.js removido:** o antigo diretório `src/app` foi retirado para evitar conflitos de tooling e de build. Toda a renderização do frontend roda apenas em **Vite + React Router**, alinhando o ambiente local com o deploy na Vercel.
+
 ---
 
 ## 🎨 Componentes Neumorphism
