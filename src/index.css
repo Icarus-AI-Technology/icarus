@@ -413,6 +413,48 @@ textarea::placeholder {
 }
 
 /* ============================================
+   AUTOFILL FIX - Prevenir fundo branco
+   ============================================ */
+
+/* Chrome, Safari, Edge */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-box-shadow: 
+    0 0 0 1000px #1A1F35 inset,
+    inset 4px 4px 8px rgba(0,0,0,0.4),
+    inset -3px -3px 6px rgba(255,255,255,0.02) !important;
+  -webkit-text-fill-color: #F9FAFB !important;
+  background-color: #1A1F35 !important;
+  caret-color: #F9FAFB !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Firefox */
+input:-moz-autofill,
+input:-moz-autofill:hover,
+input:-moz-autofill:focus,
+textarea:-moz-autofill,
+textarea:-moz-autofill:hover,
+textarea:-moz-autofill:focus,
+select:-moz-autofill,
+select:-moz-autofill:hover,
+select:-moz-autofill:focus {
+  background-color: #1A1F35 !important;
+  color: #F9FAFB !important;
+  border: none !important;
+}
+
+/* ============================================
    SELECT DROPDOWN - TEMA ESCURO
    ============================================ */
 

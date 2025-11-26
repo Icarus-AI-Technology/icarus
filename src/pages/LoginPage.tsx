@@ -74,7 +74,7 @@ export function LoginPage() {
               >
                 <BrainCircuit className="w-14 h-14 text-white" strokeWidth={2.5} />
               </div>
-              <h1 className="text-white mb-2 text-3xl font-bold">Icarus v5.0</h1>
+              <h1 className="text-white mb-2 text-3xl font-bold">ICARUS v5.0</h1>
               <p className="text-[#94A3B8] text-sm">Gestão elevada pela IA</p>
             </div>
 
