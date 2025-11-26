@@ -3,10 +3,11 @@ import {
   Send, Bot, User, Minimize2, Maximize2, X, Sparkles, RefreshCw,
   Package, Calendar, DollarSign, Truck, ShieldCheck, TrendingUp,
   BarChart3, Settings, ThumbsUp, ThumbsDown,
-  Mic, MicOff, ChevronRight, Loader2
+  Mic, MicOff, ChevronRight, Loader2, History
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChatSession } from '@/hooks/useChatSession';
+import { ChatResponseCard, parseMessageContent, type ActionData, type ChatCardData } from './ChatResponseCard';
 
 export interface ChatMessage {
   id: string;
@@ -160,9 +161,14 @@ export function ChatWidget({
     sessionId,
     messages,
     sendMessage,
+    sendFeedback,
     isLoading,
-    resetSession
+    resetSession,
+    loadHistory
   } = useChatSession();
+
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -234,9 +240,23 @@ export function ChatWidget({
     // TODO: Implement Web Speech API
   };
 
-  const handleFeedback = (_messageId: string, _feedback: 'positive' | 'negative') => {
-    // TODO: Send feedback to backend
-    console.log('Feedback:', _messageId, _feedback);
+  const handleFeedback = async (messageId: string, feedback: 'positive' | 'negative') => {
+    await sendFeedback(messageId, feedback);
+  };
+
+  const handleLoadHistory = async () => {
+    if (historyLoaded || isLoadingHistory) return;
+    setIsLoadingHistory(true);
+    await loadHistory();
+    setHistoryLoaded(true);
+    setIsLoadingHistory(false);
+    setShowCategories(false);
+  };
+
+  const handleActionClick = (action: ActionData) => {
+    if (action.link) {
+      window.location.href = action.link;
+    }
   };
 
   // FAB Button (when closed)
@@ -289,8 +309,27 @@ export function ChatWidget({
         </div>
 
         <div className="flex items-center gap-1">
+          {/* Load History Button */}
+          {sessionId && !historyLoaded && (
+            <button
+              onClick={handleLoadHistory}
+              disabled={isLoadingHistory}
+              className="p-1.5 rounded-lg hover:bg-white/20 transition-colors disabled:opacity-50"
+              title="Carregar histórico"
+            >
+              {isLoadingHistory ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <History className="w-4 h-4" />
+              )}
+            </button>
+          )}
           <button
-            onClick={resetSession}
+            onClick={() => {
+              resetSession();
+              setHistoryLoaded(false);
+              setShowCategories(true);
+            }}
             className="p-1.5 rounded-lg hover:bg-white/20 transition-colors"
             title="Nova conversa"
           >
@@ -441,9 +480,25 @@ export function ChatWidget({
                         : '0 4px 12px rgba(99, 102, 241, 0.3)'
                     }}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    {/* Parse content for structured data */}
+                    {(() => {
+                      const { text, cards } = parseMessageContent(message.content);
+                      return (
+                        <>
+                          <p className="text-sm whitespace-pre-wrap">{text}</p>
+                          {/* Render interactive cards */}
+                          {cards.map((card: ChatCardData, idx: number) => (
+                            <ChatResponseCard 
+                              key={idx} 
+                              card={card} 
+                              onAction={handleActionClick}
+                            />
+                          ))}
+                        </>
+                      );
+                    })()}
 
-                    {/* Actions */}
+                    {/* Actions from API response */}
                     {message.actions && message.actions.length > 0 && (
                       <div className="mt-3 flex flex-wrap gap-2">
                         {message.actions.map((action, idx) => (
@@ -600,6 +655,8 @@ export function ChatWidget({
                 style={{
                   boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02), 0 4px 12px rgba(99, 102, 241, 0.3)'
                 }}
+                title="Enviar mensagem"
+                aria-label="Enviar mensagem"
               >
                 <Send className="w-5 h-5" />
               </button>
@@ -607,11 +664,19 @@ export function ChatWidget({
 
             {/* Footer Info */}
             <div className="flex items-center justify-between mt-2 px-1">
+              <div className="flex items-center gap-2">
+                <p className="text-[10px] text-[#64748B]">
+                  {sessionId ? `Sessão: ${sessionId.slice(0, 8)}...` : 'Nova sessão'}
+                </p>
+                {historyLoaded && (
+                  <span className="inline-flex items-center gap-1 text-[10px] text-green-400">
+                    <History className="w-2.5 h-2.5" />
+                    Histórico
+                  </span>
+                )}
+              </div>
               <p className="text-[10px] text-[#64748B]">
-                {sessionId ? `Sessão: ${sessionId.slice(0, 8)}...` : 'Nova sessão'}
-              </p>
-              <p className="text-[10px] text-[#64748B]">
-                Ctrl+K para abrir • Esc para fechar
+                Ctrl+K • Esc
               </p>
             </div>
           </div>
