@@ -1,7 +1,8 @@
 # ICARUS v5.0 - Supabase Configuration
 # Arquivo de configuração do Supabase CLI
 
-project_id = "gvbkviozlhxorjoavmky"
+# Projeto vinculado às migrações do GitHub Actions e aos previews da Supabase
+project_id = "oshgkugagyixutiqyjsq"
 
 [api]
 enabled = true
