@@ -33,20 +33,6 @@ interface NotaFiscal {
   xml_path?: string
 }
 
-interface ItemNota {
-  id: string
-  nota_id: string
-  produto_codigo: string
-  produto_nome: string
-  quantidade: number
-  valor_unitario: number
-  valor_total: number
-  ncm: string
-  cfop: string
-  icms_aliquota: number
-  ipi_aliquota: number
-}
-
 export default function FaturamentoAvancado() {
   const [activeTab, setActiveTab] = useState('overview')
 

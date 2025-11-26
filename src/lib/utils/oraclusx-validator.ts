@@ -31,8 +31,13 @@ export interface ValidationResult {
 export function validateOraclusXCompliance(): ValidationResult {
   const violations: ValidationViolation[] = [];
 
+  const isIgnored = (element: Element): boolean =>
+    Boolean(element.closest('[data-orx-ignore="true"], [data-orx-skip="true"]'));
+
   // 1. Validar botões primários
   document.querySelectorAll('button').forEach((button) => {
+    if (isIgnored(button)) return;
+
     const computedStyle = window.getComputedStyle(button);
     const bgColor = computedStyle.backgroundColor;
     const classes = button.className;
@@ -78,6 +83,8 @@ export function validateOraclusXCompliance(): ValidationResult {
 
   // 2. Validar KPI Cards com background indigo
   document.querySelectorAll('[class*="KPI"], [class*="kpi"]').forEach((card) => {
+    if (isIgnored(card)) return;
+
     const computedStyle = window.getComputedStyle(card);
     const bgColor = computedStyle.backgroundColor;
     
@@ -115,6 +122,8 @@ export function validateOraclusXCompliance(): ValidationResult {
   ];
 
   document.querySelectorAll('*').forEach((element) => {
+    if (isIgnored(element)) return;
+
     const classes = element.className;
     if (typeof classes === 'string') {
       forbiddenFontClasses.forEach((forbiddenClass) => {
@@ -133,6 +142,8 @@ export function validateOraclusXCompliance(): ValidationResult {
   // 4. Validar border-radius permitidos
   const allowedBorderRadius = ['10px', '16px', '20px', '9999px'];
   document.querySelectorAll('*').forEach((element) => {
+    if (isIgnored(element)) return;
+
     const computedStyle = window.getComputedStyle(element);
     const borderRadius = computedStyle.borderRadius;
     
@@ -154,6 +165,8 @@ export function validateOraclusXCompliance(): ValidationResult {
 
   // 5. Validar acessibilidade básica
   document.querySelectorAll('button, a, input, select, textarea').forEach((element) => {
+    if (isIgnored(element)) return;
+
     // Verificar se elementos interativos têm aria-label ou texto
     if (element.tagName === 'BUTTON' || element.tagName === 'A') {
       const hasAriaLabel = element.hasAttribute('aria-label');

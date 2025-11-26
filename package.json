@@ -3,6 +3,10 @@
   "private": true,
   "version": "5.0.3",
   "type": "module",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
   "scripts": {
     "dev": "vite",
     "dev:start": "vite",
@@ -32,6 +36,8 @@
     "check:env": "node -e \"const fs = require('fs'); const exists = fs.existsSync('.env'); console.log('.env file:', exists ? '✅ Found' : '⚠️  Not found (optional)');\"",
     "clean": "rm -rf dist",
     "reset": "rm -rf node_modules package-lock.json && npm install",
+    "deploy:vercel": "bash scripts/vercel-deploy.sh production",
+    "deploy:vercel:preview": "bash scripts/vercel-deploy.sh preview",
     "setup:quick": "npm install",
     "setup:production": "npm ci",
     "figma:connect": "figma connect",

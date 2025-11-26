@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import { Providers } from '@/components/providers/Providers'

@@ -11,6 +11,18 @@
 - ✅ Conta Supabase
 - ✅ Repositório GitHub
 
+### Projeto já conectado ao GitHub e Vercel
+
+Como o projeto `icarus.new` já está sincronizado com o GitHub na Vercel, o caminho mais direto para manter o deploy funcionando é:
+
+1. **Confirmar o vínculo do repositório**: em *Project Settings ▸ Git* verifique se o repositório GitHub está conectado. Se houver troca de owner ou de repo, reative o link por ali.
+2. **Garantir variáveis na Vercel**: em *Project Settings ▸ Environment Variables* crie/atualize `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` e demais chaves (`PLUGGY_...`, IA) nos ambientes *Production* e *Preview*.
+3. **Produção via push na main**: todo push/merge na `main` dispara automaticamente um build de produção na Vercel (não precisa CLI nem token local).
+4. **Preview via PR**: abra um PR; a Vercel criará automaticamente uma URL de preview com o commit do PR. Feche/merge o PR para promover para produção.
+5. **Redeploy manual**: se precisar reexecutar um build sem novo commit, use *Deployments ▸ Redeploy* na Vercel ou rode `npm run deploy:vercel` com as credenciais (`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) exportadas.
+
+> Dica: se houver falha no build da Vercel, quase sempre falta alguma variável de ambiente ou a versão de Node diverge. As seções abaixo detalham como padronizar ambos.
+
 ---
 
 ## 🔐 1. Configurar GitHub Secrets
@@ -103,6 +115,24 @@ vercel
 # Deploy production
 vercel --prod
 ```
+
+### Deploy automatizado (sem prompts interativos)
+
+Use o script `scripts/vercel-deploy.sh` quando já tiver as variáveis de ambiente configuradas (localmente ou em CI) e quiser pular os prompts da CLI:
+
+```bash
+# Pré-requisitos: VERCEL_TOKEN, VERCEL_ORG_ID e VERCEL_PROJECT_ID exportados
+
+# Deploy preview
+npm run deploy:vercel:preview
+
+# Deploy produção
+npm run deploy:vercel
+```
+
+O script executa `vercel pull`, `vercel build` e `vercel deploy --prebuilt` de forma não interativa, reutilizando `vercel.json` e garantindo que o build local reproduza o ambiente da Vercel.
+
+> Dica: o script tenta carregar variáveis de `.env.local` (ou do caminho em `DOTENV_FILE`) e, em seguida, de `.env` antes de validar se `VERCEL_TOKEN`, `VERCEL_ORG_ID` e `VERCEL_PROJECT_ID` foram exportadas.
 
 ---
 

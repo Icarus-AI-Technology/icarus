@@ -509,7 +509,7 @@ export default function RastreabilidadeOPME() {
                     <div className="border-l-2 border-blue-300 pl-4 space-y-3">
                       {eventos
                         .filter(e => e.produto_id === produto.id)
-                        .map((evento, idx) => (
+                        .map((evento, _idx) => (
                           <div key={evento.id} className="relative">
                             <div className="absolute -left-6 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
                             <div className="flex justify-between">

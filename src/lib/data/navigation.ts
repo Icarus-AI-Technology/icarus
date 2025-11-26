@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
-export const navigationConfig: NavigationCategory[] = [
+export const navigationConfig = [
   {
     name: 'Principal',
     icon: LayoutDashboard,
@@ -566,9 +566,21 @@ export const navigationConfig: NavigationCategory[] = [
       }
     ]
   }
-]
+] as const satisfies readonly NavigationCategory[]
 
 // Helper to get all routes flat
+type NavigationRoute = (typeof navigationConfig)[number]['routes'][number]
+type ImplementedRoute = Extract<NavigationRoute, { isImplemented: true }>
+
+export type ImplementedRouteId = ImplementedRoute['id']
+
+export const implementedRouteIds: ImplementedRouteId[] = navigationConfig.flatMap(
+  category =>
+    category.routes
+      .filter((route): route is ImplementedRoute => route.isImplemented === true)
+      .map(route => route.id)
+)
+
 export const getAllRoutes = () => {
   return navigationConfig.flatMap(category => category.routes)
 }

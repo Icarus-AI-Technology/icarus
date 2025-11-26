@@ -19,9 +19,9 @@ export { NeuBadge } from './neu-badge'
 export { ChatbotFab } from './chatbot-fab'
 export { Icon3D } from './icon-3d'
 
-// Radix UI Components
-export { Badge } from './badge'
-export { Alert } from './alert'
+// Radix UI Components (case-safe for Vercel builds)
+export { Badge } from './Badge'
+export { Alert, AlertDescription, AlertTitle } from './Alert'
 export {
   Dialog,
   DialogContent,
@@ -30,7 +30,7 @@ export {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './dialog'
+} from './Dialog'
 export {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,10 +38,10 @@ export {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './dropdown-menu'
-export { Label } from './label'
-export { Skeleton } from './skeleton'
-export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
-export { Textarea } from './textarea'
-export { toast, useToast } from './use-toast'
-export { Toaster } from './toaster'
+} from './DropdownMenu'
+export { Label } from './Label'
+export { Skeleton } from './Skeleton'
+export { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs'
+export { Textarea } from './Textarea'
+export { toast, useToast } from '@/hooks/use-toast'
+export { Toaster } from './Toaster'

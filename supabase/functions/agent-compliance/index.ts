@@ -28,8 +28,6 @@ const ComplianceCheckRequestSchema = z.object({
   empresaId: z.string().uuid().optional(),
 })
 
-type ComplianceCheckRequest = z.infer<typeof ComplianceCheckRequestSchema>
-
 interface ComplianceIssue {
   codigo: string
   severidade: 'alta' | 'media' | 'baixa'
