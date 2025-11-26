@@ -1,24 +1,15 @@
-import { Inter } from 'next/font/google'
+/* eslint-disable react-refresh/only-export-components */
+import type { ReactNode } from 'react'
 import '@/styles/globals.css'
 import { Providers } from '@/components/providers/Providers'
 import { metadata } from './metadata'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export { metadata }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
-      </body>
-    </html>
+    <div lang="pt-BR" className="font-sans">
+      <Providers>{children}</Providers>
+    </div>
   )
 }

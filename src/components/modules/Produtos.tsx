@@ -5,7 +5,7 @@
  * Este módulo demonstra todas as funcionalidades e padrões do ICARUS.
  */
 
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { KPICard } from '@/components/ui/KPICard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
@@ -78,15 +78,7 @@ export function Produtos() {
   // EFFECTS
   // ==========================================
 
-  useEffect(() => {
-    fetchProdutos()
-  }, [])
-
-  // ==========================================
-  // DATA FETCHING
-  // ==========================================
-
-  async function fetchProdutos() {
+  const fetchProdutos = useCallback(async () => {
     setLoading(true)
 
     try {
@@ -151,7 +143,11 @@ export function Produtos() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchProdutos()
+  }, [fetchProdutos])
 
   function calculateKPIs(data: Produto[]) {
     setTotalProdutos(data.length)

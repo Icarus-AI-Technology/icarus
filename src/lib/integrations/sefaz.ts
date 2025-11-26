@@ -5,48 +5,11 @@
 
 import { supabase } from '@/lib/supabase/client';
 import type {
-  SefazConfig,
-  SefazCertificado,
   NFe,
   NFeResponse,
   SefazContingencia,
   IntegrationHealth,
 } from './types';
-
-// SEFAZ URLs by UF (simplified - would need full mapping)
-const SEFAZ_URLS: Record<string, { producao: string; homologacao: string }> = {
-  SP: {
-    producao: 'https://nfe.fazenda.sp.gov.br/ws',
-    homologacao: 'https://homologacao.nfe.fazenda.sp.gov.br/ws',
-  },
-  RJ: {
-    producao: 'https://nfe.fazenda.rj.gov.br/ws',
-    homologacao: 'https://homologacao.nfe.fazenda.rj.gov.br/ws',
-  },
-  MG: {
-    producao: 'https://nfe.fazenda.mg.gov.br/ws',
-    homologacao: 'https://homologacao.nfe.fazenda.mg.gov.br/ws',
-  },
-  // SVC (Contingência)
-  'SVC-AN': {
-    producao: 'https://www.svc.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx',
-    homologacao: 'https://hom.svc.fazenda.gov.br/NFeAutorizacao4/NFeAutorizacao4.asmx',
-  },
-  'SVC-RS': {
-    producao: 'https://nfe.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx',
-    homologacao: 'https://nfe-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx',
-  },
-};
-
-// Status codes SEFAZ
-const SEFAZ_STATUS = {
-  AUTORIZADA: '100',
-  CANCELADA: '101',
-  DENEGADA: '110',
-  USO_DENEGADO: '301',
-  SERVICO_PARALISADO: '108',
-  SERVICO_PARALISADO_SEM_PREVISAO: '109',
-} as const;
 
 export function isSefazConfigured(): boolean {
   // SEFAZ is configured via company data in Supabase

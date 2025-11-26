@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Brain, Shield, Sparkles, Eye, EyeOff } from 'lucide-react'
@@ -9,17 +9,38 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const loginTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
+    setError(null)
 
-    // TODO: Implement Supabase authentication
-    // Placeholder for now - redirects to dashboard
-    setTimeout(() => {
-      navigate('/dashboard')
-    }, 1000)
+    try {
+      // TODO: Implement Supabase authentication
+      // Placeholder for now - redirects to dashboard
+      loginTimeout.current = setTimeout(() => {
+        setLoading(false)
+        navigate('/dashboard')
+      }, 1000)
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível iniciar a sessão. Tente novamente.'
+      )
+      setLoading(false)
+    }
   }
+
+  useEffect(() => {
+    return () => {
+      if (loginTimeout.current) {
+        clearTimeout(loginTimeout.current)
+      }
+    }
+  }, [])
 
   const handleQuickAccess = (_role: 'admin' | 'analista') => {
     // Development quick access
@@ -54,6 +75,11 @@ export function LoginPage() {
 
             {/* Login Form */}
             <form onSubmit={handleLogin} className="space-y-6">
+              {error && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                  {error}
+                </div>
+              )}
               {/* Email Input */}
               <div className="form-row">
                 <label htmlFor="email" className="text-foreground text-sm font-medium flex items-center gap-2">

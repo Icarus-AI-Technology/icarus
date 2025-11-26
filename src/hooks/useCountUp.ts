@@ -22,13 +22,15 @@ export function useCountUp({ end, duration = 2000, start = 0, decimals = 0 }: Us
       { threshold: 0.3 }
     )
 
-    if (ref.current) {
-      observer.observe(ref.current)
+    const element = ref.current
+
+    if (element) {
+      observer.observe(element)
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
+      if (element) {
+        observer.unobserve(element)
       }
     }
   }, [isVisible])

@@ -1,6 +1,4 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
@@ -37,8 +35,6 @@ import {
 import { toast } from 'sonner'
 import {
   cirurgiaSchema,
-  nameToInitials,
-  type CirurgiaFormData,
 } from './schemas/cirurgia.schema'
 
 type SurgeryStatus = 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
@@ -76,6 +72,74 @@ interface Hospital {
   name: string
   city: string
 }
+
+const mockDoctors: Doctor[] = [
+  { id: '1', name: 'Dr. Carlos Silva', specialty: 'Cardiologia' },
+  { id: '2', name: 'Dr. Ana Santos', specialty: 'Ortopedia' },
+  { id: '3', name: 'Dr. Pedro Costa', specialty: 'Neurocirurgia' },
+  { id: '4', name: 'Dra. Maria Oliveira', specialty: 'Oftalmologia' },
+]
+
+const mockHospitals: Hospital[] = [
+  { id: '1', name: 'Hospital Santa Casa', city: 'São Paulo' },
+  { id: '2', name: 'Hospital Albert Einstein', city: 'São Paulo' },
+  { id: '3', name: 'Hospital Sírio-Libanês', city: 'São Paulo' },
+]
+
+// Mock data - LGPD Compliant (using initials only)
+const mockSurgeries: Surgery[] = [
+  {
+    id: '1',
+    surgery_number: 'CIR-2025-001',
+    paciente_iniciais: 'J.S.',
+    paciente_ref_hospital: 'HSC-2025-001',
+    doctor_id: '1',
+    doctor_name: 'Dr. Carlos Silva',
+    hospital_id: '1',
+    hospital_name: 'Hospital Santa Casa',
+    surgery_type: 'Angioplastia Coronária',
+    scheduled_date: '2025-01-20',
+    scheduled_time: '08:00',
+    status: 'confirmed',
+    notes: 'Monitorar pressão arterial a cada 15 minutos',
+    estimated_value: 25000,
+    created_at: '2025-01-15',
+  },
+  {
+    id: '2',
+    surgery_number: 'CIR-2025-002',
+    paciente_iniciais: 'M.O.',
+    paciente_ref_hospital: 'HSC-2025-002',
+    doctor_id: '2',
+    doctor_name: 'Dr. Ana Santos',
+    hospital_id: '2',
+    hospital_name: 'Hospital Albert Einstein',
+    surgery_type: 'Artroplastia Total de Quadril',
+    scheduled_date: '2025-01-22',
+    scheduled_time: '10:00',
+    status: 'scheduled',
+    notes: 'Paciente com alergia a penicilina',
+    estimated_value: 48000,
+    created_at: '2025-01-16',
+  },
+  {
+    id: '3',
+    surgery_number: 'CIR-2025-003',
+    paciente_iniciais: 'L.C.',
+    paciente_ref_hospital: 'HSL-2025-003',
+    doctor_id: '3',
+    doctor_name: 'Dr. Pedro Costa',
+    hospital_id: '3',
+    hospital_name: 'Hospital Sírio-Libanês',
+    surgery_type: 'Craniotomia para remoção de tumor',
+    scheduled_date: '2025-01-25',
+    scheduled_time: '07:30',
+    status: 'confirmed',
+    notes: 'Equipe de neurocirurgia completa confirmada',
+    estimated_value: 125000,
+    created_at: '2025-01-17',
+  },
+]
 
 export function Cirurgias() {
   const { supabase, isConfigured } = useSupabase()
@@ -133,110 +197,6 @@ export function Cirurgias() {
     return true
   }
 
-  // Mock data
-  const mockDoctors: Doctor[] = [
-    { id: '1', name: 'Dr. Carlos Silva', specialty: 'Cardiologia' },
-    { id: '2', name: 'Dr. Ana Santos', specialty: 'Ortopedia' },
-    { id: '3', name: 'Dr. Pedro Costa', specialty: 'Neurocirurgia' },
-    { id: '4', name: 'Dra. Maria Oliveira', specialty: 'Oftalmologia' }
-  ]
-
-  const mockHospitals: Hospital[] = [
-    { id: '1', name: 'Hospital Santa Casa', city: 'São Paulo' },
-    { id: '2', name: 'Hospital Albert Einstein', city: 'São Paulo' },
-    { id: '3', name: 'Hospital Sírio-Libanês', city: 'São Paulo' }
-  ]
-
-  // Mock data - LGPD Compliant (using initials only)
-  const mockSurgeries: Surgery[] = [
-    {
-      id: '1',
-      surgery_number: 'CIR-2025-001',
-      paciente_iniciais: 'J.S.',
-      paciente_ref_hospital: 'HSC-2025-001',
-      doctor_id: '1',
-      doctor_name: 'Dr. Carlos Silva',
-      hospital_id: '1',
-      hospital_name: 'Hospital Santa Casa',
-      surgery_type: 'Angioplastia Coronária',
-      scheduled_date: '2025-01-20',
-      scheduled_time: '08:00',
-      status: 'confirmed',
-      notes: 'Paciente em jejum de 12h',
-      estimated_value: 35000,
-      created_at: '2025-01-15T10:00:00'
-    },
-    {
-      id: '2',
-      surgery_number: 'CIR-2025-002',
-      paciente_iniciais: 'M.S.',
-      paciente_ref_hospital: 'HAE-2025-042',
-      doctor_id: '2',
-      doctor_name: 'Dr. Ana Santos',
-      hospital_id: '2',
-      hospital_name: 'Hospital Albert Einstein',
-      surgery_type: 'Artroplastia de Quadril',
-      scheduled_date: '2025-01-21',
-      scheduled_time: '10:00',
-      status: 'scheduled',
-      notes: null,
-      estimated_value: 45000,
-      created_at: '2025-01-15T11:00:00'
-    },
-    {
-      id: '3',
-      surgery_number: 'CIR-2025-003',
-      paciente_iniciais: 'P.O.',
-      paciente_ref_hospital: 'HSL-2025-103',
-      doctor_id: '3',
-      doctor_name: 'Dr. Pedro Costa',
-      hospital_id: '3',
-      hospital_name: 'Hospital Sírio-Libanês',
-      surgery_type: 'Cranioplastia',
-      scheduled_date: '2025-01-18',
-      scheduled_time: '14:00',
-      status: 'in_progress',
-      notes: 'Cirurgia de alta complexidade',
-      estimated_value: 65000,
-      created_at: '2025-01-14T09:00:00'
-    },
-    {
-      id: '4',
-      surgery_number: 'CIR-2025-004',
-      paciente_iniciais: 'A.C.',
-      paciente_ref_hospital: 'HSC-2025-002',
-      doctor_id: '1',
-      doctor_name: 'Dr. Carlos Silva',
-      hospital_id: '1',
-      hospital_name: 'Hospital Santa Casa',
-      surgery_type: 'Implante de Stent',
-      scheduled_date: '2025-01-15',
-      scheduled_time: '09:00',
-      status: 'completed',
-      notes: null,
-      estimated_value: 28000,
-      created_at: '2025-01-10T08:00:00'
-    },
-    {
-      id: '5',
-      surgery_number: 'CIR-2025-005',
-      paciente_iniciais: 'C.F.',
-      paciente_ref_hospital: 'HAE-2025-043',
-      doctor_id: '4',
-      doctor_name: 'Dra. Maria Oliveira',
-      hospital_id: '2',
-      hospital_name: 'Hospital Albert Einstein',
-      surgery_type: 'Facoemulsificação',
-      scheduled_date: '2025-01-17',
-      scheduled_time: '11:00',
-      status: 'cancelled',
-      notes: 'Cancelado pelo paciente',
-      estimated_value: 15000,
-      created_at: '2025-01-12T15:00:00'
-    }
-  ]
-
-  // Analytics data
   const statusDistribution = [
     { status: 'Agendadas', count: 2, color: '#6366F1' },
     { status: 'Confirmadas', count: 3, color: '#10B981' },

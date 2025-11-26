@@ -29,8 +29,6 @@ const ResearchRequestSchema = z.object({
   empresaId: z.string().uuid().optional(),
 })
 
-type ResearchRequest = z.infer<typeof ResearchRequestSchema>
-
 interface SearchResult {
   title: string
   url: string

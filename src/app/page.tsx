@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from 'react-router-dom'
 import {
   Package, ShoppingCart, DollarSign, Users,
   TrendingUp, FileText, Truck, Settings,
@@ -23,7 +23,7 @@ export default function HomePage() {
 
   const features = [
     { icon: Brain, title: 'IcarusBrain', description: 'IA integrada com GPT-4' },
-    { icon: Zap, title: 'Performance', description: 'Next.js 14 + React Query' },
+    { icon: Zap, title: 'Performance', description: 'Vite + React Query' },
     { icon: Shield, title: 'Segurança', description: 'RLS + Supabase Auth' },
     { icon: Database, title: 'Supabase', description: 'PostgreSQL + Realtime' },
   ]
@@ -87,7 +87,7 @@ export default function HomePage() {
               return (
                 <Link
                   key={module.name}
-                  href={module.href}
+                  to={module.href}
                   className="
                     bg-gradient-to-br from-gray-900/90 to-gray-800/90
                     backdrop-blur-sm
@@ -150,7 +150,7 @@ export default function HomePage() {
             ICARUS v5.0 - ERP com IA, Design Neumórfico e Performance Otimizada
           </p>
           <p className="text-gray-500 text-sm mt-2">
-            Desenvolvido com Next.js 14, TypeScript, Tailwind CSS e Supabase
+            Desenvolvido com Vite, TypeScript, Tailwind CSS e Supabase
           </p>
         </div>
 

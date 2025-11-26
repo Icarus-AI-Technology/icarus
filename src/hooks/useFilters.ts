@@ -63,7 +63,7 @@ export function useFilters<T extends Record<string, unknown>>({
       if (!matchesSearch) return false
 
       // Additional filters
-      for (const { field, value } of filterFields) {
+      for (const { field } of filterFields) {
         const filterValue = filters[String(field)]
         if (filterValue && filterValue !== 'all' && item[field] !== filterValue) {
           return false

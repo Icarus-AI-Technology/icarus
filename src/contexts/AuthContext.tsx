@@ -1,9 +1,10 @@
 'use client'
 
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
 
 interface AuthContextType {
   user: User | null
@@ -21,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Get initial session
@@ -52,8 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) throw error
 
-      router.push('/')
-      router.refresh()
+      navigate('/')
     } catch (error) {
       console.error('Error signing in:', error)
       throw error
@@ -85,8 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
 
-      router.push('/login')
-      router.refresh()
+      navigate('/login')
     } catch (error) {
       console.error('Error signing out:', error)
       throw error

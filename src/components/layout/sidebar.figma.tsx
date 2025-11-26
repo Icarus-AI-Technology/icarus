@@ -180,9 +180,9 @@ function DashboardLayout({ children }) {
 
 ✅ DESTACAR ROTA ATUAL:
 
-import { usePathname } from 'next/navigation';
+import { useLocation } from 'react-router-dom';
 
-const pathname = usePathname();
+const { pathname } = useLocation();
 
 const ICARUS_MODULES = [
   { id: 'financeiro', icon: 'wallet', label: 'Financeiro', href: '/financeiro' },

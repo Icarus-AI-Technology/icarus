@@ -59,7 +59,7 @@ export interface Microsoft365ValidationResult {
   score: number;
 }
 
-export async function validateMicrosoft365(empresaId: string): Promise<Microsoft365ValidationResult> {
+export async function validateMicrosoft365(_empresaId: string): Promise<Microsoft365ValidationResult> {
   const now = new Date();
   const config = getEnvConfig();
   const items: AuditorChecklistItem[] = [];
@@ -223,7 +223,7 @@ export interface PluggyValidationResult {
   score: number;
 }
 
-export async function validatePluggy(empresaId: string): Promise<PluggyValidationResult> {
+export async function validatePluggy(_empresaId: string): Promise<PluggyValidationResult> {
   const now = new Date();
   const config = getEnvConfig();
   const items: AuditorChecklistItem[] = [];
@@ -578,7 +578,7 @@ export interface AnvisaValidationResult {
   score: number;
 }
 
-export async function validateAnvisa(empresaId: string): Promise<AnvisaValidationResult> {
+export async function validateAnvisa(_empresaId: string): Promise<AnvisaValidationResult> {
   const now = new Date();
   const items: AuditorChecklistItem[] = [];
 
@@ -605,8 +605,10 @@ export async function validateAnvisa(empresaId: string): Promise<AnvisaValidatio
     description: 'Health check',
     verification: 'Verificar disponibilidade da API',
     severity: 'high',
-    status: 'pass',
-    details: 'API ANVISA pública disponível',
+    status: apiAvailable ? 'pass' : 'fail',
+    details: apiAvailable
+      ? `API ANVISA pública disponível (tempo: ${responseTime}ms)`
+      : 'API ANVISA indisponível ou bloqueada',
     lastChecked: now,
   });
 
@@ -689,7 +691,7 @@ export interface OtherApisValidationResult {
   score: number;
 }
 
-export async function validateOtherApis(empresaId: string): Promise<OtherApisValidationResult> {
+export async function validateOtherApis(_empresaId: string): Promise<OtherApisValidationResult> {
   const now = new Date();
   const config = getEnvConfig();
   const items: AuditorChecklistItem[] = [];

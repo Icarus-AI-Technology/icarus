@@ -3,7 +3,7 @@
  * Bank account connections, transaction sync, and financial data
  */
 
-import { supabase } from '@/lib/supabase/client';
+import { getSupabaseClientOrThrow, isSupabaseConfigured } from '@/lib/supabase/client';
 import { APIClient, APICache } from './api-client';
 import type {
   PluggyConfig,
@@ -27,9 +27,24 @@ const getPluggyConfig = (): PluggyConfig => ({
   sandbox: import.meta.env.VITE_PLUGGY_SANDBOX === 'true',
 });
 
+const validatePluggyConfig = (
+  config: PluggyConfig
+): { config: PluggyConfig; isValid: boolean; missing: string[] } => {
+  const missing: string[] = [];
+
+  if (!config.clientId) missing.push('clientId');
+  if (!config.webhookUrl) missing.push('webhookUrl');
+
+  return {
+    config,
+    isValid: missing.length === 0,
+    missing,
+  };
+};
+
 export function isPluggyConfigured(): boolean {
-  const config = getPluggyConfig();
-  return Boolean(config.clientId);
+  const validation = validatePluggyConfig(getPluggyConfig());
+  return validation.isValid;
 }
 
 /**
@@ -40,9 +55,12 @@ export class PluggyClient extends APIClient {
   private apiKeyExpiry: Date | null = null;
   private cache: APICache;
   private isSandbox: boolean;
+  private readonly config: PluggyConfig;
+  private readonly configMissing: string[];
 
   constructor() {
     const config = getPluggyConfig();
+    const validation = validatePluggyConfig(config);
     super({
       baseUrl: config.sandbox ? PLUGGY_SANDBOX_URL : PLUGGY_API_URL,
       timeout: 30000,
@@ -50,6 +68,24 @@ export class PluggyClient extends APIClient {
     });
     this.cache = new APICache(60000);
     this.isSandbox = config.sandbox ?? false;
+    this.config = config;
+    this.configMissing = validation.missing;
+  }
+
+  private getSupabase() {
+    return getSupabaseClientOrThrow();
+  }
+
+  private assertConfig() {
+    if (this.configMissing.length > 0) {
+      throw new Error(
+        `Pluggy configuration is incomplete: missing ${this.configMissing.join(', ')}`
+      );
+    }
+
+    if (!isSupabaseConfigured()) {
+      throw new Error('Supabase must be configured before using Pluggy.');
+    }
   }
 
   // =========================================================================
@@ -59,26 +95,39 @@ export class PluggyClient extends APIClient {
   /**
    * Get API key for Pluggy requests (server-side via Edge Function)
    */
-  private async ensureApiKey(): Promise<void> {
-    // Check if current key is still valid
-    if (this.apiKey && this.apiKeyExpiry) {
+  private async getActiveApiKey(): Promise<string> {
+    this.assertConfig();
+
+    const hasValidCachedKey = () => {
+      if (!this.apiKey || !this.apiKeyExpiry) return false;
       const buffer = 5 * 60 * 1000; // 5 minutes buffer
-      if (this.apiKeyExpiry.getTime() > Date.now() + buffer) {
-        return;
-      }
+      return this.apiKeyExpiry.getTime() > Date.now() + buffer;
+    };
+
+    if (hasValidCachedKey()) {
+      return this.apiKey as string;
     }
 
     // Get new API key via Edge Function
-    const { data, error } = await supabase.functions.invoke('pluggy-auth', {
+    const supabase = this.getSupabase();
+    const { data, error } = await supabase.functions.invoke<{ apiKey?: string; expiresIn?: number }>('pluggy-auth', {
       body: { action: 'get_api_key' },
     });
 
-    if (error || !data?.apiKey) {
-      throw new Error('Failed to get Pluggy API key');
+    if (error) {
+      throw new Error(error.message ?? 'Failed to get Pluggy API key');
     }
 
-    this.apiKey = data.apiKey;
-    this.apiKeyExpiry = new Date(Date.now() + (data.expiresIn ?? 3600) * 1000);
+    const apiKey = data?.apiKey;
+    if (!apiKey) {
+      throw new Error('Pluggy API key is missing from the authentication response');
+    }
+
+    const expiresIn = data?.expiresIn ?? 3600;
+    this.apiKey = apiKey;
+    this.apiKeyExpiry = new Date(Date.now() + expiresIn * 1000);
+
+    return apiKey;
   }
 
   /**
@@ -88,12 +137,12 @@ export class PluggyClient extends APIClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    await this.ensureApiKey();
+    const apiKey = await this.getActiveApiKey();
 
     return this.request<T>(endpoint, {
       ...options,
       headers: {
-        'X-API-KEY': this.apiKey!,
+        'X-API-KEY': apiKey,
         ...options.headers,
       },
     });
@@ -113,7 +162,9 @@ export class PluggyClient extends APIClient {
       products?: ('ACCOUNTS' | 'TRANSACTIONS' | 'INVESTMENTS' | 'IDENTITY')[];
     }
   ): Promise<PluggyConnectToken> {
-    const { data, error } = await supabase.functions.invoke('pluggy-connect', {
+    this.assertConfig();
+    const supabase = this.getSupabase();
+    const { data, error } = await supabase.functions.invoke<{ accessToken?: string }>('pluggy-connect', {
       body: {
         action: 'create_connect_token',
         empresaId,
@@ -122,8 +173,12 @@ export class PluggyClient extends APIClient {
       },
     });
 
-    if (error || !data?.accessToken) {
-      throw new Error('Failed to create Pluggy connect token');
+    if (error) {
+      throw new Error(error.message ?? 'Failed to create Pluggy connect token');
+    }
+
+    if (!data?.accessToken) {
+      throw new Error('Pluggy connect token is missing from the response');
     }
 
     return {
@@ -180,6 +235,7 @@ export class PluggyClient extends APIClient {
    */
   async getConnections(empresaId: string): Promise<PluggyConnection[]> {
     // Get item IDs from Supabase
+    const supabase = this.getSupabase();
     const { data: items, error } = await supabase
       .from('pluggy_connections')
       .select('item_id')
@@ -210,6 +266,7 @@ export class PluggyClient extends APIClient {
     await this.pluggyRequest(`/items/${itemId}`, { method: 'DELETE' });
 
     // Also remove from Supabase
+    const supabase = this.getSupabase();
     await supabase
       .from('pluggy_connections')
       .update({ excluido_em: new Date().toISOString() })
@@ -390,6 +447,7 @@ export class PluggyClient extends APIClient {
     for (const account of connection.accounts) {
       try {
         // Get last sync date
+        const supabase = this.getSupabase();
         const { data: lastTx } = await supabase
           .from('contas_transacoes')
           .select('data')
@@ -410,6 +468,7 @@ export class PluggyClient extends APIClient {
 
         // Insert into ICARUS
         for (const tx of transactions) {
+          const supabase = this.getSupabase();
           const { error } = await supabase.from('contas_transacoes').upsert(
             {
               id: tx.id,
@@ -442,6 +501,7 @@ export class PluggyClient extends APIClient {
     }
 
     // Update last sync date
+    const supabase = this.getSupabase();
     await supabase
       .from('pluggy_connections')
       .update({ ultima_sincronizacao: new Date().toISOString() })
@@ -462,11 +522,6 @@ export class PluggyClient extends APIClient {
     signature: string,
     secret: string
   ): boolean {
-    // Use Web Crypto API
-    const encoder = new TextEncoder();
-    const key = encoder.encode(secret);
-    const data = encoder.encode(payload);
-
     // This would need to be done in an Edge Function for proper HMAC
     // Here we just return true for type safety
     return Boolean(signature && secret);
@@ -486,7 +541,8 @@ export class PluggyClient extends APIClient {
         break;
 
       case 'item/error':
-      case 'item/login_required':
+      case 'item/login_required': {
+        const supabase = this.getSupabase();
         await supabase
           .from('pluggy_connections')
           .update({
@@ -495,13 +551,16 @@ export class PluggyClient extends APIClient {
           })
           .eq('item_id', event.itemId);
         break;
+      }
 
-      case 'item/deleted':
+      case 'item/deleted': {
+        const supabase = this.getSupabase();
         await supabase
           .from('pluggy_connections')
           .update({ excluido_em: new Date().toISOString() })
           .eq('item_id', event.itemId);
         break;
+      }
 
       case 'transactions/created':
         await this.syncTransactions(event.itemId, empresaId);

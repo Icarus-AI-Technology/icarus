@@ -20,7 +20,7 @@
  * 6. Teste e documente
  */
 
-import { useState, useEffect } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { KPICard } from '@/components/ui/KPICard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
@@ -84,15 +84,7 @@ export function ModuleTemplate() {
   // 2. EFFECTS
   // ==========================================
 
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
-
-  // ==========================================
-  // 3. DATA FETCHING
-  // ==========================================
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setLoading(true)
 
     try {
@@ -113,7 +105,11 @@ export function ModuleTemplate() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   function calculateKPIs(data: DataItem[]) {
     // Calcule os KPIs baseado nos dados

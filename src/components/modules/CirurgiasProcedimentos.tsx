@@ -474,7 +474,7 @@ export function CirurgiasProcedimentos() {
     } finally {
       setLoading(false)
     }
-  }, [filtroTipo, filtroStatus])
+  }, [])
 
   // ==================== EFEITOS ====================
 

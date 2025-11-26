@@ -13,7 +13,6 @@ import type {
   MicrosoftCalendarEvent,
   MicrosoftTeamsMeeting,
   IntegrationHealth,
-  APIError,
 } from './types';
 
 // Microsoft Graph API endpoints
@@ -88,7 +87,6 @@ export class Microsoft365Client extends APIClient {
     scopes: string[]
   ): Promise<MicrosoftToken> {
     const config = getMicrosoftConfig();
-    const tenant = config.tenantId ?? 'common';
 
     // This should be done server-side with client_secret
     // Using Supabase Edge Function

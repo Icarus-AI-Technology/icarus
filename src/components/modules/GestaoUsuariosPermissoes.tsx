@@ -23,15 +23,6 @@ interface Usuario {
   modulos_acesso: string[]
 }
 
-interface Permissao {
-  modulo: string
-  visualizar: boolean
-  criar: boolean
-  editar: boolean
-  excluir: boolean
-  exportar: boolean
-}
-
 export default function GestaoUsuariosPermissoes() {
   const [activeTab, setActiveTab] = useState('overview')
 

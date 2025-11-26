@@ -5,6 +5,7 @@
  * Uses react-window for virtualization with grid layout.
  */
 
+/* eslint-disable react-refresh/only-export-components */
 import { FixedSizeGrid as Grid } from 'react-window'
 import { ReactNode, CSSProperties } from 'react'
 

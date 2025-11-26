@@ -3,7 +3,7 @@
  * Complete audit checklist for external integrations
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   RefreshCw,
   CheckCircle2,
@@ -12,11 +12,9 @@ import {
   MinusCircle,
   ChevronDown,
   ChevronRight,
-  FileText,
   Download,
   AlertOctagon,
   Target,
-  Gauge,
   ListChecks,
 } from 'lucide-react';
 import { Card, Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
@@ -400,11 +398,7 @@ export function AuditorChecklistIntegrations({
   const [isRunning, setIsRunning] = useState(false);
 
   // Run audit on mount
-  useEffect(() => {
-    handleRunAudit();
-  }, []);
-
-  const handleRunAudit = async () => {
+  const handleRunAudit = useCallback(async () => {
     setIsRunning(true);
     try {
       const result = await runAudit();
@@ -417,7 +411,11 @@ export function AuditorChecklistIntegrations({
     } finally {
       setIsRunning(false);
     }
-  };
+  }, [runAudit]);
+
+  useEffect(() => {
+    handleRunAudit();
+  }, [handleRunAudit]);
 
   const toggleCategory = (name: string) => {
     setExpandedCategories((prev) => {

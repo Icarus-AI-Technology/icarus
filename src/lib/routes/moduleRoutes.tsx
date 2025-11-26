@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+import { implementedRouteIds, type ImplementedRouteId } from '../data/navigation'
 
 // Lazy load modules for better performance
 const Dashboard = lazy(() => import('@/components/modules/Dashboard').then(m => ({ default: m.Dashboard })))
@@ -19,8 +20,8 @@ const ContactPage = lazy(() => import('@/pages/Contact'))
 const IntegrationsDashboard = lazy(() => import('@/components/modules/IntegrationsDashboard').then(m => ({ default: m.IntegrationsDashboard })))
 const AuditorChecklistIntegrations = lazy(() => import('@/components/modules/AuditorChecklistIntegrations').then(m => ({ default: m.AuditorChecklistIntegrations })))
 
-export interface ModuleComponentMap {
-  [key: string]: React.LazyExoticComponent<() => JSX.Element>
+export type ModuleComponentMap = {
+  [Key in ImplementedRouteId]: React.LazyExoticComponent<() => JSX.Element>
 }
 
 /**
@@ -28,7 +29,7 @@ export interface ModuleComponentMap {
  * Maps route IDs to their corresponding React components
  * Only implemented modules are listed here
  */
-export const moduleComponents: ModuleComponentMap = {
+export const moduleComponents = {
   // Principal
   'dashboard': Dashboard,
 
@@ -57,25 +58,25 @@ export const moduleComponents: ModuleComponentMap = {
   // Dev Tools
   'showcase': ShowcasePage,
   'contato': ContactPage,
-}
+} satisfies ModuleComponentMap
 
 /**
  * Check if a module has an implementation
  */
-export const isModuleImplemented = (moduleId: string): boolean => {
+export const isModuleImplemented = (moduleId: ImplementedRouteId): boolean => {
   return moduleId in moduleComponents
 }
 
 /**
  * Get component for a module
  */
-export const getModuleComponent = (moduleId: string) => {
+export const getModuleComponent = (moduleId: ImplementedRouteId) => {
   return moduleComponents[moduleId] || null
 }
 
 /**
  * Get all implemented module IDs
  */
-export const getImplementedModuleIds = (): string[] => {
-  return Object.keys(moduleComponents)
+export const getImplementedModuleIds = (): ImplementedRouteId[] => {
+  return implementedRouteIds
 }
