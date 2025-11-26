@@ -5,6 +5,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { SidebarProvider } from '@/contexts/SidebarContext'
 import { IcarusLayout } from '@/components/layout/IcarusLayout'
 import { ModulePlaceholder } from '@/components/modules/ModulePlaceholder'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
@@ -34,8 +35,9 @@ function App() {
               <Route
                 path="/*"
                 element={
-                  <IcarusLayout>
-                    <Suspense fallback={<ModuleLoadingSkeleton />}>
+                  <SidebarProvider>
+                    <IcarusLayout>
+                      <Suspense fallback={<ModuleLoadingSkeleton />}>
                       <Routes>
                         {/* Generate routes for all modules */}
                         {allRoutes.map((route) => {
@@ -69,10 +71,11 @@ function App() {
                         />
                       </Routes>
 
-                      {/* Dev Tools */}
-                      <SupabaseConnectionTest />
-                    </Suspense>
-                  </IcarusLayout>
+                        {/* Dev Tools */}
+                        <SupabaseConnectionTest />
+                      </Suspense>
+                    </IcarusLayout>
+                  </SidebarProvider>
                 }
               />
             </Routes>

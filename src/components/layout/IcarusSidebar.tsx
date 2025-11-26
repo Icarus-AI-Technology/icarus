@@ -4,6 +4,7 @@ import { ChevronDown, ChevronRight, Search, Menu, BrainCircuit } from 'lucide-re
 import { navigationConfig } from '@/lib/data/navigation'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/hooks/useTheme'
+import { useSidebar } from '@/hooks/useSidebar'
 
 // Paleta de cores para ícones (sem repetição por categoria)
 const categoryColors: Record<string, string> = {
@@ -38,9 +39,9 @@ const routeIconColors = [
 export function IcarusSidebar() {
   const location = useLocation()
   const { isDark } = useTheme()
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Principal', 'Core Business'])
+  const { isCollapsed, toggleSidebar } = useSidebar()
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Principal', 'Cadastros & Gestão'])
   const [searchQuery, setSearchQuery] = useState('')
-  const [isCollapsed, setIsCollapsed] = useState(false)
 
   const toggleCategory = (categoryName: string) => {
     setExpandedCategories(prev =>
@@ -104,14 +105,15 @@ export function IcarusSidebar() {
           </div>
         )}
         <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={toggleSidebar}
           className={cn(
-            "w-8 h-8 rounded-lg flex items-center justify-center transition-colors ml-auto",
+            "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ml-auto",
             isDark 
               ? "bg-[#1A1F35] text-[#94A3B8] hover:text-white"
               : "bg-slate-100 text-slate-500 hover:text-slate-900"
           )}
           style={{ boxShadow: neuShadow }}
+          aria-label={isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
         >
           {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>

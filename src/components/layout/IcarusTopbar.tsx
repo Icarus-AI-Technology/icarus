@@ -1,5 +1,6 @@
 import { Bell, Search, Settings, User, Moon, Sun, LogOut } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
+import { useSidebar } from '@/hooks/useSidebar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,12 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 
-interface IcarusTopbarProps {
-  sidebarWidth?: number
-}
-
-export function IcarusTopbar({ sidebarWidth = 256 }: IcarusTopbarProps) {
+export function IcarusTopbar() {
   const { theme, toggleTheme, isDark } = useTheme()
+  const { sidebarWidth } = useSidebar()
 
   return (
     <header
