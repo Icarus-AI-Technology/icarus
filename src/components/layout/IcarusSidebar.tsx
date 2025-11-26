@@ -4,6 +4,32 @@ import { ChevronDown, ChevronRight, Search, Menu, BrainCircuit } from 'lucide-re
 import { navigationConfig } from '@/lib/data/navigation'
 import { cn } from '@/lib/utils'
 
+// Paleta de cores para ícones (sem repetição por categoria)
+const categoryColors: Record<string, string> = {
+  'Principal': '#6366F1',      // Indigo
+  'Core Business': '#2DD4BF',  // Teal
+  'Operações': '#8B5CF6',      // Purple
+  'Inteligência': '#F59E0B',   // Amber
+  'Integrações': '#3B82F6',    // Blue
+  'Administrativo': '#10B981', // Emerald
+}
+
+// Cores variadas para ícones de rotas (cíclico)
+const routeIconColors = [
+  '#6366F1', // Indigo
+  '#2DD4BF', // Teal
+  '#8B5CF6', // Purple
+  '#F59E0B', // Amber
+  '#3B82F6', // Blue
+  '#10B981', // Emerald
+  '#EC4899', // Pink
+  '#EF4444', // Red
+  '#14B8A6', // Cyan
+  '#A855F7', // Violet
+  '#84CC16', // Lime
+  '#F97316', // Orange
+]
+
 export function IcarusSidebar() {
   const location = useLocation()
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['Principal', 'Core Business'])
@@ -83,9 +109,10 @@ export function IcarusSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-3 space-y-1 max-h-[calc(100vh-180px)]">
-        {filteredNavigation.map((category) => {
+        {filteredNavigation.map((category, categoryIndex) => {
           const isExpanded = expandedCategories.includes(category.name)
           const CategoryIcon = category.icon
+          const categoryColor = categoryColors[category.name] || routeIconColors[categoryIndex % routeIconColors.length]
 
           return (
             <div key={category.name}>
@@ -98,7 +125,11 @@ export function IcarusSidebar() {
                   isCollapsed && "justify-center"
                 )}
               >
-                <CategoryIcon className="h-5 w-5 flex-shrink-0 text-[#6366F1]" strokeWidth={2} />
+                <CategoryIcon 
+                  className="h-5 w-5 flex-shrink-0" 
+                  strokeWidth={2}
+                  style={{ color: categoryColor }}
+                />
                 {!isCollapsed && (
                   <>
                     <span className="flex-1 text-left">{category.name}</span>
@@ -114,10 +145,12 @@ export function IcarusSidebar() {
               {/* Routes */}
               {isExpanded && !isCollapsed && (
                 <div className="ml-2 mt-1 space-y-0.5">
-                  {category.routes.map((route) => {
+                  {category.routes.map((route, routeIndex) => {
                     const RouteIcon = route.icon
                     const isActive = location.pathname === route.path
                     const isImplemented = route.isImplemented ?? false
+                    // Cada rota tem uma cor única baseada no índice global
+                    const routeColor = routeIconColors[(categoryIndex * 10 + routeIndex) % routeIconColors.length]
 
                     return (
                       <Link
@@ -132,15 +165,13 @@ export function IcarusSidebar() {
                         )}
                         style={isActive ? { 
                           boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)',
-                          borderLeft: '3px solid #6366F1'
+                          borderLeft: `3px solid ${routeColor}`
                         } : {}}
                       >
                         <RouteIcon 
-                          className={cn(
-                            "h-4 w-4 flex-shrink-0",
-                            isActive ? "text-[#6366F1]" : "text-[#64748B]"
-                          )} 
-                          strokeWidth={2} 
+                          className="h-4 w-4 flex-shrink-0"
+                          strokeWidth={2}
+                          style={{ color: isActive ? routeColor : '#64748B' }}
                         />
                         <span className="flex-1">{route.name}</span>
                         {!isImplemented && (
