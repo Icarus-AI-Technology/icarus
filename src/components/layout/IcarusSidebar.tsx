@@ -99,8 +99,8 @@ export function IcarusSidebar() {
               <BrainCircuit className="w-6 h-6 text-white" strokeWidth={2} />
             </div>
             <div>
-              <div className={`font-bold text-sm ${textPrimary}`}>ICARUS</div>
-              <div className={`text-xs ${textMuted}`}>v5.1.0</div>
+              <div className={`font-bold text-sm ${textPrimary}`}>ICARUS <span className={textMuted}>v5.0</span></div>
+              <div className={`text-xs ${textMuted}`}>Gestão elevada pela IA</div>
             </div>
           </div>
         )}
