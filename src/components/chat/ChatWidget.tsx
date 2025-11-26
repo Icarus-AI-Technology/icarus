@@ -88,53 +88,52 @@ export function ChatWidget({
     'Validar registro ANVISA',
   ];
 
-  // FAB Button (when closed)
+  // FAB Button (when closed) - Sempre visível, flutuante, sobreposto a tudo
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          'fixed z-[500]',
+          'fixed z-[9999]',
           'group relative',
           'w-14 h-14 rounded-full',
           'flex items-center justify-center',
-          'bg-primary-500 text-white',
+          'text-white',
           'transition-all duration-300',
-          'focus:outline-none focus:ring-4 focus:ring-primary-500/50',
-          'shadow-[8px_8px_16px_rgba(0,0,0,0.2),-8px_-8px_16px_rgba(255,255,255,0.1)]',
-          'hover:shadow-[12px_12px_24px_rgba(0,0,0,0.3),-12px_-12px_24px_rgba(255,255,255,0.15)]',
-          'active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.1)]'
+          'focus:outline-none focus:ring-4 focus:ring-[#6366F1]/50',
+          'hover:scale-110',
+          'animate-pulse'
         )}
-        style={{ backgroundColor: '#6366F1', ...positionStyle }}
+        style={{ 
+          backgroundColor: '#6366F1', 
+          bottom: '32px', 
+          right: '32px',
+          boxShadow: '0 8px 32px rgba(99, 102, 241, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2)'
+        }}
         aria-label="Abrir assistente virtual"
       >
         <Bot className="w-6 h-6" />
-        <span
-          className={cn(
-            'absolute inset-0 rounded-full',
-            'animate-ping opacity-20'
-          )}
-          style={{ backgroundColor: '#6366F1' }}
-        />
       </button>
     );
   }
 
-  // Chat Panel
+  // Chat Panel - Flutuante, sempre visível
   return (
     <div
       className={cn(
-        'fixed z-[500]',
+        'fixed z-[9999]',
         'flex flex-col',
         'bg-white dark:bg-gray-900',
         'border border-gray-200 dark:border-gray-700',
         'rounded-2xl overflow-hidden',
-        'shadow-[12px_12px_24px_rgba(0,0,0,0.15),-12px_-12px_24px_rgba(255,255,255,0.8)]',
-        'dark:shadow-[12px_12px_24px_rgba(0,0,0,0.4),-12px_-12px_24px_rgba(255,255,255,0.05)]',
         'transition-all duration-300',
         isMinimized ? 'w-80 h-14' : 'w-96 h-[520px]'
       )}
-      style={positionStyle}
+      style={{ 
+        bottom: '32px', 
+        right: '32px',
+        boxShadow: '0 16px 48px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(99, 102, 241, 0.15)'
+      }}
     >
       {/* Header */}
       <div

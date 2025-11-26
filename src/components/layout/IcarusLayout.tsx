@@ -14,31 +14,33 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
   const { sidebarWidth, isCollapsed } = useSidebar()
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-[#0B0D16]' : 'bg-[#F1F5F9]'}`}>
-      {/* Sidebar */}
-      <IcarusSidebar />
+    <>
+      <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-[#0B0D16]' : 'bg-[#F1F5F9]'}`}>
+        {/* Sidebar */}
+        <IcarusSidebar />
 
-      {/* Topbar */}
-      <IcarusTopbar />
+        {/* Topbar */}
+        <IcarusTopbar />
 
-      {/* Main Content - Estica/encolhe com a sidebar */}
-      <main
-        className="pt-16 min-h-screen transition-all duration-300 ease-in-out"
-        style={{ 
-          marginLeft: `${sidebarWidth}px`,
-          width: `calc(100% - ${sidebarWidth}px)`
-        }}
-      >
-        {/* Page Content - Estica proporcionalmente */}
-        <div 
-          className={`p-6 transition-all duration-300 ease-in-out ${isCollapsed ? 'max-w-none' : ''}`}
+        {/* Main Content - Estica/encolhe com a sidebar */}
+        <main
+          className="pt-16 min-h-screen transition-all duration-300 ease-in-out"
+          style={{ 
+            marginLeft: `${sidebarWidth}px`,
+            width: `calc(100% - ${sidebarWidth}px)`
+          }}
         >
-          {children}
-        </div>
-      </main>
+          {/* Page Content - Estica proporcionalmente */}
+          <div 
+            className={`p-6 transition-all duration-300 ease-in-out ${isCollapsed ? 'max-w-none' : ''}`}
+          >
+            {children}
+          </div>
+        </main>
+      </div>
 
-      {/* Chat Widget - Assistente Virtual ICARUS */}
+      {/* Chat Widget - Flutuante, sempre visível, sobreposto a tudo */}
       <ChatWidget position="bottom-right" />
-    </div>
+    </>
   )
 }
