@@ -133,33 +133,33 @@ export default function TabelasPrecos() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="neomorphic border-green-200">
+        <Card className="neomorphic border-success/30">
           <CardHeader className="pb-2">
             <CardDescription>Tabelas Ativas</CardDescription>
-            <CardTitle className="text-3xl text-green-600">{tabelasAtivas}</CardTitle>
+            <CardTitle className="text-3xl text-success">{tabelasAtivas}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-green-600">Vigentes</p>
+            <p className="text-xs text-success">Vigentes</p>
           </CardContent>
         </Card>
 
-        <Card className="neomorphic border-blue-200">
+        <Card className="neomorphic border-info/30">
           <CardHeader className="pb-2">
             <CardDescription>Produtos Tabelados</CardDescription>
-            <CardTitle className="text-3xl text-blue-600">{produtosTotal}</CardTitle>
+            <CardTitle className="text-3xl text-info">{produtosTotal}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-blue-600">Total de itens</p>
+            <p className="text-xs text-info">Total de itens</p>
           </CardContent>
         </Card>
 
-        <Card className="neomorphic border-purple-200">
+        <Card className="neomorphic border-accent/30">
           <CardHeader className="pb-2">
             <CardDescription>Markup Médio</CardDescription>
-            <CardTitle className="text-3xl text-purple-600">{markupMedio}%</CardTitle>
+            <CardTitle className="text-3xl text-accent">{markupMedio}%</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-purple-600">Margem média</p>
+            <p className="text-xs text-accent">Margem média</p>
           </CardContent>
         </Card>
 
@@ -195,17 +195,17 @@ export default function TabelasPrecos() {
                   { tipo: 'Clínicas', tabelas: 1, markup: 12.8, clientes: 45 },
                   { tipo: 'Operadoras', tabelas: 0, markup: 0, clientes: 0 }
                 ].map(item => (
-                  <div key={item.tipo} className="p-3 border rounded-lg">
+                  <div key={item.tipo} className="p-3 border border-border rounded-lg">
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="font-semibold">{item.tipo}</div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-muted-foreground">
                           {item.tabelas} tabela(s) • {item.clientes} cliente(s)
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xl font-bold text-green-600">{item.markup}%</div>
-                        <div className="text-xs text-gray-500">markup médio</div>
+                        <div className="text-xl font-bold text-success">{item.markup}%</div>
+                        <div className="text-xs text-muted-foreground">markup médio</div>
                       </div>
                     </div>
                   </div>
@@ -221,17 +221,17 @@ export default function TabelasPrecos() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="flex justify-between p-2 border-b">
+                  <div className="flex justify-between p-2 border-b border-border">
                     <span className="text-sm">Vigentes</span>
-                    <span className="font-bold text-green-600">2</span>
+                    <span className="font-bold text-success">2</span>
                   </div>
-                  <div className="flex justify-between p-2 border-b">
+                  <div className="flex justify-between p-2 border-b border-border">
                     <span className="text-sm">Em Revisão</span>
-                    <span className="font-bold text-yellow-600">0</span>
+                    <span className="font-bold text-warning">0</span>
                   </div>
                   <div className="flex justify-between p-2">
                     <span className="text-sm">Vencidas</span>
-                    <span className="font-bold text-red-600">1</span>
+                    <span className="font-bold text-error">1</span>
                   </div>
                 </div>
               </CardContent>
@@ -243,13 +243,13 @@ export default function TabelasPrecos() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="flex justify-between p-2 border-b">
+                  <div className="flex justify-between p-2 border-b border-border">
                     <span className="text-sm">Markup Mínimo</span>
                     <span className="font-bold">12.8%</span>
                   </div>
-                  <div className="flex justify-between p-2 border-b">
+                  <div className="flex justify-between p-2 border-b border-border">
                     <span className="text-sm">Markup Médio</span>
-                    <span className="font-bold text-green-600">{markupMedio}%</span>
+                    <span className="font-bold text-success">{markupMedio}%</span>
                   </div>
                   <div className="flex justify-between p-2">
                     <span className="text-sm">Markup Máximo</span>
@@ -273,46 +273,46 @@ export default function TabelasPrecos() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <div className="font-bold text-lg">{tab.nome}</div>
-                        <div className="text-sm text-gray-600">{tab.codigo}</div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-sm text-muted-foreground">{tab.codigo}</div>
+                        <div className="text-xs text-muted-foreground/70 mt-1">
                           Tipo: {tab.tipo.replace('_', ' ').toUpperCase()} •
                           Cliente: {tab.tipo_cliente.replace('_', ' ').toUpperCase()}
                         </div>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        tab.status === 'ativa' ? 'bg-green-100 text-green-800' :
-                        tab.status === 'em_revisao' ? 'bg-yellow-100 text-yellow-800' :
-                        tab.status === 'vencida' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
+                        tab.status === 'ativa' ? 'bg-success/20 text-success' :
+                        tab.status === 'em_revisao' ? 'bg-warning/20 text-warning' :
+                        tab.status === 'vencida' ? 'bg-error/20 text-error' :
+                        'bg-muted text-muted-foreground'
                       }`}>
                         {tab.status.toUpperCase().replace('_', ' ')}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-5 gap-3 text-sm mb-3">
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Produtos</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Produtos</p>
                         <p className="font-bold">{tab.produtos_count}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Markup</p>
-                        <p className="font-bold text-green-600">{tab.markup_medio}%</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Markup</p>
+                        <p className="font-bold text-success">{tab.markup_medio}%</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Desc. Máx</p>
-                        <p className="font-bold text-blue-600">{tab.desconto_maximo}%</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Desc. Máx</p>
+                        <p className="font-bold text-info">{tab.desconto_maximo}%</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Pedido Mín.</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Pedido Mín.</p>
                         <p className="font-bold">{formatCurrency(tab.valor_minimo_pedido)}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Clientes</p>
-                        <p className="font-bold text-purple-600">{tab.clientes_vinculados}</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Clientes</p>
+                        <p className="font-bold text-accent">{tab.clientes_vinculados}</p>
                       </div>
                     </div>
 
-                    <div className="text-sm text-gray-600 mb-3">
+                    <div className="text-sm text-muted-foreground mb-3">
                       <span className="font-semibold">Vigência:</span> {tab.vigencia_inicio}
                       {tab.vigencia_fim && ` até ${tab.vigencia_fim}`}
                     </div>
@@ -340,34 +340,34 @@ export default function TabelasPrecos() {
                 {itensAmostra.map(item => (
                   <Card key={item.id} className="p-4">
                     <div className="font-bold mb-2">{item.produto_nome}</div>
-                    <div className="text-xs text-gray-500 font-mono mb-3">{item.produto_codigo}</div>
+                    <div className="text-xs text-muted-foreground font-mono mb-3">{item.produto_codigo}</div>
 
                     <div className="grid grid-cols-5 gap-3 text-sm">
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Custo</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Custo</p>
                         <p className="font-bold">{formatCurrency(item.preco_custo)}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Tabela</p>
-                        <p className="font-bold text-blue-600">{formatCurrency(item.preco_tabela)}</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Tabela</p>
+                        <p className="font-bold text-info">{formatCurrency(item.preco_tabela)}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Markup</p>
-                        <p className="font-bold text-green-600">{item.markup}%</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Markup</p>
+                        <p className="font-bold text-success">{item.markup}%</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Desc. Máx</p>
-                        <p className="font-bold text-yellow-600">{item.desconto_maximo}%</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Desc. Máx</p>
+                        <p className="font-bold text-warning">{item.desconto_maximo}%</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Preço Mín.</p>
-                        <p className="font-bold text-red-600">{formatCurrency(item.preco_minimo)}</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Preço Mín.</p>
+                        <p className="font-bold text-error">{formatCurrency(item.preco_minimo)}</p>
                       </div>
                     </div>
 
-                    <div className="mt-3 p-2 bg-blue-50 rounded text-sm">
+                    <div className="mt-3 p-2 bg-info/10 rounded text-sm">
                       <span className="font-semibold">Margem:</span> {formatCurrency(item.preco_tabela - item.preco_custo)}
-                      <span className="text-gray-600 ml-2">
+                      <span className="text-muted-foreground ml-2">
                         ({((item.preco_tabela - item.preco_custo) / item.preco_custo * 100).toFixed(1)}%)
                       </span>
                     </div>
