@@ -54,21 +54,21 @@ export function HomePage() {
       title: 'Automação Total',
       description:
         'Automatize processos repetitivos e ganhe até 70% de produtividade.',
-      gradient: 'from-warning to-orange-600',
+      gradient: 'from-warning to-warning/70',
     },
     {
       icon: Shield,
       title: 'Segurança Enterprise',
       description:
         'Dados criptografados, backup automático e conformidade com LGPD.',
-      gradient: 'from-success to-emerald-600',
+      gradient: 'from-success to-success/70',
     },
     {
       icon: Target,
       title: 'Especializado em OPME',
       description:
         'Desenvolvido especificamente para gestão de Órteses, Próteses e Materiais Especiais.',
-      gradient: 'from-pink-500 to-error',
+      gradient: 'from-error/80 to-error',
     },
     {
       icon: TrendingUp,

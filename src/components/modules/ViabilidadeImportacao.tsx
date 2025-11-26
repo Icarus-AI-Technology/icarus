@@ -177,43 +177,43 @@ export default function ViabilidadeImportacao() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="neomorphic border-green-200">
+        <Card className="neomorphic border-success/30">
           <CardHeader className="pb-2">
             <CardDescription>Viáveis</CardDescription>
-            <CardTitle className="text-3xl text-green-600">{analises_aprovadas}</CardTitle>
+            <CardTitle className="text-3xl text-success">{analises_aprovadas}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-green-600">Aprovadas para importação</p>
+            <p className="text-xs text-success">Aprovadas para importação</p>
           </CardContent>
         </Card>
 
-        <Card className="neomorphic border-blue-200">
+        <Card className="neomorphic border-info/30">
           <CardHeader className="pb-2">
             <CardDescription>Economia Total</CardDescription>
-            <CardTitle className="text-3xl text-blue-600">{formatCurrency(economia_total)}</CardTitle>
+            <CardTitle className="text-3xl text-info">{formatCurrency(economia_total)}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-blue-600">vs. mercado nacional</p>
+            <p className="text-xs text-info">vs. mercado nacional</p>
           </CardContent>
         </Card>
 
-        <Card className="neomorphic border-purple-200">
+        <Card className="neomorphic border-accent/30">
           <CardHeader className="pb-2">
             <CardDescription>Margem Segurança Média</CardDescription>
-            <CardTitle className="text-3xl text-purple-600">{margem_media.toFixed(1)}%</CardTitle>
+            <CardTitle className="text-3xl text-accent">{margem_media.toFixed(1)}%</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-purple-600">Produtos viáveis</p>
+            <p className="text-xs text-accent">Produtos viáveis</p>
           </CardContent>
         </Card>
 
-        <Card className="neomorphic border-yellow-200">
+        <Card className="neomorphic border-warning/30">
           <CardHeader className="pb-2">
             <CardDescription>Em Análise</CardDescription>
-            <CardTitle className="text-3xl text-yellow-600">{analises_pendentes}</CardTitle>
+            <CardTitle className="text-3xl text-warning">{analises_pendentes}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-yellow-600">Aguardando conclusão</p>
+            <p className="text-xs text-warning">Aguardando conclusão</p>
           </CardContent>
         </Card>
       </div>
@@ -234,10 +234,10 @@ export default function ViabilidadeImportacao() {
             <CardContent>
               <div className="grid grid-cols-4 gap-4">
                 {[
-                  { label: 'Viável', count: 1, cor: 'bg-green-100 text-green-800' },
-                  { label: 'Marginal', count: 1, cor: 'bg-yellow-100 text-yellow-800' },
-                  { label: 'Não Viável', count: 1, cor: 'bg-red-100 text-red-800' },
-                  { label: 'Pendente', count: 0, cor: 'bg-gray-100 text-gray-800' }
+                  { label: 'Viável', count: 1, cor: 'bg-success/20 text-success' },
+                  { label: 'Marginal', count: 1, cor: 'bg-warning/20 text-warning' },
+                  { label: 'Não Viável', count: 1, cor: 'bg-error/20 text-error' },
+                  { label: 'Pendente', count: 0, cor: 'bg-muted text-muted-foreground' }
                 ].map(item => (
                   <div key={item.label} className="p-4 border rounded-lg text-center">
                     <div className="text-3xl font-bold mb-1">{item.count}</div>
@@ -257,17 +257,17 @@ export default function ViabilidadeImportacao() {
               </CardHeader>
               <CardContent>
                 {analises.filter(a => a.conclusao === 'viavel').map(analise => (
-                  <div key={analise.id} className="p-3 border rounded-lg mb-2">
+                  <div key={analise.id} className="p-3 border border-border rounded-lg mb-2">
                     <div className="font-semibold">{analise.produto_nome}</div>
                     <div className="flex justify-between items-center mt-2">
-                      <span className="text-sm text-gray-600">Economia</span>
-                      <span className="text-lg font-bold text-green-600">
+                      <span className="text-sm text-muted-foreground">Economia</span>
+                      <span className="text-lg font-bold text-success">
                         {formatCurrency(analise.economia_estimada)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Margem</span>
-                      <span className="text-sm font-bold text-blue-600">
+                      <span className="text-sm text-muted-foreground">Margem</span>
+                      <span className="text-sm font-bold text-info">
                         {analise.margem_seguranca.toFixed(1)}%
                       </span>
                     </div>
@@ -314,27 +314,27 @@ export default function ViabilidadeImportacao() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <div className="font-bold text-lg">{analise.produto_nome}</div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-muted-foreground">
                           {analise.codigo} • {analise.fornecedor} ({analise.pais_origem})
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-muted-foreground/70 mt-1">
                           Responsável: {analise.responsavel} • {analise.data_analise}
                         </div>
                       </div>
                       <div className="flex gap-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          analise.status === 'aprovada' ? 'bg-green-100 text-green-800' :
-                          analise.status === 'em_analise' ? 'bg-yellow-100 text-yellow-800' :
-                          analise.status === 'rejeitada' ? 'bg-red-100 text-red-800' :
-                          'bg-gray-100 text-gray-800'
+                          analise.status === 'aprovada' ? 'bg-success/20 text-success' :
+                          analise.status === 'em_analise' ? 'bg-warning/20 text-warning' :
+                          analise.status === 'rejeitada' ? 'bg-error/20 text-error' :
+                          'bg-muted text-muted-foreground'
                         }`}>
                           {analise.status.toUpperCase().replace('_', ' ')}
                         </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          analise.conclusao === 'viavel' ? 'bg-green-100 text-green-800' :
-                          analise.conclusao === 'marginal' ? 'bg-yellow-100 text-yellow-800' :
-                          analise.conclusao === 'nao_viavel' ? 'bg-red-100 text-red-800' :
-                          'bg-gray-100 text-gray-800'
+                          analise.conclusao === 'viavel' ? 'bg-success/20 text-success' :
+                          analise.conclusao === 'marginal' ? 'bg-warning/20 text-warning' :
+                          analise.conclusao === 'nao_viavel' ? 'bg-error/20 text-error' :
+                          'bg-muted text-muted-foreground'
                         }`}>
                           {analise.conclusao.toUpperCase().replace('_', ' ')}
                         </span>
@@ -342,27 +342,27 @@ export default function ViabilidadeImportacao() {
                     </div>
 
                     <div className="grid grid-cols-5 gap-3 text-sm mb-3">
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">CIF (USD)</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">CIF (USD)</p>
                         <p className="font-bold">${analise.cif_usd.toLocaleString('en-US')}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Custo Total</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Custo Total</p>
                         <p className="font-bold">{formatCurrency(analise.custo_total_importado)}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Mercado BR</p>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Mercado BR</p>
                         <p className="font-bold">{formatCurrency(analise.preco_mercado_nacional)}</p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Economia</p>
-                        <p className={`font-bold ${analise.economia_estimada > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Economia</p>
+                        <p className={`font-bold ${analise.economia_estimada > 0 ? 'text-success' : 'text-error'}`}>
                           {formatCurrency(Math.abs(analise.economia_estimada))}
                         </p>
                       </div>
-                      <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Margem</p>
-                        <p className={`font-bold ${analise.margem_seguranca > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      <div className="p-2 border border-border rounded">
+                        <p className="text-xs text-muted-foreground">Margem</p>
+                        <p className={`font-bold ${analise.margem_seguranca > 0 ? 'text-success' : 'text-error'}`}>
                           {analise.margem_seguranca.toFixed(1)}%
                         </p>
                       </div>
@@ -496,7 +496,7 @@ export default function ViabilidadeImportacao() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   Comparação detalhada de custos entre produtos importados e nacionais.
                 </p>
 
@@ -505,8 +505,8 @@ export default function ViabilidadeImportacao() {
                     <div className="font-bold mb-3">{analise.produto_nome}</div>
 
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-3 border-2 border-blue-200 rounded-lg">
-                        <h5 className="font-semibold text-blue-600 mb-2">💼 Importado</h5>
+                      <div className="p-3 border-2 border-info/30 rounded-lg">
+                        <h5 className="font-semibold text-info mb-2">💼 Importado</h5>
                         <div className="space-y-1 text-sm">
                           <div className="flex justify-between">
                             <span>CIF (USD):</span>
@@ -520,21 +520,21 @@ export default function ViabilidadeImportacao() {
                             <span>Despesas:</span>
                             <span>{formatCurrency(analise.despesas_desembaraco + analise.despesas_armazenagem + analise.despesas_transporte_interno)}</span>
                           </div>
-                          <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+                          <div className="flex justify-between font-bold text-lg border-t border-border pt-2 mt-2">
                             <span>Total:</span>
                             <span>{formatCurrency(analise.custo_total_importado)}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="p-3 border-2 border-gray-200 rounded-lg">
-                        <h5 className="font-semibold text-gray-600 mb-2">🇧🇷 Nacional</h5>
+                      <div className="p-3 border-2 border-border rounded-lg">
+                        <h5 className="font-semibold text-muted-foreground mb-2">🇧🇷 Nacional</h5>
                         <div className="space-y-1 text-sm">
                           <div className="flex justify-between">
                             <span>Preço de Venda:</span>
                             <span>{formatCurrency(analise.preco_mercado_nacional)}</span>
                           </div>
-                          <div className="flex justify-between font-bold text-lg border-t pt-2 mt-[4.5rem]">
+                          <div className="flex justify-between font-bold text-lg border-t border-border pt-2 mt-[4.5rem]">
                             <span>Total:</span>
                             <span>{formatCurrency(analise.preco_mercado_nacional)}</span>
                           </div>
@@ -543,14 +543,14 @@ export default function ViabilidadeImportacao() {
                     </div>
 
                     <div className={`mt-4 p-3 rounded-lg ${
-                      analise.economia_estimada > 0 ? 'bg-green-50' : 'bg-red-50'
+                      analise.economia_estimada > 0 ? 'bg-success/10' : 'bg-error/10'
                     }`}>
                       <div className="flex justify-between items-center">
                         <span className="font-semibold">
                           {analise.economia_estimada > 0 ? '💰 Economia:' : '⚠️ Prejuízo:'}
                         </span>
                         <span className={`text-2xl font-bold ${
-                          analise.economia_estimada > 0 ? 'text-green-600' : 'text-red-600'
+                          analise.economia_estimada > 0 ? 'text-success' : 'text-error'
                         }`}>
                           {formatCurrency(Math.abs(analise.economia_estimada))}
                         </span>
@@ -558,7 +558,7 @@ export default function ViabilidadeImportacao() {
                       <div className="flex justify-between items-center mt-2">
                         <span className="font-semibold">Margem de Segurança:</span>
                         <span className={`text-xl font-bold ${
-                          analise.margem_seguranca > 0 ? 'text-green-600' : 'text-red-600'
+                          analise.margem_seguranca > 0 ? 'text-success' : 'text-error'
                         }`}>
                           {analise.margem_seguranca.toFixed(2)}%
                         </span>
