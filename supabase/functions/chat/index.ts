@@ -1,6 +1,6 @@
 // Supabase Edge Function para Chatbot ICARUS
 // Deploy: npx supabase functions deploy chat
-// Updated: 2025-11-25 - Security fixes applied
+// Updated: 2025-11-26 - Added structured logging
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
@@ -10,6 +10,7 @@ import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
 import { getCorsHeaders, handleCorsPreflightRequest, jsonResponse, errorResponse } from '../_shared/cors.ts'
 import { validatePromptSecurity, sanitizePII } from '../_shared/validation.ts'
 import { verifyAuth, getUserEmpresaId } from '../_shared/supabase.ts'
+import { createLogger, Logger } from '../_shared/logger.ts'
 
 // Secrets configuradas no Supabase Dashboard
 const OPENAI_API_KEY = Deno.env.get('OPENAI_MEDICAL_MODEL')
@@ -102,24 +103,29 @@ function checkRateLimit(identifier: string): boolean {
 }
 
 serve(async (req) => {
-  const requestId = crypto.randomUUID()
+  const logger = createLogger('chat')
+  const requestId = logger.getRequestId()
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return handleCorsPreflightRequest(req)
   }
 
+  logger.logRequest(req)
+
   try {
     // 1. Verify authentication
     const { user, error: authError, supabase } = await verifyAuth(req)
     if (authError || !user) {
-      console.warn('Auth failed:', { requestId, error: authError })
+      logger.warn('Authentication failed', { error: authError })
       return errorResponse('Nao autorizado', req, 401, requestId)
     }
 
+    logger.setContext({ userId: user.id })
+
     // 2. Check rate limit
     if (!checkRateLimit(user.id)) {
-      console.warn('Rate limit exceeded:', { requestId, userId: user.id })
+      logger.logRateLimit(user.id, RATE_LIMIT.maxRequests, '60s')
       return new Response(
         JSON.stringify({ error: 'Muitas requisicoes. Tente novamente em 1 minuto.', requestId }),
         {
@@ -143,7 +149,7 @@ serve(async (req) => {
 
     const parseResult = ChatRequestSchema.safeParse(body)
     if (!parseResult.success) {
-      console.warn('Validation error:', { requestId, errors: parseResult.error.errors })
+      logger.warn('Validation error', { errors: parseResult.error.errors })
       return new Response(
         JSON.stringify({
           error: 'Erro de validacao',
@@ -162,7 +168,7 @@ serve(async (req) => {
     // 4. Security: Check for prompt injection
     const securityCheck = validatePromptSecurity(message)
     if (!securityCheck.valid) {
-      console.warn('Prompt injection attempt:', { requestId, userId: user.id, reason: securityCheck.reason })
+      logger.logSecurity('Prompt injection attempt', { reason: securityCheck.reason })
       return errorResponse('Entrada invalida', req, 400, requestId)
     }
 
@@ -212,6 +218,8 @@ serve(async (req) => {
     // Try OpenAI API if key is available
     if (OPENAI_API_KEY) {
       try {
+        logger.logAICall('gpt-4-turbo-preview', { messageCount: chatMessages.length })
+
         const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -233,9 +241,12 @@ serve(async (req) => {
             input: data.usage?.prompt_tokens || 0,
             output: data.usage?.completion_tokens || 0,
           }
+          logger.logAIResponse('gpt-4-turbo-preview', tokensUsed)
+        } else {
+          logger.logExternalResponse('OpenAI', openaiResponse.status, { error: 'Request failed' })
         }
       } catch (error) {
-        console.error('OpenAI API error:', { requestId, error: error instanceof Error ? error.message : 'unknown' })
+        logger.error('OpenAI API error', error)
       }
     }
 
@@ -253,6 +264,8 @@ serve(async (req) => {
     // Save messages to database
     const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     try {
+      logger.logDbOperation('upsert', 'chatbot_sessoes', { sessionId: currentSessionId })
+
       // Ensure session exists
       await serviceClient
         .from('chatbot_sessoes')
@@ -262,6 +275,8 @@ serve(async (req) => {
           usuario_id: user.id,
           atualizado_em: new Date().toISOString(),
         })
+
+      logger.logDbOperation('insert', 'chatbot_mensagens', { role: 'user' })
 
       // Save user message
       await serviceClient
@@ -274,6 +289,8 @@ serve(async (req) => {
           tokens_input: tokensUsed.input,
         })
 
+      logger.logDbOperation('insert', 'chatbot_mensagens', { role: 'assistant' })
+
       // Save assistant response
       await serviceClient
         .from('chatbot_mensagens')
@@ -284,7 +301,7 @@ serve(async (req) => {
           tokens_output: tokensUsed.output,
         })
     } catch (dbError) {
-      console.error('Database error:', { requestId, error: dbError instanceof Error ? dbError.message : 'unknown' })
+      logger.error('Database error', dbError)
       // Continue even if DB save fails
     }
 
@@ -295,13 +312,11 @@ serve(async (req) => {
       actions,
     }
 
+    logger.logResponse(200, { intent, hasActions: actions.length > 0 })
     return jsonResponse(response, req, 200)
 
   } catch (error) {
-    console.error('Unhandled error:', {
-      requestId,
-      error: error instanceof Error ? { name: error.name, message: error.message } : 'unknown',
-    })
+    logger.error('Unhandled error', error)
 
     return new Response(JSON.stringify({
       error: 'Erro interno do servidor',
