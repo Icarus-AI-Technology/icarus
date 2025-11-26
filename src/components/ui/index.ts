@@ -1,7 +1,7 @@
 // Legacy Components
 export { Button } from './Button'
 export { Input } from './Input'
-export { Card } from './Card'
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './Card'
 export { NeomorphicCard } from './NeomorphicCard'
 export { NeomorphicIconBox } from './NeomorphicIconBox'
 export { KPICard } from './KPICard'

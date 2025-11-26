@@ -7,16 +7,16 @@ import {
   FileText,
   TrendingUp,
   Settings,
-  Brain,
+  BrainCircuit,
 } from 'lucide-react'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Produtos', href: '/produtos', icon: Package },
   { name: 'Clientes', href: '/clientes', icon: Users },
   { name: 'Vendas', href: '/vendas', icon: TrendingUp },
   { name: 'Relatórios', href: '/relatorios', icon: FileText },
-  { name: 'IA Insights', href: '/ia-insights', icon: Brain },
+  { name: 'IA Insights', href: '/ia-insights', icon: BrainCircuit },
   { name: 'Configurações', href: '/configuracoes', icon: Settings },
 ]
 

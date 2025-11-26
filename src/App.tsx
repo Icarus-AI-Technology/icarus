@@ -8,7 +8,7 @@ import { IcarusLayout } from '@/components/layout/IcarusLayout'
 import { ModulePlaceholder } from '@/components/modules/ModulePlaceholder'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { SupabaseConnectionTest } from '@/components/dev-tools/SupabaseConnectionTest'
-import { HardGateBanner } from '@/components/dev-tools/HardGateBanner'
+// HardGateBanner removido - design padronizado para Dark Glass Medical
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -21,9 +21,6 @@ function App() {
 
   return (
     <ErrorBoundary>
-      {/* Hard Gate Validator - OraclusX DS */}
-      <HardGateBanner />
-      
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>

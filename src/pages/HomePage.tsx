@@ -6,7 +6,7 @@ import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel'
 import { useCountUp } from '@/hooks/useCountUp'
 import { useFadeIn } from '@/hooks/useFadeIn'
 import {
-  Brain,
+  BrainCircuit,
   Sparkles,
   TrendingUp,
   Shield,
@@ -21,6 +21,7 @@ import {
   Award,
   HeadphonesIcon,
   Play,
+  LogIn,
 } from 'lucide-react'
 
 export function HomePage() {
@@ -36,7 +37,7 @@ export function HomePage() {
 
   const features = [
     {
-      icon: Brain,
+      icon: BrainCircuit,
       title: 'IA Integrada',
       description:
         'Previsão de demanda, análise de inadimplência e recomendações inteligentes em tempo real.',
@@ -179,7 +180,7 @@ export function HomePage() {
             {/* Logo */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 neu-soft">
-                <Brain className="w-6 h-6 text-white" />
+                <BrainCircuit className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-foreground font-bold text-lg">Icarus v5.0</h1>
@@ -192,11 +193,7 @@ export function HomePage() {
               onClick={() => navigate('/login')}
               className="bg-gradient-to-br from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300"
             >
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                <polyline points="10 17 15 12 10 7"/>
-                <line x1="15" y1="12" x2="3" y2="12"/>
-              </svg>
+              <LogIn className="w-5 h-5 mr-2" />
               Entrar no Sistema
             </Button>
           </div>
@@ -271,7 +268,7 @@ export function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
                 <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 flex items-center justify-center border border-border relative overflow-hidden neu-pressed">
-                  <Brain className="w-32 h-32 text-primary animate-pulse relative z-10" />
+                  <BrainCircuit className="w-32 h-32 text-primary animate-pulse relative z-10" />
 
                   {/* Animated rings */}
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -544,7 +541,7 @@ export function HomePage() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 neu-soft">
-                  <Brain className="w-6 h-6 text-white" />
+                  <BrainCircuit className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">Icarus v5.0</h3>

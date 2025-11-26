@@ -15,7 +15,7 @@ export const navigationConfig = [
     routes: [
       {
         id: 'dashboard',
-        path: '/',
+        path: '/dashboard',
         name: 'Dashboard',
         icon: LayoutDashboard,
         category: 'Principal',

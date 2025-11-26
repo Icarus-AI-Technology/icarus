@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
-import { Brain, Shield, Sparkles, Eye, EyeOff } from 'lucide-react'
+import { BrainCircuit, Shield, Sparkles, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft } from 'lucide-react'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -67,7 +67,7 @@ export function LoginPage() {
             {/* Logo and Title */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent mb-4 shadow-lg shadow-primary/30 neu-soft">
-                <Brain className="w-10 h-10 text-white" strokeWidth={1.5} />
+                <BrainCircuit className="w-10 h-10 text-white" strokeWidth={1.5} />
               </div>
               <h1 className="text-foreground mb-2 text-3xl font-bold">Icarus v5.0</h1>
               <p className="text-muted-foreground text-sm">Gestão elevada pela IA</p>
@@ -83,10 +83,7 @@ export function LoginPage() {
               {/* Email Input */}
               <div className="form-row">
                 <label htmlFor="email" className="text-foreground text-sm font-medium flex items-center gap-2">
-                  <svg className="w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="4" width="20" height="16" rx="2"/>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                  </svg>
+                  <Mail className="w-4 h-4 text-muted-foreground" />
                   Email
                 </label>
                 <input
@@ -103,10 +100,7 @@ export function LoginPage() {
               {/* Password Input */}
               <div className="form-row">
                 <label htmlFor="password" className="text-foreground text-sm font-medium flex items-center gap-2">
-                  <svg className="w-4 h-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                  </svg>
+                  <Lock className="w-4 h-4 text-muted-foreground" />
                   Senha
                 </label>
                 <div className="relative">
@@ -151,19 +145,12 @@ export function LoginPage() {
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
-                      <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
-                    </svg>
+                    <Loader2 className="animate-spin w-5 h-5" />
                     Entrando...
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                      <polyline points="10 17 15 12 10 7"/>
-                      <line x1="15" y1="12" x2="3" y2="12"/>
-                    </svg>
+                    <LogIn className="w-5 h-5" />
                     Entrar no Sistema
                   </span>
                 )}
@@ -219,9 +206,7 @@ export function LoginPage() {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground text-sm transition-colors inline-flex items-center gap-2"
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m15 18-6-6 6-6"/>
-            </svg>
+            <ChevronLeft className="w-4 h-4" />
             Voltar para a página inicial
           </button>
         </div>

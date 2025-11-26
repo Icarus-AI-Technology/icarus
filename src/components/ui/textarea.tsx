@@ -1,40 +1,53 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { AlertCircle } from 'lucide-react'
 
-/**
- * OraclusX Design System - Textarea Component
- * ✅ 100% Compliant with ICARUS v5.0 Standards
- * 
- * REGRAS OBRIGATÓRIAS:
- * - Min Height: 80px (min-h-[80px])
- * - Border Radius: 10px (rounded-[10px]) - Padrão SM
- * - Font: text-[14px] font-[400] - CSS vars apenas
- * - Padding: 12px 16px (py-3 px-4)
- * - Efeito Inset: Shadow neuromórfico inset obrigatório
- */
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string
+  error?: string
+  helperText?: string
+}
 
-export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
-
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => {
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, label, error, helperText, ...props }, ref) => {
     return (
-      <textarea
-        className={cn(
-          "flex min-h-[80px] w-full rounded-[10px] border border-[rgba(0,0,0,0.1)] bg-[hsl(var(--muted))] px-4 py-3 text-[14px] font-[400] ring-offset-background",
-          "shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.5)]",
-          "placeholder:text-muted-foreground",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:ring-offset-2",
-          "focus-visible:shadow-[inset_6px_6px_12px_rgba(0,0,0,0.1),inset_-6px_-6px_12px_rgba(255,255,255,0.5),0_0_0_3px_rgba(99,102,241,0.1)]",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          "transition-all duration-200",
-          className
+      <div className="space-y-2 w-full">
+        {label && (
+          <label className="block text-sm font-medium text-gray-300">
+            {label}
+          </label>
         )}
-        ref={ref}
-        {...props}
-      />
+        
+        <textarea
+          ref={ref}
+          className={cn(
+            'w-full px-4 py-3 rounded-xl min-h-[100px] resize-y',
+            'bg-white/5 backdrop-blur-sm',
+            'border border-white/10',
+            'text-gray-300 placeholder-gray-500',
+            'shadow-lg',
+            'focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-[#6366F1]/50',
+            'transition-all duration-300',
+            'disabled:opacity-50 disabled:cursor-not-allowed',
+            error && 'border-2 border-[#EF4444]',
+            className
+          )}
+          {...props}
+        />
+        
+        {error && (
+          <p className="text-sm text-[#EF4444] flex items-center gap-1">
+            <AlertCircle className="w-4 h-4" />
+            {error}
+          </p>
+        )}
+        
+        {helperText && !error && (
+          <p className="text-sm text-gray-400">{helperText}</p>
+        )}
+      </div>
     )
   }
 )
-Textarea.displayName = "Textarea"
 
-export { Textarea }
+Textarea.displayName = 'Textarea'

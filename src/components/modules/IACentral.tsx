@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { Brain, Zap, TrendingUp, Clock } from 'lucide-react'
+import { BrainCircuit, Zap, TrendingUp, Clock } from 'lucide-react'
 
 
 type StatusServico = 'ativo' | 'pausado' | 'treinando' | 'erro'
@@ -239,7 +239,7 @@ export default function IACentral() {
         <KPICard
           title="Serviços Ativos"
           value={servicosAtivos}
-          icon={Brain}
+          icon={BrainCircuit}
           variant="success"
         />
 
