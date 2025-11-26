@@ -63,9 +63,9 @@ export function IcarusTopbar() {
             aria-label={`Alternar para modo ${theme === 'dark' ? 'claro' : 'escuro'}`}
           >
             {isDark ? (
-              <Sun className="h-5 w-5 text-[#F59E0B]" strokeWidth={2} />
+              <Sun className="h-5 w-5" strokeWidth={2} />
             ) : (
-              <Moon className="h-5 w-5 text-[#6366F1]" strokeWidth={2} />
+              <Moon className="h-5 w-5" strokeWidth={2} />
             )}
           </button>
 
