@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, ChevronRight, Search, Menu, BrainCircuit } from 'lucide-react'
 import { navigationConfig } from '@/lib/data/navigation'
 import { cn } from '@/lib/utils'
+import { useTheme } from '@/contexts/ThemeContext'
 
 // Paleta de cores para ícones (sem repetição por categoria)
 const categoryColors: Record<string, string> = {
@@ -32,6 +33,7 @@ const routeIconColors = [
 
 export function IcarusSidebar() {
   const location = useLocation()
+  const { isDark } = useTheme()
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['Principal', 'Core Business'])
   const [searchQuery, setSearchQuery] = useState('')
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -52,18 +54,33 @@ export function IcarusSidebar() {
     )
   })).filter(category => category.routes.length > 0)
 
+  // Theme colors
+  const bgSidebar = isDark ? '#15192B' : '#FFFFFF'
+  const bgInput = isDark ? '#1A1F35' : '#F1F5F9'
+  const textPrimary = isDark ? 'text-white' : 'text-slate-900'
+  const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
+  const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
+  const borderColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+  const neuShadow = isDark 
+    ? 'inset 3px 3px 6px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)'
+    : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -2px -2px 4px rgba(255,255,255,0.8)'
+  const sidebarShadow = isDark ? '4px 0 20px rgba(0,0,0,0.3)' : '4px 0 20px rgba(0,0,0,0.08)'
+
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 h-screen bg-[#15192B] transition-all duration-300 z-40",
+        "fixed left-0 top-0 h-screen transition-all duration-300 z-40",
         isCollapsed ? "w-20" : "w-64"
       )}
-      style={{ boxShadow: '4px 0 20px rgba(0,0,0,0.3)' }}
+      style={{ 
+        backgroundColor: bgSidebar,
+        boxShadow: sidebarShadow 
+      }}
     >
       {/* Header */}
       <div 
         className="h-16 flex items-center justify-between px-4"
-        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+        style={{ borderBottom: `1px solid ${borderColor}` }}
       >
         {!isCollapsed && (
           <div className="flex items-center gap-3">
@@ -77,15 +94,20 @@ export function IcarusSidebar() {
               <BrainCircuit className="w-6 h-6 text-white" strokeWidth={2} />
             </div>
             <div>
-              <div className="font-bold text-white text-sm">ICARUS</div>
-              <div className="text-xs text-[#94A3B8]">v5.1.0</div>
+              <div className={`font-bold text-sm ${textPrimary}`}>ICARUS</div>
+              <div className={`text-xs ${textMuted}`}>v5.1.0</div>
             </div>
           </div>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-8 h-8 rounded-lg bg-[#1A1F35] flex items-center justify-center text-[#94A3B8] hover:text-white transition-colors ml-auto"
-          style={{ boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)' }}
+          className={cn(
+            "w-8 h-8 rounded-lg flex items-center justify-center transition-colors ml-auto",
+            isDark 
+              ? "bg-[#1A1F35] text-[#94A3B8] hover:text-white"
+              : "bg-slate-100 text-slate-500 hover:text-slate-900"
+          )}
+          style={{ boxShadow: neuShadow }}
         >
           {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
@@ -93,15 +115,20 @@ export function IcarusSidebar() {
 
       {/* Search */}
       {!isCollapsed && (
-        <div className="p-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="p-3" style={{ borderBottom: `1px solid ${borderColor}` }}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#64748B]" />
+            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${textMuted}`} />
             <input
               placeholder="Buscar módulos..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#1A1F35] text-white placeholder-[#64748B] text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30"
-              style={{ boxShadow: 'inset 3px 3px 6px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)' }}
+              className={cn(
+                "w-full pl-9 pr-3 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30",
+                isDark 
+                  ? "bg-[#1A1F35] text-white placeholder-[#64748B]"
+                  : "bg-slate-100 text-slate-900 placeholder-slate-400"
+              )}
+              style={{ boxShadow: neuShadow }}
             />
           </div>
         </div>
@@ -121,7 +148,9 @@ export function IcarusSidebar() {
                 onClick={() => toggleCategory(category.name)}
                 className={cn(
                   "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
-                  "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]",
+                  isDark 
+                    ? "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100",
                   isCollapsed && "justify-center"
                 )}
               >
@@ -134,9 +163,9 @@ export function IcarusSidebar() {
                   <>
                     <span className="flex-1 text-left">{category.name}</span>
                     {isExpanded ? (
-                      <ChevronDown className="h-4 w-4 text-[#64748B]" />
+                      <ChevronDown className={`h-4 w-4 ${textMuted}`} />
                     ) : (
-                      <ChevronRight className="h-4 w-4 text-[#64748B]" />
+                      <ChevronRight className={`h-4 w-4 ${textMuted}`} />
                     )}
                   </>
                 )}
@@ -159,19 +188,21 @@ export function IcarusSidebar() {
                         className={cn(
                           "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-200",
                           isActive 
-                            ? "bg-[#1A1F35] text-white" 
-                            : "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]/50",
+                            ? (isDark ? "bg-[#1A1F35] text-white" : "bg-slate-100 text-slate-900")
+                            : (isDark ? "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]/50" : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"),
                           !isImplemented && "opacity-50"
                         )}
                         style={isActive ? { 
-                          boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)',
+                          boxShadow: isDark 
+                            ? '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)'
+                            : '3px 3px 6px rgba(0,0,0,0.06), -2px -2px 4px rgba(255,255,255,0.9)',
                           borderLeft: `3px solid ${routeColor}`
                         } : {}}
                       >
                         <RouteIcon 
                           className="h-4 w-4 flex-shrink-0"
                           strokeWidth={2}
-                          style={{ color: isActive ? routeColor : '#64748B' }}
+                          style={{ color: isActive ? routeColor : (isDark ? '#64748B' : '#94A3B8') }}
                         />
                         <span className="flex-1">{route.name}</span>
                         {!isImplemented && (
@@ -196,9 +227,9 @@ export function IcarusSidebar() {
       {!isCollapsed && (
         <div 
           className="p-4"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+          style={{ borderTop: `1px solid ${borderColor}` }}
         >
-          <div className="text-xs text-[#64748B] text-center">
+          <div className={`text-xs ${textMuted} text-center`}>
             © 2025 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#2DD4BF] font-medium">IcarusAI Technology</span>
           </div>
         </div>

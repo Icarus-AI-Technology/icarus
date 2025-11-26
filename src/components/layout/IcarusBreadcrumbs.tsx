@@ -1,10 +1,12 @@
 import { useLocation, Link } from 'react-router-dom'
 import { ChevronRight, Home } from 'lucide-react'
 import { getAllRoutes } from '@/lib/data/navigation'
+import { useTheme } from '@/contexts/ThemeContext'
 
 export function IcarusBreadcrumbs() {
   const location = useLocation()
   const pathname = location.pathname
+  const { isDark } = useTheme()
 
   // Get current route
   const currentRoute = getAllRoutes().find(r => r.path === pathname)
@@ -36,16 +38,22 @@ export function IcarusBreadcrumbs() {
 
         return (
           <div key={crumb.path} className="flex items-center space-x-2">
-            {index > 0 && <ChevronRight className="h-4 w-4 text-[#64748B]" />}
+            {index > 0 && (
+              <ChevronRight className={`h-4 w-4 ${isDark ? 'text-[#64748B]' : 'text-slate-400'}`} />
+            )}
             {isLast ? (
-              <span className="flex items-center gap-1.5 font-medium text-white">
+              <span className={`flex items-center gap-1.5 font-medium ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 <Icon className="h-4 w-4 text-[#6366F1]" strokeWidth={2} />
                 {crumb.name}
               </span>
             ) : (
               <Link
                 to={crumb.path}
-                className="flex items-center gap-1.5 text-[#94A3B8] hover:text-white transition-colors"
+                className={`flex items-center gap-1.5 transition-colors ${
+                  isDark 
+                    ? 'text-[#94A3B8] hover:text-white' 
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
               >
                 <Icon className="h-4 w-4" strokeWidth={2} />
                 {crumb.name}

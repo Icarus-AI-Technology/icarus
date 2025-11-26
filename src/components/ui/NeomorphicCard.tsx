@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export interface NeomorphicCardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'elevated' | 'inset' | 'flat';
@@ -11,6 +12,8 @@ export interface NeomorphicCardProps extends React.HTMLAttributes<HTMLDivElement
  * 
  * Dark Glass Medical Design System - ICARUS v5.1
  * 
+ * Supports both light and dark mode
+ * 
  * Variants:
  * - elevated: Raised effect for cards and containers (default)
  * - inset: Recessed effect for inputs and fields
@@ -18,6 +21,8 @@ export interface NeomorphicCardProps extends React.HTMLAttributes<HTMLDivElement
  */
 export const NeomorphicCard = React.forwardRef<HTMLDivElement, NeomorphicCardProps>(
   ({ variant = 'elevated', padding = 'md', className, style, children, ...props }, ref) => {
+    const { isDark } = useTheme();
+
     const paddingClasses = {
       none: '',
       sm: 'p-4',
@@ -25,7 +30,8 @@ export const NeomorphicCard = React.forwardRef<HTMLDivElement, NeomorphicCardPro
       lg: 'p-8',
     };
 
-    const variantStyles: Record<string, React.CSSProperties> = {
+    // Dark mode styles
+    const darkStyles: Record<string, React.CSSProperties> = {
       elevated: {
         background: '#15192B',
         borderRadius: '16px',
@@ -45,12 +51,36 @@ export const NeomorphicCard = React.forwardRef<HTMLDivElement, NeomorphicCardPro
       },
     };
 
+    // Light mode styles
+    const lightStyles: Record<string, React.CSSProperties> = {
+      elevated: {
+        background: '#FFFFFF',
+        borderRadius: '16px',
+        boxShadow: '6px 6px 12px rgba(0,0,0,0.08), -4px -4px 10px rgba(255,255,255,0.9)',
+        transition: 'all 0.3s ease',
+      },
+      inset: {
+        background: '#F1F5F9',
+        borderRadius: '12px',
+        boxShadow: 'inset 3px 3px 6px rgba(0,0,0,0.06), inset -2px -2px 5px rgba(255,255,255,0.9)',
+        transition: 'all 0.3s ease',
+      },
+      flat: {
+        background: '#FFFFFF',
+        borderRadius: '12px',
+        boxShadow: '4px 4px 8px rgba(0,0,0,0.06), -3px -3px 7px rgba(255,255,255,0.9)',
+      },
+    };
+
+    const variantStyles = isDark ? darkStyles : lightStyles;
+
     return (
       <div
         ref={ref}
         className={cn(
           paddingClasses[padding],
           'hover:translate-y-[-2px]',
+          isDark ? 'text-white' : 'text-slate-900',
           className
         )}
         style={{

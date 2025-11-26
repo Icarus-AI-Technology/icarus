@@ -5,23 +5,24 @@ import { cn } from "@/lib/utils"
  * Card Component - Dark Glass Medical Design System
  * 
  * ICARUS v5.1 - Neumorphic 3D card with no borders
- * Background: #15192B
- * Shadow: 8px 8px 16px rgba(0,0,0,0.4), -6px -6px 14px rgba(255,255,255,0.03)
+ * Supports both light and dark mode via CSS classes
  */
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, style, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "rounded-2xl text-white",
+      "rounded-2xl transition-all duration-300",
+      // Dark mode
+      "dark:bg-[#15192B] dark:text-white",
+      // Light mode
+      "bg-white text-slate-900",
       className
     )}
     style={{
-      background: '#15192B',
-      boxShadow: '8px 8px 16px rgba(0,0,0,0.4), -6px -6px 14px rgba(255,255,255,0.03)',
-      ...style,
+      boxShadow: 'var(--neu-elevated, 8px 8px 16px rgba(0,0,0,0.1), -6px -6px 14px rgba(255,255,255,0.8))'
     }}
     {...props}
   />
@@ -34,8 +35,11 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+    className={cn(
+      "flex flex-col space-y-1.5 p-6",
+      "border-b border-b-transparent dark:border-b-white/5 border-b-black/5",
+      className
+    )}
     {...props}
   />
 ))
@@ -48,7 +52,8 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight text-white",
+      "text-lg font-semibold leading-none tracking-tight",
+      "dark:text-white text-slate-900",
       className
     )}
     {...props}
@@ -62,7 +67,11 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-[#94A3B8]", className)}
+    className={cn(
+      "text-sm",
+      "dark:text-[#94A3B8] text-slate-600",
+      className
+    )}
     {...props}
   />
 ))
@@ -82,8 +91,11 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+    className={cn(
+      "flex items-center p-6 pt-0",
+      "border-t border-t-transparent dark:border-t-white/5 border-t-black/5",
+      className
+    )}
     {...props}
   />
 ))

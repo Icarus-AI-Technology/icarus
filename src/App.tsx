@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SpeedInsights } from '@vercel/speed-insights/react'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import { IcarusLayout } from '@/components/layout/IcarusLayout'
 import { ModulePlaceholder } from '@/components/modules/ModulePlaceholder'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
@@ -22,59 +23,61 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            {/* Public Routes (without layout) */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
+        <ThemeProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public Routes (without layout) */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* Protected Routes (with layout) */}
-            <Route
-              path="/*"
-              element={
-                <IcarusLayout>
-                  <Suspense fallback={<ModuleLoadingSkeleton />}>
-                    <Routes>
-                      {/* Generate routes for all modules */}
-                      {allRoutes.map((route) => {
-                        // Get the module component if implemented
-                        const ModuleComponent = getModuleComponent(route.id)
+              {/* Protected Routes (with layout) */}
+              <Route
+                path="/*"
+                element={
+                  <IcarusLayout>
+                    <Suspense fallback={<ModuleLoadingSkeleton />}>
+                      <Routes>
+                        {/* Generate routes for all modules */}
+                        {allRoutes.map((route) => {
+                          // Get the module component if implemented
+                          const ModuleComponent = getModuleComponent(route.id)
 
-                        // Use actual component if implemented, otherwise use placeholder
-                        const element = ModuleComponent ? (
-                          <ModuleComponent />
-                        ) : (
-                          <ModulePlaceholder
-                            title={route.name}
-                            description={route.description || `Módulo ${route.name}`}
-                            icon={route.icon}
-                            category={route.category}
-                          />
-                        )
+                          // Use actual component if implemented, otherwise use placeholder
+                          const element = ModuleComponent ? (
+                            <ModuleComponent />
+                          ) : (
+                            <ModulePlaceholder
+                              title={route.name}
+                              description={route.description || `Módulo ${route.name}`}
+                              icon={route.icon}
+                              category={route.category}
+                            />
+                          )
 
-                        return <Route key={route.id} path={route.path} element={element} />
-                      })}
+                          return <Route key={route.id} path={route.path} element={element} />
+                        })}
 
-                      {/* 404 */}
-                      <Route
-                        path="*"
-                        element={
-                          <div className="text-center py-12">
-                            <h1 className="text-4xl font-bold mb-4">404</h1>
-                            <p className="text-muted-foreground">Página não encontrada</p>
-                          </div>
-                        }
-                      />
-                    </Routes>
+                        {/* 404 */}
+                        <Route
+                          path="*"
+                          element={
+                            <div className="text-center py-12">
+                              <h1 className="text-4xl font-bold mb-4">404</h1>
+                              <p className="text-muted-foreground">Página não encontrada</p>
+                            </div>
+                          }
+                        />
+                      </Routes>
 
-                    {/* Dev Tools */}
-                    <SupabaseConnectionTest />
-                  </Suspense>
-                </IcarusLayout>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
+                      {/* Dev Tools */}
+                      <SupabaseConnectionTest />
+                    </Suspense>
+                  </IcarusLayout>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
 
         {/* React Query DevTools (only in development) */}
         <ReactQueryDevtools initialIsOpen={false} />

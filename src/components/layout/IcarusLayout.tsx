@@ -1,8 +1,9 @@
-import { ReactNode, useState, useEffect } from 'react'
+import { ReactNode, useState } from 'react'
 import { IcarusSidebar } from './IcarusSidebar'
 import { IcarusTopbar } from './IcarusTopbar'
 import { IcarusBreadcrumbs } from './IcarusBreadcrumbs'
 import { ChatWidget } from '@/components/chat/ChatWidget'
+import { useTheme } from '@/contexts/ThemeContext'
 
 interface IcarusLayoutProps {
   children: ReactNode
@@ -10,14 +11,10 @@ interface IcarusLayoutProps {
 
 export function IcarusLayout({ children }: IcarusLayoutProps) {
   const [sidebarWidth, _setSidebarWidth] = useState(256)
-
-  // Force dark mode
-  useEffect(() => {
-    document.documentElement.classList.add('dark')
-  }, [])
+  const { isDark } = useTheme()
 
   return (
-    <div className="min-h-screen bg-[#0B0D16]">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-[#0B0D16]' : 'bg-[#F1F5F9]'}`}>
       {/* Sidebar */}
       <IcarusSidebar />
 
@@ -31,8 +28,8 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
       >
         {/* Breadcrumbs */}
         <div 
-          className="px-6 py-4 bg-[#15192B]/50 backdrop-blur-sm"
-          style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+          className={`px-6 py-4 backdrop-blur-sm ${isDark ? 'bg-[#15192B]/50' : 'bg-white/50'}`}
+          style={{ borderBottom: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)' }}
         >
           <IcarusBreadcrumbs />
         </div>
