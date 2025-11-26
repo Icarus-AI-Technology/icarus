@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Minimize2, Maximize2, X, Sparkles, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChatSession } from '@/hooks/useChatSession';
+import { useSidebar } from '@/hooks/useSidebar';
 
 export interface ChatMessage {
   id: string;
@@ -23,10 +24,11 @@ interface ChatWidgetProps {
 }
 
 export function ChatWidget({
-  position = 'bottom-right',
+  position = 'bottom-left',
   defaultOpen = false,
   onClose
 }: ChatWidgetProps) {
+  const { sidebarWidth } = useSidebar();
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState('');
@@ -76,9 +78,12 @@ export function ChatWidget({
     onClose?.();
   };
 
-  const positionClasses = {
-    'bottom-right': 'bottom-6 right-6',
-    'bottom-left': 'bottom-6 left-6',
+  // Dynamic positioning based on sidebar width
+  const getPositionStyle = () => {
+    if (position === 'bottom-left') {
+      return { bottom: '24px', left: `${sidebarWidth + 24}px` };
+    }
+    return { bottom: '24px', right: '24px' };
   };
 
   const suggestions = [
@@ -95,7 +100,6 @@ export function ChatWidget({
         onClick={() => setIsOpen(true)}
         className={cn(
           'fixed z-[500]',
-          positionClasses[position],
           'group relative',
           'w-14 h-14 rounded-full',
           'flex items-center justify-center',
@@ -106,7 +110,7 @@ export function ChatWidget({
           'hover:shadow-[12px_12px_24px_rgba(0,0,0,0.3),-12px_-12px_24px_rgba(255,255,255,0.15)]',
           'active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.1)]'
         )}
-        style={{ backgroundColor: '#6366F1' }}
+        style={{ backgroundColor: '#6366F1', ...getPositionStyle() }}
         aria-label="Abrir assistente virtual"
       >
         <Bot className="w-6 h-6" />
@@ -126,7 +130,6 @@ export function ChatWidget({
     <div
       className={cn(
         'fixed z-[500]',
-        positionClasses[position],
         'flex flex-col',
         'bg-white dark:bg-gray-900',
         'border border-gray-200 dark:border-gray-700',
@@ -136,6 +139,7 @@ export function ChatWidget({
         'transition-all duration-300',
         isMinimized ? 'w-80 h-14' : 'w-96 h-[520px]'
       )}
+      style={getPositionStyle()}
     >
       {/* Header */}
       <div
