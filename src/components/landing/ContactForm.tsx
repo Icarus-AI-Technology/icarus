@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { Textarea } from '@/components/ui/Textarea'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { useSupabase } from '@/hooks/useSupabase'
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react'
 
@@ -221,55 +222,37 @@ export function ContactForm() {
         {/* Tamanho da Empresa */}
         <div className="space-y-2">
           <Label htmlFor="tamanho_empresa" className="text-white">Tamanho da Empresa</Label>
-          <div className="relative">
-            <select
-              id="tamanho_empresa"
-              aria-label="Tamanho da Empresa"
-              value={formData.tamanho_empresa}
-              onChange={(e) =>
-                setFormData({ ...formData, tamanho_empresa: e.target.value })
-              }
-              className="w-full h-12 rounded-xl bg-[#1A1F35] text-white px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30 neu-pressed appearance-none cursor-pointer"
-              style={{ colorScheme: 'dark' }}
-            >
-              <option value="" className="bg-[#1A1F35] text-[#94A3B8]">Selecione</option>
-              <option value="pequena" className="bg-[#1A1F35] text-white">Pequena (1-50 funcionários)</option>
-              <option value="media" className="bg-[#1A1F35] text-white">Média (51-250 funcionários)</option>
-              <option value="grande" className="bg-[#1A1F35] text-white">Grande (250+ funcionários)</option>
-            </select>
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg className="w-4 h-4 text-[#94A3B8]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
+          <CustomSelect
+            id="tamanho_empresa"
+            aria-label="Tamanho da Empresa"
+            value={formData.tamanho_empresa}
+            onChange={(value) => setFormData({ ...formData, tamanho_empresa: value })}
+            placeholder="Selecione"
+            options={[
+              { value: 'pequena', label: 'Pequena (1-50 funcionários)' },
+              { value: 'media', label: 'Média (51-250 funcionários)' },
+              { value: 'grande', label: 'Grande (250+ funcionários)' },
+            ]}
+          />
         </div>
 
         {/* Segmento */}
         <div className="space-y-2">
           <Label htmlFor="segmento" className="text-white">Segmento</Label>
-          <div className="relative">
-            <select
-              id="segmento"
-              aria-label="Segmento"
-              value={formData.segmento}
-              onChange={(e) => setFormData({ ...formData, segmento: e.target.value })}
-              className="w-full h-12 rounded-xl bg-[#1A1F35] text-white px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30 neu-pressed appearance-none cursor-pointer"
-              style={{ colorScheme: 'dark' }}
-            >
-              <option value="" className="bg-[#1A1F35] text-[#94A3B8]">Selecione</option>
-              <option value="opme" className="bg-[#1A1F35] text-white">OPME</option>
-              <option value="hospitalar" className="bg-[#1A1F35] text-white">Hospitalar</option>
-              <option value="clinica" className="bg-[#1A1F35] text-white">Clínica</option>
-              <option value="distribuidora" className="bg-[#1A1F35] text-white">Distribuidora Médica</option>
-              <option value="outros" className="bg-[#1A1F35] text-white">Outros</option>
-            </select>
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg className="w-4 h-4 text-[#94A3B8]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
+          <CustomSelect
+            id="segmento"
+            aria-label="Segmento"
+            value={formData.segmento}
+            onChange={(value) => setFormData({ ...formData, segmento: value })}
+            placeholder="Selecione"
+            options={[
+              { value: 'opme', label: 'OPME' },
+              { value: 'hospitalar', label: 'Hospitalar' },
+              { value: 'clinica', label: 'Clínica' },
+              { value: 'distribuidora', label: 'Distribuidora Médica' },
+              { value: 'outros', label: 'Outros' },
+            ]}
+          />
         </div>
       </div>
 
@@ -299,27 +282,32 @@ export function ContactForm() {
             return (
               <label
                 key={interest}
-                className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 neu-card ${
+                className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 ${
                   isChecked 
-                    ? 'bg-[#1A1F35] ring-2 ring-[#6366F1] shadow-[0_0_15px_rgba(99,102,241,0.3)]' 
+                    ? 'bg-[#1F2642] ring-2 ring-[#6366F1]' 
                     : 'bg-[#15192B] hover:bg-[#1A1F35]'
                 }`}
+                style={{
+                  boxShadow: isChecked
+                    ? '0 0 20px rgba(99, 102, 241, 0.4), 6px 6px 12px rgba(0,0,0,0.3), -4px -4px 10px rgba(255,255,255,0.03)'
+                    : '6px 6px 12px rgba(0,0,0,0.3), -4px -4px 10px rgba(255,255,255,0.03)'
+                }}
               >
-                {/* Custom Checkbox com efeito forte */}
+                {/* Custom Checkbox - MUITO VISÍVEL */}
                 <div 
-                  className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                    isChecked 
-                      ? 'bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] shadow-[0_0_12px_rgba(99,102,241,0.5)]' 
-                      : 'bg-[#1A1F35] border-2 border-[#4B5563] hover:border-[#6366F1]'
-                  }`}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300"
                   style={{
+                    background: isChecked 
+                      ? 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)' 
+                      : '#0B0D16',
+                    border: isChecked ? 'none' : '3px solid #6366F1',
                     boxShadow: isChecked 
-                      ? '0 0 12px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)' 
-                      : 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.05)'
+                      ? '0 0 16px rgba(99, 102, 241, 0.6), inset 0 1px 0 rgba(255,255,255,0.3)' 
+                      : 'inset 3px 3px 6px rgba(0,0,0,0.5), inset -2px -2px 4px rgba(255,255,255,0.05)'
                   }}
                 >
                   {isChecked && (
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="3.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
@@ -330,7 +318,7 @@ export function ContactForm() {
                   onChange={() => handleInterestToggle(interest)}
                   className="sr-only"
                 />
-                <span className={`text-sm font-medium transition-colors ${isChecked ? 'text-white' : 'text-[#94A3B8]'}`}>
+                <span className={`text-sm font-medium transition-colors ${isChecked ? 'text-white' : 'text-[#D1D5DB]'}`}>
                   {interest}
                 </span>
               </label>
@@ -342,31 +330,21 @@ export function ContactForm() {
       {/* Como Conheceu */}
       <div className="space-y-2">
         <Label htmlFor="como_conheceu" className="text-white">Como conheceu o Icarus?</Label>
-        <div className="relative">
-          <select
-            id="como_conheceu"
-            aria-label="Como conheceu o Icarus?"
-            value={formData.como_conheceu}
-            onChange={(e) =>
-              setFormData({ ...formData, como_conheceu: e.target.value })
-            }
-            className="w-full h-12 rounded-xl bg-[#1A1F35] text-white px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30 neu-pressed appearance-none cursor-pointer"
-            style={{ colorScheme: 'dark' }}
-          >
-            <option value="" className="bg-[#1A1F35] text-[#94A3B8]">Selecione</option>
-            <option value="google" className="bg-[#1A1F35] text-white">Google</option>
-            <option value="indicacao" className="bg-[#1A1F35] text-white">Indicação</option>
-            <option value="linkedin" className="bg-[#1A1F35] text-white">LinkedIn</option>
-            <option value="instagram" className="bg-[#1A1F35] text-white">Instagram</option>
-            <option value="evento" className="bg-[#1A1F35] text-white">Evento</option>
-            <option value="outros" className="bg-[#1A1F35] text-white">Outros</option>
-          </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            <svg className="w-4 h-4 text-[#94A3B8]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-        </div>
+        <CustomSelect
+          id="como_conheceu"
+          aria-label="Como conheceu o Icarus?"
+          value={formData.como_conheceu}
+          onChange={(value) => setFormData({ ...formData, como_conheceu: value })}
+          placeholder="Selecione"
+          options={[
+            { value: 'google', label: 'Google' },
+            { value: 'indicacao', label: 'Indicação' },
+            { value: 'linkedin', label: 'LinkedIn' },
+            { value: 'instagram', label: 'Instagram' },
+            { value: 'evento', label: 'Evento' },
+            { value: 'outros', label: 'Outros' },
+          ]}
+        />
       </div>
 
       {/* Mensagem */}

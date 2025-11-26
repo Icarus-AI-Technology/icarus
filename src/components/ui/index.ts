@@ -2,6 +2,7 @@
 export { Button } from './Button'
 export { Input } from './Input'
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './Card'
+export { CustomSelect } from './CustomSelect'
 export { NeomorphicCard } from './NeomorphicCard'
 export { NeomorphicIconBox } from './NeomorphicIconBox'
 export { KPICard } from './KPICard'
