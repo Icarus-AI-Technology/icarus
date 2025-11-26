@@ -81,66 +81,44 @@ export function ChatWidget({
     'Validar registro ANVISA',
   ];
 
-  // FAB Button (when closed) - Sempre visível, flutuante, sobreposto a tudo
+  // FAB Button (when closed)
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className={cn(
-          'fixed z-[9999]',
-          'group relative',
-          'w-14 h-14 rounded-full',
-          'flex items-center justify-center',
-          'text-white',
-          'transition-all duration-300',
-          'focus:outline-none focus:ring-4 focus:ring-[#6366F1]/50',
-          'hover:scale-110',
-          'animate-pulse'
-        )}
-        style={{ 
-          backgroundColor: '#6366F1', 
-          bottom: '32px', 
-          right: '32px',
-          boxShadow: '0 8px 32px rgba(99, 102, 241, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2)'
-        }}
+        className="fixed bottom-8 right-8 z-[9999] w-16 h-16 rounded-full bg-[#6366F1] text-white flex items-center justify-center shadow-2xl hover:scale-110 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#6366F1]/50"
         aria-label="Abrir assistente virtual"
       >
-        <Bot className="w-6 h-6" />
+        <Bot className="w-7 h-7" />
+        {/* Glow effect */}
+        <span className="absolute inset-0 rounded-full bg-[#6366F1] animate-ping opacity-30" />
       </button>
     );
   }
 
-  // Chat Panel - Flutuante, sempre visível
+  // Chat Panel
   return (
     <div
       className={cn(
-        'fixed z-[9999]',
+        'fixed bottom-8 right-8 z-[9999]',
         'flex flex-col',
-        'bg-white dark:bg-gray-900',
-        'border border-gray-200 dark:border-gray-700',
+        'bg-white dark:bg-[#15192B]',
+        'border border-gray-200 dark:border-[#252B44]',
         'rounded-2xl overflow-hidden',
+        'shadow-2xl',
         'transition-all duration-300',
         isMinimized ? 'w-80 h-14' : 'w-96 h-[520px]'
       )}
-      style={{ 
-        bottom: '32px', 
-        right: '32px',
-        boxShadow: '0 16px 48px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(99, 102, 241, 0.15)'
-      }}
     >
       {/* Header */}
       <div
-        className={cn(
-          'flex items-center justify-between',
-          'px-4 py-3',
-          'bg-gradient-to-r from-primary-500 to-primary-600',
-          'text-white'
-        )}
+        className="flex items-center justify-between px-4 py-3 text-white"
+        style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)' }}
       >
         <div className="flex items-center gap-3">
           <div className="relative">
             <Bot className="w-6 h-6" />
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-primary-500" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-[#6366F1]" />
           </div>
           <div>
             <h3 className="font-semibold text-sm">Assistente ICARUS</h3>
@@ -178,18 +156,18 @@ export function ChatWidget({
       {!isMinimized && (
         <>
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white dark:bg-[#15192B]">
             {/* Welcome Message */}
             {messages.length === 0 && (
               <div className="text-center py-6">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-primary-500" />
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#6366F1]/10 flex items-center justify-center">
+                  <Sparkles className="w-8 h-8 text-[#6366F1]" />
                 </div>
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
-                  Ola! Sou o assistente do ICARUS
+                  Olá! Sou o assistente do ICARUS
                 </h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  Como posso ajudar voce hoje?
+                <p className="text-sm text-gray-500 dark:text-[#94A3B8] mb-4">
+                  Como posso ajudar você hoje?
                 </p>
 
                 {/* Suggestions */}
@@ -201,15 +179,7 @@ export function ChatWidget({
                         setInput(suggestion);
                         inputRef.current?.focus();
                       }}
-                      className={cn(
-                        'px-3 py-1.5 text-xs',
-                        'bg-gray-100 dark:bg-gray-800',
-                        'text-gray-700 dark:text-gray-300',
-                        'rounded-full',
-                        'hover:bg-primary-100 hover:text-primary-700',
-                        'dark:hover:bg-primary-900/30 dark:hover:text-primary-400',
-                        'transition-colors'
-                      )}
+                      className="px-3 py-1.5 text-xs bg-gray-100 dark:bg-[#1A1F35] text-gray-700 dark:text-[#94A3B8] rounded-full hover:bg-[#6366F1]/10 hover:text-[#6366F1] transition-colors"
                     >
                       {suggestion}
                     </button>
@@ -232,14 +202,14 @@ export function ChatWidget({
                   className={cn(
                     'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
                     message.role === 'user'
-                      ? 'bg-gray-200 dark:bg-gray-700'
-                      : 'bg-primary-100 dark:bg-primary-900/30'
+                      ? 'bg-gray-200 dark:bg-[#1A1F35]'
+                      : 'bg-[#6366F1]/10'
                   )}
                 >
                   {message.role === 'user' ? (
-                    <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                    <User className="w-4 h-4 text-gray-600 dark:text-[#94A3B8]" />
                   ) : (
-                    <Bot className="w-4 h-4 text-primary-500" />
+                    <Bot className="w-4 h-4 text-[#6366F1]" />
                   )}
                 </div>
 
@@ -248,8 +218,8 @@ export function ChatWidget({
                   className={cn(
                     'max-w-[75%] rounded-2xl px-4 py-2.5',
                     message.role === 'user'
-                      ? 'bg-primary-500 text-white rounded-tr-sm'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-tl-sm'
+                      ? 'bg-[#6366F1] text-white rounded-tr-sm'
+                      : 'bg-gray-100 dark:bg-[#1A1F35] text-gray-900 dark:text-white rounded-tl-sm'
                   )}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -261,12 +231,7 @@ export function ChatWidget({
                         <a
                           key={idx}
                           href={action.link || '#'}
-                          className={cn(
-                            'inline-flex items-center gap-1',
-                            'px-2 py-1 text-xs',
-                            'bg-white/20 rounded',
-                            'hover:bg-white/30 transition-colors'
-                          )}
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-white/20 rounded hover:bg-white/30 transition-colors"
                         >
                           {action.label}
                         </a>
@@ -278,7 +243,7 @@ export function ChatWidget({
                   <p
                     className={cn(
                       'text-[10px] mt-1',
-                      message.role === 'user' ? 'text-white/60' : 'text-gray-400'
+                      message.role === 'user' ? 'text-white/60' : 'text-gray-400 dark:text-[#64748B]'
                     )}
                   >
                     {new Date(message.timestamp).toLocaleTimeString('pt-BR', {
@@ -293,10 +258,10 @@ export function ChatWidget({
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-primary-500 animate-pulse" />
+                <div className="w-8 h-8 rounded-full bg-[#6366F1]/10 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-[#6366F1] animate-pulse" />
                 </div>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-sm px-4 py-3">
+                <div className="bg-gray-100 dark:bg-[#1A1F35] rounded-2xl rounded-tl-sm px-4 py-3">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -311,7 +276,7 @@ export function ChatWidget({
           </div>
 
           {/* Input Area */}
-          <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="p-3 border-t border-gray-200 dark:border-[#252B44] bg-white dark:bg-[#15192B]">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -327,31 +292,12 @@ export function ChatWidget({
                 onKeyDown={handleKeyDown}
                 placeholder="Digite sua mensagem..."
                 disabled={isLoading}
-                className={cn(
-                  'flex-1 px-4 py-2.5',
-                  'bg-gray-100 dark:bg-gray-800',
-                  'text-gray-900 dark:text-white',
-                  'placeholder-gray-500 dark:placeholder-gray-400',
-                  'rounded-xl',
-                  'text-sm',
-                  'focus:outline-none focus:ring-2 focus:ring-primary-500/50',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
-                  'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.5)]',
-                  'dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.2),inset_-2px_-2px_4px_rgba(255,255,255,0.05)]'
-                )}
+                className="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-[#1A1F35] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-[#64748B] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className={cn(
-                  'p-2.5 rounded-xl',
-                  'bg-primary-500 text-white',
-                  'hover:bg-primary-600',
-                  'focus:outline-none focus:ring-2 focus:ring-primary-500/50',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
-                  'transition-colors',
-                  'shadow-[4px_4px_8px_rgba(0,0,0,0.15),-4px_-4px_8px_rgba(255,255,255,0.1)]'
-                )}
+                className="p-2.5 rounded-xl bg-[#6366F1] text-white hover:bg-[#4F46E5] focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
               >
                 <Send className="w-5 h-5" />
               </button>
@@ -359,8 +305,8 @@ export function ChatWidget({
 
             {/* Session indicator */}
             {sessionId && (
-              <p className="text-[10px] text-gray-400 mt-2 text-center">
-                Sessao: {sessionId.slice(0, 8)}...
+              <p className="text-[10px] text-gray-400 dark:text-[#64748B] mt-2 text-center">
+                Sessão: {sessionId.slice(0, 8)}...
               </p>
             )}
           </div>
