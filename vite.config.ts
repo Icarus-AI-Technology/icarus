@@ -5,6 +5,8 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react()],
+  // Expor variáveis de ambiente com estes prefixos ao cliente
+  envPrefix: ['VITE_', 'SUPABASE_', 'NEXT_PUBLIC_'],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

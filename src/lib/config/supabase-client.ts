@@ -1,14 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase configuration
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Supabase configuration - suporta múltiplos formatos de variáveis
+const supabaseUrl = 
+  import.meta.env.VITE_SUPABASE_URL || 
+  import.meta.env.SUPABASE_URL ||
+  import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
+
+const supabaseAnonKey = 
+  import.meta.env.VITE_SUPABASE_ANON_KEY || 
+  import.meta.env.SUPABASE_ANON_KEY ||
+  import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
-    '⚠️ ICARUS: Supabase credentials not found in environment variables.\n' +
-    'Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.'
+    '⚠️ ICARUS: Supabase credentials not found.\n' +
+    'Configure uma das seguintes variáveis:\n' +
+    '- VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (Vite)\n' +
+    '- SUPABASE_URL / SUPABASE_ANON_KEY\n' +
+    '- NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY (Next.js)'
   );
 }
 
