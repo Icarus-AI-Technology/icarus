@@ -22,6 +22,13 @@ import {
   HeadphonesIcon,
   Play,
   LogIn,
+  Lock,
+  ShieldCheck,
+  FileCheck,
+  Fingerprint,
+  KeyRound,
+  Server,
+  Blocks,
 } from 'lucide-react'
 
 export function HomePage() {
@@ -201,32 +208,33 @@ export function HomePage() {
 
       {/* Header / Navbar - Neumorphic Glass (SEM borda) */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#15192B]/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo com Gradiente */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ 
                   background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)',
                   boxShadow: '0 8px 20px rgba(99, 102, 241, 0.4)'
                 }}
               >
-                <BrainCircuit className="w-8 h-8 text-white" strokeWidth={2.5} />
+                <BrainCircuit className="w-6 h-6 sm:w-8 sm:h-8 text-white" strokeWidth={2.5} />
               </div>
-              <div>
-                <h1 className="text-foreground font-bold text-lg">Icarus v5.0</h1>
-                <p className="text-muted-foreground text-xs">Gestão elevada pela IA</p>
+              <div className="hidden xs:block sm:block">
+                <h1 className="text-foreground font-bold text-base sm:text-lg">Icarus v5.0</h1>
+                <p className="text-muted-foreground text-[10px] sm:text-xs">Gestão elevada pela IA</p>
               </div>
             </div>
 
             {/* Login Button com Gradiente 3D */}
             <Button
               onClick={() => navigate('/login')}
-              className="bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF] hover:from-[#818CF8] hover:via-[#A78BFA] hover:to-[#5EEAD4] text-white shadow-[0_6px_20px_rgba(99,102,241,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.5)] hover:translate-y-[-2px] transition-all duration-300"
+              className="bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF] hover:from-[#818CF8] hover:via-[#A78BFA] hover:to-[#5EEAD4] text-white shadow-[0_6px_20px_rgba(99,102,241,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.5)] hover:translate-y-[-2px] transition-all duration-300 text-sm sm:text-base px-3 sm:px-4"
             >
-              <LogIn className="w-5 h-5 mr-2" />
-              Entrar no Sistema
+              <LogIn className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Entrar no Sistema</span>
+              <span className="sm:hidden">Entrar</span>
             </Button>
           </div>
         </div>
@@ -235,28 +243,28 @@ export function HomePage() {
       {/* Hero Section */}
       <section
         ref={heroFade.ref}
-        className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] relative transition-all duration-1000 ${
+        className={`pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] relative transition-all duration-1000 ${
           heroFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Text Content */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#15192B] text-[#818CF8] animate-pulse text-sm font-medium neu-elevated">
-                <Sparkles className="w-4 h-4" />
+            <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-[#15192B] text-[#818CF8] animate-pulse text-xs sm:text-sm font-medium neu-elevated">
+                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>ERP Enterprise com Inteligência Artificial</span>
               </div>
 
-              <h1 className="text-white leading-tight text-5xl lg:text-6xl font-bold">
+              <h1 className="text-white leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
                 Transforme sua
-                <span className="text-gradient-hero inline-block mx-2">
+                <span className="text-gradient-hero inline-block mx-1 sm:mx-2">
                   Gestão OPME
                 </span>
                 com IA
               </h1>
 
-              <p className="text-muted-foreground leading-relaxed text-xl">
+              <p className="text-muted-foreground leading-relaxed text-base sm:text-lg lg:text-xl">
                 Sistema ERP completo especializado em OPME, com <strong className="text-foreground">58 módulos</strong> integrados,{' '}
                 <strong className="text-foreground">inteligência artificial</strong> e design moderno. Gerencie cirurgias, estoque,
                 financeiro e muito mais em uma única plataforma.
@@ -269,80 +277,80 @@ export function HomePage() {
                     const contactSection = document.getElementById('contato')
                     contactSection?.scrollIntoView({ behavior: 'smooth' })
                   }}
-                  className="px-8 py-6 btn-gradient hover:scale-105 transition-all duration-300 text-lg"
+                  className="px-6 sm:px-8 py-4 sm:py-6 btn-gradient hover:scale-105 transition-all duration-300 text-base sm:text-lg w-full sm:w-auto"
                 >
                   Solicitar Demonstração
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={() => navigate('/login')}
-                  className="px-8 py-6 bg-[#15192B] text-white hover:bg-[#1A1F35] hover:scale-105 transition-all duration-300 text-lg neu-elevated"
+                  className="px-6 sm:px-8 py-4 sm:py-6 bg-[#15192B] text-white hover:bg-[#1A1F35] hover:scale-105 transition-all duration-300 text-base sm:text-lg neu-elevated w-full sm:w-auto"
                 >
                   Já sou cliente
                 </Button>
               </div>
 
               {/* Trust Indicators with Animated Counters */}
-              <div className="flex items-center gap-8 pt-4">
-                <AnimatedStat value={500} suffix="+" label="Empresas Atendidas" />
+              <div className="flex items-center justify-center lg:justify-start gap-4 sm:gap-8 pt-4 flex-wrap">
+                <AnimatedStat value={500} suffix="+" label="Empresas" />
                 <AnimatedStat value={98} suffix="%" label="Satisfação" />
                 <AnimatedStat value={24} suffix="/7" label="Suporte" />
               </div>
             </div>
 
             {/* Visual Content with Neumorphic Glow Effect */}
-            <div className="relative">
-              <div className="bg-[#15192B] backdrop-blur-sm p-8 rounded-3xl relative overflow-hidden group neu-card animate-glow">
+            <div className="relative order-first lg:order-last">
+              <div className="bg-[#15192B] backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group neu-card animate-glow max-w-sm mx-auto lg:max-w-none">
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6366F1]/20 to-[#2DD4BF]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
-                <div className="aspect-square rounded-2xl bg-[#1A1F35] flex items-center justify-center relative overflow-hidden neu-pressed">
-                  <BrainCircuit className="w-32 h-32 text-[#818CF8] animate-pulse relative z-10" strokeWidth={1.5} />
+                <div className="aspect-square rounded-xl sm:rounded-2xl bg-[#1A1F35] flex items-center justify-center relative overflow-hidden neu-pressed">
+                  <BrainCircuit className="w-20 h-20 sm:w-32 sm:h-32 text-[#818CF8] animate-pulse relative z-10" strokeWidth={1.5} />
 
                   {/* Animated rings */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 border-2 border-[#6366F1]/30 rounded-full animate-ping" />
+                    <div className="w-32 sm:w-48 h-32 sm:h-48 border-2 border-[#6366F1]/30 rounded-full animate-ping" />
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-64 h-64 border-2 border-[#6366F1]/20 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
+                    <div className="w-44 sm:w-64 h-44 sm:h-64 border-2 border-[#6366F1]/20 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
                   </div>
                 </div>
               </div>
 
-              {/* Floating Stats Cards - Neumorphic Padrão */}
-              <div className="absolute -top-4 -right-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl animate-bounce neu-elevated">
-                <div className="flex items-center gap-3">
+              {/* Floating Stats Cards - Neumorphic Padrão (Hidden on mobile) */}
+              <div className="hidden sm:block absolute -top-4 -right-4 bg-[#15192B] backdrop-blur-sm p-3 sm:p-4 rounded-xl animate-bounce neu-elevated">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div 
-                    className="w-12 h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center"
                     style={{ 
                       boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
                     }}
                   >
-                    <TrendingUp className="w-7 h-7 text-[#10B981]" strokeWidth={2.5} />
+                    <TrendingUp className="w-5 h-5 sm:w-7 sm:h-7 text-[#10B981]" strokeWidth={2.5} />
                   </div>
                   <div>
-                    <p className="text-white text-sm font-semibold">+45%</p>
-                    <p className="text-[#94A3B8] text-xs">ROI</p>
+                    <p className="text-white text-xs sm:text-sm font-semibold">+45%</p>
+                    <p className="text-[#94A3B8] text-[10px] sm:text-xs">ROI</p>
                   </div>
                 </div>
               </div>
 
-              {/* Demo Video Button - Neumorphic Padrão */}
-              <div className="absolute -bottom-4 -left-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play neu-elevated">
-                <div className="flex items-center gap-3">
+              {/* Demo Video Button - Neumorphic Padrão (Hidden on mobile) */}
+              <div className="hidden sm:block absolute -bottom-4 -left-4 bg-[#15192B] backdrop-blur-sm p-3 sm:p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play neu-elevated">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div 
-                    className="w-12 h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center group-hover/play:scale-110 transition-transform"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center group-hover/play:scale-110 transition-transform"
                     style={{ 
                       boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
                     }}
                   >
-                    <Play className="w-7 h-7 text-[#8B5CF6]" strokeWidth={2.5} />
+                    <Play className="w-5 h-5 sm:w-7 sm:h-7 text-[#8B5CF6]" strokeWidth={2.5} />
                   </div>
                   <div>
-                    <p className="text-white text-sm font-semibold">Ver Demo</p>
-                    <p className="text-[#94A3B8] text-xs">2 min</p>
+                    <p className="text-white text-xs sm:text-sm font-semibold">Ver Demo</p>
+                    <p className="text-[#94A3B8] text-[10px] sm:text-xs">2 min</p>
                   </div>
                 </div>
               </div>
@@ -469,6 +477,321 @@ export function HomePage() {
             })}
           </div>
         </div>
+      </section>
+
+      {/* Security & Compliance Section - BLOCKCHAIN, ANVISA, LGPD */}
+      <section className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] relative overflow-hidden">
+        {/* Animated Background Elements - Hidden on mobile for performance */}
+        <div className="hidden sm:block absolute inset-0 pointer-events-none">
+          {/* Blockchain Grid Pattern */}
+          <div 
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(99, 102, 241, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: '60px 60px'
+            }}
+          />
+          {/* Floating Security Icons */}
+          <div className="absolute top-20 left-10 w-8 h-8 text-[#6366F1]/20 animate-pulse">
+            <Lock className="w-full h-full" />
+          </div>
+          <div className="absolute top-40 right-20 w-6 h-6 text-[#2DD4BF]/20 animate-pulse" style={{ animationDelay: '0.5s' }}>
+            <Shield className="w-full h-full" />
+          </div>
+          <div className="absolute bottom-32 left-1/4 w-10 h-10 text-[#8B5CF6]/20 animate-pulse" style={{ animationDelay: '1s' }}>
+            <Blocks className="w-full h-full" />
+          </div>
+          <div className="absolute bottom-20 right-1/3 w-7 h-7 text-[#10B981]/20 animate-pulse" style={{ animationDelay: '1.5s' }}>
+            <FileCheck className="w-full h-full" />
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-8 sm:mb-16">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-[#10B981]/10 text-[#10B981] mb-4 sm:mb-6">
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-xs sm:text-sm font-semibold">Segurança de Nível Enterprise</span>
+            </div>
+            <h2 className="text-white mb-4 sm:mb-6 text-2xl sm:text-4xl lg:text-5xl font-bold px-2">
+              Proteção Total com{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF]">
+                Blockchain
+              </span>
+            </h2>
+            <p className="text-[#94A3B8] text-sm sm:text-lg lg:text-xl max-w-3xl mx-auto px-2">
+              Seus dados protegidos com criptografia de ponta a ponta e conformidade total com 
+              as regulamentações mais rigorosas do setor de saúde
+            </p>
+          </div>
+
+          {/* Main Security Card */}
+          <div 
+            className="rounded-3xl p-1 mb-12"
+            style={{
+              background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF, #6366F1)',
+              backgroundSize: '300% 300%',
+              animation: 'gradient-shift 8s ease infinite'
+            }}
+          >
+            <div className="bg-[#0B0D16] rounded-[22px] p-8 lg:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                {/* Left - Blockchain Visualization */}
+                <div className="relative">
+                  <div className="aspect-square max-w-md mx-auto relative">
+                    {/* Center Icon */}
+                    <div 
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-2xl flex items-center justify-center z-20"
+                      style={{
+                        background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                        boxShadow: '0 0 60px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
+                      }}
+                    >
+                      <Blocks className="w-14 h-14 text-white" strokeWidth={1.5} />
+                    </div>
+                    
+                    {/* Orbiting Elements */}
+                    <div className="absolute inset-0 animate-spin-slow">
+                      {/* Orbit Ring 1 */}
+                      <div className="absolute inset-8 rounded-full border-2 border-dashed border-[#6366F1]/30" />
+                      {/* Node 1 */}
+                      <div className="absolute top-8 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-[#15192B] flex items-center justify-center neu-elevated">
+                        <Lock className="w-6 h-6 text-[#6366F1]" strokeWidth={2.5} />
+                      </div>
+                    </div>
+                    
+                    <div className="absolute inset-0 animate-spin-slower">
+                      {/* Orbit Ring 2 */}
+                      <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#2DD4BF]/20" />
+                      {/* Node 2 */}
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-[#15192B] flex items-center justify-center neu-elevated">
+                        <KeyRound className="w-6 h-6 text-[#2DD4BF]" strokeWidth={2.5} />
+                      </div>
+                      {/* Node 3 */}
+                      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-12 h-12 rounded-xl bg-[#15192B] flex items-center justify-center neu-elevated">
+                        <Fingerprint className="w-6 h-6 text-[#8B5CF6]" strokeWidth={2.5} />
+                      </div>
+                      {/* Node 4 */}
+                      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-12 h-12 rounded-xl bg-[#15192B] flex items-center justify-center neu-elevated">
+                        <Server className="w-6 h-6 text-[#10B981]" strokeWidth={2.5} />
+                      </div>
+                    </div>
+                    
+                    {/* Connection Lines Animation */}
+                    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+                      <defs>
+                        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#6366F1" stopOpacity="0.5" />
+                          <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.8" />
+                          <stop offset="100%" stopColor="#2DD4BF" stopOpacity="0.5" />
+                        </linearGradient>
+                      </defs>
+                      {/* Animated pulse lines */}
+                      <circle cx="200" cy="200" r="60" fill="none" stroke="url(#lineGrad)" strokeWidth="1" opacity="0.3">
+                        <animate attributeName="r" values="60;100;60" dur="3s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="3s" repeatCount="indefinite" />
+                      </circle>
+                      <circle cx="200" cy="200" r="80" fill="none" stroke="url(#lineGrad)" strokeWidth="1" opacity="0.2">
+                        <animate attributeName="r" values="80;140;80" dur="4s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.2;0.05;0.2" dur="4s" repeatCount="indefinite" />
+                      </circle>
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Right - Features List */}
+                <div className="space-y-6">
+                  <h3 className="text-white text-2xl font-bold mb-8">
+                    Infraestrutura de Segurança
+                  </h3>
+                  
+                  {[
+                    {
+                      icon: Blocks,
+                      title: 'Blockchain Imutável',
+                      description: 'Registros de transações e auditoria armazenados em cadeia de blocos distribuída',
+                      color: '#6366F1'
+                    },
+                    {
+                      icon: Lock,
+                      title: 'Criptografia AES-256',
+                      description: 'Criptografia militar de ponta a ponta em todos os dados sensíveis',
+                      color: '#8B5CF6'
+                    },
+                    {
+                      icon: Fingerprint,
+                      title: 'Autenticação Multifator',
+                      description: 'MFA obrigatório com biometria, tokens e validação em duas etapas',
+                      color: '#2DD4BF'
+                    },
+                    {
+                      icon: Server,
+                      title: 'Data Center Tier III',
+                      description: 'Servidores redundantes no Brasil com 99.99% de uptime garantido',
+                      color: '#10B981'
+                    }
+                  ].map((item, index) => {
+                    const Icon = item.icon
+                    return (
+                      <div 
+                        key={index}
+                        className="flex gap-4 p-4 rounded-xl bg-[#15192B] hover:bg-[#1A1F35] transition-all duration-300 group"
+                        style={{
+                          boxShadow: '6px 6px 12px rgba(0,0,0,0.3), -4px -4px 10px rgba(255,255,255,0.03)'
+                        }}
+                      >
+                        <div 
+                          className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                          style={{
+                            background: `${item.color}20`,
+                            boxShadow: `0 0 20px ${item.color}30`
+                          }}
+                        >
+                          <Icon className="w-6 h-6" style={{ color: item.color }} strokeWidth={2.5} />
+                        </div>
+                        <div>
+                          <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+                          <p className="text-[#94A3B8] text-sm">{item.description}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Compliance Badges */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* ANVISA */}
+            <div 
+              className="p-6 rounded-2xl bg-[#15192B] text-center group hover:scale-105 transition-all duration-300"
+              style={{
+                boxShadow: '8px 8px 16px rgba(0,0,0,0.3), -6px -6px 14px rgba(255,255,255,0.03)'
+              }}
+            >
+              <div 
+                className="w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #10B981, #059669)',
+                  boxShadow: '0 8px 32px rgba(16, 185, 129, 0.3)'
+                }}
+              >
+                <FileCheck className="w-10 h-10 text-white" strokeWidth={2} />
+              </div>
+              <h4 className="text-white font-bold text-lg mb-2">ANVISA</h4>
+              <p className="text-[#94A3B8] text-sm mb-4">
+                Conformidade total com RDC nº 665/2022 e rastreabilidade de dispositivos médicos
+              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10B981]/20 text-[#10B981] text-xs font-semibold">
+                <CheckCircle2 className="w-4 h-4" />
+                100% Conforme
+              </div>
+            </div>
+
+            {/* LGPD */}
+            <div 
+              className="p-6 rounded-2xl bg-[#15192B] text-center group hover:scale-105 transition-all duration-300"
+              style={{
+                boxShadow: '8px 8px 16px rgba(0,0,0,0.3), -6px -6px 14px rgba(255,255,255,0.03)'
+              }}
+            >
+              <div 
+                className="w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #6366F1, #4F46E5)',
+                  boxShadow: '0 8px 32px rgba(99, 102, 241, 0.3)'
+                }}
+              >
+                <ShieldCheck className="w-10 h-10 text-white" strokeWidth={2} />
+              </div>
+              <h4 className="text-white font-bold text-lg mb-2">LGPD</h4>
+              <p className="text-[#94A3B8] text-sm mb-4">
+                Lei Geral de Proteção de Dados com DPO dedicado e relatório de impacto
+              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6366F1]/20 text-[#818CF8] text-xs font-semibold">
+                <CheckCircle2 className="w-4 h-4" />
+                Certificado
+              </div>
+            </div>
+
+            {/* ISO 27001 */}
+            <div 
+              className="p-6 rounded-2xl bg-[#15192B] text-center group hover:scale-105 transition-all duration-300"
+              style={{
+                boxShadow: '8px 8px 16px rgba(0,0,0,0.3), -6px -6px 14px rgba(255,255,255,0.03)'
+              }}
+            >
+              <div 
+                className="w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+                  boxShadow: '0 8px 32px rgba(139, 92, 246, 0.3)'
+                }}
+              >
+                <Award className="w-10 h-10 text-white" strokeWidth={2} />
+              </div>
+              <h4 className="text-white font-bold text-lg mb-2">ISO 27001</h4>
+              <p className="text-[#94A3B8] text-sm mb-4">
+                Sistema de Gestão de Segurança da Informação certificado internacionalmente
+              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B5CF6]/20 text-[#A78BFA] text-xs font-semibold">
+                <CheckCircle2 className="w-4 h-4" />
+                Auditado
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Stats */}
+          <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-[#6366F1]/10 via-[#8B5CF6]/10 to-[#2DD4BF]/10 border border-[#6366F1]/20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div>
+                <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#8B5CF6]">256-bit</p>
+                <p className="text-[#94A3B8] text-sm mt-1">Criptografia AES</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] to-[#2DD4BF]">99.99%</p>
+                <p className="text-[#94A3B8] text-sm mt-1">Uptime Garantido</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#2DD4BF] to-[#10B981]">24/7</p>
+                <p className="text-[#94A3B8] text-sm mt-1">Monitoramento SOC</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#10B981] to-[#6366F1]">0</p>
+                <p className="text-[#94A3B8] text-sm mt-1">Vazamentos de Dados</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Custom Styles for this section */}
+        <style>{`
+          @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+          @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes spin-slower {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+          }
+          .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+          }
+          .animate-spin-slower {
+            animation: spin-slower 30s linear infinite;
+          }
+          .neu-elevated {
+            box-shadow: 6px 6px 12px rgba(0,0,0,0.3), -4px -4px 10px rgba(255,255,255,0.03);
+          }
+        `}</style>
       </section>
 
       {/* Testimonials Section */}
