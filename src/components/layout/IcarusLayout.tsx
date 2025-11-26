@@ -38,7 +38,7 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
       </main>
 
       {/* Chat Widget - Assistente Virtual ICARUS */}
-      <ChatWidget position="bottom-left" />
+      <ChatWidget position="bottom-right" />
     </div>
   )
 }

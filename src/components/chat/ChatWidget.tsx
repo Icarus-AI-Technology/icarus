@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Minimize2, Maximize2, X, Sparkles, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChatSession } from '@/hooks/useChatSession';
-import { useSidebar } from '@/hooks/useSidebar';
 
 export interface ChatMessage {
   id: string;
@@ -24,11 +23,10 @@ interface ChatWidgetProps {
 }
 
 export function ChatWidget({
-  position = 'bottom-left',
+  position = 'bottom-right',
   defaultOpen = false,
   onClose
 }: ChatWidgetProps) {
-  const { sidebarWidth } = useSidebar();
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState('');
@@ -78,13 +76,10 @@ export function ChatWidget({
     onClose?.();
   };
 
-  // Dynamic positioning based on sidebar width
-  const getPositionStyle = () => {
-    if (position === 'bottom-left') {
-      return { bottom: '24px', left: `${sidebarWidth + 24}px` };
-    }
-    return { bottom: '24px', right: '24px' };
-  };
+  // Fixed positioning - always visible
+  const positionStyle = position === 'bottom-left' 
+    ? { bottom: '24px', left: '24px' }
+    : { bottom: '24px', right: '24px' };
 
   const suggestions = [
     'Como cadastrar um produto?',
@@ -110,7 +105,7 @@ export function ChatWidget({
           'hover:shadow-[12px_12px_24px_rgba(0,0,0,0.3),-12px_-12px_24px_rgba(255,255,255,0.15)]',
           'active:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.1)]'
         )}
-        style={{ backgroundColor: '#6366F1', ...getPositionStyle() }}
+        style={{ backgroundColor: '#6366F1', ...positionStyle }}
         aria-label="Abrir assistente virtual"
       >
         <Bot className="w-6 h-6" />
@@ -139,7 +134,7 @@ export function ChatWidget({
         'transition-all duration-300',
         isMinimized ? 'w-80 h-14' : 'w-96 h-[520px]'
       )}
-      style={getPositionStyle()}
+      style={positionStyle}
     >
       {/* Header */}
       <div
