@@ -17,13 +17,11 @@ export interface ChatMessage {
 }
 
 interface ChatWidgetProps {
-  position?: 'bottom-right' | 'bottom-left';
   defaultOpen?: boolean;
   onClose?: () => void;
 }
 
 export function ChatWidget({
-  position = 'bottom-right',
   defaultOpen = false,
   onClose
 }: ChatWidgetProps) {
@@ -75,11 +73,6 @@ export function ChatWidget({
     setIsOpen(false);
     onClose?.();
   };
-
-  // Fixed positioning - always visible
-  const positionStyle = position === 'bottom-left' 
-    ? { bottom: '24px', left: '24px' }
-    : { bottom: '24px', right: '24px' };
 
   const suggestions = [
     'Como cadastrar um produto?',

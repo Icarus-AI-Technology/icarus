@@ -40,7 +40,7 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
       </div>
 
       {/* Chat Widget - Flutuante, sempre visível, sobreposto a tudo */}
-      <ChatWidget position="bottom-right" />
+      <ChatWidget />
     </>
   )
 }
