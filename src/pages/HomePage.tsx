@@ -643,7 +643,7 @@ export function HomePage() {
           </div>
 
           <div className="pt-8 border-t border-[#1A1F35] text-center text-[#94A3B8] text-sm">
-            <p>© 2025 IcarusAI Technology. Todos os direitos reservados.</p>
+            <p>© 2025 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] via-[#8B5CF6] to-[#2DD4BF] font-semibold">IcarusAI Technology</span>. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
