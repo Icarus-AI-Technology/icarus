@@ -1,16 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
-import { BrainCircuit, Shield, Sparkles, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft } from 'lucide-react'
+import { useSupabase } from '@/hooks/useSupabase'
+import { BrainCircuit, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft } from 'lucide-react'
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const { supabase } = useSupabase()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const loginTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -18,33 +19,31 @@ export function LoginPage() {
     setError(null)
 
     try {
-      // TODO: Implement Supabase authentication
-      // Placeholder for now - redirects to dashboard
-      loginTimeout.current = setTimeout(() => {
-        setLoading(false)
+      // Autenticação via Supabase
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (authError) {
+        throw authError
+      }
+
+      if (data?.user) {
         navigate('/dashboard')
-      }, 1000)
+      }
     } catch (err) {
+      console.error('Login error:', err)
       setError(
         err instanceof Error
-          ? err.message
+          ? err.message === 'Invalid login credentials'
+            ? 'Email ou senha incorretos. Verifique suas credenciais.'
+            : err.message
           : 'Não foi possível iniciar a sessão. Tente novamente.'
       )
+    } finally {
       setLoading(false)
     }
-  }
-
-  useEffect(() => {
-    return () => {
-      if (loginTimeout.current) {
-        clearTimeout(loginTimeout.current)
-      }
-    }
-  }, [])
-
-  const handleQuickAccess = (_role: 'admin' | 'analista') => {
-    // Development quick access
-    navigate('/dashboard')
   }
 
   return (
@@ -66,8 +65,14 @@ export function LoginPage() {
           <div className="relative z-10">
             {/* Logo and Title */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 btn-gradient">
-                <BrainCircuit className="w-10 h-10 text-white" strokeWidth={1.5} />
+              <div 
+                className="inline-flex items-center justify-center w-24 h-24 rounded-2xl mb-4"
+                style={{ 
+                  background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)',
+                  boxShadow: '0 12px 32px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
+                }}
+              >
+                <BrainCircuit className="w-14 h-14 text-white" strokeWidth={2.5} />
               </div>
               <h1 className="text-white mb-2 text-3xl font-bold">Icarus v5.0</h1>
               <p className="text-[#94A3B8] text-sm">Gestão elevada pela IA</p>
@@ -157,36 +162,6 @@ export function LoginPage() {
                 )}
               </Button>
             </form>
-
-            {/* Divider */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#1A1F35]"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-[#15192B] text-[#94A3B8]">Acesso rápido</span>
-              </div>
-            </div>
-
-            {/* Development Quick Access */}
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="outline"
-                onClick={() => handleQuickAccess('admin')}
-                className="bg-[#1A1F35] text-white hover:bg-[#1F2642] rounded-xl h-12 neu-soft transition-all duration-300"
-              >
-                <Shield className="w-4 h-4 mr-2 text-[#818CF8]" />
-                Admin
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleQuickAccess('analista')}
-                className="bg-[#1A1F35] text-white hover:bg-[#1F2642] rounded-xl h-12 neu-soft transition-all duration-300"
-              >
-                <Sparkles className="w-4 h-4 mr-2 text-[#2DD4BF]" />
-                Analista
-              </Button>
-            </div>
 
             {/* Footer */}
             <div className="mt-8 pt-6 border-t border-[#1A1F35] text-center">
