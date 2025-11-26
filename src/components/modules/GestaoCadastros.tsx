@@ -9,9 +9,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 
-type TipoCadastro = 'clientes' | 'fornecedores' | 'produtos' | 'usuarios' | 'outros'
-type StatusCadastro = 'ativo' | 'inativo' | 'pendente' | 'bloqueado'
-
 interface EstatisticaCadastro {
   tipo: string
   total: number

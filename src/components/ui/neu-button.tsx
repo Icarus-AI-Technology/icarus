@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Icon3D, Icon3DProps } from './icon-3d';
+import type { Icon3DProps } from './icon-3d';
 
 export interface NeuButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

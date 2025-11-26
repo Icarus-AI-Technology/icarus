@@ -10,7 +10,7 @@ import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
 import { getCorsHeaders, handleCorsPreflightRequest, jsonResponse, errorResponse } from '../_shared/cors.ts'
 import { validatePromptSecurity, sanitizePII } from '../_shared/validation.ts'
 import { verifyAuth, getUserEmpresaId } from '../_shared/supabase.ts'
-import { createLogger, Logger } from '../_shared/logger.ts'
+import { createLogger } from '../_shared/logger.ts'
 
 // Secrets configuradas no Supabase Dashboard
 const OPENAI_API_KEY = Deno.env.get('OPENAI_MEDICAL_MODEL')
@@ -31,8 +31,6 @@ const ChatRequestSchema = z.object({
     currentPage: z.string().max(200).optional(),
   }).optional(),
 })
-
-type ChatRequest = z.infer<typeof ChatRequestSchema>
 
 interface ChatResponse {
   response: string

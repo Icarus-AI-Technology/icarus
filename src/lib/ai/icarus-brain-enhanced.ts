@@ -738,7 +738,7 @@ Retorne um JSON com:
   }
 
   // Mock implementations (fallback when API key is not available)
-  private mockPredictDemand(params: PredictParams): AIResponse {
+  private mockPredictDemand(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -757,7 +757,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockAnalyzeDefaultRisk(params: PredictParams): AIResponse {
+  private mockAnalyzeDefaultRisk(_params: PredictParams): AIResponse {
     const score = Math.random() * 100
     return {
       success: true,
@@ -777,7 +777,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockRecommendProducts(params: PredictParams): AIResponse {
+  private mockRecommendProducts(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -804,7 +804,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockOptimizeInventory(params: PredictParams): AIResponse {
+  private mockOptimizeInventory(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -820,7 +820,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockAnalyzeSentiment(params: PredictParams): AIResponse {
+  private mockAnalyzeSentiment(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -836,7 +836,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockDetectAnomalies(params: PredictParams): AIResponse {
+  private mockDetectAnomalies(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -856,7 +856,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockPredictPricing(params: PredictParams): AIResponse {
+  private mockPredictPricing(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -872,7 +872,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockPredictChurn(params: PredictParams): AIResponse {
+  private mockPredictChurn(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -887,7 +887,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockScoreLeads(params: PredictParams): AIResponse {
+  private mockScoreLeads(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -904,7 +904,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockManageCreditLimit(params: PredictParams): AIResponse {
+  private mockManageCreditLimit(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -920,7 +920,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockOptimizeRoutes(params: PredictParams): AIResponse {
+  private mockOptimizeRoutes(_params: PredictParams): AIResponse {
     return {
       success: true,
       data: {
@@ -942,7 +942,7 @@ Retorne um JSON com:
     }
   }
 
-  private mockChat(mensagem: string, params: PredictParams): AIResponse {
+  private mockChat(mensagem: string, _params: PredictParams): AIResponse {
     return {
       success: true,
       data: {

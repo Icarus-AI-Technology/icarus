@@ -5,6 +5,7 @@
  * Uses react-window for virtualization.
  */
 
+/* eslint-disable react-refresh/only-export-components */
 import { FixedSizeList as List } from 'react-window'
 import { ReactNode, CSSProperties } from 'react'
 

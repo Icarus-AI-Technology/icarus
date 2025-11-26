@@ -156,7 +156,7 @@ export function HomePage() {
   const ctaFade = useFadeIn({ threshold: 0.3 })
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden" data-orx-ignore="true">
       {/* Animated background glow - OraclusX Style */}
       <div className="fixed inset-0 pointer-events-none">
         <div
