@@ -23,24 +23,16 @@ Detalhamento completo de todas as tecnologias utilizadas no ICARUS.
 }
 ```
 
-**Por que React?**
-- ✅ Ecossistema maduro
-- ✅ Performance excepcional
-- ✅ Comunidade gigante
-- ✅ Tooling excelente
-- ✅ Server Components (futuro)
-
 ---
 
-### TypeScript 5.6.3
+### TypeScript 5.8
 **Type safety & Developer Experience**
 
 ```json
 {
-  "versão": "5.6.3",
+  "versão": "5.8",
   "strict": true,
   "features": [
-    "Decorators",
     "Satisfies operator",
     "Const type parameters",
     "Template literal types"
@@ -48,37 +40,14 @@ Detalhamento completo de todas as tecnologias utilizadas no ICARUS.
 }
 ```
 
-**Configuração (tsconfig.json)**:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  }
-}
-```
-
 ---
 
-### Vite 6.0.0
+### Vite 6.3
 **Build tool ultra-rápido**
 
 ```json
 {
-  "versão": "6.0.0",
+  "versão": "6.3",
   "motivo": "HMR instantâneo, Build rápido, ESM nativo",
   "benchmarks": {
     "dev_start": "<500ms",
@@ -88,56 +57,27 @@ Detalhamento completo de todas as tecnologias utilizadas no ICARUS.
 }
 ```
 
-**vs Webpack**:
-- ⚡ **10x mais rápido** em dev
-- ⚡ **5x mais rápido** em build
-- ✅ Zero config
-- ✅ ESM nativo
-
 ---
 
-### Tailwind CSS 4.0.0
+### Tailwind CSS 4.1
 **Utility-first CSS framework**
 
 ```json
 {
-  "versão": "4.0.0",
+  "versão": "4.1",
   "motivo": "Performance, DX, Purge automático",
-  "bundle_size": "<10KB",
-  "classes": "~8000"
-}
-```
-
-**Configuração (tailwind.config.js)**:
-```javascript
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        primary: '#6366F1',
-        success: '#10B981',
-        warning: '#F59E0B',
-        danger: '#EF4444',
-      }
-    },
-  },
-  plugins: [],
+  "bundle_size": "<10KB"
 }
 ```
 
 ---
 
-### shadcn/ui
+### Radix UI
 **Component library (headless)**
 
 ```json
 {
   "base": "Radix UI",
-  "componentes": 175,
   "styled_with": "Tailwind CSS",
   "customizável": "100%"
 }
@@ -148,14 +88,35 @@ export default {
 - Dialog, Sheet, Popover, Dropdown
 - Table, Card, Tabs, Accordion
 - Toast, Alert, Badge, Avatar
-- Form, Label, Checkbox, Radio
 
-**Por que shadcn/ui?**
-- ✅ Headless (full control)
-- ✅ Acessível (WCAG AA)
-- ✅ Customizável (Tailwind)
-- ✅ Copy-paste (não NPM package)
-- ✅ TypeScript nativo
+---
+
+## 🎨 Design System
+
+### Dark Glass Medical
+**Design System neumórfico 3D profissional**
+
+```json
+{
+  "estilo": "Neumorphism 3D",
+  "tema_padrão": "Dark mode",
+  "acessibilidade": "WCAG 2.1 AA",
+  "responsivo": "Mobile-first"
+}
+```
+
+**Paleta de Cores Dark Mode**:
+```css
+--background: #0B0D16       /* Fundo principal */
+--card: #15192B             /* Cards e containers */
+--card-elevated: #1A1F35    /* Elementos elevados */
+--primary: #6366F1          /* Indigo - Ações principais */
+--success: #10B981          /* Verde - Sucesso */
+--warning: #F59E0B          /* Âmbar - Avisos */
+--danger: #EF4444           /* Vermelho - Erros */
+--text-primary: #FFFFFF     /* Texto principal */
+--text-secondary: #94A3B8   /* Texto secundário */
+```
 
 ---
 
@@ -170,136 +131,43 @@ export default {
   "auth": "GoTrue (JWT)",
   "storage": "S3-compatible",
   "realtime": "WebSocket",
-  "edge_functions": "Deno",
-  "pricing": "Free tier generoso"
+  "edge_functions": "Deno"
 }
 ```
 
 **Features usadas**:
-
-#### 1. Database (PostgreSQL 15)
-```sql
--- Relacional, ACID
--- Extensions: pgvector, postgis
--- Full-text search
--- JSON/JSONB nativo
-```
-
-#### 2. Auth
-```typescript
-// Email/Password, OAuth, Magic Link
-const { data, error } = await supabase.auth.signUp({
-  email: 'user@example.com',
-  password: 'password'
-})
-```
-
-#### 3. Realtime
-```typescript
-// WebSocket subscriptions
-supabase
-  .channel('produtos_changes')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'produtos' }, handleChange)
-  .subscribe()
-```
-
-#### 4. Storage
-```typescript
-// S3-compatible file storage
-await supabase.storage
-  .from('documentos')
-  .upload('invoice.pdf', file)
-```
-
-#### 5. Row Level Security (RLS)
-```sql
--- Multi-tenant isolation
-CREATE POLICY "tenant_isolation" ON produtos
-  FOR ALL USING (tenant_id = current_user_tenant());
-```
-
-**Por que Supabase?**
-- ✅ Open source
-- ✅ PostgreSQL (melhor DB relacional)
-- ✅ Realtime built-in
-- ✅ Auth completo
-- ✅ Self-hostable
+- Database PostgreSQL 15 com RLS
+- Auth (Email/Password, OAuth)
+- Realtime WebSocket subscriptions
+- Storage S3-compatible
+- Row Level Security (RLS) multi-tenant
 
 ---
 
 ## 🧠 IA & ML
 
-### Anthropic Claude Sonnet 4.5
+### Anthropic Claude
 **Large Language Model principal**
 
 ```json
 {
-  "model": "claude-sonnet-4-20250514",
+  "model": "claude-sonnet",
   "context_window": "200K tokens",
-  "output": "8K tokens",
   "features": [
     "Function calling",
     "Vision (images)",
-    "Streaming",
-    "Prompt caching"
+    "Streaming"
   ]
 }
 ```
 
-**Uso no ICARUS**:
-```typescript
-// 12 serviços IA
-1. Previsão de demanda (92% acurácia)
-2. Score inadimplência (0-100)
-3. Recomendação produtos
-4. Chat assistente
-5. Análise sentimento
-6. OCR documentos
-7. Categorização auto
-8. Detecção anomalias
-9. Otimização rotas
-10. Previsão churn
-11. Pricing inteligente
-12. Validação dados
-```
-
-**Custo**:
-```
-Input: $3.00 / 1M tokens
-Output: $15.00 / 1M tokens
-Cache hits: $0.30 / 1M tokens (90% desconto)
-
-Média mensal: ~R$ 2.000
-```
-
----
-
-### GPT-4 (Fallback)
-**Modelo alternativo**
-
-```json
-{
-  "model": "gpt-4-turbo",
-  "uso": "Fallback se Claude indisponível",
-  "custo": "Mais caro que Claude"
-}
-```
-
----
-
-### TensorFlow.js
-**ML no browser**
-
-```json
-{
-  "versão": "4.x",
-  "uso": [
-    "Modelos customizados",
-    "Inference local",
-    "Transfer learning"
-  ]
-}
-```
+**Uso no ICARUS (IcarusBrain)**:
+- Previsão de demanda
+- Score inadimplência
+- Recomendação produtos
+- Assistente virtual (ChatWidget)
+- Análise sentimento
+- Detecção anomalias
 
 ---
 
@@ -310,7 +178,6 @@ Média mensal: ~R$ 2.000
 
 ```json
 {
-  "tier": "Pro",
   "features": [
     "Edge Functions",
     "Analytics",
@@ -318,174 +185,42 @@ Média mensal: ~R$ 2.000
     "DDoS protection",
     "Auto SSL"
   ],
-  "regions": "Global CDN (300+ POPs)"
+  "regions": "Global CDN"
 }
 ```
-
-**Build config (vercel.json)**:
-```json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "env": {
-    "VITE_SUPABASE_URL": "@supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key"
-  }
-}
-```
-
-**Por que Vercel?**
-- ✅ Deploy <30s
-- ✅ Preview automático
-- ✅ Edge runtime
-- ✅ Analytics incluído
-- ✅ DX excepcional
-
----
 
 ### GitHub Actions
 **CI/CD Pipeline**
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run type-check
-      - run: npm test
-      - run: npm run build
-```
+- Lint e Type Check automáticos
+- Build de produção
+- Deploy automático para Vercel
 
 ---
 
-## 📊 Monitoring & Analytics
-
-### Vercel Analytics
-**Web Vitals & Performance**
-
-```json
-{
-  "metrics": [
-    "FCP (First Contentful Paint)",
-    "LCP (Largest Contentful Paint)",
-    "CLS (Cumulative Layout Shift)",
-    "FID (First Input Delay)",
-    "TTFB (Time to First Byte)"
-  ]
-}
-```
-
----
-
-### Sentry
-**Error tracking**
-
-```typescript
-import * as Sentry from '@sentry/react'
-
-Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  environment: import.meta.env.VITE_APP_ENV,
-  tracesSampleRate: 1.0,
-})
-```
-
----
-
-## 🧪 Testing
-
-### Vitest
-**Unit & Integration tests**
-
-```json
-{
-  "framework": "Vitest",
-  "versão": "1.x",
-  "features": [
-    "Vite-native",
-    "ESM support",
-    "Snapshot testing",
-    "Coverage (c8)"
-  ]
-}
-```
-
-```typescript
-// Exemplo
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { Button } from './button'
-
-describe('Button', () => {
-  it('renders correctly', () => {
-    render(<Button>Click me</Button>)
-    expect(screen.getByText('Click me')).toBeInTheDocument()
-  })
-})
-```
-
----
-
-### React Testing Library
-**Component testing**
-
-```json
-{
-  "filosofia": "Test behavior, not implementation",
-  "queries": ["ByRole", "ByLabelText", "ByText"],
-  "user_events": "@testing-library/user-event"
-}
-```
-
----
-
-### Playwright
-**E2E testing**
-
-```json
-{
-  "browsers": ["Chromium", "Firefox", "WebKit"],
-  "features": [
-    "Auto-wait",
-    "Screenshots",
-    "Video recording",
-    "Network mocking"
-  ]
-}
-```
-
-```typescript
-// Exemplo
-import { test, expect } from '@playwright/test'
-
-test('login flow', async ({ page }) => {
-  await page.goto('http://localhost:5173')
-  await page.fill('input[name="email"]', 'user@test.com')
-  await page.fill('input[name="password"]', 'password')
-  await page.click('button[type="submit"]')
-  await expect(page).toHaveURL('/dashboard')
-})
-```
-
----
-
-## 📦 Outras Dependências
+## 📊 Outras Dependências
 
 ### UI/UX
 ```json
 {
-  "lucide-react": "Icons (tree-shakeable)",
+  "lucide-react": "Ícones (tree-shakeable)",
   "radix-ui": "Headless components",
   "clsx": "Conditional classes",
   "tailwind-merge": "Merge Tailwind classes"
+}
+```
+
+### Animações
+```json
+{
+  "motion": "Framer Motion 12.x - Animações declarativas"
+}
+```
+
+### Charts
+```json
+{
+  "recharts": "Charts declarativos 3.x"
 }
 ```
 
@@ -495,60 +230,29 @@ test('login flow', async ({ page }) => {
   "date-fns": "Date manipulation",
   "zod": "Schema validation",
   "react-hook-form": "Form management",
-  "zustand": "State management (opcional)"
-}
-```
-
-### Charts
-```json
-{
-  "recharts": "Charts declarativos",
-  "chart.js": "Alternativa imperativa"
+  "@tanstack/react-query": "Data fetching & caching"
 }
 ```
 
 ---
 
-## 📊 Comparação Stack
+## 📊 Resumo do Stack
 
-### ICARUS vs Competitors
-
-| Stack | ICARUS | Protheus | SAP |
-|-------|--------|----------|-----|
-| **Frontend** | React 18 | Desktop app | Java/ABAP |
-| **Database** | PostgreSQL | SQL Server | HANA |
-| **Deploy** | Vercel Edge | On-premise | On-premise |
-| **IA** | Claude 4.5 | ❌ Nenhuma | Watson (pago) |
-| **Custo** | Baixo | Alto | Muito alto |
-| **DX** | Excelente | Ruim | Médio |
-
----
-
-## 🔮 Roadmap Tecnológico
-
-### v5.1 (Q1 2026)
-- [ ] React Server Components
-- [ ] Bun runtime
-- [ ] Turbopack (Vite replacement)
-
-### v5.2 (Q2 2026)
-- [ ] Edge database (Cloudflare D1)
-- [ ] WebAssembly modules
-- [ ] Offline-first architecture
-
-### v6.0 (Q3 2026)
-- [ ] React Native (mobile)
-- [ ] Tauri (desktop)
-- [ ] Blockchain integration
-
----
-
-## 📚 Documentação Relacionada
-
-- [Arquitetura](02-ARQUITETURA.md)
-- [OraclusX Design System](06-ORACLUSX-DESIGN-SYSTEM.md)
-- [IA IcarusBrain](07-IA-ICARUSBRAIN.md)
-- [Supabase Database](08-SUPABASE-DATABASE.md)
+| Categoria | Tecnologia | Versão |
+|-----------|------------|--------|
+| Frontend | React | 18.3.1 |
+| Linguagem | TypeScript | 5.8 |
+| Build | Vite | 6.3 |
+| Styling | Tailwind CSS | 4.1 |
+| UI Components | Radix UI | Latest |
+| Design System | Dark Glass Medical | - |
+| Icons | Lucide React | Latest |
+| Animations | Motion | 12.x |
+| Charts | Recharts | 3.x |
+| Database | Supabase PostgreSQL | 15 |
+| IA | Claude (Anthropic) | Sonnet |
+| Deploy | Vercel | - |
+| CI/CD | GitHub Actions | - |
 
 ---
 

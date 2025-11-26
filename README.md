@@ -1,31 +1,30 @@
 # 🚀 ICARUS v5.0
 
-**ERP Enterprise neumórfico para OPME** (Órteses, Próteses e Materiais Especiais)
+**ERP Enterprise para OPME** (Órteses, Próteses e Materiais Especiais) com **Inteligência Artificial**
 
-[![React](https://img.shields.io/badge/React-18.3.1-blue?logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0.0-646CFF?logo=vite)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?logo=tailwind-css)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3FCF8E?logo=supabase)](https://supabase.com/)
 
 ---
 
-## ⚡ Quick Start em 3 Passos
+## ⚡ Quick Start
 
 ```bash
-# 1. Instalar
-npm install
+# 1. Instalar dependências
+pnpm install
 
-# 2. Configurar
+# 2. Configurar variáveis de ambiente
 cp .env.example .env.local
 # Editar .env.local com suas credenciais Supabase
 
-# 3. Rodar
-npm run dev
+# 3. Iniciar desenvolvimento
+pnpm dev
 ```
 
 Acesse: **http://localhost:5173**
-
-**Ver guia completo:** [GETTING_STARTED.md](./GETTING_STARTED.md)
 
 ---
 
@@ -40,71 +39,63 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
 - 💰 **Financeiro** - Controle de faturamento e inadimplência
 - 🤖 **IcarusBrain** - IA integrada para análises preditivas
 - 📊 **Dashboards** - Visualizações em tempo real
-- 🎨 **OraclusX DS** - Design System neumórfico
-
----
-
-## 📚 Documentação
-
-### Para Começar
-- **[GETTING_STARTED.md](./GETTING_STARTED.md)** - Setup completo em 5 minutos ⚡
-- **[QUICKSTART.md](./QUICKSTART.md)** - Guia rápido de início
-
-### Code Connect (Figma → Code)
-- **[CODE_CONNECT_IMPLEMENTATION.md](./CODE_CONNECT_IMPLEMENTATION.md)** - Implementar Code Connect (15min)
-- [CODE_CONNECT_SETUP.md](./CODE_CONNECT_SETUP.md) - Visão geral Code Connect
-- [docs/code-connect-analysis.md](./docs/code-connect-analysis.md) - Análise ROI detalhada (4.105%)
-
-### Suporte
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Solução de problemas comuns
-- [docs/troubleshooting.md](./docs/troubleshooting.md) - Guia de troubleshooting
+- 🎨 **Dark Glass Medical** - Design System moderno e profissional
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-```typescript
-{
-  frontend: "React 18.3.1 + TypeScript 5.6.3 + Vite 6.0.0",
-  styling: "Tailwind CSS 4.0 + shadcn/ui",
-  database: "Supabase PostgreSQL 15",
-  designSystem: "OraclusX DS (Neumorphism)",
-  ai: ["Claude Sonnet 4.5", "GPT-4", "TensorFlow.js"],
-  deployment: "Vercel + GitHub Actions",
-  codeConnect: "Figma → Code automation"
-}
-```
+| Categoria | Tecnologia |
+|-----------|------------|
+| **Frontend** | React 18.3.1 + TypeScript 5.8 + Vite 6.3 |
+| **Styling** | Tailwind CSS 4.1 + Radix UI |
+| **Database** | Supabase PostgreSQL 15 |
+| **Design System** | Dark Glass Medical (Neumorphism 3D) |
+| **Animações** | Motion (Framer Motion) 12.x |
+| **Gráficos** | Recharts 3.x |
+| **Ícones** | Lucide React |
+| **IA** | Claude Sonnet, GPT-4, TensorFlow.js |
+| **Deploy** | Vercel + GitHub Actions |
 
 ---
 
-## 🎨 Componentes Neumorphism
+## 🎨 Dark Glass Medical Design System
 
-### Principais Componentes
-- ✅ **NeuButton** - 5 variantes (primary, soft, danger, secondary, pressed)
-- ✅ **NeuCard** - 4 elevações (low, medium, high) + 3 variantes
-- ✅ **NeuInput** - Com validação, helper text e error handling
-- ✅ **Icon3D** - Ícones com profundidade
-- ✅ **Sidebar** - Navegação collapsible
-- ✅ **Dialog, Tabs, Select, Table** - Componentes auxiliares
+O ICARUS utiliza o **Dark Glass Medical**, um design system moderno baseado em:
 
-### 🎭 Showcase Interativo
-**Ver todos os componentes em ação:**
+### Características
+- 🌙 **Dark Mode** como padrão
+- ✨ **Neumorphism 3D** com sombras elevadas
+- 🎯 **Glassmorphism** com blur e transparência
+- 🎨 **Paleta profissional** para ambiente médico-hospitalar
+- ♿ **Acessibilidade** WCAG 2.1 AA
+- 📱 **Responsivo** mobile-first
 
-Acesse: `src/pages/ShowcasePage.tsx`
+### Paleta de Cores
 
-Inclui:
-- Todos os componentes com exemplos vivos
-- Estados (loading, disabled, error)
-- Formulário completo funcional
-- Guias de uso inline
-- 400+ linhas de exemplos práticos
+```css
+/* Dark Mode */
+--background: #0B0D16       /* Fundo principal */
+--card: #15192B             /* Cards e containers */
+--card-elevated: #1A1F35    /* Elementos elevados */
+--primary: #6366F1          /* Indigo - Ações principais */
+--success: #10B981          /* Verde - Sucesso */
+--warning: #F59E0B          /* Âmbar - Avisos */
+--danger: #EF4444           /* Vermelho - Erros */
+--text-primary: #FFFFFF     /* Texto principal */
+--text-secondary: #94A3B8   /* Texto secundário */
+--text-muted: #64748B       /* Texto desabilitado */
+```
 
-### Design System
-- Design System Neumorphism completo
-- 14+ componentes otimizados
-- Dark mode ready
-- Acessibilidade (WCAG 2.1 AA)
-- Responsivo mobile-first
+### Componentes Principais
+
+- ✅ **Card** - Container com efeito neumórfico 3D
+- ✅ **KPICard** - Cards de métricas com ícones coloridos
+- ✅ **Button** - Botões com variantes (primary, secondary, ghost)
+- ✅ **Input** - Campos com efeito inset neumórfico
+- ✅ **Sidebar** - Navegação colapsável com transições suaves
+- ✅ **Topbar** - Barra superior com busca e notificações
+- ✅ **ChatWidget** - Assistente virtual flutuante
 
 ---
 
@@ -114,74 +105,45 @@ Inclui:
 icarus/
 ├── src/
 │   ├── components/
-│   │   ├── ui/              # Componentes shadcn/ui + Neumorphism
-│   │   │   ├── neu-button.tsx
-│   │   │   ├── neu-card.tsx
-│   │   │   ├── neu-input.tsx
-│   │   │   └── icon-3d.tsx
-│   │   ├── layout/          # Layout components
+│   │   ├── ui/                 # Componentes base
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── KPICard.tsx
+│   │   │   └── ...
+│   │   ├── layout/             # Layout components
 │   │   │   ├── IcarusLayout.tsx
-│   │   │   └── sidebar.tsx
-│   │   └── modules/         # Módulos do sistema
-│   │       └── Dashboard.tsx
-│   ├── pages/               # Páginas
-│   │   └── ShowcasePage.tsx # Demonstração interativa
-│   ├── hooks/               # Hooks customizados
-│   │   ├── useSupabase.ts
+│   │   │   ├── IcarusSidebar.tsx
+│   │   │   └── IcarusTopbar.tsx
+│   │   ├── modules/            # Módulos do sistema
+│   │   │   ├── Dashboard.tsx
+│   │   │   └── ...
+│   │   └── chat/               # Assistente virtual
+│   │       └── ChatWidget.tsx
+│   ├── pages/                  # Páginas
+│   │   ├── HomePage.tsx
+│   │   ├── LoginPage.tsx
+│   │   └── ...
+│   ├── hooks/                  # Hooks customizados
+│   │   ├── useTheme.ts
+│   │   ├── useSidebar.ts
 │   │   └── useIcarusBrain.ts
-│   ├── lib/                 # Utilitários
+│   ├── contexts/               # React Contexts
+│   │   ├── ThemeContext.tsx
+│   │   └── SidebarContext.tsx
+│   ├── lib/                    # Utilitários
 │   │   ├── utils.ts
-│   │   ├── supabase.ts
 │   │   └── data/navigation.ts
-│   ├── types/               # Tipos TypeScript
 │   ├── App.tsx
 │   ├── main.tsx
-│   └── index.css
-├── docs/                    # Documentação completa
-├── .clinerules              # Regras de desenvolvimento
-├── CLAUDE.md                # Contexto para Claude Code
+│   └── index.css               # CSS Variables + Tailwind
+├── docs/                       # Documentação
+├── public/
+│   └── favicon.svg
 ├── package.json
 ├── vite.config.ts
-├── tailwind.config.js
+├── tailwind.config.ts
 └── tsconfig.json
-```
-
----
-
-## 🎨 OraclusX Design System
-
-O ICARUS utiliza o **OraclusX Design System**, baseado em neumorfismo:
-
-### Paleta de Cores
-
-```css
---primary: #6366F1      /* Indigo - Botões principais */
---background: #F9FAFB   /* Fundo claro */
---foreground: #1F2937   /* Texto escuro */
-```
-
-### Componentes Base
-
-Todos os componentes utilizam shadcn/ui:
-
-```tsx
-import { NeuButton } from '@/components/ui/neu-button'
-import { NeuCard } from '@/components/ui/neu-card'
-import { NeuInput } from '@/components/ui/neu-input'
-
-// Exemplo
-<NeuCard variant="soft" elevation="medium" padding="lg">
-  <h2>Título</h2>
-  <NeuButton variant="primary">Ação</NeuButton>
-</NeuCard>
-```
-
-### Classes Neumórficas
-
-```tsx
-<Card className="neu-card">
-  {/* Efeito neumórfico automático */}
-</Card>
 ```
 
 ---
@@ -211,22 +173,28 @@ const score = await analyze('inadimplencia', {
 
 ## 📊 Módulos Disponíveis
 
-- ✅ **Dashboard** - Visão geral do sistema
-- 🏥 **Cirurgias** - Gestão de procedimentos
-- 📦 **Estoque IA** - Controle inteligente
-- 💰 **Financeiro** - Faturamento e cobrança
-- 👥 **Clientes** - CRM integrado
-- 🏢 **Hospitais** - Cadastro de unidades
-- ⚙️ **Configurações** - Preferências do sistema
+| Módulo | Status | Descrição |
+|--------|--------|-----------|
+| Dashboard | ✅ | Visão geral do sistema |
+| Cirurgias | ✅ | Gestão de procedimentos |
+| Estoque IA | ✅ | Controle inteligente |
+| Financeiro | ✅ | Faturamento e cobrança |
+| CRM & Vendas | ✅ | Gestão de clientes |
+| Compras | ✅ | Gestão de fornecedores |
+| Produtos OPME | ✅ | Cadastro de produtos |
+| Contas a Receber | ✅ | Gestão de recebíveis |
+| Faturamento NFe | ✅ | Emissão de notas fiscais |
+| Inventário | ✅ | Controle de inventário |
+| Licitações | ✅ | Gestão de licitações |
 
 ---
 
 ## 🗄️ Supabase
 
-### Setup
+### Configuração
 
 1. Crie um projeto no [Supabase](https://supabase.com)
-2. Copie as credenciais para `.env.local`:
+2. Configure as variáveis de ambiente:
 
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
@@ -236,9 +204,7 @@ VITE_SUPABASE_ANON_KEY=sua_chave_anon
 ### Exemplo de Uso
 
 ```typescript
-import { useSupabase } from '@/hooks/useSupabase'
-
-const { supabase } = useSupabase()
+import { supabase } from '@/lib/config/supabase-client'
 
 // Fetch
 const { data } = await supabase
@@ -253,67 +219,21 @@ await supabase
 
 ---
 
-## 🔗 Code Connect (Figma → Code)
-
-**Automatize 75% do desenvolvimento** com Code Connect:
-
-### Benefícios
-- ⚡ **75% mais rápido** para desenvolver
-- 🎯 **92% menos retrabalho**
-- ✅ **99% consistência** design-código
-- 💰 **ROI 4.105%** no primeiro ano
-
-### Setup Rápido (15min)
-
-```bash
-# 1. Autenticar
-npx figma connect auth
-
-# 2. Publicar componentes
-npm run figma:publish
-
-# 3. Verificar
-npm run figma:list
-```
-
-**Ver guia completo:** [CODE_CONNECT_IMPLEMENTATION.md](./CODE_CONNECT_IMPLEMENTATION.md)
-
----
-
-## 🤝 Trabalhando com Claude Code
-
-Este projeto foi otimizado para desenvolvimento com **Claude Code**. Consulte `CLAUDE.md` para o contexto completo.
-
-### Comandos úteis para Claude:
-
-```
-"Crie um novo módulo de Compras seguindo o padrão OraclusX"
-"Adicione previsão de demanda no módulo Estoque IA"
-"Implemente validação Zod no formulário de produtos"
-"Criar botão de salvar usando componentes ICARUS"
-```
-
----
-
 ## 📝 Scripts Disponíveis
 
 ```bash
-npm run dev         # Inicia servidor de desenvolvimento (port 5173)
-npm run build       # Cria build de produção
-npm run preview     # Preview do build de produção
-npm run lint        # Executa linter
-
-# Code Connect
-npm run figma:publish  # Publicar componentes no Figma
-npm run figma:list     # Listar componentes conectados
-npm run figma:parse    # Validar arquivos .figma.tsx
+pnpm dev          # Servidor de desenvolvimento (port 5173)
+pnpm build        # Build de produção
+pnpm preview      # Preview do build
+pnpm lint         # Executar linter
+pnpm type-check   # Verificar tipos TypeScript
 ```
 
 ---
 
 ## 🔧 Suporte
 
-- **Issues**: Reportar bugs via [GitHub Issues](https://github.com/Icarus-AI-Technology/icarus/issues)
+- **Issues**: [GitHub Issues](https://github.com/Icarus-AI-Technology/icarus/issues)
 - **Docs**: Ver pasta `/docs/` para guias completos
 - **Troubleshooting**: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
 
@@ -327,15 +247,16 @@ Este projeto é propriedade da **Icarus AI Technology**.
 
 ## 🌟 Versão
 
-**v5.0.3** - Production Ready
+**v5.0** - Production Ready
 
 ### Status do Projeto
-- ✅ Setup completo
-- ✅ 14+ componentes Neumorphism
-- ✅ Code Connect preparado
-- ✅ Showcase interativo
-- ✅ 8 guias de documentação
-- ✅ Módulos exemplo com IA
+- ✅ Design System Dark Glass Medical
+- ✅ 14+ componentes otimizados
+- ✅ Dark mode como padrão
+- ✅ Sidebar colapsável com transições
+- ✅ 11 módulos implementados
+- ✅ Assistente virtual integrado
+- ✅ Deploy automático Vercel
 
 ---
 
