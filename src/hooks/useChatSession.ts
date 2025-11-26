@@ -1,4 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+/**
+ * Hook para gerenciamento de sessões de chat do ICARUS AI Assistant
+ * Integra com Edge Function `chat` no Supabase
+ */
+
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import type { ChatMessage } from '@/components/chat/ChatWidget';
 
@@ -6,6 +11,7 @@ interface ChatContext {
   empresaId?: string;
   userId?: string;
   currentPage?: string;
+  currentModule?: string;
 }
 
 interface ChatResponse {
@@ -22,12 +28,18 @@ interface ChatResponse {
 interface UseChatSessionOptions {
   context?: ChatContext;
   persistSession?: boolean;
+  maxHistoryMessages?: number;
 }
 
 const STORAGE_KEY = 'icarus_chat_session';
+const MAX_HISTORY = 50;
 
 export function useChatSession(options: UseChatSessionOptions = {}) {
-  const { context = {}, persistSession = true } = options;
+  const { 
+    context = {}, 
+    persistSession = true,
+    maxHistoryMessages = MAX_HISTORY
+  } = options;
 
   const [sessionId, setSessionId] = useState<string | null>(() => {
     if (persistSession && typeof window !== 'undefined') {
@@ -35,7 +47,13 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
       if (stored) {
         try {
           const data = JSON.parse(stored);
-          return data.sessionId || null;
+          // Check if session is not too old (24 hours)
+          const updatedAt = new Date(data.updatedAt);
+          const now = new Date();
+          const hoursDiff = (now.getTime() - updatedAt.getTime()) / (1000 * 60 * 60);
+          if (hoursDiff < 24) {
+            return data.sessionId || null;
+          }
         } catch {
           return null;
         }
@@ -53,7 +71,7 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
           return data.messages?.map((m: ChatMessage) => ({
             ...m,
             timestamp: new Date(m.timestamp)
-          })) || [];
+          })).slice(-maxHistoryMessages) || [];
         } catch {
           return [];
         }
@@ -64,17 +82,18 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Persist session to localStorage
   useEffect(() => {
     if (persistSession && typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         sessionId,
-        messages,
+        messages: messages.slice(-maxHistoryMessages),
         updatedAt: new Date().toISOString()
       }));
     }
-  }, [sessionId, messages, persistSession]);
+  }, [sessionId, messages, persistSession, maxHistoryMessages]);
 
   // Get current context
   const getCurrentContext = useCallback((): ChatContext => {
@@ -87,6 +106,12 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
   // Send message to chat API
   const sendMessage = useCallback(async (messageText: string): Promise<string | null> => {
     if (!messageText.trim()) return null;
+
+    // Cancel any pending request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
 
     setIsLoading(true);
     setError(null);
@@ -102,8 +127,12 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
     setMessages(prev => [...prev, userMessage]);
 
     try {
-      // Call Edge Function or mock response
-      const response = await callChatAPI(messageText, sessionId, getCurrentContext());
+      const response = await callChatAPI(
+        messageText, 
+        sessionId, 
+        getCurrentContext(),
+        abortControllerRef.current.signal
+      );
 
       // Update session ID if new
       if (response.sessionId && response.sessionId !== sessionId) {
@@ -124,6 +153,10 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
 
       return response.response;
     } catch (err) {
+      if ((err as Error).name === 'AbortError') {
+        return null;
+      }
+
       const errorMessage = err instanceof Error ? err.message : 'Erro ao enviar mensagem';
       setError(errorMessage);
 
@@ -140,8 +173,35 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
       return null;
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   }, [sessionId, getCurrentContext]);
+
+  // Send feedback for a message
+  const sendFeedback = useCallback(async (
+    messageId: string, 
+    feedback: 'positive' | 'negative',
+    feedbackText?: string
+  ): Promise<boolean> => {
+    try {
+      // Update local state first
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, feedback } 
+          : msg
+      ));
+
+      // Save feedback (for now, just log - could be extended to save to DB)
+      if (sessionId) {
+        console.log('Feedback saved:', { messageId, feedback, feedbackText });
+      }
+
+      return true;
+    } catch (err) {
+      console.error('Error saving feedback:', err);
+      return false;
+    }
+  }, [sessionId]);
 
   // Reset session
   const resetSession = useCallback(() => {
@@ -158,14 +218,67 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
     setError(null);
   }, []);
 
+  // Cancel pending request
+  const cancelRequest = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Load session history from database
+  const loadHistory = useCallback(async () => {
+    if (!sessionId) return;
+
+    try {
+      const { data, error: queryError } = await supabase
+        .from('chatbot_mensagens')
+        .select('id, role, content, criado_em, intent, acoes')
+        .eq('sessao_id', sessionId)
+        .order('criado_em', { ascending: true })
+        .limit(maxHistoryMessages);
+
+      if (queryError) throw queryError;
+
+      if (data && data.length > 0) {
+        // Type assertion for database result
+        type DbMessage = {
+          id: string;
+          role: string;
+          content: string;
+          criado_em: string;
+          intent: string | null;
+          acoes: Array<{ type: string; label: string; link?: string }> | null;
+        };
+
+        const loadedMessages: ChatMessage[] = (data as DbMessage[]).map(msg => ({
+          id: msg.id,
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content,
+          timestamp: new Date(msg.criado_em),
+          intent: msg.intent || undefined,
+          actions: msg.acoes || undefined
+        }));
+
+        setMessages(loadedMessages);
+      }
+    } catch (err) {
+      console.error('Error loading chat history:', err);
+    }
+  }, [sessionId, maxHistoryMessages]);
+
   return {
     sessionId,
     messages,
     isLoading,
     error,
     sendMessage,
+    sendFeedback,
     resetSession,
-    clearError
+    clearError,
+    cancelRequest,
+    loadHistory
   };
 }
 
@@ -173,10 +286,11 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
 async function callChatAPI(
   message: string,
   sessionId: string | null,
-  context: ChatContext
+  context: ChatContext,
+  _signal?: AbortSignal
 ): Promise<ChatResponse> {
+  // Try to use Edge Function
   try {
-    // Try to call Supabase Edge Function
     const { data, error } = await supabase.functions.invoke('chat', {
       body: {
         message,
@@ -186,52 +300,130 @@ async function callChatAPI(
     });
 
     if (error) {
-      console.warn('Edge function error, using mock response:', error);
+      console.warn('Edge function error, using fallback:', error);
       return getMockResponse(message, sessionId);
     }
 
     return data as ChatResponse;
   } catch (err) {
-    console.warn('API call failed, using mock response:', err);
+    console.warn('API call failed, using fallback:', err);
     return getMockResponse(message, sessionId);
   }
 }
 
-// Mock response for development/fallback
+// Enhanced mock response for development/fallback
 function getMockResponse(message: string, currentSessionId: string | null): ChatResponse {
   const sessionId = currentSessionId || crypto.randomUUID();
   const lowerMessage = message.toLowerCase();
 
-  // Intent detection
+  // Intent detection with more patterns
   let intent = 'geral';
   let response = '';
   const actions: ChatResponse['actions'] = [];
 
-  if (lowerMessage.includes('estoque') || lowerMessage.includes('produto')) {
+  // Estoque patterns
+  if (lowerMessage.match(/estoque|produto|falta|ruptura|inventario|lote|validade/)) {
     intent = 'consulta_estoque';
-    response = 'Para consultar o estoque, voce pode acessar o modulo de Estoque no menu lateral. La voce encontra informacoes sobre quantidades disponiveis, lotes e alertas de nivel critico.\n\nDeseja que eu te ajude com algo mais especifico sobre estoque?';
-    actions.push({ type: 'navigate', label: 'Ir para Estoque', link: '/estoque-ia' });
-  } else if (lowerMessage.includes('cirurgia') || lowerMessage.includes('agendar')) {
+    
+    if (lowerMessage.includes('falta') || lowerMessage.includes('ruptura')) {
+      response = `📦 **Produtos em Falta**\n\nPara verificar produtos em falta ou com ruptura de estoque:\n\n1. Acesse o módulo **Estoque IA**\n2. Veja o alerta de "Estoque Crítico"\n3. Filtre por status "Abaixo do Mínimo"\n\nO sistema monitora automaticamente e pode criar pedidos de compra.`;
+      actions.push({ type: 'navigate', label: 'Ver Estoque Crítico', link: '/estoque-ia' });
+    } else if (lowerMessage.includes('validade')) {
+      response = `⏰ **Controle de Validades**\n\nPara verificar produtos com validade próxima:\n\n1. Acesse **Estoque IA** > Controle de Lotes\n2. Filtre por "Vencendo em 30/60/90 dias"\n3. O sistema alerta automaticamente sobre vencimentos\n\nDica: Configure alertas para receber notificações antecipadas.`;
+      actions.push({ type: 'navigate', label: 'Controle de Lotes', link: '/estoque-ia' });
+    } else {
+      response = `📊 **Gestão de Estoque**\n\nO módulo de Estoque IA oferece:\n\n• Controle em tempo real\n• Previsão de demanda com IA\n• Alertas de estoque crítico\n• Gestão de lotes e validades\n• Sugestões automáticas de reposição\n\nO que você precisa especificamente?`;
+      actions.push({ type: 'navigate', label: 'Ir para Estoque', link: '/estoque-ia' });
+    }
+  }
+  // Cirurgias patterns
+  else if (lowerMessage.match(/cirurgia|agend|procedimento|kit|material|medico|hospital/)) {
     intent = 'ajuda_cirurgia';
-    response = 'Para agendar uma cirurgia, acesse o modulo de Cirurgias. La voce pode:\n\n1. Criar novo agendamento\n2. Montar kit de materiais\n3. Acompanhar status no Kanban\n\nPosso ajudar com mais detalhes?';
-    actions.push({ type: 'navigate', label: 'Ir para Cirurgias', link: '/cirurgias' });
-  } else if (lowerMessage.includes('anvisa') || lowerMessage.includes('registro')) {
+    
+    if (lowerMessage.includes('justificativa')) {
+      response = `📝 **Justificativa Médica**\n\nPara gerar uma justificativa médica:\n\n1. Acesse **Cirurgias** > Nova Cirurgia\n2. Preencha dados do paciente e procedimento\n3. Clique em "Gerar Justificativa com IA"\n4. O sistema analisa requisitos ANVISA/TUSS\n5. Revise e envie ao convênio\n\nA IA gera justificativas completas baseadas no CID-10 e procedimento.`;
+      actions.push({ type: 'navigate', label: 'Gerar Justificativa', link: '/cirurgias' });
+    } else {
+      response = `🏥 **Gestão de Cirurgias**\n\nO módulo de Cirurgias permite:\n\n• Agendar procedimentos\n• Montar kits de materiais OPME\n• Acompanhar status no Kanban\n• Gerar justificativas médicas com IA\n• Rastrear materiais utilizados\n• Integrar com faturamento\n\nPrecisa de ajuda com alguma função específica?`;
+      actions.push({ type: 'navigate', label: 'Ir para Cirurgias', link: '/cirurgias' });
+    }
+  }
+  // ANVISA/Compliance patterns
+  else if (lowerMessage.match(/anvisa|registro|compliance|rdc|regulatorio|rastreabilidade/)) {
     intent = 'compliance';
-    response = 'Para validar um registro ANVISA, voce pode:\n\n1. Usar o modulo de Compliance\n2. Consultar diretamente no cadastro de produtos\n\nO sistema valida automaticamente os registros e alerta sobre vencimentos proximos.';
+    response = `🛡️ **Compliance ANVISA**\n\nO ICARUS monitora conformidade com:\n\n• **RDC 16/2013** - Boas Práticas de Distribuição\n• **RDC 665/2022** - Rastreabilidade de Implantes\n• **RDC 546/2021** - Registro de Dispositivos\n• **LGPD** - Proteção de Dados\n\nPosso verificar:\n• Validade de registros ANVISA\n• Conformidade de lotes\n• Rastreabilidade de implantes\n• Documentação regulatória`;
     actions.push({ type: 'navigate', label: 'Ir para Compliance', link: '/compliance-anvisa' });
-  } else if (lowerMessage.includes('faturamento') || lowerMessage.includes('nota') || lowerMessage.includes('nf')) {
+  }
+  // Financeiro patterns
+  else if (lowerMessage.match(/fatura|nota|nf|financeiro|cobranca|inadimplente|receber|pagar|fluxo/)) {
     intent = 'consulta_financeiro';
-    response = 'O modulo de Faturamento NF-e permite:\n\n1. Emitir notas fiscais eletronicas\n2. Consultar status na SEFAZ\n3. Gerar DANFE e XML\n4. Enviar por email\n\nQual operacao voce precisa realizar?';
-    actions.push({ type: 'navigate', label: 'Ir para Faturamento', link: '/faturamento-nfe' });
-  } else if (lowerMessage.includes('cadastrar') || lowerMessage.includes('cadastro')) {
-    intent = 'cadastro';
-    response = 'O ICARUS possui diversos cadastros disponiveis:\n\n- Produtos OPME\n- Medicos\n- Hospitais\n- Fornecedores\n- Clientes\n\nQual cadastro voce gostaria de acessar?';
-    actions.push({ type: 'navigate', label: 'Ir para Cadastros', link: '/cadastros' });
-  } else if (lowerMessage.includes('ajuda') || lowerMessage.includes('ola') || lowerMessage.includes('oi')) {
+    
+    if (lowerMessage.includes('inadimplente')) {
+      response = `💰 **Clientes Inadimplentes**\n\nPara verificar inadimplentes:\n\n1. Acesse **Contas a Receber**\n2. Filtre por status "Vencido"\n3. Use a IA para analisar risco de cada cliente\n4. Configure cobranças automáticas\n\nO sistema calcula score de inadimplência e sugere ações.`;
+      actions.push({ type: 'navigate', label: 'Ver Inadimplentes', link: '/contas-receber' });
+    } else if (lowerMessage.includes('fluxo')) {
+      response = `📈 **Fluxo de Caixa**\n\nPara análise do fluxo de caixa:\n\n1. Acesse **Financeiro** > Dashboard\n2. Veja projeções de entradas/saídas\n3. Analise períodos específicos\n4. Use a IA para previsões\n\nA IA prevê recebimentos considerando histórico de pagamentos.`;
+      actions.push({ type: 'navigate', label: 'Ver Fluxo de Caixa', link: '/financeiro' });
+    } else {
+      response = `💵 **Módulo Financeiro**\n\nO ICARUS oferece gestão financeira completa:\n\n• Faturamento NF-e integrado\n• Contas a Receber/Pagar\n• Fluxo de Caixa preditivo\n• Análise de inadimplência\n• Conciliação bancária\n• Relatórios gerenciais\n\nComo posso ajudar?`;
+      actions.push({ type: 'navigate', label: 'Ir para Financeiro', link: '/financeiro' });
+    }
+  }
+  // Vendas/CRM patterns
+  else if (lowerMessage.match(/lead|cliente|venda|crm|proposta|oportunidade|funil/)) {
+    intent = 'crm';
+    response = `📊 **CRM & Vendas**\n\nO módulo de CRM oferece:\n\n• Gestão de leads com scoring IA\n• Pipeline de oportunidades\n• Previsão de fechamento\n• Sugestões de upsell/cross-sell\n• Análise de churn\n• Histórico completo do cliente\n\nA IA identifica leads quentes e sugere próximas ações.`;
+    actions.push({ type: 'navigate', label: 'Ir para CRM', link: '/crm' });
+  }
+  // Logística patterns
+  else if (lowerMessage.match(/entrega|rota|frete|logistica|rastreio|transportadora/)) {
+    intent = 'logistica';
+    response = `🚚 **Logística & Entregas**\n\nO módulo de Logística oferece:\n\n• Otimização de rotas com IA\n• Rastreamento em tempo real\n• Cálculo de frete\n• Gestão de transportadoras\n• Controle de SLA\n• Consolidação de cargas\n\nPrecisa otimizar alguma rota ou rastrear entrega?`;
+    actions.push({ type: 'navigate', label: 'Ir para Logística', link: '/logistica' });
+  }
+  // Analytics patterns
+  else if (lowerMessage.match(/relatorio|analise|analytics|bi|dashboard|kpi|metrica|previsao/)) {
+    intent = 'analytics';
+    response = `📊 **Analytics & BI**\n\nO ICARUS oferece análises avançadas:\n\n• Dashboards executivos\n• Previsão de demanda (ML)\n• Análise de churn\n• Segmentação de clientes\n• KPIs em tempo real\n• Relatórios customizados\n\nQue tipo de análise você precisa?`;
+    actions.push({ type: 'navigate', label: 'Ir para BI', link: '/bi-analytics' });
+  }
+  // Ajuda/Saudação patterns
+  else if (lowerMessage.match(/ajuda|ola|oi|bom dia|boa tarde|boa noite|como funciona|tutorial/)) {
     intent = 'saudacao';
-    response = 'Ola! Sou o assistente virtual do ICARUS. Posso ajudar com:\n\n- Consultas de estoque e produtos\n- Agendamento de cirurgias\n- Validacao de registros ANVISA\n- Faturamento e notas fiscais\n- Navegacao no sistema\n\nComo posso ajudar voce hoje?';
-  } else {
-    response = `Entendi sua pergunta sobre "${message}". \n\nO ICARUS e um sistema ERP completo para gestao OPME. Posso ajudar com informacoes sobre estoque, cirurgias, compliance ANVISA, faturamento e muito mais.\n\nPoderia ser mais especifico sobre o que precisa?`;
+    response = `👋 **Olá! Sou o ICARUS AI Assistant**\n\nSou seu copiloto inteligente para gestão OPME. Posso ajudar com:\n\n🏥 **Cirurgias** - Agendamento, kits, justificativas\n📦 **Estoque** - Controle, previsão, reposição\n💰 **Financeiro** - Faturamento, cobrança, fluxo\n🛡️ **Compliance** - ANVISA, rastreabilidade\n📊 **Analytics** - Relatórios, KPIs, previsões\n🚚 **Logística** - Rotas, entregas, rastreio\n\n**Dica:** Use "/" para comandos rápidos!\n\nComo posso ajudar você hoje?`;
+  }
+  // Comandos rápidos
+  else if (lowerMessage.startsWith('/')) {
+    intent = 'comando';
+    const command = lowerMessage.split(' ')[0];
+    
+    switch (command) {
+      case '/estoque':
+        response = '📦 Abrindo módulo de Estoque...';
+        actions.push({ type: 'navigate', label: 'Ir para Estoque', link: '/estoque-ia' });
+        break;
+      case '/cirurgias':
+        response = '🏥 Abrindo módulo de Cirurgias...';
+        actions.push({ type: 'navigate', label: 'Ir para Cirurgias', link: '/cirurgias' });
+        break;
+      case '/faturamento':
+        response = '💵 Abrindo módulo de Faturamento...';
+        actions.push({ type: 'navigate', label: 'Ir para Faturamento', link: '/faturamento-nfe' });
+        break;
+      case '/alertas':
+        response = '🔔 Verificando alertas ativos...\n\nAlertas são exibidos no Dashboard e na barra de notificações.';
+        actions.push({ type: 'navigate', label: 'Ver Dashboard', link: '/dashboard' });
+        break;
+      case '/ajuda':
+        response = `📚 **Comandos Disponíveis:**\n\n\`/estoque\` - Ir para Estoque\n\`/cirurgias\` - Ir para Cirurgias\n\`/faturamento\` - Ir para Faturamento\n\`/alertas\` - Ver alertas ativos\n\`/ajuda\` - Esta lista de comandos\n\nVocê também pode perguntar em linguagem natural!`;
+        break;
+      default:
+        response = `❓ Comando "${command}" não reconhecido.\n\nDigite \`/ajuda\` para ver comandos disponíveis.`;
+    }
+  }
+  // Default response
+  else {
+    response = `Entendi sua pergunta sobre "${message.slice(0, 50)}${message.length > 50 ? '...' : ''}".\n\nO ICARUS é um sistema ERP completo para gestão OPME. Posso ajudar com:\n\n• **Estoque** - Controle e previsão\n• **Cirurgias** - Agendamento e kits\n• **Financeiro** - Faturamento e cobrança\n• **Compliance** - ANVISA e LGPD\n• **Analytics** - Relatórios e KPIs\n\nPoderia ser mais específico sobre o que precisa?`;
   }
 
   return {
