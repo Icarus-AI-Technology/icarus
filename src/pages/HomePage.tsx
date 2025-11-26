@@ -165,15 +165,15 @@ export function HomePage() {
   const ctaFade = useFadeIn({ threshold: 0.3 })
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden" data-orx-ignore="true">
-      {/* Animated background glow - OraclusX Style */}
+    <div className="min-h-screen bg-[#0B0D16] relative overflow-hidden" data-orx-ignore="true">
+      {/* Animated background glow - Dark Glass Style */}
       <div className="fixed inset-0 pointer-events-none">
         <div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full opacity-10 blur-[120px] animate-pulse"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-[#6366F1] rounded-full opacity-15 blur-[150px] animate-pulse"
           style={{ transform: `translateY(${scrollY * 0.2}px)` }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-96 h-96 bg-accent rounded-full opacity-10 blur-[120px] animate-pulse"
+          className="absolute top-1/3 right-1/4 w-96 h-96 bg-[#2DD4BF] rounded-full opacity-12 blur-[150px] animate-pulse"
           style={{
             transform: `translateY(${scrollY * 0.3}px)`,
             animationDelay: '1s',
@@ -181,13 +181,13 @@ export function HomePage() {
         />
       </div>
 
-      {/* Header / Navbar - Neumorphic Glass */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-xl border-b border-border">
+      {/* Header / Navbar - Neumorphic Glass (SEM borda) */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#15192B]/90 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+            {/* Logo com Gradiente */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 neu-soft">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center btn-gradient">
                 <BrainCircuit className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -211,7 +211,7 @@ export function HomePage() {
       {/* Hero Section */}
       <section
         ref={heroFade.ref}
-        className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-muted to-background relative transition-all duration-1000 ${
+        className={`pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] relative transition-all duration-1000 ${
           heroFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -219,16 +219,15 @@ export function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20 animate-pulse text-sm font-medium neu-soft">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#15192B] text-[#818CF8] animate-pulse text-sm font-medium neu-elevated">
                 <Sparkles className="w-4 h-4" />
                 <span>ERP Enterprise com Inteligência Artificial</span>
               </div>
 
-              <h1 className="text-foreground leading-tight text-5xl lg:text-6xl font-bold">
+              <h1 className="text-white leading-tight text-5xl lg:text-6xl font-bold">
                 Transforme sua
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary animate-gradient">
-                  {' '}
-                  Gestão OPME{' '}
+                <span className="text-gradient-hero inline-block mx-2">
+                  Gestão OPME
                 </span>
                 com IA
               </h1>
@@ -246,7 +245,7 @@ export function HomePage() {
                     const contactSection = document.getElementById('contato')
                     contactSection?.scrollIntoView({ behavior: 'smooth' })
                   }}
-                  className="px-8 py-6 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:scale-105 transition-all duration-300 text-lg"
+                  className="px-8 py-6 btn-gradient hover:scale-105 transition-all duration-300 text-lg"
                 >
                   Solicitar Demonstração
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -255,7 +254,7 @@ export function HomePage() {
                   size="lg"
                   variant="outline"
                   onClick={() => navigate('/login')}
-                  className="px-8 py-6 border-2 border-border text-foreground hover:bg-muted hover:scale-105 transition-all duration-300 text-lg neu-soft"
+                  className="px-8 py-6 bg-[#15192B] text-white hover:bg-[#1A1F35] hover:scale-105 transition-all duration-300 text-lg neu-elevated"
                 >
                   Já sou cliente
                 </Button>
@@ -271,45 +270,45 @@ export function HomePage() {
 
             {/* Visual Content with Neumorphic Glow Effect */}
             <div className="relative">
-              <div className="bg-card/50 backdrop-blur-sm p-8 rounded-3xl border border-border relative overflow-hidden group neu-soft">
+              <div className="bg-[#15192B] backdrop-blur-sm p-8 rounded-3xl relative overflow-hidden group neu-card animate-glow">
                 {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#6366F1]/20 to-[#2DD4BF]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 flex items-center justify-center border border-border relative overflow-hidden neu-pressed">
-                  <BrainCircuit className="w-32 h-32 text-primary animate-pulse relative z-10" />
+                <div className="aspect-square rounded-2xl bg-[#1A1F35] flex items-center justify-center relative overflow-hidden neu-pressed">
+                  <BrainCircuit className="w-32 h-32 text-[#818CF8] animate-pulse relative z-10" />
 
                   {/* Animated rings */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 border-2 border-primary/30 rounded-full animate-ping" />
+                    <div className="w-48 h-48 border-2 border-[#6366F1]/30 rounded-full animate-ping" />
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-64 h-64 border-2 border-primary/20 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
+                    <div className="w-64 h-64 border-2 border-[#6366F1]/20 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
                   </div>
                 </div>
               </div>
 
               {/* Floating Stats Cards - Neumorphic */}
-              <div className="absolute -top-4 -right-4 bg-card/90 backdrop-blur-sm p-4 rounded-xl border border-border animate-bounce neu-soft">
+              <div className="absolute -top-4 -right-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl animate-bounce neu-elevated">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center border border-success/30">
-                    <TrendingUp className="w-5 h-5 text-success" />
+                  <div className="w-10 h-10 rounded-lg bg-[#10B981]/20 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-[#10B981]" />
                   </div>
                   <div>
-                    <p className="text-foreground text-sm font-semibold">+45%</p>
-                    <p className="text-muted-foreground text-xs">ROI</p>
+                    <p className="text-white text-sm font-semibold">+45%</p>
+                    <p className="text-[#94A3B8] text-xs">ROI</p>
                   </div>
                 </div>
               </div>
 
               {/* Demo Video Button - Neumorphic */}
-              <div className="absolute -bottom-4 -left-4 bg-card/90 backdrop-blur-sm p-4 rounded-xl border border-border hover:bg-card transition-all cursor-pointer group/play neu-soft">
+              <div className="absolute -bottom-4 -left-4 bg-[#15192B] backdrop-blur-sm p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play neu-elevated">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center group-hover/play:bg-primary transition-colors">
+                  <div className="w-10 h-10 rounded-full btn-gradient flex items-center justify-center group-hover/play:scale-110 transition-transform">
                     <Play className="w-5 h-5 text-white fill-white" />
                   </div>
                   <div>
-                    <p className="text-foreground text-sm font-semibold">Ver Demo</p>
-                    <p className="text-muted-foreground text-xs">2 min</p>
+                    <p className="text-white text-sm font-semibold">Ver Demo</p>
+                    <p className="text-[#94A3B8] text-xs">2 min</p>
                   </div>
                 </div>
               </div>
@@ -321,35 +320,32 @@ export function HomePage() {
       {/* Pain Points Section - Neumorphic Cards */}
       <section
         ref={painPointsFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-muted transition-all duration-1000 delay-100 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] transition-all duration-1000 delay-100 ${
           painPointsFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-foreground mb-4 text-4xl font-bold">
-              Problemas que Resolvemos
-            </h2>
-            <p className="text-muted-foreground text-xl">
+            <h2 className="text-white mb-4 text-4xl font-bold">
               Acabamos com as dores de cabeça da gestão OPME
-            </p>
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {painPoints.map((pain, index) => (
               <div
                 key={index}
-                className="flex items-start gap-4 p-6 rounded-xl bg-card border border-border hover:border-primary/50 hover:scale-105 transition-all duration-300 neu-soft"
+                className="flex items-start gap-4 p-6 rounded-xl bg-[#15192B] hover:scale-105 transition-all duration-300 pain-point-card"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="w-6 h-6 rounded-full bg-error/20 flex items-center justify-center flex-shrink-0 mt-1 border border-error/30">
-                  <div className="w-2 h-2 rounded-full bg-error" />
+                <div className="w-6 h-6 rounded-full bg-[#EF4444]/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 rounded-full bg-[#EF4444]" />
                 </div>
                 <div>
-                  <p className="text-muted-foreground line-through decoration-error decoration-1">
+                  <p className="text-[#94A3B8] line-through decoration-[#EF4444] decoration-1">
                     {pain}
                   </p>
-                  <p className="text-success mt-2 text-sm font-medium">
+                  <p className="text-[#10B981] mt-2 text-sm font-medium">
                     ✓ Resolvido com Icarus
                   </p>
                 </div>
@@ -362,18 +358,15 @@ export function HomePage() {
       {/* Features Section - Neumorphic Cards */}
       <section
         ref={featuresFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background to-muted transition-all duration-1000 delay-150 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] transition-all duration-1000 delay-150 ${
           featuresFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-foreground mb-4 text-4xl font-bold">
-              Funcionalidades Poderosas
-            </h2>
-            <p className="text-muted-foreground text-xl">
+            <h2 className="text-white mb-4 text-4xl font-bold">
               Tudo que você precisa em um único sistema
-            </p>
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -382,7 +375,7 @@ export function HomePage() {
               return (
                 <div
                   key={index}
-                  className="bg-card backdrop-blur-sm p-8 rounded-2xl border border-border hover:scale-105 hover:border-primary/50 transition-all duration-300 group neu-soft"
+                  className="bg-[#15192B] backdrop-blur-sm p-8 rounded-2xl hover:scale-105 transition-all duration-300 group neu-card"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div
@@ -390,10 +383,10 @@ export function HomePage() {
                   >
                     <Icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-foreground mb-3 text-xl font-bold">
+                  <h3 className="text-white mb-3 text-xl font-bold">
                     {feature.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-[#94A3B8] leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -406,16 +399,16 @@ export function HomePage() {
       {/* Benefits Section with Animated Counters */}
       <section
         ref={benefitsFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-muted transition-all duration-1000 delay-200 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] transition-all duration-1000 delay-200 ${
           benefitsFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-foreground mb-4 text-4xl font-bold">
+            <h2 className="text-white mb-4 text-4xl font-bold">
               Resultados Reais
             </h2>
-            <p className="text-muted-foreground text-xl">
+            <p className="text-[#94A3B8] text-xl">
               Veja o impacto que o Icarus pode ter no seu negócio
             </p>
           </div>
@@ -442,16 +435,16 @@ export function HomePage() {
       {/* Testimonials Section */}
       <section
         ref={testimonialsFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background to-muted transition-all duration-1000 delay-100 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] transition-all duration-1000 delay-100 ${
           testimonialsFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-foreground mb-4 text-4xl font-bold">
+            <h2 className="text-white mb-4 text-4xl font-bold">
               O que Nossos Clientes Dizem
             </h2>
-            <p className="text-muted-foreground text-xl">
+            <p className="text-[#94A3B8] text-xl">
               Depoimentos reais de quem usa o Icarus diariamente
             </p>
           </div>
@@ -460,12 +453,12 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Differentials Section - Primary Gradient with Neumorphic Cards */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary to-accent text-white">
+      {/* Differentials Section - Neumorphic Cards */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="mb-4 text-4xl font-bold">Por que Escolher o Icarus?</h2>
-            <p className="text-white/80 text-xl">
+            <h2 className="mb-4 text-4xl font-bold text-white">Por que Escolher o Icarus?</h2>
+            <p className="text-[#94A3B8] text-xl">
               Diferenciais que fazem a diferença
             </p>
           </div>
@@ -476,14 +469,14 @@ export function HomePage() {
               return (
                 <div
                   key={index}
-                  className="flex gap-6 p-8 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 hover:scale-105 transition-all duration-300"
+                  className="flex gap-6 p-8 rounded-2xl bg-[#15192B] backdrop-blur-sm hover:scale-105 transition-all duration-300 differential-card"
                 >
-                  <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0 border border-white/30">
-                    <Icon className="w-7 h-7 text-white" />
+                  <div className="w-14 h-14 rounded-xl bg-[#1A1F35] flex items-center justify-center flex-shrink-0 neu-pressed">
+                    <Icon className="w-7 h-7 text-[#818CF8]" />
                   </div>
                   <div>
-                    <h3 className="mb-3 text-xl font-bold">{diff.title}</h3>
-                    <p className="text-white/80 leading-relaxed">
+                    <h3 className="mb-3 text-xl font-bold text-white">{diff.title}</h3>
+                    <p className="text-[#94A3B8] leading-relaxed">
                       {diff.description}
                     </p>
                   </div>
@@ -497,42 +490,42 @@ export function HomePage() {
       {/* CTA Section */}
       <section
         ref={ctaFade.ref}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background to-muted transition-all duration-1000 ${
+        className={`py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16] transition-all duration-1000 ${
           ctaFade.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-foreground mb-6 text-4xl font-bold">
+          <h2 className="text-white mb-6 text-4xl font-bold">
             Pronto para Transformar sua Gestão?
           </h2>
-          <p className="text-muted-foreground mb-8 text-xl">
+          <p className="text-[#94A3B8] mb-8 text-xl">
             Junte-se a centenas de empresas que já estão elevando sua gestão com IA
           </p>
           <div className="flex items-center justify-center gap-6 mb-12 flex-wrap">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-success" />
-              <span className="text-muted-foreground">Sem permanência mínima</span>
+              <CheckCircle2 className="w-6 h-6 text-[#10B981]" />
+              <span className="text-[#94A3B8]">Sem permanência mínima</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-success" />
-              <span className="text-muted-foreground">Demonstração gratuita</span>
+              <CheckCircle2 className="w-6 h-6 text-[#10B981]" />
+              <span className="text-[#94A3B8]">Demonstração gratuita</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-success" />
-              <span className="text-muted-foreground">Suporte incluído</span>
+              <CheckCircle2 className="w-6 h-6 text-[#10B981]" />
+              <span className="text-[#94A3B8]">Suporte incluído</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Form Section */}
-      <section id="contato" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted">
+      <section id="contato" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0D16]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-foreground mb-4 text-4xl font-bold">
+            <h2 className="text-white mb-4 text-4xl font-bold">
               Solicite uma Demonstração
             </h2>
-            <p className="text-muted-foreground text-xl">
+            <p className="text-[#94A3B8] text-xl">
               Preencha o formulário e nossa equipe entrará em contato
             </p>
           </div>
@@ -542,21 +535,21 @@ export function HomePage() {
       </section>
 
       {/* Footer - Neumorphic */}
-      <footer className="bg-card text-foreground py-12 px-4 sm:px-6 lg:px-8 border-t border-border">
+      <footer className="bg-[#15192B] text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 neu-soft">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center btn-gradient">
                   <BrainCircuit className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">Icarus v5.0</h3>
-                  <p className="text-muted-foreground text-sm">Gestão elevada pela IA</p>
+                  <h3 className="font-bold text-lg text-white">Icarus v5.0</h3>
+                  <p className="text-[#94A3B8] text-sm">Gestão elevada pela IA</p>
                 </div>
               </div>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-[#94A3B8] text-sm">
                 Sistema ERP Enterprise especializado em OPME, com inteligência
                 artificial integrada.
               </p>
@@ -564,8 +557,8 @@ export function HomePage() {
 
             {/* Contact */}
             <div>
-              <h4 className="mb-4 text-foreground font-semibold">Contato</h4>
-              <ul className="space-y-2 text-muted-foreground text-sm">
+              <h4 className="mb-4 text-white font-semibold">Contato</h4>
+              <ul className="space-y-2 text-[#94A3B8] text-sm">
                 <li>sac@icarusai.com.br</li>
                 <li>Suporte 24/7 disponível</li>
               </ul>
@@ -573,12 +566,12 @@ export function HomePage() {
 
             {/* Links */}
             <div>
-              <h4 className="mb-4 text-foreground font-semibold">Links Rápidos</h4>
-              <ul className="space-y-2 text-muted-foreground text-sm">
+              <h4 className="mb-4 text-white font-semibold">Links Rápidos</h4>
+              <ul className="space-y-2 text-[#94A3B8] text-sm">
                 <li>
                   <button
                     onClick={() => navigate('/login')}
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Entrar no Sistema
                   </button>
@@ -589,7 +582,7 @@ export function HomePage() {
                       const contactSection = document.getElementById('contato')
                       contactSection?.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="hover:text-foreground transition-colors"
+                    className="hover:text-white transition-colors"
                   >
                     Solicitar Demonstração
                   </button>
@@ -598,7 +591,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-border text-center text-muted-foreground text-sm">
+          <div className="pt-8 border-t border-[#1A1F35] text-center text-[#94A3B8] text-sm">
             <p>© 2025 IcarusAI Technology. Todos os direitos reservados.</p>
           </div>
         </div>
@@ -629,10 +622,10 @@ function AnimatedStat({ value, suffix = '', label }: { value: number; suffix?: s
 
   return (
     <div ref={ref}>
-      <p className="text-foreground text-3xl font-bold">
+      <p className="text-white text-3xl font-bold">
         {count}{suffix}
       </p>
-      <p className="text-muted-foreground text-sm">{label}</p>
+      <p className="text-[#94A3B8] text-sm">{label}</p>
     </div>
   )
 }
@@ -658,18 +651,18 @@ function BenefitCard({
   return (
     <div
       ref={ref}
-      className="text-center p-8 bg-card backdrop-blur-sm rounded-2xl border border-border hover:scale-105 hover:border-primary/50 transition-all duration-300 group neu-soft"
+      className="text-center p-8 bg-[#15192B] backdrop-blur-sm rounded-2xl hover:scale-105 transition-all duration-300 group neu-card"
     >
-      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/30 group-hover:scale-110 transition-transform duration-300">
-        <Icon className="w-8 h-8 text-primary" />
+      <div className="w-16 h-16 rounded-full bg-[#1A1F35] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 neu-pressed">
+        <Icon className="w-8 h-8 text-[#818CF8]" />
       </div>
-      <p className="text-primary mb-3 text-4xl font-bold">
+      <p className="text-gradient mb-3 text-4xl font-bold">
         {prefix}{count}{suffix}
       </p>
-      <h3 className="text-foreground mb-2 text-lg font-semibold">
+      <h3 className="text-white mb-2 text-lg font-semibold">
         {title}
       </h3>
-      <p className="text-muted-foreground text-sm">{description}</p>
+      <p className="text-[#94A3B8] text-sm">{description}</p>
     </div>
   )
 }

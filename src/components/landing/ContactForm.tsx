@@ -113,16 +113,16 @@ export function ContactForm() {
   if (success) {
     return (
       <div className="max-w-2xl mx-auto text-center py-12">
-        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
-          <CheckCircle2 className="w-10 h-10 text-green-600" />
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#10B981]/20 mb-6 neu-elevated">
+          <CheckCircle2 className="w-10 h-10 text-[#10B981]" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+        <h3 className="text-2xl font-bold text-white mb-4">
           Mensagem enviada com sucesso!
         </h3>
-        <p className="text-gray-600 mb-8">
+        <p className="text-[#94A3B8] mb-8">
           Obrigado pelo seu interesse. Nossa equipe entrará em contato em breve.
         </p>
-        <Button onClick={() => setSuccess(false)}>Enviar outra mensagem</Button>
+        <Button onClick={() => setSuccess(false)} className="btn-gradient">Enviar outra mensagem</Button>
       </div>
     )
   }
@@ -131,9 +131,9 @@ export function ContactForm() {
     <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-8">
       {/* Error Message */}
       {error && (
-        <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="flex items-center gap-3 p-4 bg-[#EF4444]/10 rounded-xl neu-pressed">
+          <AlertCircle className="w-5 h-5 text-[#EF4444] flex-shrink-0" />
+          <p className="text-sm text-[#EF4444]">{error}</p>
         </div>
       )}
 
@@ -141,8 +141,8 @@ export function ContactForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Nome Completo */}
         <div className="md:col-span-2 space-y-2">
-          <Label htmlFor="nome_completo">
-            Nome Completo <span className="text-red-500">*</span>
+          <Label htmlFor="nome_completo" className="text-white">
+            Nome Completo <span className="text-[#EF4444]">*</span>
           </Label>
           <Input
             id="nome_completo"
@@ -153,13 +153,14 @@ export function ContactForm() {
               setFormData({ ...formData, nome_completo: e.target.value })
             }
             required
+            className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
           />
         </div>
 
         {/* Email */}
         <div className="space-y-2">
-          <Label htmlFor="email">
-            Email Corporativo <span className="text-red-500">*</span>
+          <Label htmlFor="email" className="text-white">
+            Email Corporativo <span className="text-[#EF4444]">*</span>
           </Label>
           <Input
             id="email"
@@ -168,13 +169,14 @@ export function ContactForm() {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
+            className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
           />
         </div>
 
         {/* Telefone */}
         <div className="space-y-2">
-          <Label htmlFor="telefone">
-            Telefone/WhatsApp <span className="text-red-500">*</span>
+          <Label htmlFor="telefone" className="text-white">
+            Telefone/WhatsApp <span className="text-[#EF4444]">*</span>
           </Label>
           <Input
             id="telefone"
@@ -183,13 +185,14 @@ export function ContactForm() {
             value={formData.telefone}
             onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
             required
+            className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
           />
         </div>
 
         {/* Empresa */}
         <div className="space-y-2">
-          <Label htmlFor="empresa">
-            Empresa <span className="text-red-500">*</span>
+          <Label htmlFor="empresa" className="text-white">
+            Empresa <span className="text-[#EF4444]">*</span>
           </Label>
           <Input
             id="empresa"
@@ -198,24 +201,26 @@ export function ContactForm() {
             value={formData.empresa}
             onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
             required
+            className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
           />
         </div>
 
         {/* Cargo */}
         <div className="space-y-2">
-          <Label htmlFor="cargo">Cargo</Label>
+          <Label htmlFor="cargo" className="text-white">Cargo</Label>
           <Input
             id="cargo"
             type="text"
             placeholder="Seu cargo na empresa"
             value={formData.cargo}
             onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
+            className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
           />
         </div>
 
         {/* Tamanho da Empresa */}
         <div className="space-y-2">
-          <Label htmlFor="tamanho_empresa">Tamanho da Empresa</Label>
+          <Label htmlFor="tamanho_empresa" className="text-white">Tamanho da Empresa</Label>
           <select
             id="tamanho_empresa"
             aria-label="Tamanho da Empresa"
@@ -223,7 +228,7 @@ export function ContactForm() {
             onChange={(e) =>
               setFormData({ ...formData, tamanho_empresa: e.target.value })
             }
-            className="w-full h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]/50 shadow-lg transition-all duration-300"
+            className="w-full h-12 rounded-xl bg-[#1A1F35] text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30 neu-pressed"
           >
             <option value="">Selecione</option>
             <option value="pequena">Pequena (1-50 funcionários)</option>
@@ -234,13 +239,13 @@ export function ContactForm() {
 
         {/* Segmento */}
         <div className="space-y-2">
-          <Label htmlFor="segmento">Segmento</Label>
+          <Label htmlFor="segmento" className="text-white">Segmento</Label>
           <select
             id="segmento"
             aria-label="Segmento"
             value={formData.segmento}
             onChange={(e) => setFormData({ ...formData, segmento: e.target.value })}
-            className="w-full h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]/50 shadow-lg transition-all duration-300"
+            className="w-full h-12 rounded-xl bg-[#1A1F35] text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30 neu-pressed"
           >
             <option value="">Selecione</option>
             <option value="opme">OPME</option>
@@ -254,7 +259,7 @@ export function ContactForm() {
 
       {/* Principal Desafio */}
       <div className="space-y-2">
-        <Label htmlFor="principal_desafio">
+        <Label htmlFor="principal_desafio" className="text-white">
           Qual o seu principal desafio na gestão hoje?
         </Label>
         <Textarea
@@ -265,25 +270,26 @@ export function ContactForm() {
             setFormData({ ...formData, principal_desafio: e.target.value })
           }
           rows={3}
+          className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
         />
       </div>
 
       {/* Interesses */}
       <div className="space-y-3">
-        <Label>Áreas de Interesse</Label>
+        <Label className="text-white">Áreas de Interesse</Label>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {interests.map((interest) => (
             <label
               key={interest}
-              className="flex items-center gap-3 p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl cursor-pointer hover:border-[#6366F1]/50 hover:bg-white/10 transition-all duration-300 shadow-lg"
+              className="flex items-center gap-3 p-4 bg-[#15192B] rounded-xl cursor-pointer hover:bg-[#1A1F35] transition-all duration-300 neu-soft"
             >
               <input
                 type="checkbox"
                 checked={formData.interesse_em.includes(interest)}
                 onChange={() => handleInterestToggle(interest)}
-                className="w-4 h-4 text-[#6366F1] bg-transparent border-gray-300 rounded focus:ring-[#6366F1] focus:ring-2"
+                className="w-5 h-5"
               />
-              <span className="text-sm text-gray-300">{interest}</span>
+              <span className="text-sm text-[#94A3B8]">{interest}</span>
             </label>
           ))}
         </div>
@@ -291,7 +297,7 @@ export function ContactForm() {
 
       {/* Como Conheceu */}
       <div className="space-y-2">
-        <Label htmlFor="como_conheceu">Como conheceu o Icarus?</Label>
+        <Label htmlFor="como_conheceu" className="text-white">Como conheceu o Icarus?</Label>
         <select
           id="como_conheceu"
           aria-label="Como conheceu o Icarus?"
@@ -299,7 +305,7 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, como_conheceu: e.target.value })
           }
-          className="w-full h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]/50 shadow-lg transition-all duration-300"
+          className="w-full h-12 rounded-xl bg-[#1A1F35] text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30 neu-pressed"
         >
           <option value="">Selecione</option>
           <option value="google">Google</option>
@@ -313,13 +319,14 @@ export function ContactForm() {
 
       {/* Mensagem */}
       <div className="space-y-2">
-        <Label htmlFor="mensagem">Mensagem adicional</Label>
+        <Label htmlFor="mensagem" className="text-white">Mensagem adicional</Label>
         <Textarea
           id="mensagem"
           placeholder="Deixe aqui qualquer informação adicional que julgar relevante..."
           value={formData.mensagem}
           onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
           rows={4}
+          className="bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed"
         />
       </div>
 
@@ -329,7 +336,7 @@ export function ContactForm() {
           type="submit"
           disabled={loading}
           size="lg"
-          className="min-w-[200px] bg-gradient-to-br from-[#6366F1] to-indigo-700 hover:from-[#4F46E5] hover:to-indigo-800 text-white shadow-lg shadow-[#6366F1]/50 hover:shadow-xl hover:shadow-[#6366F1]/60 transition-all duration-300"
+          className="min-w-[200px] btn-gradient"
         >
           {loading ? (
             <>
@@ -346,11 +353,10 @@ export function ContactForm() {
       </div>
 
       {/* Privacy Notice */}
-      <p className="text-xs text-center text-gray-500">
+      <p className="text-xs text-center text-[#64748B]">
         Ao enviar este formulário, você concorda com nossa política de privacidade.
         Seus dados serão utilizados apenas para contato comercial.
       </p>
     </form>
   )
 }
-
