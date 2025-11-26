@@ -22,7 +22,6 @@ import {
   HeadphonesIcon,
   Play,
   LogIn,
-  ChevronLeft,
 } from 'lucide-react'
 
 export function HomePage() {
