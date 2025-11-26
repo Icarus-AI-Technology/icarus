@@ -1,14 +1,13 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { NeomorphicCard } from './NeomorphicCard';
 import { LucideIcon, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 
 export interface KPICardProps {
   title: string;
   value: string | number;
-  icon?: LucideIcon | React.ReactNode;
-  iconColor?: string; // Direct color for icon
+  icon?: LucideIcon;
+  iconColor?: string;
   trend?: {
     value: number;
     direction: 'up' | 'down' | 'stable';
@@ -22,105 +21,79 @@ export interface KPICardProps {
  * 
  * Dark Glass Medical Design System - ICARUS v5.1
  * 
- * Standard KPI card following the official specification:
- * - Fixed height: 140px (desktop/tablet), 160px (mobile)
- * - Padding: 24px (p-6)
- * - Border radius: 16px (rounded-2xl)
- * - Neuromorphic elevated effect
- * - Colored icons via iconColor prop
- * 
- * @example
- * <KPICard
- *   title="Médicos Cirurgiões"
- *   value="847"
- *   icon={Stethoscope}
- *   iconColor="#2DD4BF"
- *   trend={{ value: 15, direction: 'up' }}
- *   variant="default"
- * />
+ * Features:
+ * - Neumorphic 3D design with proper dark/light mode support
+ * - Colored icon backgrounds based on iconColor prop
+ * - Different variants (default, primary, success, warning, danger)
  */
 export const KPICard: React.FC<KPICardProps> = ({
   title,
   value,
-  icon,
-  iconColor,
+  icon: Icon,
+  iconColor = '#6366F1',
   trend,
   variant = 'default',
   className = '',
 }) => {
   const { isDark } = useTheme();
 
-  const variantClasses = {
-    default: isDark ? 'bg-[#15192B]' : 'bg-white',
-    primary: 'bg-[#6366F1] text-white', // Background indigo + texto branco
-    success: 'bg-[#10B981] text-white',
-    warning: 'bg-[#F59E0B] text-white',
-    danger: 'bg-[#EF4444] text-white',
-  };
-
   const isColoredVariant = variant !== 'default';
 
-  // Default icon colors by variant if not provided
-  const defaultIconColors: Record<string, string> = {
-    default: '#6366F1',
-    primary: '#FFFFFF',
-    success: '#FFFFFF',
-    warning: '#FFFFFF',
-    danger: '#FFFFFF',
+  // Background colors based on variant
+  const variantBackgrounds: Record<string, string> = {
+    default: isDark ? '#15192B' : '#FFFFFF',
+    primary: '#6366F1',
+    success: '#10B981',
+    warning: '#F59E0B',
+    danger: '#EF4444',
   };
 
-  const finalIconColor = isColoredVariant 
-    ? '#FFFFFF' 
-    : (iconColor || defaultIconColors[variant]);
+  // Shadow styles
+  const cardShadow = isDark 
+    ? '8px 8px 16px rgba(0,0,0,0.4), -6px -6px 14px rgba(255,255,255,0.02)'
+    : '6px 6px 12px rgba(0,0,0,0.08), -4px -4px 10px rgba(255,255,255,0.9)';
 
-  const renderIcon = () => {
-    if (!icon) return null;
-    
-    if (React.isValidElement(icon)) {
-      return icon;
-    }
-    
-    if (typeof icon === 'function') {
-      const IconComponent = icon as React.ComponentType<{ size?: number; className?: string; strokeWidth?: number; style?: React.CSSProperties }>;
-      return (
-        <IconComponent 
-          size={22} 
-          strokeWidth={2.5} 
-          style={{ color: finalIconColor }}
-        />
+  // Icon box styles
+  const iconBoxBg = isColoredVariant 
+    ? 'rgba(255,255,255,0.2)' 
+    : (isDark ? '#1A1F35' : '#F1F5F9');
+
+  const iconBoxShadow = isColoredVariant 
+    ? 'inset 2px 2px 4px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1)'
+    : (isDark 
+        ? 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
+        : 'inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8)'
       );
-    }
-    
-    return null;
-  };
+
+  // Icon color - white for colored variants, custom color otherwise
+  const finalIconColor = isColoredVariant ? '#FFFFFF' : iconColor;
 
   return (
-    <NeomorphicCard
-      variant="elevated"
-      padding="lg"
+    <div
       className={cn(
-        variantClasses[variant],
+        'rounded-2xl p-6 transition-all duration-300 hover:translate-y-[-2px]',
         className
       )}
+      style={{
+        backgroundColor: variantBackgrounds[variant],
+        boxShadow: cardShadow,
+      }}
     >
       {/* Header Section */}
       <div className="flex items-center gap-3 mb-3">
-        {icon && (
+        {Icon && (
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{
-              background: isColoredVariant 
-                ? 'rgba(255,255,255,0.15)' 
-                : (isDark ? '#1A1F35' : '#F1F5F9'),
-              boxShadow: isColoredVariant 
-                ? 'inset 2px 2px 4px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1)'
-                : (isDark 
-                    ? 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
-                    : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -2px -2px 4px rgba(255,255,255,0.8)'
-                  ),
+              backgroundColor: iconBoxBg,
+              boxShadow: iconBoxShadow,
             }}
           >
-            {renderIcon()}
+            <Icon 
+              size={22} 
+              strokeWidth={2.5} 
+              style={{ color: finalIconColor }}
+            />
           </div>
         )}
         <h4
@@ -176,7 +149,7 @@ export const KPICard: React.FC<KPICardProps> = ({
           </div>
         )}
       </div>
-    </NeomorphicCard>
+    </div>
   );
 };
 
