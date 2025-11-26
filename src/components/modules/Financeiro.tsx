@@ -17,7 +17,7 @@ import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   DollarSign, TrendingUp, CreditCard, AlertCircle,
-  Calendar, Download, Filter, Search, CheckCircle2, Clock,
+  Calendar, Download, Filter, Search, CheckCircle2, Clock, BarChart3,
 } from 'lucide-react'
 import {
   BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
