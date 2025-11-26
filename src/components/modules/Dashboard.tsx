@@ -58,7 +58,7 @@ export function Dashboard() {
     return (
       <ModuleLoadingSkeleton
         title="Dashboard"
-        subtitle="Visão geral do sistema ICARUS v5.1"
+        subtitle="Visão geral do sistema ICARUS v5.0"
         kpiCount={4}
       />
     )
@@ -79,7 +79,7 @@ export function Dashboard() {
       <div>
         <h1 className={`text-3xl font-bold ${textPrimary} mb-2`}>Dashboard</h1>
         <p className={textSecondary}>
-          Visão geral do sistema ICARUS v5.1
+          Visão geral do sistema ICARUS v5.0
         </p>
       </div>
 
