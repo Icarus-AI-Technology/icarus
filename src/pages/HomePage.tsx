@@ -21,11 +21,20 @@ import {
   Award,
   HeadphonesIcon,
   Play,
+  LogIn,
 } from 'lucide-react'
 
 export function HomePage() {
   const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
+
+  // Force dark mode on mount
+  useEffect(() => {
+    document.documentElement.classList.add('dark')
+    return () => {
+      // Keep dark mode when leaving (optional cleanup)
+    }
+  }, [])
 
   // Parallax scroll effect
   useEffect(() => {
@@ -192,11 +201,7 @@ export function HomePage() {
               onClick={() => navigate('/login')}
               className="bg-gradient-to-br from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300"
             >
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                <polyline points="10 17 15 12 10 7"/>
-                <line x1="15" y1="12" x2="3" y2="12"/>
-              </svg>
+              <LogIn className="w-5 h-5 mr-2" />
               Entrar no Sistema
             </Button>
           </div>
