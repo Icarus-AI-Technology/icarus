@@ -83,7 +83,7 @@ export function Dashboard() {
         </p>
       </div>
 
-      {/* KPIs with colored icons */}
+      {/* KPIs - Dark neumorphic cards with colored icons */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Cirurgias Hoje - Calendar (Cyan) */}
         <KPICard
@@ -95,7 +95,6 @@ export function Dashboard() {
             value: Math.abs(kpis?.surgeriesChange || 0),
             direction: (kpis?.surgeriesChange || 0) > 0 ? 'up' : (kpis?.surgeriesChange || 0) < 0 ? 'down' : 'stable'
           }}
-          variant="default"
         />
 
         {/* Estoque Crítico - AlertCircle (Red) */}
@@ -104,7 +103,6 @@ export function Dashboard() {
           value={kpis?.criticalStock || 0}
           icon={AlertCircle}
           iconColor="#EF4444"
-          variant="danger"
         />
 
         {/* Faturamento - DollarSign (Green) */}
@@ -117,16 +115,14 @@ export function Dashboard() {
             value: kpis?.revenueChange || 0,
             direction: 'up'
           }}
-          variant="success"
         />
 
-        {/* IA Status - BrainCircuit (Indigo/Purple gradient effect) */}
+        {/* IA Status - BrainCircuit (Purple) */}
         <KPICard
           title="IcarusBrain"
           value={(kpis?.aiStatus || 'offline') === 'online' ? 'Online' : 'Offline'}
           icon={BrainCircuit}
           iconColor="#8B5CF6"
-          variant="primary"
         />
       </div>
 

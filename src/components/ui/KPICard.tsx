@@ -12,7 +12,6 @@ export interface KPICardProps {
     value: number;
     direction: 'up' | 'down' | 'stable';
   };
-  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
   className?: string;
 }
 
@@ -22,9 +21,9 @@ export interface KPICardProps {
  * Dark Glass Medical Design System - ICARUS v5.1
  * 
  * Features:
- * - Neumorphic 3D design with proper dark/light mode support
- * - Colored icon backgrounds based on iconColor prop
- * - Different variants (default, primary, success, warning, danger)
+ * - Neumorphic 3D design with consistent dark/light backgrounds
+ * - Colored icons via iconColor prop
+ * - All cards follow the same neumorphic pattern
  */
 export const KPICard: React.FC<KPICardProps> = ({
   title,
@@ -32,41 +31,25 @@ export const KPICard: React.FC<KPICardProps> = ({
   icon: Icon,
   iconColor = '#6366F1',
   trend,
-  variant = 'default',
   className = '',
 }) => {
   const { isDark } = useTheme();
 
-  const isColoredVariant = variant !== 'default';
-
-  // Background colors based on variant
-  const variantBackgrounds: Record<string, string> = {
-    default: isDark ? '#15192B' : '#FFFFFF',
-    primary: '#6366F1',
-    success: '#10B981',
-    warning: '#F59E0B',
-    danger: '#EF4444',
-  };
-
-  // Shadow styles
+  // Neumorphic card styles - consistent for all cards
+  const cardBg = isDark ? '#15192B' : '#FFFFFF';
   const cardShadow = isDark 
     ? '8px 8px 16px rgba(0,0,0,0.4), -6px -6px 14px rgba(255,255,255,0.02)'
     : '6px 6px 12px rgba(0,0,0,0.08), -4px -4px 10px rgba(255,255,255,0.9)';
 
-  // Icon box styles
-  const iconBoxBg = isColoredVariant 
-    ? 'rgba(255,255,255,0.2)' 
-    : (isDark ? '#1A1F35' : '#F1F5F9');
+  // Neumorphic icon box styles
+  const iconBoxBg = isDark ? '#1A1F35' : '#F1F5F9';
+  const iconBoxShadow = isDark 
+    ? 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
+    : 'inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8)';
 
-  const iconBoxShadow = isColoredVariant 
-    ? 'inset 2px 2px 4px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1)'
-    : (isDark 
-        ? 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
-        : 'inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8)'
-      );
-
-  // Icon color - white for colored variants, custom color otherwise
-  const finalIconColor = isColoredVariant ? '#FFFFFF' : iconColor;
+  // Text colors
+  const titleColor = isDark ? '#94A3B8' : '#64748B';
+  const valueColor = isDark ? '#FFFFFF' : '#0F172A';
 
   return (
     <div
@@ -75,7 +58,7 @@ export const KPICard: React.FC<KPICardProps> = ({
         className
       )}
       style={{
-        backgroundColor: variantBackgrounds[variant],
+        backgroundColor: cardBg,
         boxShadow: cardShadow,
       }}
     >
@@ -92,17 +75,13 @@ export const KPICard: React.FC<KPICardProps> = ({
             <Icon 
               size={22} 
               strokeWidth={2.5} 
-              style={{ color: finalIconColor }}
+              style={{ color: iconColor }}
             />
           </div>
         )}
         <h4
-          className={cn(
-            'text-sm font-medium',
-            isColoredVariant 
-              ? 'text-white/80' 
-              : (isDark ? 'text-[#94A3B8]' : 'text-slate-500')
-          )}
+          className="text-sm font-medium"
+          style={{ color: titleColor }}
         >
           {title}
         </h4>
@@ -111,12 +90,8 @@ export const KPICard: React.FC<KPICardProps> = ({
       {/* Content Section */}
       <div className="space-y-2">
         <div
-          className={cn(
-            'text-3xl font-bold',
-            isColoredVariant 
-              ? 'text-white' 
-              : (isDark ? 'text-white' : 'text-slate-900')
-          )}
+          className="text-3xl font-bold"
+          style={{ color: valueColor }}
         >
           {value}
         </div>
@@ -124,27 +99,24 @@ export const KPICard: React.FC<KPICardProps> = ({
         {trend && (
           <div className="flex items-center gap-2">
             {trend.direction === 'up' && (
-              <TrendingUp size={16} className={isColoredVariant ? 'text-white/80' : 'text-green-500'} />
+              <TrendingUp size={16} className="text-green-500" />
             )}
             {trend.direction === 'down' && (
-              <TrendingDown size={16} className={isColoredVariant ? 'text-white/80' : 'text-red-500'} />
+              <TrendingDown size={16} className="text-red-500" />
             )}
             {trend.direction === 'stable' && (
-              <Minus size={16} className={isColoredVariant ? 'text-white/80' : 'text-gray-500'} />
+              <Minus size={16} className="text-gray-500" />
             )}
             <span
               className={cn(
                 'text-sm font-medium',
-                isColoredVariant 
-                  ? 'text-white/90'
-                  : (trend.direction === 'up' && 'text-green-600'),
-                !isColoredVariant && trend.direction === 'down' && 'text-red-600',
-                !isColoredVariant && trend.direction === 'stable' && 'text-gray-600'
+                trend.direction === 'up' && 'text-green-500',
+                trend.direction === 'down' && 'text-red-500',
+                trend.direction === 'stable' && 'text-gray-500'
               )}
             >
               {trend.direction === 'up' ? '+' : trend.direction === 'down' ? '-' : ''}
-              {trend.value}
-              {typeof trend.value === 'number' && trend.value !== Math.floor(trend.value) ? '' : '%'}
+              {trend.value}%
             </span>
           </div>
         )}
