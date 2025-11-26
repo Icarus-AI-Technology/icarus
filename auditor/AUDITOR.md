@@ -143,7 +143,7 @@ function calculateOverallScore(sections: Section[]): number {
 ## Checklist Master
 
 ### Frontend (React/TypeScript)
-- [ ] Componentes seguem Design System OraclusX
+- [ ] Componentes seguem Design System Dark Glass Medical
 - [ ] TypeScript strict mode habilitado
 - [ ] Sem `any` types desnecessarios
 - [ ] React hooks seguem regras

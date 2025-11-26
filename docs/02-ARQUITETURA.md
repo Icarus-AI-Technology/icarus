@@ -52,8 +52,8 @@ ICARUS v5.0 segue uma arquitetura **modular, escalável e cloud-native**, projet
 ┌─────────────────────────────────────────────────────────┐
 │                FRONTEND (React SPA)                      │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  58 Módulos  │  │  OraclusX DS │  │ Code Connect │  │
-│  │  (Lazy Load) │  │ (175 Comps)  │  │(Figma Sync)  │  │
+│  │  58 Módulos  │  │ Dark Glass   │  │   Lucide     │  │
+│  │  (Lazy Load) │  │   Medical    │  │   React      │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 │                                                          │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
@@ -93,7 +93,7 @@ ICARUS v5.0 segue uma arquitetura **modular, escalável e cloud-native**, projet
    ↓
 5. Fetch data do Supabase
    ↓
-6. Render UI com OraclusX DS
+6. Render UI com Dark Glass Medical
 ```
 
 ### 2. Interação do Usuário
@@ -425,7 +425,7 @@ Semver: `MAJOR.MINOR.PATCH`
 ## 📚 Documentação Relacionada
 
 - [Stack Tecnológico](03-STACK-TECNOLOGICO.md)
-- [Design System](06-ORACLUSX-DESIGN-SYSTEM.md)
+- [Design System](DARK-GLASS-MEDICAL.md)
 - [IA IcarusBrain](07-IA-ICARUSBRAIN.md)
 - [Supabase Database](08-SUPABASE-DATABASE.md)
 

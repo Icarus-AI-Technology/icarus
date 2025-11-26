@@ -13,7 +13,7 @@ export interface NeuBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 /**
  * NeuBadge - Neumorphic Badge Component
  *
- * A badge component with neumorphic design following ICARUS OraclusX patterns.
+ * A badge component with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports multiple variants, sizes, icons, and dot indicators.
  *
  * @example

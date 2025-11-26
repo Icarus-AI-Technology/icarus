@@ -4,7 +4,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 /**
- * OraclusX Design System - Dialog Component
+ * Dark Glass Medical - Dialog Component
  * ✅ 100% Compliant with ICARUS v5.0 Standards
  * 
  * REGRAS OBRIGATÓRIAS:

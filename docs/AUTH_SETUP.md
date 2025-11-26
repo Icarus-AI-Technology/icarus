@@ -205,7 +205,7 @@ Interface completa de autenticação com 3 modos:
 - Validação com Zod
 - React Hook Form
 - Feedback de erros
-- Design neumórfico (OraclusX)
+- Design neumórfico (Dark Glass Medical)
 - Loading states
 - Tab navigation
 

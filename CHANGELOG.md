@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial project setup with Vite + React + TypeScript
-- OraclusX Design System with neumorphic components
+- Dark Glass Medical Design System with neumorphic components
 - Supabase PostgreSQL integration
 - Core UI components (Button, Card, Toast)
 - Layout components (Sidebar, Header)

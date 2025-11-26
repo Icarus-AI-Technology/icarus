@@ -31,7 +31,7 @@ type SortConfig = {
 /**
  * NeuTable - Neumorphic Table Component
  *
- * A table component with neumorphic design following ICARUS OraclusX patterns.
+ * A table component with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports sorting, custom rendering, row actions, and loading states.
  *
  * @example

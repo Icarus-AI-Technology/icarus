@@ -508,7 +508,7 @@ export function NomeModulo() {
 - ✅ Exports (PDF, Excel)
 - ✅ Integração Supabase
 - ✅ Componentes shadcn/ui
-- ✅ OraclusX Design System
+- ✅ Dark Glass Medical Design System
 - ✅ Dark mode
 - ✅ Acessibilidade WCAG AA
 - ✅ (Opcional) Serviços IA
@@ -539,7 +539,7 @@ export function NomeModulo() {
 ## 📚 Documentação Relacionada
 
 - [Criar Módulos](skills/SKILL_CRIAR_MODULOS.md)
-- [OraclusX Design System](skills/SKILL_ORACLUSX_DS.md)
+- [Dark Glass Medical](DARK-GLASS-MEDICAL.md)
 - [IA Integration](skills/SKILL_IA_INTEGRATION.md)
 - [Supabase Patterns](skills/SKILL_SUPABASE.md)
 

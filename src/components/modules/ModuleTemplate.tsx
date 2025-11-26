@@ -9,7 +9,7 @@
  * ✅ 3-5 abas de navegação
  * ✅ Integração Supabase
  * ✅ (Opcional) Serviços IA
- * ✅ 100% OraclusX DS compliant
+ * ✅ 100% Dark Glass Medical compliant
  *
  * COMO USAR:
  * 1. Copie este arquivo para o nome do seu módulo

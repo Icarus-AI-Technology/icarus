@@ -2,7 +2,7 @@
  * Contact Page - ICARUS v5.0
  * 
  * Formulário de contato com:
- * - OraclusX DS Components (100% neuromórfico)
+ * - Dark Glass Medical Components (100% neumórfico)
  * - Validação Zod
  * - API integration POST /api/contact
  * - Toast notifications

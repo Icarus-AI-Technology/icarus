@@ -8,7 +8,7 @@ export { NeomorphicIconBox } from './NeomorphicIconBox'
 export { KPICard } from './KPICard'
 export { Loading, LoadingOverlay } from './Loading'
 
-// OraclusX Design System - Neumorphic Components
+// Dark Glass Medical - Neumorphic Components
 export { NeuButton } from './neu-button'
 export { NeuCard } from './neu-card'
 export { NeuInput } from './neu-input'

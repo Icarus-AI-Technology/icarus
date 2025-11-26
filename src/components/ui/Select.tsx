@@ -4,7 +4,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 /**
- * OraclusX Design System - Select Component
+ * Dark Glass Medical - Select Component
  * ✅ 100% Compliant with ICARUS v5.0 Standards
  * 
  * REGRAS OBRIGATÓRIAS:

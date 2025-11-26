@@ -17,7 +17,7 @@ export interface NeuModalProps {
 /**
  * NeuModal - Neumorphic Modal Component
  *
- * A modal dialog with neumorphic design following ICARUS OraclusX patterns.
+ * A modal dialog with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports multiple sizes, custom footers, and overlay interactions.
  *
  * @example

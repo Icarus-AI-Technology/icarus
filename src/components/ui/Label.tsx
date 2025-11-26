@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 /**
- * OraclusX Design System - Label Component
+ * Dark Glass Medical - Label Component
  * ✅ 100% Compliant with ICARUS v5.0 Standards
  * 
  * REGRAS OBRIGATÓRIAS:

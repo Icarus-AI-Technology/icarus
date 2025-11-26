@@ -17,7 +17,7 @@ Esta release representa uma **atualização completa** do stack tecnológico e r
 ### ✨ Principais Mudanças
 
 1. **Stack Tecnológico Atualizado** - React 19, TypeScript 5.9, Motion 12
-2. **Novo Design System** - Dark Glass Medical (substituindo OraclusX DS)
+2. **Novo Design System** - Dark Glass Medical
 3. **Padronização de Ícones** - 100% Lucide React
 4. **Correções Críticas** - Erros de runtime, rotas, componentes
 5. **Deploy Otimizado** - pnpm no Vercel
@@ -59,9 +59,9 @@ Esta release representa uma **atualização completa** do stack tecnológico e r
 
 ## 🎨 Design System: Dark Glass Medical
 
-### Substituição do OraclusX DS
+### Dark Glass Medical Design System
 
-O design system **OraclusX DS** foi substituído pelo novo **Dark Glass Medical**, oferecendo:
+O design system **Dark Glass Medical** oferece:
 
 - ✅ Paleta de cores profissional para ERP médico
 - ✅ Contraste WCAG AAA compliant
@@ -162,7 +162,7 @@ ATUALIZACAO-COMPLETA.md
 ### Limpeza de Código Legado
 
 - **70+ arquivos** de documentação legada removidos
-- **OraclusX Validator** (`src/lib/utils/oraclusx-validator.ts`)
+- **Validator** (`src/lib/utils/validator.ts`)
 - **HardGateBanner** (`src/components/dev-tools/HardGateBanner.tsx`)
 - **Pasta src/app/** (código Next.js incompatível com Vite)
 - **Scripts shell** legados na raiz
@@ -262,7 +262,7 @@ ATUALIZACAO-COMPLETA.md
 1. **React 19** - Verificar compatibilidade de bibliotecas de terceiros
 2. **Motion 12** - API de gestures mudou (primeiro argumento é o elemento)
 3. **Rota Dashboard** - Agora em `/dashboard` em vez de `/`
-4. **OraclusX DS Removido** - Usar Dark Glass Medical
+4. **Design System** - Usar Dark Glass Medical
 
 ### Peer Dependencies Warnings
 

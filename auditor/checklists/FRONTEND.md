@@ -97,7 +97,7 @@ grep -r "ErrorBoundary" src/ --include="*.tsx" | wc -l
 
 ---
 
-## 4. Design System (OraclusX)
+## 4. Design System (Dark Glass Medical)
 
 ### 4.1 Components
 - [ ] Usando componentes do Design System

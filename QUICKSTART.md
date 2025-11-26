@@ -134,7 +134,7 @@ import { NeuButton, NeuCard, NeuInput } from '@/components/ui';
 
 # Claude Code vai:
 # 1. Consultar Figma via Code Connect
-# 2. Usar componentes OraclusX DS
+# 2. Usar componentes Dark Glass Medical
 # 3. Seguir padrões ICARUS
 # 4. Gerar código production-ready
 ```

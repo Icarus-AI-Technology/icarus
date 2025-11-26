@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 /**
- * OraclusX Design System - Textarea Component
+ * Dark Glass Medical - Textarea Component
  * ✅ 100% Compliant with ICARUS v5.0 Standards
  * 
  * REGRAS OBRIGATÓRIAS:

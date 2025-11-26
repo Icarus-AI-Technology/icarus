@@ -6,7 +6,7 @@
 
 - **58 módulos funcionais** (100% implementados)
 - **12 serviços de IA** integrados (IcarusBrain)
-- **Design neumórfico 3D** (OraclusX DS)
+- **Design neumórfico 3D** (Dark Glass Medical)
 - **Supabase PostgreSQL** (RLS multi-tenant)
 - **Code Connect** (Figma ↔ Código sincronizado)
 - **ROI 450%** no primeiro ano
@@ -78,7 +78,7 @@ Empresas que:
 ┌─────────────────────────────────────────────────────────┐
 │                    FRONTEND (React)                      │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  58 Módulos  │  │  OraclusX DS │  │ Code Connect │  │
+│  │  58 Módulos  │  │ Dark Glass   │  │   Lucide     │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 └─────────────────────────────────────────────────────────┘
                            │
@@ -201,7 +201,7 @@ People management:
 
 ---
 
-## 🎨 OraclusX Design System
+## 🎨 Dark Glass Medical Design System
 
 ### Filosofia Neumórfica
 
@@ -224,7 +224,7 @@ People management:
 --foreground: #1F2937   /* Cinza escuro */
 ```
 
-[📖 Ver guia completo do Design System →](06-ORACLUSX-DESIGN-SYSTEM.md)
+[📖 Ver guia completo do Design System →](DARK-GLASS-MEDICAL.md)
 
 ---
 
@@ -334,7 +334,7 @@ Retorno do não usado
 - [Stack Tecnológico](03-STACK-TECNOLOGICO.md)
 - [Comparativo Protheus](04-COMPARATIVO-PROTHEUS.md)
 - [Code Connect](05-CODE-CONNECT.md)
-- [Design System](06-ORACLUSX-DESIGN-SYSTEM.md)
+- [Design System](DARK-GLASS-MEDICAL.md)
 - [IA IcarusBrain](07-IA-ICARUSBRAIN.md)
 - [Supabase Database](08-SUPABASE-DATABASE.md)
 - [58 Módulos](09-MODULOS.md)

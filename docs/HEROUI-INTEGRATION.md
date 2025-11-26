@@ -79,7 +79,7 @@ function App() {
 
 ## 📝 Exemplos de Uso
 
-### Button com OraclusX Style
+### Button com Dark Glass Medical Style
 
 ```tsx
 import { Button } from '@heroui/react';
@@ -181,11 +181,11 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 
 ---
 
-## 🎨 Integração com OraclusX Design System
+## 🎨 Integração com Dark Glass Medical
 
 ### Manter Consistência Visual
 
-HeroUI v2 pode ser customizado para seguir o OraclusX Design System:
+HeroUI v2 pode ser customizado para seguir o Dark Glass Medical Design System:
 
 ```tsx
 // Exemplo de Button customizado
@@ -225,7 +225,7 @@ const button = tv({
 
 ---
 
-## 🚀 Quando Usar HeroUI vs OraclusX Components
+## 🚀 Quando Usar HeroUI vs Dark Glass Medical Components
 
 ### Use HeroUI para:
 - ✅ Tabelas complexas (`<Table>`)
@@ -234,10 +234,10 @@ const button = tv({
 - ✅ Componentes de navegação (`<Navbar>`, `<Breadcrumbs>`)
 - ✅ Componentes de feedback (`<Progress>`, `<Spinner>`)
 
-### Use OraclusX Components para:
-- ✅ Cards neuromórficos (`<NeuCard>`)
-- ✅ Buttons primários (`<NeuButton>`)
-- ✅ Inputs com estilo específico (`<NeuInput>`)
+### Use Dark Glass Medical Components para:
+- ✅ Cards neumórficos (`<Card>`, `<KPICard>`)
+- ✅ Buttons primários (`<Button>`)
+- ✅ Inputs com estilo específico (`<Input>`)
 - ✅ Componentes customizados do projeto
 
 ---

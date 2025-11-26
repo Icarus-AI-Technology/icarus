@@ -2,7 +2,7 @@
  * ConfirmModal - Modal de confirmação usando HeroUI
  * 
  * Modal reutilizável para confirmações de ações críticas.
- * Integrado com OraclusX Design System.
+ * Integrado com Dark Glass Medical Design System.
  * 
  * @example
  * ```tsx

@@ -7,7 +7,7 @@
  * - Seleção de linhas
  * - Busca/filtro
  * - Responsivo
- * - Integrado com OraclusX Design System
+ * - Integrado com Dark Glass Medical Design System
  * 
  * @example
  * ```tsx

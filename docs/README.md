@@ -20,7 +20,7 @@ Documentação completa do sistema ERP enterprise.
 - [CHANGELOG.md](../CHANGELOG.md) - Histórico de versões
 
 ### Design System
-- OraclusX Design System - Componentes neumórficos
+- Dark Glass Medical - Design System neumórfico
 - Paleta de cores e tipografia
 - Guia de acessibilidade
 

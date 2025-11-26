@@ -580,7 +580,7 @@ Após instalação:
 1. **Leia a documentação**:
    - [CLAUDE.md](../CLAUDE.md) - Contexto para desenvolvimento
    - [.clinerules](../.clinerules) - Regras obrigatórias
-   - [Design System](06-ORACLUSX-DESIGN-SYSTEM.md)
+   - [Design System](DARK-GLASS-MEDICAL.md)
 
 2. **Explore os módulos**:
    - `/cirurgias` - Módulo referência

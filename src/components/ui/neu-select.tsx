@@ -24,7 +24,7 @@ export interface NeuSelectProps {
 /**
  * NeuSelect - Neumorphic Select Component
  *
- * A select dropdown with neumorphic design following ICARUS OraclusX patterns.
+ * A select dropdown with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports labels, validation, and custom styling.
  *
  * @example

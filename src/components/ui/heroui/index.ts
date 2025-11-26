@@ -1,7 +1,7 @@
 /**
  * HeroUI Components - Exports
  * 
- * Componentes customizados usando HeroUI integrados com OraclusX DS
+ * Componentes customizados usando HeroUI integrados com Dark Glass Medical
  */
 
 export { DataTable, type Column, type DataTableProps } from './DataTable';

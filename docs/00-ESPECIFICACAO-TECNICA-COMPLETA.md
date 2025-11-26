@@ -4,7 +4,7 @@
 **Versão**: 5.0.3
 **Data**: 15 de Novembro de 2025
 **Status**: ✅ Production-Ready - 100% Implementado
-**Score**: 100/100 Conformidade OraclusX DS
+**Score**: 100/100 Conformidade Dark Glass Medical
 
 ---
 
@@ -12,7 +12,7 @@
 
 1. [Visão Geral Executiva](#1-visão-geral-executiva)
 2. [Stack Tecnológico](#2-stack-tecnológico)
-3. [OraclusX Design System](#3-oraclusx-design-system)
+3. [Dark Glass Medical Design System](#3-dark-glass-medical-design-system)
 4. [Arquitetura do Sistema](#4-arquitetura-do-sistema)
 5. [Módulos Implementados (58)](#5-módulos-implementados-58)
 6. [Banco de Dados Supabase](#6-banco-de-dados-supabase)
@@ -57,7 +57,7 @@ const projectStatus = {
   },
 
   infrastructure: {
-    designSystem: "100%",     // OraclusX DS completo
+    designSystem: "100%",     // Dark Glass Medical completo
     database: "100%",         // Supabase configurado
     layout: "100%",           // Sidebar + Topbar + Breadcrumbs
     routing: "100%",          // Sistema de navegação completo
@@ -68,7 +68,7 @@ const projectStatus = {
   },
 
   compliance: {
-    oraclusxDS: 100,         // Score perfeito
+    darkGlassMedical: 100,   // Score perfeito
     wcag: "AA",              // Acessibilidade
     gdpr: "Compliant",       // Proteção de dados
     anvisa: "Ready"          // Regulamentação médica
@@ -79,7 +79,7 @@ const projectStatus = {
 ### 1.2 Características Principais
 
 ✅ **58 Módulos Funcionais** - Sistema completo de gestão OPME
-✅ **100% Padronizado** - OraclusX Design System em todos os módulos
+✅ **100% Padronizado** - Dark Glass Medical Design System em todos os módulos
 ✅ **Supabase Integrado** - Banco de dados PostgreSQL configurado
 ✅ **12 Tabelas Criadas** - Estrutura completa do banco
 ✅ **RLS Habilitado** - Row Level Security multi-tenant
@@ -184,11 +184,11 @@ const projectStatus = {
 
 ---
 
-## 3. OraclusX Design System
+## 3. Dark Glass Medical Design System
 
 ### 3.1 Filosofia do Design
 
-**OraclusX DS** é um design system Enterprise com estilo **Neumorphism** (Neomorphism) - interface 3D com sombras suaves que criam profundidade visual.
+**Dark Glass Medical** é um design system Enterprise com estilo **Neumorphism** - interface 3D com sombras suaves que criam profundidade visual.
 
 #### Princípios:
 
@@ -317,7 +317,7 @@ IcarusKPICard          // Card KPI individual
 ```
 📦 ICARUS v5.0
 ├── 📁 /components
-│   ├── 📁 /oraclusx-ds          ← Design System atômico
+│   ├── 📁 /ui                   ← Design System components
 │   │   ├── Button.tsx
 │   │   ├── Input.tsx
 │   │   ├── Card.tsx
@@ -388,7 +388,7 @@ IcarusKPICard          // Card KPI individual
 │
 ├── 📁 /styles
 │   ├── globals.css              ← Tokens + Neumorphism
-│   └── oraclusx-ds.css          ← Estilos OraclusX
+│   └── index.css                ← Estilos Dark Glass Medical
 │
 ├── 📁 /scripts                  ← 🆕 Scripts setup
 │   └── setup-supabase.sh        ← Automação
@@ -535,7 +535,7 @@ IcarusKPICard          // Card KPI individual
 | 53 | Voice Macros | `VoiceMacrosManager.tsx` | ✅ 100% |
 | 54 | Video Calls | `VideoCallsManager.tsx` | ✅ 100% |
 | 55 | Workflow Builder | `WorkflowBuilderVisual.tsx` | ✅ 100% |
-| 56 | OraclusX Showcase | `OraclusXShowcase.tsx` | ✅ 100% |
+| 56 | Design Showcase | `ShowcasePage.tsx` | ✅ 100% |
 | 57 | Health Dashboard | `SystemHealthDashboard.tsx` | ✅ 100% |
 | 58 | Navigation Hubs | `NavigationHubs.tsx` | ✅ 100% |
 
@@ -961,7 +961,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGc...
   seedData: "✅ Carregado",
   tests: "✅ Componente de teste ativo",
   docs: "✅ Documentação completa",
-  score: "100/100 OraclusX DS",
+  score: "100/100 Dark Glass Medical",
   status: "🚀 PRODUCTION READY"
 }
 ```

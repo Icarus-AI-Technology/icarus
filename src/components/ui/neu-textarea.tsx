@@ -14,7 +14,7 @@ export interface NeuTextareaProps
 /**
  * NeuTextarea - Neumorphic Textarea Component
  *
- * A textarea component with neumorphic design following ICARUS OraclusX patterns.
+ * A textarea component with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports labels, character count, validation, and resizing options.
  *
  * @example

@@ -74,7 +74,7 @@ O Módulo de Produtos gerencia todo o catálogo de produtos médicos do hospital
 - **shadcn/ui** components
 - **Supabase** (data layer)
 - **Claude Sonnet 4** (AI predictions)
-- **OraclusX DS** (design)
+- **Dark Glass Medical** (design)
 
 ## 📊 Modelo de Dados
 
