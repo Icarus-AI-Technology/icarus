@@ -4,7 +4,7 @@ import {
   Brain, Zap, Webhook, TrendingUp, UserCog, FileSpreadsheet,
   Activity, Bell, MessageSquare, Video, Fingerprint, Workflow,
   Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye, Mail,
-  Plug, ListChecks
+  Plug, ListChecks, ClipboardList
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
@@ -21,6 +21,77 @@ export const navigationConfig = [
         category: 'Principal',
         description: 'Visão geral do sistema',
         isImplemented: true
+      }
+    ]
+  },
+  {
+    name: 'Cadastros & Gestão',
+    icon: ClipboardList,
+    routes: [
+      {
+        id: 'cadastros',
+        path: '/cadastros',
+        name: 'Cadastros',
+        icon: FileText,
+        category: 'Cadastros & Gestão',
+        description: 'Cadastros auxiliares do sistema',
+        isImplemented: true
+      },
+      {
+        id: 'contratos',
+        path: '/contratos',
+        name: 'Contratos',
+        icon: FileText,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
+      },
+      {
+        id: 'contabil',
+        path: '/contabil',
+        name: 'Contábil',
+        icon: FileSpreadsheet,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
+      },
+      {
+        id: 'rh',
+        path: '/rh',
+        name: 'RH & Pessoas',
+        icon: UserCog,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
+      },
+      {
+        id: 'usuarios',
+        path: '/usuarios',
+        name: 'Usuários',
+        icon: Users,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
+      },
+      {
+        id: 'configuracoes',
+        path: '/configuracoes',
+        name: 'Configurações',
+        icon: Settings,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
+      },
+      {
+        id: 'relatorios-financeiros',
+        path: '/relatorios-financeiros',
+        name: 'Relatórios Financeiros',
+        icon: BarChart3,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
+      },
+      {
+        id: 'hospitais',
+        path: '/hospitais',
+        name: 'Hospitais',
+        icon: Building2,
+        category: 'Cadastros & Gestão',
+        isImplemented: false
       }
     ]
   },
@@ -163,77 +234,6 @@ export const navigationConfig = [
         name: 'Grupos de Produtos',
         icon: Package,
         category: 'Compras & Fornecedores',
-        isImplemented: false
-      }
-    ]
-  },
-  {
-    name: 'Cadastros & Gestão',
-    icon: Settings,
-    routes: [
-      {
-        id: 'cadastros',
-        path: '/cadastros',
-        name: 'Cadastros',
-        icon: FileText,
-        category: 'Cadastros & Gestão',
-        description: 'Cadastros auxiliares do sistema',
-        isImplemented: true
-      },
-      {
-        id: 'contratos',
-        path: '/contratos',
-        name: 'Contratos',
-        icon: FileText,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'contabil',
-        path: '/contabil',
-        name: 'Contábil',
-        icon: FileSpreadsheet,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'rh',
-        path: '/rh',
-        name: 'RH & Pessoas',
-        icon: UserCog,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'usuarios',
-        path: '/usuarios',
-        name: 'Usuários',
-        icon: Users,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'configuracoes',
-        path: '/configuracoes',
-        name: 'Configurações',
-        icon: Settings,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'relatorios-financeiros',
-        path: '/relatorios-financeiros',
-        name: 'Relatórios Financeiros',
-        icon: BarChart3,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'hospitais',
-        path: '/hospitais',
-        name: 'Hospitais',
-        icon: Building2,
-        category: 'Cadastros & Gestão',
         isImplemented: false
       }
     ]

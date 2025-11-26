@@ -7,12 +7,16 @@ import { useTheme } from '@/hooks/useTheme'
 
 // Paleta de cores para ícones (sem repetição por categoria)
 const categoryColors: Record<string, string> = {
-  'Principal': '#6366F1',      // Indigo
-  'Core Business': '#2DD4BF',  // Teal
-  'Operações': '#8B5CF6',      // Purple
-  'Inteligência': '#F59E0B',   // Amber
-  'Integrações': '#3B82F6',    // Blue
-  'Administrativo': '#10B981', // Emerald
+  'Principal': '#6366F1',           // Indigo
+  'Cadastros & Gestão': '#F97316',  // Orange (laranja)
+  'Core Business': '#2DD4BF',       // Teal
+  'Compras & Fornecedores': '#8B5CF6', // Purple
+  'Operações & Logística': '#EC4899',  // Pink
+  'Analytics & BI': '#3B82F6',      // Blue
+  'Marketing & Vendas': '#10B981',  // Emerald
+  'Automação & IA': '#F59E0B',      // Amber
+  'Integrações': '#14B8A6',         // Cyan
+  'Dev Tools': '#A855F7',           // Violet
 }
 
 // Cores variadas para ícones de rotas (cíclico)
