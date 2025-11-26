@@ -208,7 +208,7 @@ export function HomePage() {
 
       {/* Header / Navbar - Neumorphic Glass (SEM borda) */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#15192B]/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="max-w-[1600px] mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo com Gradiente */}
             <div className="flex items-center gap-2 sm:gap-3">
