@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useSupabase } from '@/hooks/useSupabase'
-import { BrainCircuit, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft } from 'lucide-react'
+import { BrainCircuit, Eye, EyeOff, LogIn, Mail, Lock, Loader2, ChevronLeft, AlertTriangle } from 'lucide-react'
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const { supabase } = useSupabase()
+  const { supabase, isConfigured } = useSupabase()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -17,6 +17,13 @@ export function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError(null)
+
+    // Verificar se Supabase está configurado
+    if (!isConfigured) {
+      setError('Supabase não está configurado. Verifique as variáveis de ambiente VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.')
+      setLoading(false)
+      return
+    }
 
     try {
       // Autenticação via Supabase
@@ -34,13 +41,21 @@ export function LoginPage() {
       }
     } catch (err) {
       console.error('Login error:', err)
-      setError(
-        err instanceof Error
-          ? err.message === 'Invalid login credentials'
-            ? 'Email ou senha incorretos. Verifique suas credenciais.'
-            : err.message
-          : 'Não foi possível iniciar a sessão. Tente novamente.'
-      )
+      
+      // Tratamento de erros específicos
+      if (err instanceof Error) {
+        if (err.message === 'Invalid login credentials') {
+          setError('Email ou senha incorretos. Verifique suas credenciais.')
+        } else if (err.message === 'Failed to fetch' || err.message.includes('fetch')) {
+          setError('Erro de conexão com o servidor. Verifique sua internet ou tente novamente.')
+        } else if (err.message.includes('network')) {
+          setError('Erro de rede. Verifique sua conexão com a internet.')
+        } else {
+          setError(err.message)
+        }
+      } else {
+        setError('Não foi possível iniciar a sessão. Tente novamente.')
+      }
     } finally {
       setLoading(false)
     }
