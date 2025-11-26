@@ -15,12 +15,12 @@ export function IcarusBreadcrumbs() {
   // Always start with home
   breadcrumbs.push({
     name: 'Home',
-    path: '/',
+    path: '/dashboard',
     icon: Home
   })
 
   // Add current page if not home
-  if (currentRoute && pathname !== '/') {
+  if (currentRoute && pathname !== '/dashboard') {
     breadcrumbs.push({
       name: currentRoute.name,
       path: currentRoute.path,
@@ -29,25 +29,25 @@ export function IcarusBreadcrumbs() {
   }
 
   return (
-    <nav className="flex items-center space-x-2 text-sm text-muted-foreground">
+    <nav className="flex items-center space-x-2 text-sm">
       {breadcrumbs.map((crumb, index) => {
         const isLast = index === breadcrumbs.length - 1
         const Icon = crumb.icon
 
         return (
           <div key={crumb.path} className="flex items-center space-x-2">
-            {index > 0 && <ChevronRight className="h-4 w-4" />}
+            {index > 0 && <ChevronRight className="h-4 w-4 text-[#64748B]" />}
             {isLast ? (
-              <span className="flex items-center gap-1.5 font-medium text-foreground">
-                <Icon className="h-4 w-4" />
+              <span className="flex items-center gap-1.5 font-medium text-white">
+                <Icon className="h-4 w-4 text-[#6366F1]" strokeWidth={2} />
                 {crumb.name}
               </span>
             ) : (
               <Link
                 to={crumb.path}
-                className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+                className="flex items-center gap-1.5 text-[#94A3B8] hover:text-white transition-colors"
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4" strokeWidth={2} />
                 {crumb.name}
               </Link>
             )}

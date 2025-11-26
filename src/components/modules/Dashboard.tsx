@@ -7,12 +7,35 @@ import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton
 import { useDashboardKPIs, useDashboardStats } from '@/hooks/queries/useDashboardData'
 import {
   Calendar, DollarSign,
-  AlertCircle, Brain
+  AlertCircle, BrainCircuit
 } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
+
+// Custom tooltip style for charts
+const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div 
+        className="px-4 py-3 rounded-xl text-white"
+        style={{
+          background: '#1A1F35',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+        }}
+      >
+        <p className="text-sm font-medium text-[#94A3B8]">{label}</p>
+        <p className="text-lg font-bold text-white">
+          {typeof payload[0].value === 'number' && payload[0].value > 1000 
+            ? formatCurrency(payload[0].value) 
+            : payload[0].value}
+        </p>
+      </div>
+    )
+  }
+  return null
+}
 
 export function Dashboard() {
   // React Query hooks for data fetching
@@ -31,7 +54,7 @@ export function Dashboard() {
     return (
       <ModuleLoadingSkeleton
         title="Dashboard"
-        subtitle="Visão geral do sistema ICARUS v5.0"
+        subtitle="Visão geral do sistema ICARUS v5.1"
         kpiCount={4}
       />
     )
@@ -41,9 +64,9 @@ export function Dashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Visão geral do sistema ICARUS v5.0
+        <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
+        <p className="text-[#94A3B8]">
+          Visão geral do sistema ICARUS v5.1
         </p>
       </div>
 
@@ -85,17 +108,35 @@ export function Dashboard() {
         <KPICard
           title="IcarusBrain"
           value={(kpis?.aiStatus || 'offline') === 'online' ? 'Online' : 'Offline'}
-          icon={Brain}
+          icon={BrainCircuit}
           variant="primary"
         />
       </div>
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="ai">IA Insights</TabsTrigger>
+        <TabsList 
+          className="bg-[#15192B] p-1 rounded-xl"
+          style={{ boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)' }}
+        >
+          <TabsTrigger 
+            value="overview" 
+            className="data-[state=active]:bg-[#1A1F35] data-[state=active]:text-white text-[#94A3B8] rounded-lg px-4 py-2 transition-all"
+          >
+            Visão Geral
+          </TabsTrigger>
+          <TabsTrigger 
+            value="analytics"
+            className="data-[state=active]:bg-[#1A1F35] data-[state=active]:text-white text-[#94A3B8] rounded-lg px-4 py-2 transition-all"
+          >
+            Analytics
+          </TabsTrigger>
+          <TabsTrigger 
+            value="ai"
+            className="data-[state=active]:bg-[#1A1F35] data-[state=active]:text-white text-[#94A3B8] rounded-lg px-4 py-2 transition-all"
+          >
+            IA Insights
+          </TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -109,17 +150,17 @@ export function Dashboard() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip
-                      formatter={(value: number) => formatCurrency(value)}
-                    />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#252B44" />
+                    <XAxis dataKey="month" stroke="#64748B" fontSize={12} />
+                    <YAxis stroke="#64748B" fontSize={12} />
+                    <Tooltip content={<CustomTooltip />} />
                     <Line
                       type="monotone"
                       dataKey="valor"
                       stroke="#6366F1"
-                      strokeWidth={2}
+                      strokeWidth={3}
+                      dot={{ fill: '#6366F1', strokeWidth: 2 }}
+                      activeDot={{ r: 6, fill: '#818CF8' }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -134,11 +175,15 @@ export function Dashboard() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={surgeriesData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="dia" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="cirurgias" fill="#10B981" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#252B44" />
+                    <XAxis dataKey="dia" stroke="#64748B" fontSize={12} />
+                    <YAxis stroke="#64748B" fontSize={12} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar 
+                      dataKey="cirurgias" 
+                      fill="#10B981" 
+                      radius={[8, 8, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -167,7 +212,7 @@ export function Dashboard() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip content={<CustomTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -182,8 +227,12 @@ export function Dashboard() {
                 <CardTitle className="text-base">Taxa de Conversão</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">87.5%</div>
-                <Badge variant="success" className="mt-2">+5.2% este mês</Badge>
+                <div className="text-3xl font-bold text-white">87.5%</div>
+                <Badge 
+                  className="mt-2 bg-[#10B981]/20 text-[#10B981] border-none"
+                >
+                  +5.2% este mês
+                </Badge>
               </CardContent>
             </Card>
 
@@ -192,8 +241,12 @@ export function Dashboard() {
                 <CardTitle className="text-base">Tempo Médio Cirurgia</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">2h 45m</div>
-                <Badge variant="info" className="mt-2">-15 min vs média</Badge>
+                <div className="text-3xl font-bold text-white">2h 45m</div>
+                <Badge 
+                  className="mt-2 bg-[#3B82F6]/20 text-[#3B82F6] border-none"
+                >
+                  -15 min vs média
+                </Badge>
               </CardContent>
             </Card>
 
@@ -202,8 +255,12 @@ export function Dashboard() {
                 <CardTitle className="text-base">Satisfação Clientes</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">4.8/5.0</div>
-                <Badge variant="success" className="mt-2">Excelente</Badge>
+                <div className="text-3xl font-bold text-white">4.8/5.0</div>
+                <Badge 
+                  className="mt-2 bg-[#10B981]/20 text-[#10B981] border-none"
+                >
+                  Excelente
+                </Badge>
               </CardContent>
             </Card>
           </div>
@@ -213,43 +270,78 @@ export function Dashboard() {
         <TabsContent value="ai" className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-primary" />
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                    boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
+                  }}
+                >
+                  <BrainCircuit className="h-5 w-5 text-white" strokeWidth={2} />
+                </div>
                 <CardTitle>Insights de Inteligência Artificial</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900">
-                <div className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                  💡 Oportunidade de Otimização
+              <div 
+                className="p-4 rounded-xl"
+                style={{
+                  background: '#1A1F35',
+                  boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)',
+                  borderLeft: '4px solid #3B82F6'
+                }}
+              >
+                <div className="font-medium text-white mb-2 flex items-center gap-2">
+                  <span className="text-lg">💡</span> Oportunidade de Otimização
                 </div>
-                <p className="text-sm text-blue-700 dark:text-blue-300">
+                <p className="text-sm text-[#94A3B8]">
                   O IcarusBrain identificou que aumentar o estoque de produtos de Cardiologia
                   em 15% pode reduzir perdas de vendas em até R$ 12.500/mês.
                 </p>
-                <Badge variant="info" className="mt-2">Confiança: 92%</Badge>
+                <Badge className="mt-3 bg-[#3B82F6]/20 text-[#3B82F6] border-none">
+                  Confiança: 92%
+                </Badge>
               </div>
 
-              <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-900">
-                <div className="font-medium text-green-900 dark:text-green-100 mb-2">
-                  ✅ Previsão Positiva
+              <div 
+                className="p-4 rounded-xl"
+                style={{
+                  background: '#1A1F35',
+                  boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)',
+                  borderLeft: '4px solid #10B981'
+                }}
+              >
+                <div className="font-medium text-white mb-2 flex items-center gap-2">
+                  <span className="text-lg">✅</span> Previsão Positiva
                 </div>
-                <p className="text-sm text-green-700 dark:text-green-300">
+                <p className="text-sm text-[#94A3B8]">
                   Tendência de crescimento de 18% em cirurgias de Ortopedia
                   para o próximo trimestre baseado em dados históricos.
                 </p>
-                <Badge variant="success" className="mt-2">Confiança: 88%</Badge>
+                <Badge className="mt-3 bg-[#10B981]/20 text-[#10B981] border-none">
+                  Confiança: 88%
+                </Badge>
               </div>
 
-              <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-900">
-                <div className="font-medium text-yellow-900 dark:text-yellow-100 mb-2">
-                  ⚠️ Atenção Necessária
+              <div 
+                className="p-4 rounded-xl"
+                style={{
+                  background: '#1A1F35',
+                  boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)',
+                  borderLeft: '4px solid #F59E0B'
+                }}
+              >
+                <div className="font-medium text-white mb-2 flex items-center gap-2">
+                  <span className="text-lg">⚠️</span> Atenção Necessária
                 </div>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                <p className="text-sm text-[#94A3B8]">
                   3 clientes com alto risco de inadimplência detectados.
                   Recomenda-se contato proativo para negociação.
                 </p>
-                <Badge variant="warning" className="mt-2">Confiança: 85%</Badge>
+                <Badge className="mt-3 bg-[#F59E0B]/20 text-[#F59E0B] border-none">
+                  Confiança: 85%
+                </Badge>
               </div>
             </CardContent>
           </Card>

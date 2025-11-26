@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { ChevronDown, ChevronRight, Search, X } from 'lucide-react'
+import { ChevronDown, ChevronRight, Search, Menu, BrainCircuit } from 'lucide-react'
 import { navigationConfig } from '@/lib/data/navigation'
-import { Input } from '@/components/ui/Input'
-import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
 export function IcarusSidebar() {
@@ -31,50 +29,60 @@ export function IcarusSidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 h-screen bg-card border-r border-border transition-all duration-300 z-40",
+        "fixed left-0 top-0 h-screen bg-[#15192B] transition-all duration-300 z-40",
         isCollapsed ? "w-20" : "w-64"
       )}
+      style={{ boxShadow: '4px 0 20px rgba(0,0,0,0.3)' }}
     >
       {/* Header */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-border">
+      <div 
+        className="h-16 flex items-center justify-between px-4"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+      >
         {!isCollapsed && (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-white font-bold text-sm">IC</span>
+          <div className="flex items-center gap-3">
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ 
+                background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)',
+                boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
+              }}
+            >
+              <BrainCircuit className="w-6 h-6 text-white" strokeWidth={2} />
             </div>
             <div>
-              <div className="font-bold text-sm">ICARUS</div>
-              <div className="text-xs text-muted-foreground">v5.0.3</div>
+              <div className="font-bold text-white text-sm">ICARUS</div>
+              <div className="text-xs text-[#94A3B8]">v5.1.0</div>
             </div>
           </div>
         )}
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="ml-auto"
+          className="w-8 h-8 rounded-lg bg-[#1A1F35] flex items-center justify-center text-[#94A3B8] hover:text-white transition-colors ml-auto"
+          style={{ boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)' }}
         >
-          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <X className="h-4 w-4" />}
-        </Button>
+          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        </button>
       </div>
 
       {/* Search */}
       {!isCollapsed && (
-        <div className="p-3 border-b border-border">
+        <div className="p-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#64748B]" />
+            <input
               placeholder="Buscar módulos..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#1A1F35] text-white placeholder-[#64748B] text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30"
+              style={{ boxShadow: 'inset 3px 3px 6px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)' }}
             />
           </div>
         </div>
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto p-3 space-y-1 max-h-[calc(100vh-180px)]">
         {filteredNavigation.map((category) => {
           const isExpanded = expandedCategories.includes(category.name)
           const CategoryIcon = category.icon
@@ -85,19 +93,19 @@ export function IcarusSidebar() {
               <button
                 onClick={() => toggleCategory(category.name)}
                 className={cn(
-                  "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                  "hover:bg-accent hover:text-accent-foreground",
+                  "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                  "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]",
                   isCollapsed && "justify-center"
                 )}
               >
-                <CategoryIcon className="h-4 w-4 flex-shrink-0" />
+                <CategoryIcon className="h-5 w-5 flex-shrink-0 text-[#6366F1]" strokeWidth={2} />
                 {!isCollapsed && (
                   <>
                     <span className="flex-1 text-left">{category.name}</span>
                     {isExpanded ? (
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className="h-4 w-4 text-[#64748B]" />
                     ) : (
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4 text-[#64748B]" />
                     )}
                   </>
                 )}
@@ -116,16 +124,30 @@ export function IcarusSidebar() {
                         key={route.id}
                         to={route.path}
                         className={cn(
-                          "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
-                          "hover:bg-accent hover:text-accent-foreground",
-                          isActive && "bg-primary text-primary-foreground hover:bg-primary/90",
+                          "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-200",
+                          isActive 
+                            ? "bg-[#1A1F35] text-white" 
+                            : "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]/50",
                           !isImplemented && "opacity-50"
                         )}
+                        style={isActive ? { 
+                          boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)',
+                          borderLeft: '3px solid #6366F1'
+                        } : {}}
                       >
-                        <RouteIcon className="h-4 w-4 flex-shrink-0" />
+                        <RouteIcon 
+                          className={cn(
+                            "h-4 w-4 flex-shrink-0",
+                            isActive ? "text-[#6366F1]" : "text-[#64748B]"
+                          )} 
+                          strokeWidth={2} 
+                        />
                         <span className="flex-1">{route.name}</span>
                         {!isImplemented && (
-                          <span className="text-xs px-1.5 py-0.5 bg-yellow-500/10 text-yellow-500 rounded">
+                          <span 
+                            className="text-[10px] px-1.5 py-0.5 rounded-full"
+                            style={{ backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#F59E0B' }}
+                          >
                             Em breve
                           </span>
                         )}
@@ -141,9 +163,12 @@ export function IcarusSidebar() {
 
       {/* Footer */}
       {!isCollapsed && (
-        <div className="p-3 border-t border-border">
-          <div className="text-xs text-muted-foreground text-center">
-            © 2025 ICARUS AI Technology
+        <div 
+          className="p-4"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+        >
+          <div className="text-xs text-[#64748B] text-center">
+            © 2025 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#2DD4BF] font-medium">IcarusAI Technology</span>
           </div>
         </div>
       )}

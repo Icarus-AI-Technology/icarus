@@ -12,16 +12,11 @@ export interface NeomorphicIconBoxProps {
 /**
  * NeomorphicIconBox - Mini Card for Icons with Neuromorphic Effect
  * 
- * OraclusX Design System - ICARUS v5.0
+ * Dark Glass Medical Design System - ICARUS v5.1
  * 
  * Used in KPI Cards header section
- * 
- * @example
- * <NeomorphicIconBox 
- *   icon={Stethoscope} 
- *   colorVariant="cyan" 
- *   size="md" 
- * />
+ * - Dark background (#1A1F35) with inset shadow
+ * - Only the icon is colored (no gradient backgrounds)
  */
 export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
   icon: Icon,
@@ -30,9 +25,9 @@ export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
   className = '',
 }) => {
   const sizeMap = {
-    sm: 'w-8 h-8 min-w-[2rem] min-h-[2rem]',
-    md: 'w-10 h-10 min-w-[2.5rem] min-h-[2.5rem]',
-    lg: 'w-14 h-14 min-w-[3.5rem] min-h-[3.5rem]',
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-14 h-14',
   };
 
   const iconSizeMap = {
@@ -41,20 +36,17 @@ export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
     lg: 28,
   };
 
-  // Color variants for light mode
-  const colorVariants = {
-    cyan: 'bg-[#E0F2FE] text-[#0EA5E9]',
-    indigo: 'bg-[#E0E7FF] text-[#6366F1]',
-    green: 'bg-[#D1FAE5] text-[#10B981]',
-    purple: 'bg-[#EDE9FE] text-[#8B5CF6]',
-    orange: 'bg-[#FFEDD5] text-[#F59E0B]',
-    blue: 'bg-[#DBEAFE] text-[#3B82F6]',
-    red: 'bg-[#FEE2E2] text-[#EF4444]',
-    yellow: 'bg-[#FEF9C3] text-[#F59E0B]',
+  // Icon colors only (background is always dark)
+  const iconColors: Record<string, string> = {
+    cyan: '#2DD4BF',
+    indigo: '#6366F1',
+    green: '#10B981',
+    purple: '#8B5CF6',
+    orange: '#F59E0B',
+    blue: '#3B82F6',
+    red: '#EF4444',
+    yellow: '#F59E0B',
   };
-
-  // Dark mode: uniform blue background
-  const darkModeClasses = 'dark:bg-[#1e293b] dark:text-white dark:shadow-[-6px_-6px_12px_rgba(51,65,85,0.4),6px_6px_12px_rgba(0,0,0,0.6)]';
 
   const renderIcon = () => {
     if (React.isValidElement(Icon)) {
@@ -62,8 +54,14 @@ export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
     }
     
     if (typeof Icon === 'function') {
-      const IconComponent = Icon as React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
-      return <IconComponent size={iconSizeMap[size]} strokeWidth={2} className="stroke-current" />;
+      const IconComponent = Icon as React.ComponentType<{ size?: number; className?: string; strokeWidth?: number; style?: React.CSSProperties }>;
+      return (
+        <IconComponent 
+          size={iconSizeMap[size]} 
+          strokeWidth={2.5} 
+          style={{ color: iconColors[colorVariant] }}
+        />
+      );
     }
     
     return null;
@@ -72,16 +70,14 @@ export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
   return (
     <div
       className={cn(
-        'rounded-[10px]',
-        'flex items-center justify-center',
-        'bg-[var(--surface-raised)]',
-        'shadow-[4px_4px_8px_var(--shadow-dark),-4px_-4px_8px_var(--shadow-light)]',
-        'transition-all duration-300',
+        'rounded-xl flex items-center justify-center flex-shrink-0',
         sizeMap[size],
-        colorVariants[colorVariant],
-        darkModeClasses,
         className
       )}
+      style={{
+        background: '#1A1F35',
+        boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)',
+      }}
     >
       {renderIcon()}
     </div>
@@ -89,4 +85,3 @@ export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
 };
 
 NeomorphicIconBox.displayName = 'NeomorphicIconBox';
-
