@@ -55,7 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    // Use global scope to revoke all sessions across devices (security best practice)
+    await supabase.auth.signOut({ scope: 'global' })
   }
 
   const value = {

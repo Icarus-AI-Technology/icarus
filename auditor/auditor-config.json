@@ -1,0 +1,132 @@
+{
+  "agent": {
+    "name": "icarus-auditor",
+    "version": "2.0.0",
+    "description": "Sistema completo de auditoria automatizada para o projeto ICARUS"
+  },
+  "thresholds": {
+    "pass": {
+      "minScore": 80,
+      "status": "PASSED",
+      "icon": "✅"
+    },
+    "warning": {
+      "minScore": 60,
+      "status": "WARNING",
+      "icon": "⚠️"
+    },
+    "fail": {
+      "belowScore": 60,
+      "status": "FAILED",
+      "icon": "❌"
+    }
+  },
+  "weights": {
+    "frontend": 0.12,
+    "backend": 0.12,
+    "database": 0.18,
+    "security": 0.18,
+    "compliance": 0.15,
+    "performance": 0.10,
+    "ai": 0.05,
+    "vercel": 0.05,
+    "integrations": 0.05
+  },
+  "severityPenalties": {
+    "CRITICAL": 30,
+    "HIGH": 15,
+    "MEDIUM": 5,
+    "LOW": 2,
+    "INFO": 0
+  },
+  "gradeScale": {
+    "A": { "min": 90, "max": 100 },
+    "B": { "min": 80, "max": 89 },
+    "C": { "min": 70, "max": 79 },
+    "D": { "min": 60, "max": 69 },
+    "F": { "min": 0, "max": 59 }
+  },
+  "areas": {
+    "frontend": {
+      "enabled": true,
+      "weight": 0.12,
+      "description": "React, TypeScript, UI/UX",
+      "checklist": "checklists/FRONTEND.md"
+    },
+    "backend": {
+      "enabled": true,
+      "weight": 0.12,
+      "description": "Edge Functions, APIs",
+      "checklist": "checklists/BACKEND.md"
+    },
+    "database": {
+      "enabled": true,
+      "weight": 0.18,
+      "description": "Schema, RLS, Indexes",
+      "checklist": "checklists/DATABASE.md",
+      "requiresMCP": "supabase"
+    },
+    "security": {
+      "enabled": true,
+      "weight": 0.18,
+      "description": "Auth, Secrets, Validation",
+      "checklist": "checklists/SECURITY.md"
+    },
+    "compliance": {
+      "enabled": true,
+      "weight": 0.15,
+      "description": "ANVISA, LGPD, SEFAZ",
+      "checklist": "checklists/COMPLIANCE.md",
+      "requiresMCP": "supabase"
+    },
+    "performance": {
+      "enabled": true,
+      "weight": 0.10,
+      "description": "Web Vitals, Queries",
+      "checklist": "checklists/PERFORMANCE.md"
+    },
+    "ai": {
+      "enabled": true,
+      "weight": 0.05,
+      "description": "Chatbot, Embeddings",
+      "checklist": "checklists/AI.md"
+    },
+    "vercel": {
+      "enabled": true,
+      "weight": 0.05,
+      "description": "Deploy, Domains",
+      "checklist": "checklists/VERCEL.md",
+      "requiresMCP": "vercel"
+    },
+    "integrations": {
+      "enabled": true,
+      "weight": 0.05,
+      "description": "MS365, Pluggy, SEFAZ",
+      "checklist": "checklists/INTEGRATIONS.md"
+    }
+  },
+  "skipPatterns": [
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    "coverage",
+    ".next",
+    ".vercel"
+  ],
+  "output": {
+    "format": "markdown",
+    "savePath": "./audit-reports",
+    "includeTimestamp": true,
+    "includeHistory": true
+  },
+  "notifications": {
+    "enabled": false,
+    "slack": null,
+    "email": null
+  },
+  "schedule": {
+    "enabled": false,
+    "cron": "0 8 * * 1"
+  }
+}

@@ -186,8 +186,12 @@ export type Database = {
           hospital_id: string | null;
           medico_id: string | null;
           numero_protocolo: string;
-          nome_paciente: string;
-          cpf_paciente: string | null;
+          /** @deprecated Use paciente_iniciais instead - LGPD compliance */
+          nome_paciente?: string;
+          /** LGPD Compliant: Only patient initials (e.g., "J.S.") */
+          paciente_iniciais: string;
+          /** Hospital's internal patient reference ID */
+          paciente_ref_hospital: string | null;
           nome_procedimento: string;
           codigo_procedimento: string | null;
           data_agendada: string;

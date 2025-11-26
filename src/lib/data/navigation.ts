@@ -3,7 +3,8 @@ import {
   ShoppingCart, FileText, Settings, BarChart3, Truck, Shield,
   Brain, Zap, Webhook, TrendingUp, UserCog, FileSpreadsheet,
   Activity, Bell, MessageSquare, Video, Fingerprint, Workflow,
-  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye, Mail
+  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye, Mail,
+  Plug, ListChecks
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
@@ -449,6 +450,24 @@ export const navigationConfig: NavigationCategory[] = [
     name: 'Integrações',
     icon: Webhook,
     routes: [
+      {
+        id: 'integrations-dashboard',
+        path: '/integrations-dashboard',
+        name: 'Dashboard Integrações',
+        icon: Plug,
+        category: 'Integrações',
+        description: 'Monitoramento de integrações externas',
+        isImplemented: true
+      },
+      {
+        id: 'auditor-checklist-integrations',
+        path: '/auditor-checklist-integrations',
+        name: 'Auditoria Integrações',
+        icon: ListChecks,
+        category: 'Integrações',
+        description: 'Checklist de auditoria de integrações',
+        isImplemented: true
+      },
       {
         id: 'api-gateway',
         path: '/api-gateway',

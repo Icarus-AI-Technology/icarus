@@ -1,0 +1,292 @@
+# =====================================================
+# ICARUS AUDITOR - GitHub Actions Workflow
+# =====================================================
+# Este workflow executa auditorias automatizadas
+# =====================================================
+
+name: ICARUS Audit
+
+on:
+  # Execucao semanal (segunda as 8h UTC)
+  schedule:
+    - cron: '0 8 * * 1'
+
+  # Execucao em push para branches principais
+  push:
+    branches: [main, develop]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+  # Execucao em PRs
+  pull_request:
+    branches: [main, develop]
+
+  # Execucao manual
+  workflow_dispatch:
+    inputs:
+      full_audit:
+        description: 'Executar auditoria completa'
+        required: false
+        default: 'true'
+        type: boolean
+      areas:
+        description: 'Areas especificas (separadas por virgula)'
+        required: false
+        default: 'all'
+        type: string
+
+env:
+  NODE_VERSION: '20'
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+jobs:
+  # =========================================
+  # JOB 1: Auditoria de Codigo (Frontend/Backend)
+  # =========================================
+  code-audit:
+    name: Code Audit
+    runs-on: ubuntu-latest
+
+    outputs:
+      frontend_score: ${{ steps.frontend.outputs.score }}
+      backend_score: ${{ steps.backend.outputs.score }}
+      security_issues: ${{ steps.security.outputs.issues }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # Frontend Audit
+      - name: Frontend Audit
+        id: frontend
+        run: |
+          echo "## Frontend Audit" >> $GITHUB_STEP_SUMMARY
+
+          # TypeScript strict check
+          if grep -q '"strict": true' tsconfig.json; then
+            echo "TypeScript strict mode enabled" >> $GITHUB_STEP_SUMMARY
+            strict_pass=1
+          else
+            echo "TypeScript strict mode disabled" >> $GITHUB_STEP_SUMMARY
+            strict_pass=0
+          fi
+
+          # Any types check
+          any_count=$(grep -r ": any" src/ --include="*.ts" --include="*.tsx" 2>/dev/null | wc -l || echo 0)
+          echo "Any types found: $any_count" >> $GITHUB_STEP_SUMMARY
+
+          # ts-ignore check
+          ignore_count=$(grep -r "@ts-ignore" src/ --include="*.ts" --include="*.tsx" 2>/dev/null | wc -l || echo 0)
+          echo "ts-ignore found: $ignore_count" >> $GITHUB_STEP_SUMMARY
+
+          # Calculate score
+          score=100
+          score=$((score - any_count * 2))
+          score=$((score - ignore_count * 5))
+          [ $strict_pass -eq 0 ] && score=$((score - 15))
+          [ $score -lt 0 ] && score=0
+
+          echo "score=$score" >> $GITHUB_OUTPUT
+          echo "**Score: $score/100**" >> $GITHUB_STEP_SUMMARY
+
+      # Backend Audit
+      - name: Backend Audit
+        id: backend
+        run: |
+          echo "## Backend Audit" >> $GITHUB_STEP_SUMMARY
+
+          # Check Edge Functions structure
+          if [ -d "supabase/functions" ]; then
+            func_count=$(ls -d supabase/functions/*/ 2>/dev/null | wc -l || echo 0)
+            echo "Edge Functions folder found ($func_count functions)" >> $GITHUB_STEP_SUMMARY
+
+            # Check for error handling
+            error_handling=0
+            for dir in supabase/functions/*/; do
+              if [ -f "${dir}index.ts" ]; then
+                if grep -q "try {" "${dir}index.ts"; then
+                  error_handling=$((error_handling + 1))
+                fi
+              fi
+            done
+            echo "Functions with error handling: $error_handling/$func_count" >> $GITHUB_STEP_SUMMARY
+
+            score=100
+            [ $func_count -gt 0 ] && score=$((score - (func_count - error_handling) * 10))
+            [ $score -lt 0 ] && score=0
+          else
+            echo "Edge Functions folder not found" >> $GITHUB_STEP_SUMMARY
+            score=50
+          fi
+
+          echo "score=$score" >> $GITHUB_OUTPUT
+          echo "**Score: $score/100**" >> $GITHUB_STEP_SUMMARY
+
+      # Security Audit
+      - name: Security Audit
+        id: security
+        run: |
+          echo "## Security Audit" >> $GITHUB_STEP_SUMMARY
+
+          issues=0
+
+          # Check for hardcoded secrets
+          secrets_found=$(grep -rn "sk-[a-zA-Z0-9]\{48\}" src/ 2>/dev/null | wc -l || echo 0)
+          if [ $secrets_found -gt 0 ]; then
+            echo "Hardcoded OpenAI keys found: $secrets_found" >> $GITHUB_STEP_SUMMARY
+            issues=$((issues + secrets_found))
+          else
+            echo "No hardcoded OpenAI keys" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Check .gitignore
+          if grep -q "\.env" .gitignore 2>/dev/null; then
+            echo ".env in .gitignore" >> $GITHUB_STEP_SUMMARY
+          else
+            echo ".env NOT in .gitignore" >> $GITHUB_STEP_SUMMARY
+            issues=$((issues + 1))
+          fi
+
+          # Check for exposed service role
+          service_role=$(grep -rn "SUPABASE_SERVICE_ROLE" src/ --include="*.ts" --include="*.tsx" 2>/dev/null | grep -v "import.meta.env" | wc -l || echo 0)
+          if [ $service_role -gt 0 ]; then
+            echo "Service role key potentially exposed: $service_role occurrences" >> $GITHUB_STEP_SUMMARY
+            issues=$((issues + service_role * 10))
+          else
+            echo "No exposed service role key" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "issues=$issues" >> $GITHUB_OUTPUT
+          echo "**Issues found: $issues**" >> $GITHUB_STEP_SUMMARY
+
+      # TypeScript Check
+      - name: TypeScript Check
+        run: npx tsc --noEmit
+        continue-on-error: true
+
+      # Lint Check
+      - name: ESLint Check
+        run: npm run lint 2>&1 | tee lint-output.txt || true
+        continue-on-error: true
+
+      # Build Check
+      - name: Build Check
+        run: |
+          npm run build
+
+          echo "## Build Output" >> $GITHUB_STEP_SUMMARY
+
+          # Check bundle size
+          if [ -d "dist" ]; then
+            total_size=$(du -sh dist | cut -f1)
+            echo "Total build size: $total_size" >> $GITHUB_STEP_SUMMARY
+
+            # JS files
+            js_size=$(find dist -name "*.js" -exec du -ch {} + | tail -1 | cut -f1)
+            echo "JS bundle size: $js_size" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # =========================================
+  # JOB 2: Auditoria de Database
+  # =========================================
+  database-audit:
+    name: Database Audit
+    runs-on: ubuntu-latest
+    needs: code-audit
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Database Audit
+        run: |
+          echo "## Database Audit" >> $GITHUB_STEP_SUMMARY
+
+          # Check if we have Supabase credentials
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "Supabase credentials not configured" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          echo "Supabase credentials configured" >> $GITHUB_STEP_SUMMARY
+          echo "Database audit requires MCP connection" >> $GITHUB_STEP_SUMMARY
+
+  # =========================================
+  # JOB 3: Relatorio Final
+  # =========================================
+  report:
+    name: Generate Report
+    runs-on: ubuntu-latest
+    needs: [code-audit, database-audit]
+    if: always()
+
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "# ICARUS Audit Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "## Scores" >> $GITHUB_STEP_SUMMARY
+          echo "| Area | Score |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend | ${{ needs.code-audit.outputs.frontend_score }}/100 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend | ${{ needs.code-audit.outputs.backend_score }}/100 |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          security_issues=${{ needs.code-audit.outputs.security_issues }}
+          if [ "$security_issues" -gt "0" ]; then
+            echo "**Security Issues Found: $security_issues**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**No Security Issues Found**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Notify on Critical Issues
+        if: ${{ needs.code-audit.outputs.security_issues > 0 }}
+        run: |
+          echo "::warning::Security issues found! Review the audit report."
+
+  # =========================================
+  # JOB 4: Compliance Check (Weekly only)
+  # =========================================
+  compliance-audit:
+    name: Compliance Audit
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compliance Check
+        run: |
+          echo "## Compliance Audit" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Full compliance audit requires Supabase MCP connection" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Checks Required:" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] ANVISA - Rastreabilidade de produtos" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] ANVISA - Registro de lotes" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] LGPD - Minimizacao de dados" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] LGPD - Audit log integrity" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Run @auditor compliance in Claude Code for full audit**" >> $GITHUB_STEP_SUMMARY
