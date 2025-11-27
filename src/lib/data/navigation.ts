@@ -120,7 +120,7 @@ export const navigationConfig = [
         icon: Calendar,
         category: 'Cirurgias & Procedimentos',
         description: 'Gestão completa de cirurgias e procedimentos',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'licitacoes-propostas',
@@ -129,7 +129,7 @@ export const navigationConfig = [
         icon: Scale,
         category: 'Cirurgias & Procedimentos',
         description: 'Gestão de licitações públicas e propostas comerciais',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'tabela-precos-viewer',
@@ -138,7 +138,7 @@ export const navigationConfig = [
         icon: Eye,
         category: 'Cirurgias & Procedimentos',
         description: 'Visualização de tabelas de preços OPME',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'tabelas-precos-form',
@@ -147,7 +147,7 @@ export const navigationConfig = [
         icon: FileSpreadsheet,
         category: 'Cirurgias & Procedimentos',
         description: 'Cadastro e edição de tabelas de preços',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -162,7 +162,7 @@ export const navigationConfig = [
         icon: Brain,
         category: 'Estoque & Consignação',
         description: 'Gestão inteligente de estoque com IA preditiva',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'consignacao-avancada',
@@ -171,7 +171,7 @@ export const navigationConfig = [
         icon: Container,
         category: 'Estoque & Consignação',
         description: 'Gestão de kits consignados em hospitais',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'rastreabilidade-opme',
@@ -180,7 +180,7 @@ export const navigationConfig = [
         icon: Activity,
         category: 'Estoque & Consignação',
         description: 'Rastreabilidade RDC 59/2008 (lote, validade, nota fiscal)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'telemetria-iot',
@@ -189,7 +189,7 @@ export const navigationConfig = [
         icon: Gauge,
         category: 'Estoque & Consignação',
         description: 'Monitoramento IoT (temperatura, localização GPS)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'manutencao-preventiva',
@@ -198,7 +198,7 @@ export const navigationConfig = [
         icon: Settings,
         category: 'Estoque & Consignação',
         description: 'Manutenção preventiva de equipamentos OPME',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -333,7 +333,7 @@ export const navigationConfig = [
         icon: Receipt,
         category: 'Financeiro & Faturamento',
         description: 'Emissão de NF-e integrada com SEFAZ',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'gestao-contabil',

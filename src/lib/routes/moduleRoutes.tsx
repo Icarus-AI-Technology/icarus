@@ -14,6 +14,22 @@ const RHGestaoPessoas = lazy(() => import('@/components/modules/RHGestaoPessoas'
 const RelacionamentoCliente = lazy(() => import('@/components/modules/RelacionamentoCliente').then(m => ({ default: m.RelacionamentoCliente })))
 const GestaoLeads = lazy(() => import('@/components/modules/GestaoLeads').then(m => ({ default: m.GestaoLeads })))
 
+// Cirurgias & Procedimentos
+const CirurgiasProcedimentos = lazy(() => import('@/components/modules/CirurgiasProcedimentos').then(m => ({ default: m.CirurgiasProcedimentos })))
+const LicitacoesPropostas = lazy(() => import('@/components/modules/LicitacoesPropostas').then(m => ({ default: m.LicitacoesPropostas })))
+const TabelaPrecosViewer = lazy(() => import('@/components/modules/TabelaPrecosViewer').then(m => ({ default: m.TabelaPrecosViewer })))
+const TabelasPrecosForm = lazy(() => import('@/components/modules/TabelasPrecosForm').then(m => ({ default: m.TabelasPrecosForm })))
+
+// Estoque & Consignação
+const EstoqueIAModule = lazy(() => import('@/components/modules/EstoqueIAModule').then(m => ({ default: m.EstoqueIAModule })))
+const ConsignacaoAvancada = lazy(() => import('@/components/modules/ConsignacaoAvancada').then(m => ({ default: m.ConsignacaoAvancada })))
+const RastreabilidadeOPME = lazy(() => import('@/components/modules/RastreabilidadeOPME').then(m => ({ default: m.RastreabilidadeOPME })))
+const TelemetriaIoT = lazy(() => import('@/components/modules/TelemetriaIoT').then(m => ({ default: m.TelemetriaIoT })))
+const ManutencaoPreventiva = lazy(() => import('@/components/modules/ManutencaoPreventiva').then(m => ({ default: m.ManutencaoPreventiva })))
+
+// Financeiro & Faturamento
+const FaturamentoNFeCompleto = lazy(() => import('@/components/modules/FaturamentoNFeCompleto').then(m => ({ default: m.FaturamentoNFeCompleto })))
+
 // Dev Tools (mantidos para desenvolvimento)
 const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
 const ContactPage = lazy(() => import('@/pages/Contact'))
@@ -43,6 +59,22 @@ export const moduleComponents = {
   'rh-gestao-pessoas': RHGestaoPessoas,
   'relacionamento-cliente': RelacionamentoCliente,
   'gestao-leads': GestaoLeads,
+
+  // Cirurgias & Procedimentos
+  'cirurgias-procedimentos': CirurgiasProcedimentos,
+  'licitacoes-propostas': LicitacoesPropostas,
+  'tabela-precos-viewer': TabelaPrecosViewer,
+  'tabelas-precos-form': TabelasPrecosForm,
+
+  // Estoque & Consignação
+  'estoque-ia': EstoqueIAModule,
+  'consignacao-avancada': ConsignacaoAvancada,
+  'rastreabilidade-opme': RastreabilidadeOPME,
+  'telemetria-iot': TelemetriaIoT,
+  'manutencao-preventiva': ManutencaoPreventiva,
+
+  // Financeiro & Faturamento
+  'faturamento-nfe-completo': FaturamentoNFeCompleto,
 
   // Dev Tools
   'showcase': ShowcasePage,
