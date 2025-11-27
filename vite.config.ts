@@ -21,31 +21,67 @@ export default defineConfig(({ mode }) => ({
         drop_debugger: true,
       },
     },
-    // Code splitting for better caching
+    // Improved code splitting for better caching and smaller chunks
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks: (id) => {
           // Core React dependencies
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          // UI components
-          'vendor-ui': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-select',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-tooltip',
-          ],
+          if (id.includes('node_modules/react') || 
+              id.includes('node_modules/react-dom') || 
+              id.includes('node_modules/react-router')) {
+            return 'vendor-react'
+          }
+          // Radix UI components
+          if (id.includes('node_modules/@radix-ui')) {
+            return 'vendor-radix'
+          }
+          // HeroUI components
+          if (id.includes('node_modules/@heroui')) {
+            return 'vendor-heroui'
+          }
           // Data fetching
-          'vendor-query': ['@tanstack/react-query'],
+          if (id.includes('node_modules/@tanstack')) {
+            return 'vendor-query'
+          }
           // Charts (heavy)
-          'vendor-charts': ['recharts'],
+          if (id.includes('node_modules/recharts') || 
+              id.includes('node_modules/d3')) {
+            return 'vendor-charts'
+          }
           // Forms
-          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          if (id.includes('node_modules/react-hook-form') || 
+              id.includes('node_modules/@hookform') || 
+              id.includes('node_modules/zod')) {
+            return 'vendor-forms'
+          }
+          // Supabase
+          if (id.includes('node_modules/@supabase')) {
+            return 'vendor-supabase'
+          }
+          // Motion/Animation
+          if (id.includes('node_modules/motion') || 
+              id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion'
+          }
+          // Date utilities
+          if (id.includes('node_modules/date-fns')) {
+            return 'vendor-date'
+          }
+          // Lucide icons
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons'
+          }
+          // Other utilities
+          if (id.includes('node_modules/clsx') || 
+              id.includes('node_modules/tailwind-merge') ||
+              id.includes('node_modules/class-variance-authority')) {
+            return 'vendor-utils'
+          }
         },
       },
     },
-    // Chunk size warning limit
-    chunkSizeWarningLimit: 500,
+    // Chunk size warning limit (increased to 1000kb as per user request)
+    chunkSizeWarningLimit: 1000,
     // Disable source maps in production
     sourcemap: mode !== 'production',
   },
@@ -57,6 +93,8 @@ export default defineConfig(({ mode }) => ({
       'react-router-dom',
       '@tanstack/react-query',
       'zod',
+      'lucide-react',
+      'motion',
     ],
   },
 }))
