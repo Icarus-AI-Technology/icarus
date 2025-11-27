@@ -12,17 +12,17 @@ import { toast } from 'sonner'
  * const { data, create, update, remove } = useSupabaseCRUD('produtos', ['produtos'])
  */
 
-export interface UseSupabaseCRUDOptions<T> {
+export interface UseSupabaseCRUDOptions<T = unknown> {
   tableName: string
   queryKey: string[]
   select?: string
   orderBy?: { column: string; ascending?: boolean }
-  filters?: Record<string, any>
+  filters?: Record<string, unknown>
   onSuccess?: (message: string) => void
   onError?: (error: Error) => void
 }
 
-export function useSupabaseCRUD<T = any>({
+export function useSupabaseCRUD<T = unknown>({
   tableName,
   queryKey,
   select = '*',
@@ -72,7 +72,7 @@ export function useSupabaseCRUD<T = any>({
       if (error) throw error
       return data as T
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey })
       const message = 'Registro criado com sucesso'
       toast.success(message)

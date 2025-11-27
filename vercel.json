@@ -1,8 +1,21 @@
 {
+  "version": 2,
   "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
   "framework": "vite",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_SUPABASE_URL": "@supabase_url",
+    "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key",
+    "VITE_ANTHROPIC_API_KEY": "@anthropic_api_key",
+    "VITE_OPENAI_API_KEY": "@openai_api_key"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -28,18 +41,6 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=63072000; includeSubDomains; preload"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.supabase.co *.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https: *.supabase.co; font-src 'self' data:; connect-src 'self' *.supabase.co wss://*.supabase.co *.vercel-insights.com https://api.anthropic.com https://api.openai.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
         }
       ]
     },
