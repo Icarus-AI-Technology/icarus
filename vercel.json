@@ -2,15 +2,9 @@
   "version": 2,
   "buildCommand": "pnpm build",
   "devCommand": "pnpm dev",
-  "installCommand": "pnpm install",
+  "installCommand": "NODE_ENV=development pnpm install",
   "framework": "vite",
   "outputDirectory": "dist",
-  "env": {
-    "VITE_SUPABASE_URL": "@supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "VITE_ANTHROPIC_API_KEY": "@anthropic_api_key",
-    "VITE_OPENAI_API_KEY": "@openai_api_key"
-  },
   "build": {
     "env": {
       "NODE_ENV": "production"
