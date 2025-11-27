@@ -3,22 +3,20 @@ import { implementedRouteIds, type ImplementedRouteId } from '../data/navigation
 
 // Lazy load modules for better performance
 const Dashboard = lazy(() => import('@/components/modules/Dashboard').then(m => ({ default: m.Dashboard })))
-const EstoqueIA = lazy(() => import('@/components/modules/EstoqueIA').then(m => ({ default: m.EstoqueIA })))
-const Cirurgias = lazy(() => import('@/components/modules/Cirurgias').then(m => ({ default: m.Cirurgias })))
-const Financeiro = lazy(() => import('@/components/modules/Financeiro').then(m => ({ default: m.Financeiro })))
-const CRMVendas = lazy(() => import('@/components/modules/CRMVendas').then(m => ({ default: m.CRMVendas })))
-const ProdutosOPME = lazy(() => import('@/components/modules/ProdutosOPME').then(m => ({ default: m.ProdutosOPME })))
-const Compras = lazy(() => import('@/components/modules/Compras').then(m => ({ default: m.Compras })))
-const ContasReceber = lazy(() => import('@/components/modules/ContasReceber').then(m => ({ default: m.ContasReceber })))
-const FaturamentoNFe = lazy(() => import('@/components/modules/FaturamentoNFe').then(m => ({ default: m.FaturamentoNFe })))
-const Inventario = lazy(() => import('@/components/modules/Inventario').then(m => ({ default: m.Inventario })))
-const TabelaPrecos = lazy(() => import('@/components/modules/TabelaPrecos').then(m => ({ default: m.TabelaPrecos })))
-const Licitacoes = lazy(() => import('@/components/modules/Licitacoes').then(m => ({ default: m.Licitacoes })))
-const Cadastros = lazy(() => import('@/components/modules/Cadastros').then(m => ({ default: m.Cadastros })))
+
+// Cadastros & Gestão
+const GestaoCadastros = lazy(() => import('@/components/modules/GestaoCadastros').then(m => ({ default: m.GestaoCadastros })))
+const GruposProdutosOPME = lazy(() => import('@/components/modules/GruposProdutosOPME').then(m => ({ default: m.GruposProdutosOPME })))
+const GestaoUsuariosPermissoes = lazy(() => import('@/components/modules/GestaoUsuariosPermissoes').then(m => ({ default: m.GestaoUsuariosPermissoes })))
+const GestaoContratos = lazy(() => import('@/components/modules/GestaoContratos').then(m => ({ default: m.GestaoContratos })))
+const GestaoInventario = lazy(() => import('@/components/modules/GestaoInventario').then(m => ({ default: m.GestaoInventario })))
+const RHGestaoPessoas = lazy(() => import('@/components/modules/RHGestaoPessoas').then(m => ({ default: m.RHGestaoPessoas })))
+const RelacionamentoCliente = lazy(() => import('@/components/modules/RelacionamentoCliente').then(m => ({ default: m.RelacionamentoCliente })))
+const GestaoLeads = lazy(() => import('@/components/modules/GestaoLeads').then(m => ({ default: m.GestaoLeads })))
+
+// Dev Tools (mantidos para desenvolvimento)
 const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
 const ContactPage = lazy(() => import('@/pages/Contact'))
-const IntegrationsDashboard = lazy(() => import('@/components/modules/IntegrationsDashboard').then(m => ({ default: m.IntegrationsDashboard })))
-const AuditorChecklistIntegrations = lazy(() => import('@/components/modules/AuditorChecklistIntegrations').then(m => ({ default: m.AuditorChecklistIntegrations })))
 
 export type ModuleComponentMap = {
   [Key in ImplementedRouteId]: React.LazyExoticComponent<() => JSX.Element>
@@ -28,32 +26,23 @@ export type ModuleComponentMap = {
  * Module Route Mapping
  * Maps route IDs to their corresponding React components
  * Only implemented modules are listed here
+ * 
+ * FASE 0: Limpeza concluída - Apenas Dashboard mantido
+ * Módulos serão implementados em fases seguindo ICARUS-58-MODULOS
  */
 export const moduleComponents = {
   // Principal
   'dashboard': Dashboard,
 
-  // Core Business
-  'estoque-ia': EstoqueIA,
-  'cirurgias': Cirurgias,
-  'financeiro': Financeiro,
-  'crm-vendas': CRMVendas,
-  'produtos': ProdutosOPME,
-  'contas-receber': ContasReceber,
-  'faturamento': FaturamentoNFe,
-  'inventario': Inventario,
-  'tabela-precos': TabelaPrecos,
-
-  // Compras & Fornecedores
-  'compras': Compras,
-  'licitacoes': Licitacoes,
-
   // Cadastros & Gestão
-  'cadastros': Cadastros,
-
-  // Integrações
-  'integrations-dashboard': IntegrationsDashboard,
-  'auditor-checklist-integrations': AuditorChecklistIntegrations,
+  'gestao-cadastros': GestaoCadastros,
+  'grupos-produtos-opme': GruposProdutosOPME,
+  'usuarios-permissoes': GestaoUsuariosPermissoes,
+  'gestao-contratos': GestaoContratos,
+  'gestao-inventario': GestaoInventario,
+  'rh-gestao-pessoas': RHGestaoPessoas,
+  'relacionamento-cliente': RelacionamentoCliente,
+  'gestao-leads': GestaoLeads,
 
   // Dev Tools
   'showcase': ShowcasePage,

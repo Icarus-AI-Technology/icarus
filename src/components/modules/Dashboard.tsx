@@ -127,6 +127,79 @@ export function Dashboard() {
         />
       </div>
 
+      {/* Ações Rápidas */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Activity className="w-5 h-5 text-[#6366F1]" />
+            Ações Rápidas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Nova Cirurgia */}
+            <button
+              className={`p-4 rounded-xl text-left transition-all duration-200 ${
+                isDark
+                  ? 'bg-[#1A1F35] hover:bg-[#1F2440] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
+                  : 'bg-slate-50 hover:bg-slate-100 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
+              }`}
+              onClick={() => window.location.href = '/cirurgias-procedimentos'}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#2DD4BF]/20 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-[#2DD4BF]" />
+                </div>
+                <div>
+                  <div className={`font-semibold ${textPrimary}`}>Nova Cirurgia</div>
+                  <div className={`text-sm ${textSecondary}`}>Agendar procedimento</div>
+                </div>
+              </div>
+            </button>
+
+            {/* Adicionar Produto */}
+            <button
+              className={`p-4 rounded-xl text-left transition-all duration-200 ${
+                isDark
+                  ? 'bg-[#1A1F35] hover:bg-[#1F2440] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
+                  : 'bg-slate-50 hover:bg-slate-100 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
+              }`}
+              onClick={() => window.location.href = '/grupos-produtos-opme'}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-[#8B5CF6]" />
+                </div>
+                <div>
+                  <div className={`font-semibold ${textPrimary}`}>Adicionar Produto</div>
+                  <div className={`text-sm ${textSecondary}`}>Cadastrar OPME</div>
+                </div>
+              </div>
+            </button>
+
+            {/* Emitir NFe */}
+            <button
+              className={`p-4 rounded-xl text-left transition-all duration-200 ${
+                isDark
+                  ? 'bg-[#1A1F35] hover:bg-[#1F2440] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
+                  : 'bg-slate-50 hover:bg-slate-100 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
+              }`}
+              onClick={() => window.location.href = '/faturamento-nfe-completo'}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#10B981]/20 flex items-center justify-center">
+                  <DollarSign className="w-5 h-5 text-[#10B981]" />
+                </div>
+                <div>
+                  <div className={`font-semibold ${textPrimary}`}>Emitir NFe</div>
+                  <div className={`text-sm ${textSecondary}`}>Nota fiscal eletrônica</div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList 

@@ -1,13 +1,20 @@
 import {
-  LayoutDashboard, Package, Calendar, DollarSign, Users, Building2,
+  LayoutDashboard, Package, Calendar, DollarSign, Users,
   ShoppingCart, FileText, Settings, BarChart3, Truck, Shield,
   Brain, Zap, Webhook, TrendingUp, UserCog, FileSpreadsheet,
   Activity, Bell, MessageSquare, Video, Fingerprint, Workflow,
-  Globe, Lock, ClipboardCheck, Heart, Boxes, Factory, Eye, Mail,
-  Plug, ListChecks, ClipboardList
+  Globe, Lock, ClipboardCheck, Heart, Boxes, Eye, Mail,
+  Plug, ClipboardList, PieChart, Briefcase, Scale,
+  Receipt, FileCheck, Container, FileCog, Database,
+  UserPlus, Target, Megaphone, HeartHandshake, Mic, Gauge
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
+/**
+ * ICARUS v5.0 - Navegação Completa dos 58 Módulos
+ * Organização: 10 categorias conforme documentação oficial
+ * Fase 0: Apenas Dashboard implementado, demais módulos serão implementados em fases
+ */
 export const navigationConfig = [
   {
     name: 'Principal',
@@ -19,7 +26,7 @@ export const navigationConfig = [
         name: 'Dashboard',
         icon: LayoutDashboard,
         category: 'Principal',
-        description: 'Visão geral do sistema',
+        description: 'Visão geral do sistema com KPIs e ações rápidas',
         isImplemented: true
       }
     ]
@@ -29,156 +36,169 @@ export const navigationConfig = [
     icon: ClipboardList,
     routes: [
       {
-        id: 'cadastros',
-        path: '/cadastros',
-        name: 'Cadastros',
+        id: 'gestao-cadastros',
+        path: '/gestao-cadastros',
+        name: 'Gestão de Cadastros',
         icon: FileText,
         category: 'Cadastros & Gestão',
-        description: 'Cadastros auxiliares do sistema',
+        description: 'Cadastros auxiliares (médicos, hospitais, pacientes, convênios)',
         isImplemented: true
       },
       {
-        id: 'contratos',
-        path: '/contratos',
-        name: 'Contratos',
-        icon: FileText,
+        id: 'grupos-produtos-opme',
+        path: '/grupos-produtos-opme',
+        name: 'Grupos Produtos OPME',
+        icon: Boxes,
         category: 'Cadastros & Gestão',
-        isImplemented: false
+        description: 'Grupos e categorias de produtos OPME',
+        isImplemented: true
       },
       {
-        id: 'contabil',
-        path: '/contabil',
-        name: 'Contábil',
-        icon: FileSpreadsheet,
-        category: 'Cadastros & Gestão',
-        isImplemented: false
-      },
-      {
-        id: 'rh',
-        path: '/rh',
-        name: 'RH & Pessoas',
+        id: 'usuarios-permissoes',
+        path: '/usuarios-permissoes',
+        name: 'Usuários e Permissões',
         icon: UserCog,
         category: 'Cadastros & Gestão',
-        isImplemented: false
+        description: 'Gestão de usuários e controle de acesso (RBAC)',
+        isImplemented: true
       },
       {
-        id: 'usuarios',
-        path: '/usuarios',
-        name: 'Usuários',
+        id: 'gestao-contratos',
+        path: '/gestao-contratos',
+        name: 'Gestão de Contratos',
+        icon: FileCheck,
+        category: 'Cadastros & Gestão',
+        description: 'Contratos com hospitais, fornecedores e convênios',
+        isImplemented: true
+      },
+      {
+        id: 'gestao-inventario',
+        path: '/gestao-inventario',
+        name: 'Gestão de Inventário',
+        icon: ClipboardCheck,
+        category: 'Cadastros & Gestão',
+        description: 'Inventário físico periódico de estoque',
+        isImplemented: true
+      },
+      {
+        id: 'rh-gestao-pessoas',
+        path: '/rh-gestao-pessoas',
+        name: 'RH Gestão de Pessoas',
         icon: Users,
         category: 'Cadastros & Gestão',
+        description: 'Recursos Humanos e gestão de equipes',
+        isImplemented: true
+      },
+      {
+        id: 'relacionamento-cliente',
+        path: '/relacionamento-cliente',
+        name: 'Relacionamento Cliente',
+        icon: HeartHandshake,
+        category: 'Cadastros & Gestão',
+        description: 'Relacionamento e suporte pós-venda',
+        isImplemented: true
+      },
+      {
+        id: 'gestao-leads',
+        path: '/gestao-leads',
+        name: 'Gestão de Leads',
+        icon: UserPlus,
+        category: 'Cadastros & Gestão',
+        description: 'Qualificação e conversão de leads',
+        isImplemented: true
+      }
+    ]
+  },
+  {
+    name: 'Cirurgias & Procedimentos',
+    icon: Calendar,
+    routes: [
+      {
+        id: 'cirurgias-procedimentos',
+        path: '/cirurgias-procedimentos',
+        name: 'Cirurgias e Procedimentos',
+        icon: Calendar,
+        category: 'Cirurgias & Procedimentos',
+        description: 'Gestão completa de cirurgias e procedimentos',
         isImplemented: false
       },
       {
-        id: 'configuracoes',
-        path: '/configuracoes',
-        name: 'Configurações',
-        icon: Settings,
-        category: 'Cadastros & Gestão',
+        id: 'licitacoes-propostas',
+        path: '/licitacoes-propostas',
+        name: 'Licitações e Propostas',
+        icon: Scale,
+        category: 'Cirurgias & Procedimentos',
+        description: 'Gestão de licitações públicas e propostas comerciais',
         isImplemented: false
       },
       {
-        id: 'relatorios-financeiros',
-        path: '/relatorios-financeiros',
-        name: 'Relatórios Financeiros',
-        icon: BarChart3,
-        category: 'Cadastros & Gestão',
+        id: 'tabela-precos-viewer',
+        path: '/tabela-precos-viewer',
+        name: 'Tabela Preços Viewer',
+        icon: Eye,
+        category: 'Cirurgias & Procedimentos',
+        description: 'Visualização de tabelas de preços OPME',
         isImplemented: false
       },
       {
-        id: 'hospitais',
-        path: '/hospitais',
-        name: 'Hospitais',
-        icon: Building2,
-        category: 'Cadastros & Gestão',
+        id: 'tabelas-precos-form',
+        path: '/tabelas-precos-form',
+        name: 'Tabelas Preços Form',
+        icon: FileSpreadsheet,
+        category: 'Cirurgias & Procedimentos',
+        description: 'Cadastro e edição de tabelas de preços',
         isImplemented: false
       }
     ]
   },
   {
-    name: 'Core Business',
+    name: 'Estoque & Consignação',
     icon: Package,
     routes: [
       {
         id: 'estoque-ia',
         path: '/estoque-ia',
         name: 'Estoque IA',
-        icon: Package,
-        category: 'Core Business',
-        description: 'Gestão inteligente de estoque',
-        isImplemented: true
+        icon: Brain,
+        category: 'Estoque & Consignação',
+        description: 'Gestão inteligente de estoque com IA preditiva',
+        isImplemented: false
       },
       {
-        id: 'cirurgias',
-        path: '/cirurgias',
-        name: 'Cirurgias',
-        icon: Calendar,
-        category: 'Core Business',
-        description: 'Gestão de procedimentos cirúrgicos',
-        isImplemented: true
+        id: 'consignacao-avancada',
+        path: '/consignacao-avancada',
+        name: 'Consignação Avançada',
+        icon: Container,
+        category: 'Estoque & Consignação',
+        description: 'Gestão de kits consignados em hospitais',
+        isImplemented: false
       },
       {
-        id: 'financeiro',
-        path: '/financeiro',
-        name: 'Financeiro',
-        icon: DollarSign,
-        category: 'Core Business',
-        description: 'Gestão financeira avançada',
-        isImplemented: true
+        id: 'rastreabilidade-opme',
+        path: '/rastreabilidade-opme',
+        name: 'Rastreabilidade OPME',
+        icon: Activity,
+        category: 'Estoque & Consignação',
+        description: 'Rastreabilidade RDC 59/2008 (lote, validade, nota fiscal)',
+        isImplemented: false
       },
       {
-        id: 'crm-vendas',
-        path: '/crm-vendas',
-        name: 'CRM & Vendas',
-        icon: Users,
-        category: 'Core Business',
-        description: 'Gestão de clientes e vendas',
-        isImplemented: true
+        id: 'telemetria-iot',
+        path: '/telemetria-iot',
+        name: 'Telemetria IoT',
+        icon: Gauge,
+        category: 'Estoque & Consignação',
+        description: 'Monitoramento IoT (temperatura, localização GPS)',
+        isImplemented: false
       },
       {
-        id: 'produtos',
-        path: '/produtos',
-        name: 'Produtos OPME',
-        icon: Boxes,
-        category: 'Core Business',
-        description: 'Cadastro de produtos OPME',
-        isImplemented: true
-      },
-      {
-        id: 'contas-receber',
-        path: '/contas-receber',
-        name: 'Contas a Receber',
-        icon: FileSpreadsheet,
-        category: 'Core Business',
-        description: 'Gestão completa de recebíveis',
-        isImplemented: true
-      },
-      {
-        id: 'faturamento',
-        path: '/faturamento',
-        name: 'Faturamento NFe',
-        icon: FileText,
-        category: 'Core Business',
-        description: 'Emissão de notas fiscais eletrônicas',
-        isImplemented: true
-      },
-      {
-        id: 'inventario',
-        path: '/inventario',
-        name: 'Inventário',
-        icon: ClipboardCheck,
-        category: 'Core Business',
-        description: 'Controle de inventário físico',
-        isImplemented: true
-      },
-      {
-        id: 'tabela-precos',
-        path: '/tabela-precos',
-        name: 'Tabela de Preços',
-        icon: DollarSign,
-        category: 'Core Business',
-        description: 'Gestão de tabelas de preços',
-        isImplemented: true
+        id: 'manutencao-preventiva',
+        path: '/manutencao-preventiva',
+        name: 'Manutenção Preventiva',
+        icon: Settings,
+        category: 'Estoque & Consignação',
+        description: 'Manutenção preventiva de equipamentos OPME',
+        isImplemented: false
       }
     ]
   },
@@ -187,20 +207,21 @@ export const navigationConfig = [
     icon: ShoppingCart,
     routes: [
       {
-        id: 'compras',
-        path: '/compras',
+        id: 'gestao-compras',
+        path: '/gestao-compras',
         name: 'Gestão de Compras',
         icon: ShoppingCart,
         category: 'Compras & Fornecedores',
-        description: 'Gestão completa de compras e fornecedores',
-        isImplemented: true
+        description: 'Gestão completa de compras e cotações',
+        isImplemented: false
       },
       {
         id: 'notas-compra',
         path: '/notas-compra',
         name: 'Notas de Compra',
-        icon: FileText,
+        icon: Receipt,
         category: 'Compras & Fornecedores',
+        description: 'Registro e validação de notas fiscais de compra',
         isImplemented: false
       },
       {
@@ -209,6 +230,7 @@ export const navigationConfig = [
         name: 'Compras Internacionais',
         icon: Globe,
         category: 'Compras & Fornecedores',
+        description: 'Importação de produtos OPME (SISCOMEX)',
         isImplemented: false
       },
       {
@@ -217,183 +239,166 @@ export const navigationConfig = [
         name: 'Viabilidade Importação',
         icon: TrendingUp,
         category: 'Compras & Fornecedores',
+        description: 'Análise de viabilidade financeira de importações',
+        isImplemented: false
+      }
+    ]
+  },
+  {
+    name: 'Vendas & CRM',
+    icon: Briefcase,
+    routes: [
+      {
+        id: 'crm-vendas',
+        path: '/crm-vendas',
+        name: 'CRM Vendas',
+        icon: Users,
+        category: 'Vendas & CRM',
+        description: 'CRM completo com funil de vendas',
         isImplemented: false
       },
       {
-        id: 'licitacoes',
-        path: '/licitacoes',
-        name: 'Licitações',
+        id: 'campanhas-marketing',
+        path: '/campanhas-marketing',
+        name: 'Campanhas Marketing',
+        icon: Megaphone,
+        category: 'Vendas & CRM',
+        description: 'Gestão de campanhas de marketing digital',
+        isImplemented: false
+      },
+      {
+        id: 'tabelas-precos-import',
+        path: '/tabelas-precos-import',
+        name: 'Tabelas Preços Import',
         icon: FileSpreadsheet,
-        category: 'Compras & Fornecedores',
-        description: 'Gestão de licitações públicas',
-        isImplemented: true
-      },
-      {
-        id: 'grupos-produtos',
-        path: '/grupos-produtos',
-        name: 'Grupos de Produtos',
-        icon: Package,
-        category: 'Compras & Fornecedores',
-        isImplemented: false
-      }
-    ]
-  },
-  {
-    name: 'Operações & Logística',
-    icon: Truck,
-    routes: [
-      {
-        id: 'logistica',
-        path: '/logistica',
-        name: 'Logística',
-        icon: Truck,
-        category: 'Operações & Logística',
+        category: 'Vendas & CRM',
+        description: 'Importação em massa de tabelas de preços',
         isImplemented: false
       },
       {
-        id: 'transportadoras',
-        path: '/transportadoras',
-        name: 'Transportadoras',
-        icon: Truck,
-        category: 'Operações & Logística',
-        isImplemented: false
-      },
-      {
-        id: 'consignacao',
-        path: '/consignacao',
-        name: 'Consignação',
-        icon: Package,
-        category: 'Operações & Logística',
-        isImplemented: false
-      },
-      {
-        id: 'rastreabilidade',
-        path: '/rastreabilidade',
-        name: 'Rastreabilidade',
-        icon: Activity,
-        category: 'Operações & Logística',
-        isImplemented: false
-      },
-      {
-        id: 'manutencao',
-        path: '/manutencao',
-        name: 'Manutenção',
-        icon: Settings,
-        category: 'Operações & Logística',
-        isImplemented: false
-      },
-      {
-        id: 'qualidade',
-        path: '/qualidade',
-        name: 'Qualidade',
+        id: 'qualidade-certificacao',
+        path: '/qualidade-certificacao',
+        name: 'Qualidade Certificação',
         icon: Shield,
-        category: 'Operações & Logística',
+        category: 'Vendas & CRM',
+        description: 'Gestão de qualidade e certificações (ISO, ANVISA)',
         isImplemented: false
       },
       {
-        id: 'compliance',
-        path: '/compliance',
-        name: 'Compliance',
-        icon: Lock,
-        category: 'Operações & Logística',
+        id: 'video-calls-manager',
+        path: '/video-calls-manager',
+        name: 'Video Calls Manager',
+        icon: Video,
+        category: 'Vendas & CRM',
+        description: 'Videochamadas integradas para atendimento',
         isImplemented: false
       }
     ]
   },
   {
-    name: 'Analytics & BI',
-    icon: BarChart3,
+    name: 'Financeiro & Faturamento',
+    icon: DollarSign,
     routes: [
       {
-        id: 'analytics-bi',
-        path: '/analytics-bi',
-        name: 'Analytics BI',
-        icon: BarChart3,
-        category: 'Analytics & BI',
+        id: 'financeiro-avancado',
+        path: '/financeiro-avancado',
+        name: 'Financeiro Avançado',
+        icon: DollarSign,
+        category: 'Financeiro & Faturamento',
+        description: 'Gestão financeira completa (contas a pagar/receber)',
         isImplemented: false
       },
       {
-        id: 'analytics-predicao',
-        path: '/analytics-predicao',
-        name: 'Predição',
+        id: 'contas-receber-ia',
+        path: '/contas-receber-ia',
+        name: 'Contas a Receber IA',
         icon: TrendingUp,
-        category: 'Analytics & BI',
+        category: 'Financeiro & Faturamento',
+        description: 'Gestão de recebíveis com IA (score inadimplência)',
         isImplemented: false
       },
       {
-        id: 'kpi-dashboard',
-        path: '/kpi-dashboard',
-        name: 'KPI Dashboard',
-        icon: Activity,
-        category: 'Analytics & BI',
-        isImplemented: false
-      },
-      {
-        id: 'bi-interactive',
-        path: '/bi-interactive',
-        name: 'BI Interativo',
-        icon: BarChart3,
-        category: 'Analytics & BI',
-        isImplemented: false
-      },
-      {
-        id: 'relatorios-executivos',
-        path: '/relatorios-executivos',
-        name: 'Relatórios Executivos',
+        id: 'faturamento-avancado',
+        path: '/faturamento-avancado',
+        name: 'Faturamento Avançado',
         icon: FileText,
-        category: 'Analytics & BI',
+        category: 'Financeiro & Faturamento',
+        description: 'Faturamento hospitalar (TISS, AMB, CBHPM)',
+        isImplemented: false
+      },
+      {
+        id: 'faturamento-nfe-completo',
+        path: '/faturamento-nfe-completo',
+        name: 'Faturamento NFe',
+        icon: Receipt,
+        category: 'Financeiro & Faturamento',
+        description: 'Emissão de NF-e integrada com SEFAZ',
+        isImplemented: false
+      },
+      {
+        id: 'gestao-contabil',
+        path: '/gestao-contabil',
+        name: 'Gestão Contábil',
+        icon: FileSpreadsheet,
+        category: 'Financeiro & Faturamento',
+        description: 'Contabilidade e plano de contas',
+        isImplemented: false
+      },
+      {
+        id: 'relatorios-financeiros',
+        path: '/relatorios-financeiros',
+        name: 'Relatórios Financeiros',
+        icon: BarChart3,
+        category: 'Financeiro & Faturamento',
+        description: 'Relatórios financeiros gerenciais (DRE, Fluxo de Caixa)',
         isImplemented: false
       },
       {
         id: 'relatorios-regulatorios',
         path: '/relatorios-regulatorios',
         name: 'Relatórios Regulatórios',
-        icon: ClipboardCheck,
-        category: 'Analytics & BI',
-        isImplemented: false
-      },
-      {
-        id: 'system-health',
-        path: '/system-health',
-        name: 'System Health',
-        icon: Heart,
-        category: 'Analytics & BI',
+        icon: FileCheck,
+        category: 'Financeiro & Faturamento',
+        description: 'Relatórios regulatórios (SPED, DCTF, DIRF)',
         isImplemented: false
       }
     ]
   },
   {
-    name: 'Marketing & Vendas',
-    icon: TrendingUp,
+    name: 'Compliance & Auditoria',
+    icon: Lock,
     routes: [
       {
-        id: 'leads',
-        path: '/leads',
-        name: 'Leads',
-        icon: Users,
-        category: 'Marketing & Vendas',
+        id: 'compliance-auditoria',
+        path: '/compliance-auditoria',
+        name: 'Compliance e Auditoria',
+        icon: Shield,
+        category: 'Compliance & Auditoria',
+        description: 'Auditoria interna e compliance regulatório',
         isImplemented: false
       },
       {
-        id: 'campanhas',
-        path: '/campanhas',
-        name: 'Campanhas',
+        id: 'compliance-avancado',
+        path: '/compliance-avancado',
+        name: 'Compliance Avançado',
+        icon: Lock,
+        category: 'Compliance & Auditoria',
+        description: 'Compliance avançado (LGPD, ISO 27001, 21 CFR Part 11)',
+        isImplemented: false
+      },
+      {
+        id: 'notificacoes-inteligentes',
+        path: '/notificacoes-inteligentes',
+        name: 'Notificações Inteligentes',
         icon: Bell,
-        category: 'Marketing & Vendas',
-        isImplemented: false
-      },
-      {
-        id: 'relacionamento',
-        path: '/relacionamento',
-        name: 'Relacionamento',
-        icon: MessageSquare,
-        category: 'Marketing & Vendas',
+        category: 'Compliance & Auditoria',
+        description: 'Sistema de notificações inteligentes e alertas',
         isImplemented: false
       }
     ]
   },
   {
-    name: 'Automação & IA',
+    name: 'IA & Automação',
     icon: Brain,
     routes: [
       {
@@ -401,23 +406,17 @@ export const navigationConfig = [
         path: '/ia-central',
         name: 'IA Central',
         icon: Brain,
-        category: 'Automação & IA',
+        category: 'IA & Automação',
+        description: 'Centro de controle de IA (IcarusBrain)',
         isImplemented: false
       },
       {
         id: 'automacao-ia',
         path: '/automacao-ia',
-        name: 'Automação',
+        name: 'Automação IA',
         icon: Zap,
-        category: 'Automação & IA',
-        isImplemented: false
-      },
-      {
-        id: 'notificacoes-inteligentes',
-        path: '/notificacoes-inteligentes',
-        name: 'Notificações',
-        icon: Bell,
-        category: 'Automação & IA',
+        category: 'IA & Automação',
+        description: 'Automações inteligentes baseadas em IA',
         isImplemented: false
       },
       {
@@ -425,15 +424,8 @@ export const navigationConfig = [
         path: '/chatbot-metrics',
         name: 'Chatbot Metrics',
         icon: MessageSquare,
-        category: 'Automação & IA',
-        isImplemented: false
-      },
-      {
-        id: 'tooltip-analytics',
-        path: '/tooltip-analytics',
-        name: 'Tooltip Analytics',
-        icon: Activity,
-        category: 'Automação & IA',
+        category: 'IA & Automação',
+        description: 'Métricas e análises do chatbot IA',
         isImplemented: false
       },
       {
@@ -441,63 +433,8 @@ export const navigationConfig = [
         path: '/voice-analytics',
         name: 'Voice Analytics',
         icon: Activity,
-        category: 'Automação & IA',
-        isImplemented: false
-      }
-    ]
-  },
-  {
-    name: 'Integrações',
-    icon: Webhook,
-    routes: [
-      {
-        id: 'integrations-dashboard',
-        path: '/integrations-dashboard',
-        name: 'Dashboard Integrações',
-        icon: Plug,
-        category: 'Integrações',
-        description: 'Monitoramento de integrações externas',
-        isImplemented: true
-      },
-      {
-        id: 'auditor-checklist-integrations',
-        path: '/auditor-checklist-integrations',
-        name: 'Auditoria Integrações',
-        icon: ListChecks,
-        category: 'Integrações',
-        description: 'Checklist de auditoria de integrações',
-        isImplemented: true
-      },
-      {
-        id: 'api-gateway',
-        path: '/api-gateway',
-        name: 'API Gateway',
-        icon: Webhook,
-        category: 'Integrações',
-        isImplemented: false
-      },
-      {
-        id: 'integracoes',
-        path: '/integracoes',
-        name: 'Integrações',
-        icon: Globe,
-        category: 'Integrações',
-        isImplemented: false
-      },
-      {
-        id: 'integrations-manager',
-        path: '/integrations-manager',
-        name: 'Integrations Manager',
-        icon: Settings,
-        category: 'Integrações',
-        isImplemented: false
-      },
-      {
-        id: 'telemetria-iot',
-        path: '/telemetria-iot',
-        name: 'Telemetria IoT',
-        icon: Activity,
-        category: 'Integrações',
+        category: 'IA & Automação',
+        description: 'Análise de voz e comandos por voz',
         isImplemented: false
       },
       {
@@ -505,23 +442,26 @@ export const navigationConfig = [
         path: '/voice-biometrics',
         name: 'Voice Biometrics',
         icon: Fingerprint,
-        category: 'Integrações',
+        category: 'IA & Automação',
+        description: 'Biometria por voz para autenticação',
         isImplemented: false
       },
       {
         id: 'voice-macros',
         path: '/voice-macros',
         name: 'Voice Macros',
-        icon: MessageSquare,
-        category: 'Integrações',
+        icon: Mic,
+        category: 'IA & Automação',
+        description: 'Macros ativadas por comandos de voz',
         isImplemented: false
       },
       {
-        id: 'video-calls',
-        path: '/video-calls',
-        name: 'Video Calls',
-        icon: Video,
-        category: 'Integrações',
+        id: 'tooltip-analytics',
+        path: '/tooltip-analytics',
+        name: 'Tooltip Analytics',
+        icon: Target,
+        category: 'IA & Automação',
+        description: 'Analytics de tooltips e ajuda contextual',
         isImplemented: false
       },
       {
@@ -529,15 +469,131 @@ export const navigationConfig = [
         path: '/workflow-builder',
         name: 'Workflow Builder',
         icon: Workflow,
-        category: 'Integrações',
+        category: 'IA & Automação',
+        description: 'Construtor visual de workflows automatizados',
+        isImplemented: false
+      }
+    ]
+  },
+  {
+    name: 'Sistema & Integrações',
+    icon: Settings,
+    routes: [
+      {
+        id: 'configuracoes-system',
+        path: '/configuracoes-system',
+        name: 'Configurações System',
+        icon: Settings,
+        category: 'Sistema & Integrações',
+        description: 'Configurações gerais do sistema',
         isImplemented: false
       },
       {
-        id: 'fabricantes',
-        path: '/fabricantes',
-        name: 'Fabricantes',
-        icon: Factory,
-        category: 'Integrações',
+        id: 'configuracoes-avancadas',
+        path: '/configuracoes-avancadas',
+        name: 'Configurações Avançadas',
+        icon: FileCog,
+        category: 'Sistema & Integrações',
+        description: 'Configurações avançadas e personalizações',
+        isImplemented: false
+      },
+      {
+        id: 'system-health',
+        path: '/system-health',
+        name: 'System Health',
+        icon: Heart,
+        category: 'Sistema & Integrações',
+        description: 'Monitoramento de saúde do sistema',
+        isImplemented: false
+      },
+      {
+        id: 'kpi-dashboard',
+        path: '/kpi-dashboard',
+        name: 'KPI Dashboard',
+        icon: PieChart,
+        category: 'Sistema & Integrações',
+        description: 'Dashboard executivo de KPIs',
+        isImplemented: false
+      },
+      {
+        id: 'analytics-bi',
+        path: '/analytics-bi',
+        name: 'Analytics BI',
+        icon: BarChart3,
+        category: 'Sistema & Integrações',
+        description: 'Business Intelligence e análises avançadas',
+        isImplemented: false
+      },
+      {
+        id: 'analytics-predicao',
+        path: '/analytics-predicao',
+        name: 'Analytics Predição',
+        icon: TrendingUp,
+        category: 'Sistema & Integrações',
+        description: 'Predições e forecasting com IA',
+        isImplemented: false
+      },
+      {
+        id: 'bi-dashboard-interactive',
+        path: '/bi-dashboard-interactive',
+        name: 'BI Dashboard Interactive',
+        icon: Activity,
+        category: 'Sistema & Integrações',
+        description: 'Dashboard BI interativo e customizável',
+        isImplemented: false
+      },
+      {
+        id: 'relatorios-executivos',
+        path: '/relatorios-executivos',
+        name: 'Relatórios Executivos',
+        icon: FileText,
+        category: 'Sistema & Integrações',
+        description: 'Relatórios executivos para diretoria',
+        isImplemented: false
+      },
+      {
+        id: 'integracoes-avancadas',
+        path: '/integracoes-avancadas',
+        name: 'Integrações Avançadas',
+        icon: Plug,
+        category: 'Sistema & Integrações',
+        description: 'Integrações com sistemas externos',
+        isImplemented: false
+      },
+      {
+        id: 'integrations-manager',
+        path: '/integrations-manager',
+        name: 'Integrations Manager',
+        icon: Database,
+        category: 'Sistema & Integrações',
+        description: 'Gerenciamento de integrações ativas',
+        isImplemented: false
+      },
+      {
+        id: 'api-gateway',
+        path: '/api-gateway',
+        name: 'API Gateway',
+        icon: Webhook,
+        category: 'Sistema & Integrações',
+        description: 'Gateway de APIs e webhooks',
+        isImplemented: false
+      },
+      {
+        id: 'webhooks-manager',
+        path: '/webhooks-manager',
+        name: 'Webhooks Manager',
+        icon: Zap,
+        category: 'Sistema & Integrações',
+        description: 'Gerenciamento de webhooks',
+        isImplemented: false
+      },
+      {
+        id: 'logistica-avancada',
+        path: '/logistica-avancada',
+        name: 'Logística Avançada',
+        icon: Truck,
+        category: 'Sistema & Integrações',
+        description: 'Gestão logística completa com roteirização',
         isImplemented: false
       }
     ]
@@ -552,7 +608,7 @@ export const navigationConfig = [
         name: 'Showcase',
         icon: Eye,
         category: 'Dev Tools',
-        description: 'Demonstração interativa de todos os componentes',
+        description: 'Demonstração de componentes do sistema',
         isImplemented: true
       },
       {
@@ -561,7 +617,7 @@ export const navigationConfig = [
         name: 'Contato',
         icon: Mail,
         category: 'Dev Tools',
-        description: 'Formulário de contato com validação Zod',
+        description: 'Formulário de contato',
         isImplemented: true
       }
     ]
