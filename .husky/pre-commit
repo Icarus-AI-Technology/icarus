@@ -1,11 +1,8 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Type check
 echo "🔍 Running TypeScript type check..."
 pnpm type-check
 
-# Lint check (only blocks on errors, not warnings)
+# Lint check
 echo "🔍 Running ESLint..."
 pnpm lint
 
