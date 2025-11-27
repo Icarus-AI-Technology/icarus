@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { BarChart3, TrendingUp, TrendingDown, Target } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
+import { useKPIs, useRevenueData, usePerformanceData, useTrendData } from '@/hooks/queries/useAnalytics'
+import { useDashboardRealtime } from '@/hooks/useRealtimeSubscription'
 
 type CategoriaKPI = 'vendas' | 'financeiro' | 'operacional' | 'marketing' | 'qualidade'
 type TendenciaKPI = 'subindo' | 'estavel' | 'descendo'
@@ -43,6 +45,15 @@ interface AlertaKPI {
 export default function KPIDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
   const [categoria, setCategoria] = useState<CategoriaKPI | 'todas'>('todas')
+  
+  // React Query hooks for real data
+  const { data: _kpisData } = useKPIs()
+  const { data: _revenueData } = useRevenueData('mes')
+  const { data: _performanceData } = usePerformanceData()
+  const { data: _trendData } = useTrendData('vendas')
+  
+  // Enable real-time updates
+  useDashboardRealtime()
 
   const [kpis] = useState<KPI[]>([
     {

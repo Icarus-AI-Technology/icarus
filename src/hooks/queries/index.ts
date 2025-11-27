@@ -21,3 +21,6 @@ export * from './useClientes'
 // Compras (Fornecedores, Pedidos)
 export * from './useCompras'
 
+// Analytics & BI
+export * from './useAnalytics'
+
