@@ -27,3 +27,6 @@ export * from './useAnalytics'
 // Logística & Rastreabilidade
 export * from './useLogistica'
 
+// Compliance & Auditoria
+export * from './useCompliance'
+

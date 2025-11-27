@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { formatDate } from '@/lib/utils'
+import { useComplianceStats, useAuditorias, useNaoConformidades, useAnvisaStatus, useLGPDStatus } from '@/hooks/queries/useCompliance'
 
 type StatusAuditoria = 'planejada' | 'em_andamento' | 'concluida' | 'nao_conformidade'
 type TipoAuditoria = 'interna' | 'externa' | 'anvisa' | 'iso' | 'financeira'
@@ -72,6 +73,13 @@ interface DocumentoCompliance {
 
 export default function ComplianceAuditoria() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks
+  const { data: _complianceStats } = useComplianceStats()
+  const { data: _auditoriasData } = useAuditorias()
+  const { data: _naoConformidadesData } = useNaoConformidades()
+  const { data: _anvisaStatus } = useAnvisaStatus()
+  const { data: _lgpdStatus } = useLGPDStatus()
 
   const [auditorias] = useState<Auditoria[]>([
     {
