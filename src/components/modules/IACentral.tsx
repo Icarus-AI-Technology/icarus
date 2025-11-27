@@ -10,13 +10,7 @@ import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { BrainCircuit, Zap, TrendingUp, Clock } from 'lucide-react'
-import { 
-  useAIInsights, 
-  useDemandPredictions, 
-  useChurnPredictions, 
-  useStockOptimization,
-  useRunAnalysis 
-} from '@/hooks/queries/useIcarusBrainAI'
+import { useIcarusBrain, useAIInsights, useDemandPredictions } from '@/hooks/useIcarusBrain'
 
 
 type StatusServico = 'ativo' | 'pausado' | 'treinando' | 'erro'
@@ -66,12 +60,15 @@ interface TreinamentoModelo {
 export default function IACentral() {
   const [activeTab, setActiveTab] = useState('overview')
   
-  // React Query hooks for AI data
-  const { data: _aiInsights } = useAIInsights('ia-central')
-  const { data: _demandPredictions } = useDemandPredictions()
-  const { data: _churnPredictions } = useChurnPredictions()
-  const { data: _stockOptimization } = useStockOptimization()
-  const runAnalysis = useRunAnalysis()
+  // IcarusBrain hooks
+  const { isProcessing, predictDemand, optimizeStock, detectAnomalies, generateInsights } = useIcarusBrain()
+  const { data: aiInsights } = useAIInsights()
+  const { data: demandPredictions } = useDemandPredictions()
+  
+  // Log available data for future integration
+  console.log('[IACentral] Insights:', aiInsights?.length || 0)
+  console.log('[IACentral] Predictions:', demandPredictions?.length || 0)
+  console.log('[IACentral] Processing:', isProcessing)
 
   const [servicos] = useState<ServicoIA[]>([
     {

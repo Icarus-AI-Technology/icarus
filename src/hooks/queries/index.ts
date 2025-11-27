@@ -21,6 +21,3 @@ export * from './useClientes'
 // Compras (Fornecedores, Pedidos)
 export * from './useCompras'
 
-// IcarusBrain AI (Previsões, Insights, Chat)
-export * from './useIcarusBrainAI'
-
