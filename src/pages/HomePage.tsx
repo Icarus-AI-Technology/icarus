@@ -302,11 +302,23 @@ export function HomePage() {
 
             {/* Visual Content with Neumorphic Glow Effect */}
             <div className="relative order-first lg:order-last">
-              <div className="bg-[#15192B] backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group neu-card animate-glow max-w-sm mx-auto lg:max-w-none">
+              <div 
+                className="backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group animate-glow max-w-sm mx-auto lg:max-w-none"
+                style={{ 
+                  background: '#15192B',
+                  boxShadow: '8px 8px 20px rgba(0, 0, 0, 0.5), -6px -6px 16px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                }}
+              >
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6366F1]/20 to-[#2DD4BF]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
-                <div className="aspect-square rounded-xl sm:rounded-2xl bg-[#1A1F35] flex items-center justify-center relative overflow-hidden neu-pressed">
+                <div 
+                  className="aspect-square rounded-xl sm:rounded-2xl flex items-center justify-center relative overflow-hidden"
+                  style={{ 
+                    background: '#1A1F35',
+                    boxShadow: 'inset 6px 6px 12px rgba(0, 0, 0, 0.4), inset -4px -4px 10px rgba(255, 255, 255, 0.02)'
+                  }}
+                >
                   <BrainCircuit className="w-20 h-20 sm:w-32 sm:h-32 text-[#818CF8] animate-pulse relative z-10" strokeWidth={1.5} />
 
                   {/* Animated rings */}
@@ -320,11 +332,18 @@ export function HomePage() {
               </div>
 
               {/* Floating Stats Cards - Neumorphic Padrão (Hidden on mobile) */}
-              <div className="hidden sm:block absolute -top-4 -right-4 bg-[#15192B] backdrop-blur-sm p-3 sm:p-4 rounded-xl animate-bounce neu-elevated">
+              <div 
+                className="hidden sm:block absolute -top-4 -right-4 backdrop-blur-sm p-3 sm:p-4 rounded-xl animate-bounce"
+                style={{ 
+                  background: '#15192B',
+                  boxShadow: '8px 8px 20px rgba(0, 0, 0, 0.5), -6px -6px 16px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                }}
+              >
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div 
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
                     style={{ 
+                      background: '#1A1F35',
                       boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
                     }}
                   >
@@ -338,11 +357,18 @@ export function HomePage() {
               </div>
 
               {/* Demo Video Button - Neumorphic Padrão (Hidden on mobile) */}
-              <div className="hidden sm:block absolute -bottom-4 -left-4 bg-[#15192B] backdrop-blur-sm p-3 sm:p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play neu-elevated">
+              <div 
+                className="hidden sm:block absolute -bottom-4 -left-4 backdrop-blur-sm p-3 sm:p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play"
+                style={{ 
+                  background: '#15192B',
+                  boxShadow: '8px 8px 20px rgba(0, 0, 0, 0.5), -6px -6px 16px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                }}
+              >
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div 
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1A1F35] flex items-center justify-center group-hover/play:scale-110 transition-transform"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center group-hover/play:scale-110 transition-transform"
                     style={{ 
+                      background: '#1A1F35',
                       boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
                     }}
                   >
