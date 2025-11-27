@@ -12,7 +12,7 @@ import { toast } from 'sonner'
  * const { data, create, update, remove } = useSupabaseCRUD('produtos', ['produtos'])
  */
 
-export interface UseSupabaseCRUDOptions<T = unknown> {
+export interface UseSupabaseCRUDOptions {
   tableName: string
   queryKey: string[]
   select?: string
@@ -30,7 +30,7 @@ export function useSupabaseCRUD<T = unknown>({
   filters,
   onSuccess,
   onError
-}: UseSupabaseCRUDOptions<T>) {
+}: UseSupabaseCRUDOptions) {
   const queryClient = useQueryClient()
 
   // READ - Listar registros
