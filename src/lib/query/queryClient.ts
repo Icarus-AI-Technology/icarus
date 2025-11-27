@@ -85,4 +85,53 @@ export const queryKeys = {
     invoices: (filters?: Record<string, unknown>) => [...queryKeys.financial.all, 'invoices', filters] as const,
     kpis: () => [...queryKeys.financial.all, 'kpis'] as const,
   },
+
+  // Cirurgias
+  cirurgias: {
+    all: ['cirurgias'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.cirurgias.all, 'list', filters] as const,
+    detail: (id: string) => [...queryKeys.cirurgias.all, 'detail', id] as const,
+    stats: () => [...queryKeys.cirurgias.all, 'stats'] as const,
+  },
+
+  // Estoque
+  estoque: {
+    all: ['estoque'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.estoque.all, 'list', filters] as const,
+    detail: (id: string) => [...queryKeys.estoque.all, 'detail', id] as const,
+    movimentacoes: (produtoId?: string) => [...queryKeys.estoque.all, 'movimentacoes', produtoId] as const,
+    stats: () => [...queryKeys.estoque.all, 'stats'] as const,
+  },
+
+  // Clientes
+  clientes: {
+    all: ['clientes'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.clientes.all, 'list', filters] as const,
+    detail: (id: string) => [...queryKeys.clientes.all, 'detail', id] as const,
+    hospitais: () => [...queryKeys.clientes.all, 'hospitais'] as const,
+    medicos: () => [...queryKeys.clientes.all, 'medicos'] as const,
+  },
+
+  // Fornecedores
+  fornecedores: {
+    all: ['fornecedores'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.fornecedores.all, 'list', filters] as const,
+    detail: (id: string) => [...queryKeys.fornecedores.all, 'detail', id] as const,
+  },
+
+  // Contas a Receber
+  contasReceber: {
+    all: ['contas-receber'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.contasReceber.all, 'list', filters] as const,
+    detail: (id: string) => [...queryKeys.contasReceber.all, 'detail', id] as const,
+    stats: () => [...queryKeys.contasReceber.all, 'stats'] as const,
+  },
+
+  // Contas a Pagar
+  contasPagar: {
+    all: ['contas-pagar'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.contasPagar.all, 'list', filters] as const,
+    detail: (id: string) => [...queryKeys.contasPagar.all, 'detail', id] as const,
+    stats: () => [...queryKeys.contasPagar.all, 'stats'] as const,
+  },
 }
