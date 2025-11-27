@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
@@ -20,8 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
+import { 
+  useCirurgias, 
+  useCirurgiasStats,
+  useCreateCirurgia,
+  useUpdateCirurgia,
+  useDeleteCirurgia,
+  type CirurgiaFilters 
+} from '@/hooks/queries/useCirurgias'
+import { useHospitais, useMedicos } from '@/hooks/queries/useClientes'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
@@ -73,21 +81,45 @@ interface Hospital {
   city: string
 }
 
-const mockDoctors: Doctor[] = [
+const _mockDoctors: Doctor[] = [
   { id: '1', name: 'Dr. Carlos Silva', specialty: 'Cardiologia' },
   { id: '2', name: 'Dr. Ana Santos', specialty: 'Ortopedia' },
   { id: '3', name: 'Dr. Pedro Costa', specialty: 'Neurocirurgia' },
   { id: '4', name: 'Dra. Maria Oliveira', specialty: 'Oftalmologia' },
 ]
 
-const mockHospitals: Hospital[] = [
+const _mockHospitals: Hospital[] = [
   { id: '1', name: 'Hospital Santa Casa', city: 'São Paulo' },
   { id: '2', name: 'Hospital Albert Einstein', city: 'São Paulo' },
   { id: '3', name: 'Hospital Sírio-Libanês', city: 'São Paulo' },
 ]
 
+// Helper to map Supabase status to local status
+function mapStatus(status: string): SurgeryStatus {
+  const statusMap: Record<string, SurgeryStatus> = {
+    'agendada': 'scheduled',
+    'confirmada': 'confirmed',
+    'em_andamento': 'in_progress',
+    'realizada': 'completed',
+    'cancelada': 'cancelled',
+  }
+  return statusMap[status] || 'scheduled'
+}
+
+// Helper to map local status to Supabase status
+function mapStatusToSupabase(status: SurgeryStatus): string {
+  const statusMap: Record<SurgeryStatus, string> = {
+    'scheduled': 'agendada',
+    'confirmed': 'confirmada',
+    'in_progress': 'em_andamento',
+    'completed': 'realizada',
+    'cancelled': 'cancelada',
+  }
+  return statusMap[status]
+}
+
 // Mock data - LGPD Compliant (using initials only)
-const mockSurgeries: Surgery[] = [
+const _mockSurgeries: Surgery[] = [
   {
     id: '1',
     surgery_number: 'CIR-2025-001',
@@ -142,11 +174,6 @@ const mockSurgeries: Surgery[] = [
 ]
 
 export function Cirurgias() {
-  const { supabase, isConfigured } = useSupabase()
-  const [loading, setLoading] = useState(true)
-  const [surgeries, setSurgeries] = useState<Surgery[]>([])
-  const [doctors, setDoctors] = useState<Doctor[]>([])
-  const [hospitals, setHospitals] = useState<Hospital[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearch = useDebounce(searchTerm, 300)
   const [statusFilter, setStatusFilter] = useState<SurgeryStatus | 'all'>('all')
@@ -154,6 +181,55 @@ export function Cirurgias() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [selectedSurgery, setSelectedSurgery] = useState<Surgery | null>(null)
+
+  // React Query hooks for data fetching
+  const filters: CirurgiaFilters = {
+    status: statusFilter !== 'all' ? statusFilter : undefined,
+    search: debouncedSearch || undefined,
+  }
+  
+  const { data: cirurgiasData, isLoading: cirurgiasLoading } = useCirurgias(filters)
+  const { data: _stats } = useCirurgiasStats()
+  const { data: hospitaisData } = useHospitais()
+  const { data: medicosData } = useMedicos()
+  
+  // Mutations
+  const createMutation = useCreateCirurgia()
+  const updateMutation = useUpdateCirurgia()
+  const deleteMutation = useDeleteCirurgia()
+
+  // Map data to local format for compatibility
+  const surgeries: Surgery[] = (cirurgiasData || []).map(c => ({
+    id: c.id,
+    surgery_number: c.numero,
+    paciente_iniciais: c.paciente_nome,
+    paciente_ref_hospital: null,
+    doctor_id: c.medico_id,
+    doctor_name: c.medico?.nome,
+    hospital_id: c.hospital_id,
+    hospital_name: c.hospital?.nome,
+    surgery_type: c.tipo_cirurgia,
+    scheduled_date: c.data_cirurgia,
+    scheduled_time: '08:00',
+    status: mapStatus(c.status),
+    notes: c.observacoes ?? null,
+    estimated_value: c.valor_total,
+    created_at: c.criado_em,
+  }))
+
+  const doctors: Doctor[] = (medicosData || []).map(m => ({
+    id: m.id,
+    name: m.nome,
+    specialty: '',
+  }))
+
+  const hospitals: Hospital[] = (hospitaisData || []).map(h => ({
+    id: h.id,
+    name: h.nome,
+    city: h.endereco?.cidade || '',
+  }))
+
+  const loading = cirurgiasLoading
 
   // Form state with Zod validation
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
@@ -185,9 +261,9 @@ export function Cirurgias() {
 
     if (!result.success) {
       const errors: Record<string, string> = {}
-      result.error.errors.forEach((err) => {
-        const field = err.path[0] as string
-        errors[field] = err.message
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string
+        errors[field] = issue.message
       })
       setFormErrors(errors)
       return false
@@ -213,70 +289,6 @@ export function Cirurgias() {
     { month: 'Dez', cirurgias: 24 },
   ]
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
-
-    if (!isConfigured) {
-      setTimeout(() => {
-        setSurgeries(mockSurgeries)
-        setDoctors(mockDoctors)
-        setHospitals(mockHospitals)
-        setLoading(false)
-      }, 500)
-      return
-    }
-
-    try {
-      // Fetch surgeries with joins
-      const { data: surgeriesData, error: surgeriesError } = await supabase  
-    
-        .from('cirurgias')
-        .select(`
-          *,
-          doctor:doctors(id, name, specialty),
-          hospital:hospitals(id, name, city)
-        `)
-        .order('scheduled_date', { ascending: false })
-
-      if (surgeriesError) throw surgeriesError
-
-      // Fetch doctors
-      const { data: doctorsData, error: doctorsError } = await supabase  
-    
-        .from('medicos')
-        .select('*')
-        .order('name')
-
-      if (doctorsError) throw doctorsError
-
-      // Fetch hospitals
-      const { data: hospitalsData, error: hospitalsError } = await supabase  
-    
-        .from('hospitais')
-        .select('*')
-        .order('name')
-
-      if (hospitalsError) throw hospitalsError
-
-      setSurgeries(surgeriesData || [])
-      setDoctors(doctorsData || [])
-      setHospitals(hospitalsData || [])
-    } catch (error) {
-      console.error('Error loading data:', error)
-      toast.error('Erro ao carregar dados')
-      // Fallback to mock data
-      setSurgeries(mockSurgeries)
-      setDoctors(mockDoctors)
-      setHospitals(mockHospitals)
-    } finally {
-      setLoading(false)
-    }
-  }, [isConfigured, supabase])
-
-  useEffect(() => {
-    loadData()
-  }, [isConfigured, loadData])
-
   const handleCreate = async () => {
     // Validate form with Zod schema
     if (!validateForm()) {
@@ -284,60 +296,24 @@ export function Cirurgias() {
       return
     }
 
-    if (!isConfigured) {
-      // Mock create - LGPD compliant (initials only)
-      const newSurgery: Surgery = {
-        id: String(surgeries.length + 1),
-        surgery_number: `CIR-2025-${String(surgeries.length + 1).padStart(3, '0')}`,
-        paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
-        paciente_ref_hospital: formData.paciente_ref_hospital || null,
-        doctor_id: formData.doctor_id,
-        doctor_name: doctors.find(d => d.id === formData.doctor_id)?.name,
-        hospital_id: formData.hospital_id,
-        hospital_name: hospitals.find(h => h.id === formData.hospital_id)?.name,
-        surgery_type: formData.surgery_type,
-        scheduled_date: formData.scheduled_date,
-        scheduled_time: formData.scheduled_time,
-        status: 'scheduled',
-        notes: formData.notes || null,
-        estimated_value: parseFloat(formData.estimated_value) || 0,
-        created_at: new Date().toISOString()
+    const numero = `CIR-2025-${String(Date.now()).slice(-3)}`
+    
+    createMutation.mutate({
+      numero,
+      paciente_nome: formData.paciente_iniciais.toUpperCase(),
+      medico_id: formData.doctor_id,
+      hospital_id: formData.hospital_id,
+      tipo_cirurgia: formData.surgery_type,
+      data_cirurgia: formData.scheduled_date,
+      valor_total: parseFloat(formData.estimated_value) || 0,
+      observacoes: formData.notes || null,
+      status: 'agendada',
+    }, {
+      onSuccess: () => {
+        resetForm()
+        setIsCreateDialogOpen(false)
       }
-      setSurgeries([newSurgery, ...surgeries])
-      toast.success('Cirurgia cadastrada com sucesso!')
-      resetForm()
-      setIsCreateDialogOpen(false)
-      return
-    }
-
-    try {
-      const { error } = await supabase
-
-        .from('cirurgias')
-        .insert([{
-          paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
-          paciente_ref_hospital: formData.paciente_ref_hospital || null,
-          doctor_id: formData.doctor_id,
-          hospital_id: formData.hospital_id,
-          surgery_type: formData.surgery_type,
-          scheduled_date: formData.scheduled_date,
-          scheduled_time: formData.scheduled_time,
-          notes: formData.notes || null,
-          estimated_value: parseFloat(formData.estimated_value) || 0,
-          status: 'scheduled'
-        }])
-        .select()
-
-      if (error) throw error
-
-      toast.success('Cirurgia cadastrada com sucesso!')
-      loadData()
-      resetForm()
-      setIsCreateDialogOpen(false)
-    } catch (error) {
-      console.error('Error creating surgery:', error)
-      toast.error('Erro ao cadastrar cirurgia')
-    }
+    })
   }
 
   const handleUpdate = async () => {
@@ -349,62 +325,22 @@ export function Cirurgias() {
       return
     }
 
-    if (!isConfigured) {
-      // Mock update - LGPD compliant
-      const updatedSurgeries = surgeries.map(s =>
-        s.id === selectedSurgery.id
-          ? {
-              ...s,
-              paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
-              paciente_ref_hospital: formData.paciente_ref_hospital || null,
-              doctor_id: formData.doctor_id,
-              doctor_name: doctors.find(d => d.id === formData.doctor_id)?.name,
-              hospital_id: formData.hospital_id,
-              hospital_name: hospitals.find(h => h.id === formData.hospital_id)?.name,
-              surgery_type: formData.surgery_type,
-              scheduled_date: formData.scheduled_date,
-              scheduled_time: formData.scheduled_time,
-              notes: formData.notes || null,
-              estimated_value: parseFloat(formData.estimated_value) || 0
-            }
-          : s
-      )
-      setSurgeries(updatedSurgeries)
-      toast.success('Cirurgia atualizada com sucesso!')
-      resetForm()
-      setIsEditDialogOpen(false)
-      setSelectedSurgery(null)
-      return
-    }
-
-    try {
-      const { error } = await supabase
-
-        .from('cirurgias')
-        .update({
-          paciente_iniciais: formData.paciente_iniciais.toUpperCase(),
-          paciente_ref_hospital: formData.paciente_ref_hospital || null,
-          doctor_id: formData.doctor_id,
-          hospital_id: formData.hospital_id,
-          surgery_type: formData.surgery_type,
-          scheduled_date: formData.scheduled_date,
-          scheduled_time: formData.scheduled_time,
-          notes: formData.notes || null,
-          estimated_value: parseFloat(formData.estimated_value) || 0
-        })
-        .eq('id', selectedSurgery.id)
-
-      if (error) throw error
-
-      toast.success('Cirurgia atualizada com sucesso!')
-      loadData()
-      resetForm()
-      setIsEditDialogOpen(false)
-      setSelectedSurgery(null)
-    } catch (error) {
-      console.error('Error updating surgery:', error)
-      toast.error('Erro ao atualizar cirurgia')
-    }
+    updateMutation.mutate({
+      id: selectedSurgery.id,
+      paciente_nome: formData.paciente_iniciais.toUpperCase(),
+      medico_id: formData.doctor_id,
+      hospital_id: formData.hospital_id,
+      tipo_cirurgia: formData.surgery_type,
+      data_cirurgia: formData.scheduled_date,
+      valor_total: parseFloat(formData.estimated_value) || 0,
+      observacoes: formData.notes || null,
+    }, {
+      onSuccess: () => {
+        resetForm()
+        setIsEditDialogOpen(false)
+        setSelectedSurgery(null)
+      }
+    })
   }
 
   const handleDelete = async (surgery: Surgery) => {
@@ -412,56 +348,14 @@ export function Cirurgias() {
       return
     }
 
-    if (!isConfigured) {
-      // Mock delete
-      setSurgeries(surgeries.filter(s => s.id !== surgery.id))
-      toast.success('Cirurgia excluída com sucesso!')
-      return
-    }
-
-    try {
-      const { error } = await supabase  
-    
-        .from('cirurgias')
-        .delete()
-        .eq('id', surgery.id)
-
-      if (error) throw error
-
-      toast.success('Cirurgia excluída com sucesso!')
-      loadData()
-    } catch (error) {
-      console.error('Error deleting surgery:', error)
-      toast.error('Erro ao excluir cirurgia')
-    }
+    deleteMutation.mutate(surgery.id)
   }
 
   const handleStatusChange = async (surgery: Surgery, newStatus: SurgeryStatus) => {
-    if (!isConfigured) {
-      // Mock status change
-      const updatedSurgeries = surgeries.map(s =>
-        s.id === surgery.id ? { ...s, status: newStatus } : s
-      )
-      setSurgeries(updatedSurgeries)
-      toast.success('Status atualizado com sucesso!')
-      return
-    }
-
-    try {
-      const { error } = await supabase  
-    
-        .from('cirurgias')
-        .update({ status: newStatus })
-        .eq('id', surgery.id)
-
-      if (error) throw error
-
-      toast.success('Status atualizado com sucesso!')
-      loadData()
-    } catch (error) {
-      console.error('Error updating status:', error)
-      toast.error('Erro ao atualizar status')
-    }
+    updateMutation.mutate({
+      id: surgery.id,
+      status: mapStatusToSupabase(newStatus) as 'agendada' | 'confirmada' | 'realizada' | 'cancelada',
+    })
   }
 
   const openEditDialog = (surgery: Surgery) => {
@@ -544,13 +438,13 @@ export function Cirurgias() {
     })
   }, [surgeries, debouncedSearch, statusFilter])
 
-  const stats = {
+  const localStats = {
     total: surgeries.length,
     scheduled: surgeries.filter(s => s.status === 'scheduled').length,
     confirmed: surgeries.filter(s => s.status === 'confirmed').length,
     inProgress: surgeries.filter(s => s.status === 'in_progress').length,
     completed: surgeries.filter(s => s.status === 'completed').length,
-    totalValue: surgeries.reduce((sum, s) => sum + s.estimated__value, 0)
+    totalValue: surgeries.reduce((sum, s) => sum + s.estimated_value, 0)
   }
 
   if (loading) {
@@ -728,7 +622,7 @@ export function Cirurgias() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => {
+              <Button variant="secondary" onClick={() => {
                 setIsCreateDialogOpen(false)
                 resetForm()
               }}>
@@ -752,9 +646,9 @@ export function Cirurgias() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-2xl font-bold">{localStats.total}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {stats.scheduled} agendadas
+              {localStats.scheduled} agendadas
             </p>
           </CardContent>
         </Card>
@@ -767,7 +661,7 @@ export function Cirurgias() {
             <CheckCircle2 className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.confirmed}</div>
+            <div className="text-2xl font-bold text-green-600">{localStats.confirmed}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Prontas para realizar
             </p>
@@ -782,7 +676,7 @@ export function Cirurgias() {
             <AlertCircle className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.inProgress}</div>
+            <div className="text-2xl font-bold text-yellow-600">{localStats.inProgress}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Sendo realizadas agora
             </p>
@@ -797,9 +691,9 @@ export function Cirurgias() {
             <TrendingUp className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(stats.totalValue)}</div>
+            <div className="text-2xl font-bold">{formatCurrency(localStats.totalValue)}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {stats.completed} concluídas
+              {localStats.completed} concluídas
             </p>
           </CardContent>
         </Card>
@@ -1087,7 +981,7 @@ export function Cirurgias() {
             </div>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => {
+            <Button variant="secondary" onClick={() => {
               setIsEditDialogOpen(false)
               resetForm()
               setSelectedSurgery(null)
@@ -1177,35 +1071,35 @@ export function Cirurgias() {
                 <Label className="text-muted-foreground mb-3 block">Alterar Status</Label>
                 <div className="flex flex-wrap gap-2">
                   <Button
-                    variant={selectedSurgery.status === 'scheduled' ? 'default' : 'outline'}
+                    variant={selectedSurgery.status === 'scheduled' ? 'primary' : 'secondary'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedSurgery, 'scheduled')}
                   >
                     Agendada
                   </Button>
                   <Button
-                    variant={selectedSurgery.status === 'confirmed' ? 'default' : 'outline'}
+                    variant={selectedSurgery.status === 'confirmed' ? 'primary' : 'secondary'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedSurgery, 'confirmed')}
                   >
                     Confirmada
                   </Button>
                   <Button
-                    variant={selectedSurgery.status === 'in_progress' ? 'default' : 'outline'}
+                    variant={selectedSurgery.status === 'in_progress' ? 'primary' : 'secondary'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedSurgery, 'in_progress')}
                   >
                     Em Progresso
                   </Button>
                   <Button
-                    variant={selectedSurgery.status === 'completed' ? 'default' : 'outline'}
+                    variant={selectedSurgery.status === 'completed' ? 'primary' : 'secondary'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedSurgery, 'completed')}
                   >
                     Concluída
                   </Button>
                   <Button
-                    variant={selectedSurgery.status === 'cancelled' ? 'destructive' : 'outline'}
+                    variant={selectedSurgery.status === 'cancelled' ? 'danger' : 'secondary'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedSurgery, 'cancelled')}
                   >
