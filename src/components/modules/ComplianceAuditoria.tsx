@@ -256,7 +256,7 @@ export default function ComplianceAuditoria() {
       case 'nao_conformidade':
         return 'bg-red-100 text-red-800 border-red-300'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -271,7 +271,7 @@ export default function ComplianceAuditoria() {
       case 'critica':
         return 'bg-red-100 text-red-800 border-red-300'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -284,9 +284,9 @@ export default function ComplianceAuditoria() {
       case 'em_adequacao':
         return 'bg-yellow-100 text-yellow-800 border-yellow-300'
       case 'vencido':
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-theme-muted text-theme-primary border-gray-300'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -371,7 +371,7 @@ export default function ComplianceAuditoria() {
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-mono text-gray-600">{nc.codigo}</span>
+                              <span className="text-xs font-mono text-theme-secondary">{nc.codigo}</span>
                               <span className={`text-xs px-2 py-0.5 rounded-full border ${getSeveridadeBadge(nc.severidade)}`}>
                                 {nc.severidade.toUpperCase()}
                               </span>
@@ -382,17 +382,17 @@ export default function ComplianceAuditoria() {
                               )}
                             </div>
                             <div className="font-bold mt-2">{nc.descricao}</div>
-                            <div className="text-xs text-gray-600 mt-1">
+                            <div className="text-xs text-theme-secondary mt-1">
                               Requisito: {nc.requisito_violado} • {nc.area_responsavel}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-theme-muted mt-1">
                               Prazo: {formatDate(nc.prazo_correcao)} • Resp: {nc.responsavel}
                             </div>
                           </div>
                         </div>
                         <div className="mt-2">
                           <p className="text-xs font-semibold text-blue-700">Ação Corretiva:</p>
-                          <p className="text-xs text-gray-700 mt-1">{nc.acao_corretiva}</p>
+                          <p className="text-xs text-theme-secondary mt-1">{nc.acao_corretiva}</p>
                         </div>
                       </div>
                     ))}
@@ -413,8 +413,8 @@ export default function ComplianceAuditoria() {
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
                             <div className="font-bold">{aud.titulo}</div>
-                            <div className="text-sm text-gray-600 mt-1">Auditor: {aud.auditor}</div>
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-sm text-theme-secondary mt-1">Auditor: {aud.auditor}</div>
+                            <div className="text-xs text-theme-muted mt-1">
                               {formatDate(aud.data_inicio)} a {formatDate(aud.data_fim)}
                             </div>
                           </div>
@@ -442,7 +442,7 @@ export default function ComplianceAuditoria() {
                     <div key={cat} className="p-4 border rounded-lg">
                       <p className="text-sm font-semibold uppercase">{cat}</p>
                       <div className="flex items-center gap-2 mt-2">
-                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="flex-1 h-3 progress-bar-bg rounded-full overflow-hidden">
                           <div
                             className={`h-full w-(--progress) ${conformes === reqs.length ? 'bg-green-500' : 'bg-yellow-500'}`}
                             style={{ '--progress': `${(conformes / reqs.length) * 100}%` } as React.CSSProperties}
@@ -493,23 +493,23 @@ export default function ComplianceAuditoria() {
                           </span>
                         </div>
                         <div className="font-bold text-lg mt-2">{aud.titulo}</div>
-                        <div className="text-sm text-gray-600">Auditor: {aud.auditor}</div>
+                        <div className="text-sm text-theme-secondary">Auditor: {aud.auditor}</div>
                       </div>
                     </div>
-                    <div className="text-sm text-gray-700 mb-3">{aud.escopo}</div>
+                    <div className="text-sm text-theme-secondary mb-3">{aud.escopo}</div>
                     <div className="grid grid-cols-3 gap-3 mb-3">
                       <div className="p-2 border rounded-lg">
-                        <p className="text-xs text-gray-500">Período</p>
+                        <p className="text-xs text-theme-muted">Período</p>
                         <p className="text-sm font-semibold">
                           {formatDate(aud.data_inicio)} a {formatDate(aud.data_fim)}
                         </p>
                       </div>
                       <div className="p-2 border rounded-lg">
-                        <p className="text-xs text-gray-500">Não Conformidades</p>
+                        <p className="text-xs text-theme-muted">Não Conformidades</p>
                         <p className="text-2xl font-bold text-red-600">{aud.nao_conformidades}</p>
                       </div>
                       <div className="p-2 border rounded-lg">
-                        <p className="text-xs text-gray-500">Observações</p>
+                        <p className="text-xs text-theme-muted">Observações</p>
                         <p className="text-2xl font-bold text-blue-600">{aud.observacoes}</p>
                       </div>
                     </div>
@@ -562,23 +562,23 @@ export default function ComplianceAuditoria() {
                     <div className="font-semibold text-lg mb-2">{nc.descricao}</div>
                     <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                       <div>
-                        <span className="text-gray-500">Requisito:</span> {nc.requisito_violado}
+                        <span className="text-theme-muted">Requisito:</span> {nc.requisito_violado}
                       </div>
                       <div>
-                        <span className="text-gray-500">Área:</span> {nc.area_responsavel}
+                        <span className="text-theme-muted">Área:</span> {nc.area_responsavel}
                       </div>
                       <div>
-                        <span className="text-gray-500">Identificação:</span> {formatDate(nc.data_identificacao)}
+                        <span className="text-theme-muted">Identificação:</span> {formatDate(nc.data_identificacao)}
                       </div>
                       <div>
-                        <span className="text-gray-500">Prazo:</span> {formatDate(nc.prazo_correcao)}
+                        <span className="text-theme-muted">Prazo:</span> {formatDate(nc.prazo_correcao)}
                       </div>
                     </div>
                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-3">
                       <p className="text-xs font-semibold text-blue-700 mb-1">Ação Corretiva:</p>
-                      <p className="text-sm text-gray-700">{nc.acao_corretiva}</p>
+                      <p className="text-sm text-theme-secondary">{nc.acao_corretiva}</p>
                     </div>
-                    <div className="text-xs text-gray-600">
+                    <div className="text-xs text-theme-secondary">
                       Responsável: <span className="font-semibold">{nc.responsavel}</span>
                     </div>
                   </Card>
@@ -612,19 +612,19 @@ export default function ComplianceAuditoria() {
                         <div className="font-semibold text-lg">{req.requisito}</div>
                         <div className="grid grid-cols-3 gap-4 mt-3 text-sm">
                           <div>
-                            <span className="text-gray-500">Última Verificação:</span>
+                            <span className="text-theme-muted">Última Verificação:</span>
                             <div className="font-semibold">{formatDate(req.ultima_verificacao)}</div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Próxima Verificação:</span>
+                            <span className="text-theme-muted">Próxima Verificação:</span>
                             <div className="font-semibold">{formatDate(req.proxima_verificacao)}</div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Evidências:</span>
+                            <span className="text-theme-muted">Evidências:</span>
                             <div className="font-semibold">{req.evidencias} documentos</div>
                           </div>
                         </div>
-                        <div className="text-xs text-gray-600 mt-2">
+                        <div className="text-xs text-theme-secondary mt-2">
                           Responsável: <span className="font-semibold">{req.responsavel}</span>
                         </div>
                       </div>
@@ -653,7 +653,7 @@ export default function ComplianceAuditoria() {
                             {doc.tipo}
                           </span>
                           <span className="text-sm font-mono font-bold">{doc.codigo}</span>
-                          <span className="text-xs px-2 py-0.5 rounded bg-gray-100">v{doc.versao}</span>
+                          <span className="text-xs px-2 py-0.5 rounded bg-theme-muted">v{doc.versao}</span>
                           <span
                             className={`text-xs px-2 py-0.5 rounded-full border ${
                               doc.status === 'vigente'
@@ -669,15 +669,15 @@ export default function ComplianceAuditoria() {
                         <div className="font-semibold text-lg">{doc.titulo}</div>
                         <div className="grid grid-cols-3 gap-4 mt-3 text-sm">
                           <div>
-                            <span className="text-gray-500">Aprovação:</span>
+                            <span className="text-theme-muted">Aprovação:</span>
                             <div className="font-semibold">{formatDate(doc.data_aprovacao)}</div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Validade:</span>
+                            <span className="text-theme-muted">Validade:</span>
                             <div className="font-semibold">{formatDate(doc.data_validade)}</div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Responsável:</span>
+                            <span className="text-theme-muted">Responsável:</span>
                             <div className="font-semibold">{doc.responsavel}</div>
                           </div>
                         </div>

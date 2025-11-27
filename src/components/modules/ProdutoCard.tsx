@@ -162,12 +162,12 @@ export function ProdutoCard({
           <div className="flex-1 min-w-0">
             <h3 className={cn(
               'text-lg font-bold truncate',
-              isDark ? 'text-white' : 'text-gray-900'
+              isDark ? 'text-white' : 'text-theme-primary'
             )}>
               {produto.nome}
             </h3>
             {produto.codigo && (
-              <p className={cn('text-sm', isDark ? 'text-slate-400' : 'text-gray-500')}>
+              <p className={cn('text-sm', isDark ? 'text-slate-400' : 'text-theme-muted')}>
                 Código: {produto.codigo}
               </p>
             )}
@@ -179,7 +179,7 @@ export function ProdutoCard({
         <div 
           className={cn(
             'p-3 rounded-xl flex items-center justify-between',
-            isDark ? 'bg-[#15192B]' : 'bg-gray-100'
+            isDark ? 'bg-[#15192B]' : 'bg-theme-muted'
           )}
           style={{
             boxShadow: isDark 
@@ -191,7 +191,7 @@ export function ProdutoCard({
             <p className={cn('text-xs', isDark ? 'text-slate-500' : 'text-gray-400')}>
               Registro ANVISA
             </p>
-            <p className={cn('font-mono font-semibold', isDark ? 'text-white' : 'text-gray-900')}>
+            <p className={cn('font-mono font-semibold', isDark ? 'text-white' : 'text-theme-primary')}>
               {formatarNumero(produto.numero_registro_anvisa)}
             </p>
           </div>
@@ -206,7 +206,7 @@ export function ProdutoCard({
           {produto.fabricante && (
             <div className="flex items-center gap-2">
               <Building2 className={cn('w-4 h-4', isDark ? 'text-slate-500' : 'text-gray-400')} />
-              <span className={cn('text-sm truncate', isDark ? 'text-slate-300' : 'text-gray-600')}>
+              <span className={cn('text-sm truncate', isDark ? 'text-slate-300' : 'text-theme-secondary')}>
                 {produto.fabricante}
               </span>
             </div>
@@ -214,7 +214,7 @@ export function ProdutoCard({
           {(produto.classe_risco || dadosAnvisa?.classe_risco) && (
             <div className="flex items-center gap-2">
               <Package className={cn('w-4 h-4', isDark ? 'text-slate-500' : 'text-gray-400')} />
-              <span className={cn('text-sm', isDark ? 'text-slate-300' : 'text-gray-600')}>
+              <span className={cn('text-sm', isDark ? 'text-slate-300' : 'text-theme-secondary')}>
                 Classe {dadosAnvisa?.classe_risco || produto.classe_risco}
               </span>
             </div>
@@ -277,7 +277,7 @@ export function ProdutoCard({
               onClick={() => setExpanded(!expanded)}
               className={cn(
                 'w-full flex items-center justify-between py-2 text-sm',
-                isDark ? 'text-slate-400 hover:text-slate-300' : 'text-gray-500 hover:text-gray-600'
+                isDark ? 'text-slate-400 hover:text-slate-300' : 'text-theme-muted hover:text-theme-secondary'
               )}
             >
               <span>Ver detalhes da ANVISA</span>
@@ -375,7 +375,7 @@ function DetailRow({
       <span className={cn('text-xs', isDark ? 'text-slate-500' : 'text-gray-400')}>
         {label}
       </span>
-      <span className={cn('text-sm font-medium flex items-center', isDark ? 'text-slate-300' : 'text-gray-700')}>
+      <span className={cn('text-sm font-medium flex items-center', isDark ? 'text-slate-300' : 'text-theme-secondary')}>
         {children}
         {value}
       </span>

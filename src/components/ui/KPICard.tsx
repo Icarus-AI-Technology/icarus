@@ -68,7 +68,7 @@ export const KPICard: React.FC<KPICardProps> = ({
   const valueColor = isDark ? '#FFFFFF' : '#0F172A';
 
   return (
-    <div
+    <article
       className={cn(
         'rounded-2xl p-6 transition-all duration-300 hover:translate-y-[-2px]',
         className
@@ -77,6 +77,8 @@ export const KPICard: React.FC<KPICardProps> = ({
         backgroundColor: cardBg,
         boxShadow: cardShadow,
       }}
+      role="group"
+      aria-labelledby={`kpi-title-${title.replace(/\s+/g, '-').toLowerCase()}`}
     >
       {/* Header Section */}
       <div className="flex items-center gap-3 mb-3">
@@ -87,6 +89,7 @@ export const KPICard: React.FC<KPICardProps> = ({
               backgroundColor: iconBoxBg,
               boxShadow: iconBoxShadow,
             }}
+            aria-hidden="true"
           >
             <Icon 
               size={22} 
@@ -96,6 +99,7 @@ export const KPICard: React.FC<KPICardProps> = ({
           </div>
         )}
         <h4
+          id={`kpi-title-${title.replace(/\s+/g, '-').toLowerCase()}`}
           className="text-sm font-medium"
           style={{ color: titleColor }}
         >
@@ -137,7 +141,7 @@ export const KPICard: React.FC<KPICardProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

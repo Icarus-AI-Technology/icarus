@@ -824,3 +824,129 @@ a:focus-visible {
   outline: 2px solid rgba(99, 102, 241, 0.5);
   outline-offset: 2px;
 }
+
+/* ============================================
+   THEME-AWARE UTILITY CLASSES
+   Dark Glass Medical Design System
+   ============================================ */
+
+/* Text Colors - Auto dark/light */
+.text-theme-primary {
+  color: var(--text-primary, #F9FAFB);
+}
+.light .text-theme-primary {
+  color: #111827;
+}
+
+.text-theme-secondary {
+  color: var(--text-secondary, #94A3B8);
+}
+.light .text-theme-secondary {
+  color: #4B5563;
+}
+
+.text-theme-muted {
+  color: var(--text-muted, #64748B);
+}
+.light .text-theme-muted {
+  color: #6B7280;
+}
+
+/* Background Colors - Auto dark/light */
+.bg-theme-card {
+  background: var(--bg-card, #15192B);
+}
+.light .bg-theme-card {
+  background: #FFFFFF;
+}
+
+.bg-theme-elevated {
+  background: var(--bg-elevated, #1F2642);
+}
+.light .bg-theme-elevated {
+  background: #F9FAFB;
+}
+
+.bg-theme-muted {
+  background: rgba(100, 116, 139, 0.2);
+}
+.light .bg-theme-muted {
+  background: #F3F4F6;
+}
+
+/* Status Badges - Dark Mode Optimized */
+.badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.light .badge-success {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.light .badge-danger {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.light .badge-warning {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.badge-neutral {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94A3B8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+.light .badge-neutral {
+  background: #F3F4F6;
+  color: #374151;
+  border: 1px solid #E5E7EB;
+}
+
+/* Progress Bars */
+.progress-bar-bg {
+  background: rgba(100, 116, 139, 0.2);
+}
+.light .progress-bar-bg {
+  background: #E5E7EB;
+}
+
+/* Table Styles */
+.table-header {
+  background: var(--bg-secondary, #15192B);
+  color: var(--text-secondary, #94A3B8);
+}
+.light .table-header {
+  background: #F9FAFB;
+  color: #6B7280;
+}
+
+.table-row {
+  border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+}
+.light .table-row {
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.table-row:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+.light .table-row:hover {
+  background: #F3F4F6;
+}

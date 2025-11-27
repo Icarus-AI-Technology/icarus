@@ -1046,7 +1046,7 @@ Forneça:
                           <span className="text-muted-foreground">Qtd:</span> {lote.quantidade}
                         </div>
                         <div className={getValidadeColor(lote.status_validade)}>
-                          <span className="text-muted-foreground text-gray-600">Validade:</span> {formatDate(lote.validade)}
+                          <span className="text-muted-foreground text-theme-secondary">Validade:</span> {formatDate(lote.validade)}
                         </div>
                         <div className="text-orange-600">
                           <strong>{lote.dias_para_vencer} dias</strong>

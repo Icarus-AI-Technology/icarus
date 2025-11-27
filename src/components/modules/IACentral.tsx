@@ -220,7 +220,7 @@ export default function IACentral() {
       case 'erro':
         return 'bg-red-100 text-red-800 border-red-300'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -232,7 +232,7 @@ export default function IACentral() {
       forecasting: 'bg-orange-100 text-orange-800',
       nlp: 'bg-indigo-100 text-indigo-800'
     }
-    return badges[tipo] || 'bg-gray-100 text-gray-800'
+    return badges[tipo] || 'bg-theme-muted text-theme-primary'
   }
 
   return (
@@ -303,11 +303,11 @@ export default function IACentral() {
                         <div className="flex justify-between items-start">
                           <div>
                             <div className="font-semibold">{servico.nome}</div>
-                            <div className="text-xs text-gray-600">{servico.descricao}</div>
+                            <div className="text-xs text-theme-secondary">{servico.descricao}</div>
                           </div>
                           <div className="text-right">
                             <div className="text-xl font-bold text-blue-600">{servico.uso_mensal}</div>
-                            <div className="text-xs text-gray-500">usos/mês</div>
+                            <div className="text-xs text-theme-muted">usos/mês</div>
                           </div>
                         </div>
                       </div>
@@ -324,19 +324,19 @@ export default function IACentral() {
                 <div className="space-y-3">
                   <div className="p-3 border rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Uptime (30d)</span>
+                      <span className="text-sm text-theme-secondary">Uptime (30d)</span>
                       <span className="text-xl font-bold text-green-600">99.8%</span>
                     </div>
                   </div>
                   <div className="p-3 border rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Taxa de Erro</span>
+                      <span className="text-sm text-theme-secondary">Taxa de Erro</span>
                       <span className="text-xl font-bold text-blue-600">0.3%</span>
                     </div>
                   </div>
                   <div className="p-3 border rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Predições/Segundo</span>
+                      <span className="text-sm text-theme-secondary">Predições/Segundo</span>
                       <span className="text-xl font-bold text-purple-600">12.5</span>
                     </div>
                   </div>
@@ -359,13 +359,13 @@ export default function IACentral() {
                         <div className="font-semibold">{treino.modelo}</div>
                         <div className="text-sm font-bold">{treino.progresso}%</div>
                       </div>
-                      <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="w-full h-3 progress-bar-bg rounded-full overflow-hidden">
                         <div
                           className="h-full bg-blue-500 w-(--progress)"
                           style={{ '--progress': `${treino.progresso}%` } as React.CSSProperties}
                         ></div>
                       </div>
-                      <div className="text-xs text-gray-600 mt-2">Dataset: {treino.dataset}</div>
+                      <div className="text-xs text-theme-secondary mt-2">Dataset: {treino.dataset}</div>
                     </div>
                   ))}
               </div>
@@ -386,7 +386,7 @@ export default function IACentral() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <div className="font-bold text-lg">{servico.nome}</div>
-                        <div className="text-sm text-gray-600">{servico.descricao}</div>
+                        <div className="text-sm text-theme-secondary">{servico.descricao}</div>
                         <div className="flex gap-2 mt-2">
                           <span className={`text-xs px-2 py-0.5 rounded-full border ${getStatusBadge(servico.status)}`}>
                             {servico.status.toUpperCase()}
@@ -398,24 +398,24 @@ export default function IACentral() {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-green-600">{servico.precisao}%</div>
-                        <div className="text-xs text-gray-500">Precisão</div>
+                        <div className="text-xs text-theme-muted">Precisão</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-4 gap-3 text-sm">
                       <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Versão</p>
+                        <p className="text-xs text-theme-muted">Versão</p>
                         <p className="font-semibold">{servico.versao_modelo}</p>
                       </div>
                       <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Dataset</p>
+                        <p className="text-xs text-theme-muted">Dataset</p>
                         <p className="font-semibold">{(servico.dataset_size / 1000).toFixed(0)}k</p>
                       </div>
                       <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Uso Mensal</p>
+                        <p className="text-xs text-theme-muted">Uso Mensal</p>
                         <p className="font-semibold">{servico.uso_mensal}</p>
                       </div>
                       <div className="p-2 border rounded">
-                        <p className="text-xs text-gray-500">Resposta</p>
+                        <p className="text-xs text-theme-muted">Resposta</p>
                         <p className="font-semibold">{servico.tempo_resposta_ms}ms</p>
                       </div>
                     </div>
@@ -439,16 +439,16 @@ export default function IACentral() {
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="font-semibold">{pred.servico}</div>
-                        <div className="text-sm text-gray-600 mt-1">Entrada: {pred.entrada}</div>
+                        <div className="text-sm text-theme-secondary mt-1">Entrada: {pred.entrada}</div>
                         <div className="text-sm font-semibold text-blue-600 mt-1">Resultado: {pred.resultado}</div>
                       </div>
                       <div className="text-right">
                         <div className="text-xl font-bold text-green-600">{pred.confianca}%</div>
-                        <div className="text-xs text-gray-500">Confiança</div>
+                        <div className="text-xs text-theme-muted">Confiança</div>
                         <div className="text-xs text-gray-400 mt-1">{pred.tempo_processamento}ms</div>
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500 mt-2">{pred.data}</div>
+                    <div className="text-xs text-theme-muted mt-2">{pred.data}</div>
                   </Card>
                 ))}
               </div>
@@ -469,7 +469,7 @@ export default function IACentral() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <div className="font-bold text-lg">{treino.modelo}</div>
-                        <div className="text-xs text-gray-600">Dataset: {treino.dataset}</div>
+                        <div className="text-xs text-theme-secondary">Dataset: {treino.dataset}</div>
                       </div>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full border ${
@@ -489,7 +489,7 @@ export default function IACentral() {
                           <span>Progresso</span>
                           <span className="font-bold">{treino.progresso}%</span>
                         </div>
-                        <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="w-full h-3 progress-bar-bg rounded-full overflow-hidden">
                           <div
                             className="h-full bg-blue-500 w-(--progress)"
                             style={{ '--progress': `${treino.progresso}%` } as React.CSSProperties}
@@ -500,24 +500,24 @@ export default function IACentral() {
                     {treino.status === 'concluido' && (
                       <div className="grid grid-cols-4 gap-3 text-sm">
                         <div className="p-2 border rounded">
-                          <p className="text-xs text-gray-500">Accuracy</p>
+                          <p className="text-xs text-theme-muted">Accuracy</p>
                           <p className="font-bold text-green-600">{treino.metricas.accuracy}%</p>
                         </div>
                         <div className="p-2 border rounded">
-                          <p className="text-xs text-gray-500">Precision</p>
+                          <p className="text-xs text-theme-muted">Precision</p>
                           <p className="font-bold">{treino.metricas.precision}%</p>
                         </div>
                         <div className="p-2 border rounded">
-                          <p className="text-xs text-gray-500">Recall</p>
+                          <p className="text-xs text-theme-muted">Recall</p>
                           <p className="font-bold">{treino.metricas.recall}%</p>
                         </div>
                         <div className="p-2 border rounded">
-                          <p className="text-xs text-gray-500">F1-Score</p>
+                          <p className="text-xs text-theme-muted">F1-Score</p>
                           <p className="font-bold">{treino.metricas.f1_score}%</p>
                         </div>
                       </div>
                     )}
-                    <div className="text-xs text-gray-500 mt-2">
+                    <div className="text-xs text-theme-muted mt-2">
                       Início: {treino.inicio} {treino.fim && `• Fim: ${treino.fim}`}
                     </div>
                   </Card>

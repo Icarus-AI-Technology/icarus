@@ -151,13 +151,13 @@ export function ConformidadeDashboard() {
             <div className="flex-1">
               <p className={cn(
                 'text-sm font-medium',
-                isDark ? 'text-slate-400' : 'text-gray-500'
+                isDark ? 'text-slate-400' : 'text-theme-muted'
               )}>
                 {title}
               </p>
               <p className={cn(
                 'text-3xl font-bold mt-1',
-                isDark ? 'text-white' : 'text-gray-900'
+                isDark ? 'text-white' : 'text-theme-primary'
               )}>
                 {value}
               </p>
@@ -240,7 +240,7 @@ export function ConformidadeDashboard() {
         <div className="absolute inset-0 flex items-center justify-center">
           <span className={cn(
             'text-2xl font-bold',
-            isDark ? 'text-white' : 'text-gray-900'
+            isDark ? 'text-white' : 'text-theme-primary'
           )}>
             {value}%
           </span>
@@ -269,13 +269,13 @@ export function ConformidadeDashboard() {
         <div>
           <h2 className={cn(
             'text-2xl font-bold',
-            isDark ? 'text-white' : 'text-gray-900'
+            isDark ? 'text-white' : 'text-theme-primary'
           )}>
             Dashboard de Conformidade
           </h2>
           <p className={cn(
             'text-sm',
-            isDark ? 'text-slate-400' : 'text-gray-500'
+            isDark ? 'text-slate-400' : 'text-theme-muted'
           )}>
             Monitoramento ANVISA + CFM em tempo real
           </p>
@@ -310,13 +310,13 @@ export function ConformidadeDashboard() {
             <div className="flex-1 text-center md:text-left">
               <h3 className={cn(
                 'text-xl font-bold',
-                isDark ? 'text-white' : 'text-gray-900'
+                isDark ? 'text-white' : 'text-theme-primary'
               )}>
                 Conformidade Regulatória Geral
               </h3>
               <p className={cn(
                 'mt-1',
-                isDark ? 'text-slate-400' : 'text-gray-500'
+                isDark ? 'text-slate-400' : 'text-theme-muted'
               )}>
                 Taxa de conformidade combinada ANVISA + CFM
               </p>
@@ -389,32 +389,32 @@ export function ConformidadeDashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Total Verificados</span>
-              <span className={cn('font-semibold', isDark ? 'text-white' : 'text-gray-900')}>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>Total Verificados</span>
+              <span className={cn('font-semibold', isDark ? 'text-white' : 'text-theme-primary')}>
                 {stats?.anvisa_total || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Registros Válidos</span>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>Registros Válidos</span>
               <span className="text-emerald-500 font-semibold">{stats?.anvisa_validos || 0}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Registros Inválidos</span>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>Registros Inválidos</span>
               <span className="text-red-500 font-semibold">{stats?.anvisa_invalidos || 0}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Vencendo (30 dias)</span>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>Vencendo (30 dias)</span>
               <span className="text-amber-500 font-semibold">{stats?.anvisa_vencendo_30d || 0}</span>
             </div>
             {/* Progress bar */}
             <div className="mt-4">
               <div className="flex justify-between text-xs mb-1">
                 <span className={isDark ? 'text-slate-500' : 'text-gray-400'}>Taxa de Conformidade</span>
-                <span className={isDark ? 'text-white' : 'text-gray-900'}>{stats?.anvisa_percentual || 0}%</span>
+                <span className={isDark ? 'text-white' : 'text-theme-primary'}>{stats?.anvisa_percentual || 0}%</span>
               </div>
               <div className={cn(
                 'h-2 rounded-full overflow-hidden',
-                isDark ? 'bg-slate-700' : 'bg-gray-200'
+                isDark ? 'bg-slate-700' : 'progress-bar-bg'
               )}>
                 <motion.div
                   initial={{ width: 0 }}
@@ -444,32 +444,32 @@ export function ConformidadeDashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Total Verificados</span>
-              <span className={cn('font-semibold', isDark ? 'text-white' : 'text-gray-900')}>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>Total Verificados</span>
+              <span className={cn('font-semibold', isDark ? 'text-white' : 'text-theme-primary')}>
                 {stats?.cfm_total || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>CRMs Ativos</span>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>CRMs Ativos</span>
               <span className="text-emerald-500 font-semibold">{stats?.cfm_validos || 0}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>CRMs Inativos/Suspensos</span>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>CRMs Inativos/Suspensos</span>
               <span className="text-red-500 font-semibold">{stats?.cfm_invalidos || 0}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Pendentes Verificação</span>
+              <span className={isDark ? 'text-slate-400' : 'text-theme-muted'}>Pendentes Verificação</span>
               <span className="text-amber-500 font-semibold">-</span>
             </div>
             {/* Progress bar */}
             <div className="mt-4">
               <div className="flex justify-between text-xs mb-1">
                 <span className={isDark ? 'text-slate-500' : 'text-gray-400'}>Taxa de Conformidade</span>
-                <span className={isDark ? 'text-white' : 'text-gray-900'}>{stats?.cfm_percentual || 0}%</span>
+                <span className={isDark ? 'text-white' : 'text-theme-primary'}>{stats?.cfm_percentual || 0}%</span>
               </div>
               <div className={cn(
                 'h-2 rounded-full overflow-hidden',
-                isDark ? 'bg-slate-700' : 'bg-gray-200'
+                isDark ? 'bg-slate-700' : 'progress-bar-bg'
               )}>
                 <motion.div
                   initial={{ width: 0 }}
@@ -508,7 +508,7 @@ export function ConformidadeDashboard() {
                   animate={{ opacity: 1, x: 0 }}
                   className={cn(
                     'p-4 rounded-xl flex items-start gap-3',
-                    isDark ? 'bg-slate-800/50' : 'bg-gray-50'
+                    isDark ? 'bg-slate-800/50' : 'bg-theme-elevated'
                   )}
                 >
                   <div className={cn(
@@ -529,13 +529,13 @@ export function ConformidadeDashboard() {
                   <div className="flex-1 min-w-0">
                     <p className={cn(
                       'font-medium truncate',
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? 'text-white' : 'text-theme-primary'
                     )}>
                       {alerta.titulo}
                     </p>
                     <p className={cn(
                       'text-sm truncate',
-                      isDark ? 'text-slate-400' : 'text-gray-500'
+                      isDark ? 'text-slate-400' : 'text-theme-muted'
                     )}>
                       {alerta.descricao}
                     </p>

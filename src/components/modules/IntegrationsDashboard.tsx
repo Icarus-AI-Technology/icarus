@@ -96,7 +96,7 @@ const getStatusColor = (status: IntegrationStatus) => {
     case 'connected':
       return 'bg-emerald-100 text-emerald-800 border-emerald-200';
     case 'disconnected':
-      return 'bg-gray-100 text-gray-800 border-gray-200';
+      return 'bg-theme-muted text-theme-primary border-gray-200';
     case 'error':
       return 'bg-red-100 text-red-800 border-red-200';
     case 'expiring':
@@ -106,7 +106,7 @@ const getStatusColor = (status: IntegrationStatus) => {
     case 'outdated':
       return 'bg-orange-100 text-orange-800 border-orange-200';
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-200';
+      return 'bg-theme-muted text-theme-primary border-gray-200';
   }
 };
 
@@ -164,12 +164,12 @@ function IntegrationCard({ health, onConfigure }: IntegrationCardProps) {
     <Card className="neu-soft p-4 hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gray-100 text-gray-600">
+          <div className="p-2 rounded-lg bg-theme-muted text-theme-secondary">
             {getIntegrationIcon(health.name)}
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">{health.name}</h3>
-            <p className="text-sm text-gray-500">
+            <h3 className="font-semibold text-theme-primary">{health.name}</h3>
+            <p className="text-sm text-theme-muted">
               Última verificação: {formatDate(health.lastSync)}
             </p>
           </div>
@@ -225,8 +225,8 @@ function SummaryCard({ title, value, icon, color }: SummaryCardProps) {
       <div className="flex items-center gap-3">
         <div className={`p-2 rounded-lg ${color}`}>{icon}</div>
         <div>
-          <p className="text-sm text-gray-500">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm text-theme-muted">{title}</p>
+          <p className="text-2xl font-bold text-theme-primary">{value}</p>
         </div>
       </div>
     </Card>
@@ -287,15 +287,15 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-theme-primary">
             Dashboard de Integrações
           </h2>
-          <p className="text-gray-500">
+          <p className="text-theme-muted">
             Monitore o status de todas as integrações externas
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-theme-muted">
             Última atualização: {formatDate(lastCheck ?? undefined)}
           </span>
           <Button
@@ -332,8 +332,8 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
         <SummaryCard
           title="Desconectadas"
           value={stats.disconnected}
-          icon={<Plug className="h-5 w-5 text-gray-600" />}
-          color="bg-gray-100"
+          icon={<Plug className="h-5 w-5 text-theme-secondary" />}
+          color="bg-theme-muted"
         />
       </div>
 
@@ -381,12 +381,12 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
 
       {/* Health Score */}
       <Card className="neu-soft p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <h3 className="text-lg font-semibold text-theme-primary mb-4">
           Score de Saúde das Integrações
         </h3>
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-4 progress-bar-bg rounded-full overflow-hidden">
               <div
                 className={`h-full transition-all duration-500 w-(--progress) ${
                   stats.total > 0 && stats.connected / stats.total >= 0.8
@@ -401,14 +401,14 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
               />
             </div>
           </div>
-          <span className="text-2xl font-bold text-gray-900">
+          <span className="text-2xl font-bold text-theme-primary">
             {stats.total > 0
               ? Math.round((stats.connected / stats.total) * 100)
               : 0}
             %
           </span>
         </div>
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-theme-muted">
           {stats.connected} de {stats.total} integrações funcionando corretamente
         </p>
       </Card>
@@ -416,7 +416,7 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
       {/* Alerts Section */}
       {stats.errors > 0 || stats.warnings > 0 ? (
         <Card className="neu-soft p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">
             Alertas Ativos
           </h3>
           <div className="space-y-3">

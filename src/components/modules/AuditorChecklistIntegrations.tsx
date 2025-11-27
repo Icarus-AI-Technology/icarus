@@ -83,21 +83,22 @@ const getStatusIcon = (status: AuditorChecklistItem['status']) => {
     case 'warning':
       return <AlertTriangle className="h-5 w-5 text-amber-500" />;
     case 'pending':
-      return <MinusCircle className="h-5 w-5 text-gray-400" />;
+      return <MinusCircle className="h-5 w-5 text-theme-muted" />;
     case 'not_applicable':
-      return <MinusCircle className="h-5 w-5 text-gray-300" />;
+      return <MinusCircle className="h-5 w-5 text-theme-muted" />;
     default:
-      return <MinusCircle className="h-5 w-5 text-gray-400" />;
+      return <MinusCircle className="h-5 w-5 text-theme-muted" />;
   }
 };
 
 const getStatusBadge = (status: AuditorChecklistItem['status']) => {
+  // Dark Glass Medical - Theme-aware badge styles
   const styles: Record<AuditorChecklistItem['status'], string> = {
-    pass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    fail: 'bg-red-100 text-red-800 border-red-200',
-    warning: 'bg-amber-100 text-amber-800 border-amber-200',
-    pending: 'bg-gray-100 text-gray-800 border-gray-200',
-    not_applicable: 'bg-gray-50 text-gray-500 border-gray-200',
+    pass: 'badge-success',
+    fail: 'badge-danger',
+    warning: 'badge-warning',
+    pending: 'badge-neutral',
+    not_applicable: 'badge-neutral opacity-60',
   };
 
   const labels: Record<AuditorChecklistItem['status'], string> = {
@@ -214,7 +215,7 @@ function ScoreGauge({ score, label, size = 'md' }: ScoreGaugeProps) {
           {Math.round(score)}
         </text>
       </svg>
-      <span className={`${labelSize} text-gray-600 mt-1`}>{label}</span>
+      <span className={`${labelSize} text-theme-secondary mt-1`}>{label}</span>
     </div>
   );
 }
@@ -234,31 +235,31 @@ function CategorySection({ category, expanded, onToggle }: CategorySectionProps)
     <Card className="neu-soft overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
       >
         <div className="flex items-center gap-4">
           {expanded ? (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-theme-muted" />
           ) : (
-            <ChevronRight className="h-5 w-5 text-gray-400" />
+            <ChevronRight className="h-5 w-5 text-theme-muted" />
           )}
           <div className="text-left">
-            <h3 className="font-semibold text-gray-900">{category.name}</h3>
+            <h3 className="font-semibold text-theme-primary">{category.name}</h3>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-theme-muted">
                 Peso: {(category.weight * 100).toFixed(0)}%
               </span>
-              <span className="text-xs text-gray-300">|</span>
+              <span className="text-xs text-theme-muted">|</span>
               <span className="text-xs text-emerald-600">{passCount} OK</span>
               {warningCount > 0 && (
                 <>
-                  <span className="text-xs text-gray-300">|</span>
+                  <span className="text-xs text-theme-muted">|</span>
                   <span className="text-xs text-amber-600">{warningCount} Alertas</span>
                 </>
               )}
               {failCount > 0 && (
                 <>
-                  <span className="text-xs text-gray-300">|</span>
+                  <span className="text-xs text-theme-muted">|</span>
                   <span className="text-xs text-red-600">{failCount} Falhas</span>
                 </>
               )}
@@ -271,7 +272,7 @@ function CategorySection({ category, expanded, onToggle }: CategorySectionProps)
               {Math.round(category.score)}%
             </span>
           </div>
-          <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-24 h-2 progress-bar-bg rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${getScoreProgressColor(
                 category.score
@@ -285,37 +286,37 @@ function CategorySection({ category, expanded, onToggle }: CategorySectionProps)
       {expanded && (
         <div className="border-t border-gray-100">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-theme-elevated">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-2 text-left text-xs font-medium text-theme-muted uppercase">
                   Item
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-2 text-left text-xs font-medium text-theme-muted uppercase">
                   Descrição
                 </th>
-                <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-2 text-center text-xs font-medium text-theme-muted uppercase">
                   Severidade
                 </th>
-                <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-2 text-center text-xs font-medium text-theme-muted uppercase">
                   Status
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {category.items.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
+                <tr key={item.id} className="hover:bg-white/5">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(item.status)}
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-theme-primary">
                         {item.item}
                       </span>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-gray-600">{item.description}</span>
+                    <span className="text-sm text-theme-secondary">{item.description}</span>
                     {item.details && (
-                      <p className="text-xs text-gray-400 mt-0.5">{item.details}</p>
+                      <p className="text-xs text-theme-muted mt-0.5">{item.details}</p>
                     )}
                   </td>
                   <td className="px-4 py-3 text-center">
@@ -369,10 +370,10 @@ function AlertCard({ alert }: AlertCardProps) {
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <span className={`font-semibold ${style.text}`}>{alert.integration}</span>
-            <span className="text-xs text-gray-500">{formatDate(alert.timestamp)}</span>
+            <span className="text-xs text-theme-muted">{formatDate(alert.timestamp)}</span>
           </div>
           <p className={`text-sm ${style.text} mt-1`}>{alert.message}</p>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-theme-secondary mt-2">
             <span className="font-medium">Ação:</span> {alert.action}
           </p>
         </div>
@@ -476,7 +477,7 @@ export function AuditorChecklistIntegrations({
     return (
       <div className="flex items-center justify-center py-12">
         <RefreshCw className="h-8 w-8 text-indigo-500 animate-spin" />
-        <span className="ml-3 text-gray-600">Executando auditoria...</span>
+        <span className="ml-3 text-theme-secondary">Executando auditoria...</span>
       </div>
     );
   }
@@ -486,10 +487,10 @@ export function AuditorChecklistIntegrations({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-theme-primary">
             Auditoria de Integrações
           </h2>
-          <p className="text-gray-500">
+          <p className="text-theme-muted">
             Checklist completo de verificação das integrações externas
           </p>
         </div>
@@ -529,8 +530,8 @@ export function AuditorChecklistIntegrations({
               </div>
 
               <div className="text-center md:text-right">
-                <div className="text-sm text-gray-500 mb-1">Última execução</div>
-                <div className="font-medium text-gray-900">
+                <div className="text-sm text-theme-muted mb-1">Última execução</div>
+                <div className="font-medium text-theme-primary">
                   {formatDate(auditResult.timestamp)}
                 </div>
                 <div className="mt-4">
@@ -550,7 +551,7 @@ export function AuditorChecklistIntegrations({
                       : 'Reprovado'}
                   </span>
                 </div>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-theme-muted mt-2">
                   Meta mínima: 85 pontos
                 </p>
               </div>
@@ -602,10 +603,10 @@ export function AuditorChecklistIntegrations({
               {auditResult.alerts.length === 0 ? (
                 <Card className="neu-soft p-8 text-center">
                   <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-theme-primary">
                     Nenhum alerta ativo
                   </h3>
-                  <p className="text-gray-500 mt-1">
+                  <p className="text-theme-muted mt-1">
                     Todas as integrações estão funcionando corretamente.
                   </p>
                 </Card>
@@ -622,10 +623,10 @@ export function AuditorChecklistIntegrations({
               {auditResult.recommendations.length === 0 ? (
                 <Card className="neu-soft p-8 text-center">
                   <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-theme-primary">
                     Nenhuma recomendação
                   </h3>
-                  <p className="text-gray-500 mt-1">
+                  <p className="text-theme-muted mt-1">
                     Todas as verificações passaram com sucesso.
                   </p>
                 </Card>
@@ -638,12 +639,12 @@ export function AuditorChecklistIntegrations({
                   </div>
                   <ul className="divide-y divide-gray-100">
                     {auditResult.recommendations.map((rec, index) => (
-                      <li key={index} className="p-4 hover:bg-gray-50">
+                      <li key={index} className="p-4 hover:bg-white/5">
                         <div className="flex items-start gap-3">
                           <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-medium">
                             {index + 1}
                           </span>
-                          <span className="text-gray-700">{rec}</span>
+                          <span className="text-theme-secondary">{rec}</span>
                         </div>
                       </li>
                     ))}
@@ -654,11 +655,11 @@ export function AuditorChecklistIntegrations({
           </Tabs>
 
           {/* Score Formula */}
-          <Card className="neu-inset p-4 bg-gray-50">
-            <h4 className="text-sm font-semibold text-gray-700 mb-2">
+          <Card className="neu-inset p-4 bg-theme-elevated">
+            <h4 className="text-sm font-semibold text-theme-secondary mb-2">
               Fórmula de Score
             </h4>
-            <code className="text-xs text-gray-600">
+            <code className="text-xs text-theme-secondary">
               Score = (Microsoft365 × 0.30) + (Pluggy × 0.25) + (SEFAZ × 0.20) + (ANVISA ×
               0.15) + (Outras × 0.10) × 100
             </code>

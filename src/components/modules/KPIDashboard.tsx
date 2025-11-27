@@ -244,7 +244,7 @@ export default function KPIDashboard() {
       case 'qualidade':
         return 'bg-indigo-100 text-indigo-800'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-theme-muted text-theme-primary'
     }
   }
 
@@ -277,7 +277,7 @@ export default function KPIDashboard() {
       case 'info':
         return 'bg-blue-100 text-blue-800 border-blue-300'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -370,11 +370,11 @@ export default function KPIDashboard() {
                             <div className={`text-2xl font-bold ${getAtingimentoColor(kpi.atingimento)}`}>
                               {kpi.atingimento.toFixed(0)}%
                             </div>
-                            <div className="text-xs text-gray-500">Atingimento</div>
+                            <div className="text-xs text-theme-muted">Atingimento</div>
                           </div>
                         </div>
                         <div className="mt-2">
-                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="w-full h-2 progress-bar-bg rounded-full overflow-hidden">
                             <div
                               className={`h-full w-(--progress) ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : kpi.atingimento >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
                               style={{ '--progress': `${Math.min(kpi.atingimento, 100)}%` } as React.CSSProperties}
@@ -399,10 +399,10 @@ export default function KPIDashboard() {
                         <span className={`text-xs px-2 py-0.5 rounded-full border ${getSeveridadeBadge(alerta.severidade)}`}>
                           {alerta.severidade.toUpperCase()}
                         </span>
-                        <span className="text-xs text-gray-600">{alerta.data}</span>
+                        <span className="text-xs text-theme-secondary">{alerta.data}</span>
                       </div>
                       <div className="font-semibold">{alerta.kpi_nome}</div>
-                      <p className="text-sm text-gray-700 mt-1">{alerta.mensagem}</p>
+                      <p className="text-sm text-theme-secondary mt-1">{alerta.mensagem}</p>
                     </div>
                   ))}
                 </div>
@@ -426,7 +426,7 @@ export default function KPIDashboard() {
                       </span>
                       <div className="mt-3">
                         <div className="text-3xl font-bold">{atingMedio}%</div>
-                        <div className="text-xs text-gray-500">{kpisCat.length} KPIs</div>
+                        <div className="text-xs text-theme-muted">{kpisCat.length} KPIs</div>
                       </div>
                     </div>
                   )
@@ -453,33 +453,33 @@ export default function KPIDashboard() {
                           <span className={`text-xs px-2 py-0.5 rounded capitalize ${getCategoriaBadge(kpi.categoria)}`}>
                             {kpi.categoria}
                           </span>
-                          <span className="text-xs text-gray-600">• {kpi.responsavel}</span>
+                          <span className="text-xs text-theme-secondary">• {kpi.responsavel}</span>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className={`text-3xl font-bold ${getAtingimentoColor(kpi.atingimento)}`}>
                           {kpi.atingimento.toFixed(0)}%
                         </div>
-                        <div className="text-xs text-gray-500">Atingimento</div>
+                        <div className="text-xs text-theme-muted">Atingimento</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4 mb-3">
                       <div>
-                        <p className="text-xs text-gray-500">Valor Atual</p>
+                        <p className="text-xs text-theme-muted">Valor Atual</p>
                         <p className="text-xl font-bold">
                           {kpi.unidade === 'R$' && formatCurrency(kpi.valor_atual)}
                           {kpi.unidade !== 'R$' && `${kpi.valor_atual.toFixed(1)}${kpi.unidade}`}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">Meta</p>
-                        <p className="text-xl font-semibold text-gray-600">
+                        <p className="text-xs text-theme-muted">Meta</p>
+                        <p className="text-xl font-semibold text-theme-secondary">
                           {kpi.unidade === 'R$' && formatCurrency(kpi.meta)}
                           {kpi.unidade !== 'R$' && `${kpi.meta.toFixed(1)}${kpi.unidade}`}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">Variação vs Anterior</p>
+                        <p className="text-xs text-theme-muted">Variação vs Anterior</p>
                         <div className="flex items-center gap-1">
                           <span className="text-lg">{getTendenciaIcon(kpi.tendencia)}</span>
                           <p className={`text-xl font-semibold ${kpi.variacao_percentual > 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -489,13 +489,13 @@ export default function KPIDashboard() {
                       </div>
                     </div>
                     <div>
-                      <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="w-full h-3 progress-bar-bg rounded-full overflow-hidden">
                         <div
                           className={`h-full w-(--progress) ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : kpi.atingimento >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
                           style={{ '--progress': `${Math.min(kpi.atingimento, 100)}%` } as React.CSSProperties}
                         ></div>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">{kpi.periodo}</p>
+                      <p className="text-xs text-theme-muted mt-1">{kpi.periodo}</p>
                     </div>
                   </Card>
                 ))}
@@ -517,14 +517,14 @@ export default function KPIDashboard() {
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <div className="font-bold text-lg">{alerta.kpi_nome}</div>
-                        <div className="text-xs text-gray-600 capitalize">{alerta.tipo.replace('_', ' ')}</div>
+                        <div className="text-xs text-theme-secondary capitalize">{alerta.tipo.replace('_', ' ')}</div>
                       </div>
                       <span className={`text-xs px-2 py-0.5 rounded-full border ${getSeveridadeBadge(alerta.severidade)}`}>
                         {alerta.severidade.toUpperCase()}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-700 mb-2">{alerta.mensagem}</p>
-                    <div className="text-xs text-gray-500">Data: {alerta.data}</div>
+                    <p className="text-sm text-theme-secondary mb-2">{alerta.mensagem}</p>
+                    <div className="text-xs text-theme-muted">Data: {alerta.data}</div>
                   </Card>
                 ))}
               </div>
@@ -562,20 +562,20 @@ export default function KPIDashboard() {
                         </div>
                         <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
                           <div>
-                            <span className="text-xs text-gray-500">Atual:</span>{' '}
+                            <span className="text-xs text-theme-muted">Atual:</span>{' '}
                             <span className="font-semibold">
                               {kpi.unidade === 'R$' ? formatCurrency(kpi.valor_atual) : `${kpi.valor_atual.toFixed(1)}${kpi.unidade}`}
                             </span>
                           </div>
                           <div>
-                            <span className="text-xs text-gray-500">Meta:</span>{' '}
+                            <span className="text-xs text-theme-muted">Meta:</span>{' '}
                             <span className="font-semibold">
                               {kpi.unidade === 'R$' ? formatCurrency(kpi.meta) : `${kpi.meta.toFixed(1)}${kpi.unidade}`}
                             </span>
                           </div>
                         </div>
                         <div className="mt-2">
-                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="w-full h-2 progress-bar-bg rounded-full overflow-hidden">
                             <div
                               className={`h-full w-(--progress) ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
                               style={{ '--progress': `${Math.min(kpi.atingimento, 100)}%` } as React.CSSProperties}

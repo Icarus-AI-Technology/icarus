@@ -714,9 +714,9 @@ export default function CRMVendas() {
     switch (status) {
       case 'ativo': return 'bg-green-100 text-green-800 border-green-300'
       case 'prospecto': return 'bg-blue-100 text-blue-800 border-blue-300'
-      case 'inativo': return 'bg-gray-100 text-gray-800 border-gray-300'
+      case 'inativo': return 'bg-theme-muted text-theme-primary border-gray-300'
       case 'churn': return 'bg-red-100 text-red-800 border-red-300'
-      default: return 'bg-gray-100 text-gray-800 border-gray-300'
+      default: return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -724,9 +724,9 @@ export default function CRMVendas() {
     switch (nivel) {
       case 'estrategico': return 'bg-purple-100 text-purple-800 border-purple-300'
       case 'gold': return 'bg-yellow-100 text-yellow-800 border-yellow-300'
-      case 'silver': return 'bg-gray-100 text-gray-800 border-gray-300'
+      case 'silver': return 'bg-theme-muted text-theme-primary border-gray-300'
       case 'bronze': return 'bg-orange-100 text-orange-800 border-orange-300'
-      default: return 'bg-gray-100 text-gray-800 border-gray-300'
+      default: return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -739,7 +739,7 @@ export default function CRMVendas() {
       case 'fechamento': return 'bg-orange-100 text-orange-800 border-orange-300'
       case 'ganho': return 'bg-green-100 text-green-800 border-green-300'
       case 'perdido': return 'bg-red-100 text-red-800 border-red-300'
-      default: return 'bg-gray-100 text-gray-800 border-gray-300'
+      default: return 'bg-theme-muted text-theme-primary border-gray-300'
     }
   }
 
@@ -887,7 +887,7 @@ export default function CRMVendas() {
                               {alerta.prioridade.toUpperCase()}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-700">{alerta.mensagem}</p>
+                          <p className="text-sm text-theme-secondary">{alerta.mensagem}</p>
                         </div>
                       </div>
                       <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
@@ -915,7 +915,7 @@ export default function CRMVendas() {
                         <div className="text-2xl font-bold text-gray-400">#{index + 1}</div>
                         <div>
                           <div className="font-semibold">{cliente.nome_fantasia}</div>
-                          <div className="text-xs text-gray-500">{cliente.vendedor_responsavel}</div>
+                          <div className="text-xs text-theme-muted">{cliente.vendedor_responsavel}</div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -950,7 +950,7 @@ export default function CRMVendas() {
                         {getEstagioLabel(estagio as EstagioOportunidade)}
                       </div>
                       <div className="text-2xl font-bold">{count}</div>
-                      <div className="text-xs text-gray-500 mt-1">{formatCurrency(valorTotal)}</div>
+                      <div className="text-xs text-theme-muted mt-1">{formatCurrency(valorTotal)}</div>
                     </div>
                   )
                 })}
@@ -995,7 +995,7 @@ export default function CRMVendas() {
                     <SelectItem value="Norte">Norte</SelectItem>
                   </SelectContent>
                 </Select>
-                <div className="text-sm text-gray-500 flex items-center">
+                <div className="text-sm text-theme-muted flex items-center">
                   {clientesFiltrados.length} cliente(s) encontrado(s)
                 </div>
               </div>
@@ -1013,8 +1013,8 @@ export default function CRMVendas() {
                       <div className="flex items-start gap-3">
                         <div className="flex-1">
                           <h3 className="font-bold text-lg">{cliente.nome_fantasia}</h3>
-                          <p className="text-sm text-gray-600">{cliente.razao_social}</p>
-                          <p className="text-xs text-gray-500 mt-1">CNPJ: {cliente.cnpj}</p>
+                          <p className="text-sm text-theme-secondary">{cliente.razao_social}</p>
+                          <p className="text-xs text-theme-muted mt-1">CNPJ: {cliente.cnpj}</p>
                           <div className="flex gap-2 mt-2">
                             <span className={`text-xs px-2 py-0.5 rounded-full border ${getBadgeColorStatus(cliente.status)}`}>
                               {cliente.status.toUpperCase()}
@@ -1031,15 +1031,15 @@ export default function CRMVendas() {
                     <div className="lg:col-span-1">
                       <div className="space-y-2">
                         <div>
-                          <p className="text-xs text-gray-500">Faturamento Mensal Médio</p>
+                          <p className="text-xs text-theme-muted">Faturamento Mensal Médio</p>
                           <p className="font-bold">{formatCurrency(cliente.faturamento_mensal_medio)}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500">Últimos 12 meses</p>
+                          <p className="text-xs text-theme-muted">Últimos 12 meses</p>
                           <p className="font-semibold">{formatCurrency(cliente.faturamento_ultimos_12m)}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500">Crescimento</p>
+                          <p className="text-xs text-theme-muted">Crescimento</p>
                           <p className={`font-semibold ${cliente.crescimento_percentual >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {cliente.crescimento_percentual >= 0 ? '↗' : '↘'} {Math.abs(cliente.crescimento_percentual).toFixed(1)}%
                           </p>
@@ -1051,15 +1051,15 @@ export default function CRMVendas() {
                     <div className="lg:col-span-1">
                       <div className="space-y-2">
                         <div>
-                          <p className="text-xs text-gray-500">Vendedor Responsável</p>
+                          <p className="text-xs text-theme-muted">Vendedor Responsável</p>
                           <p className="font-semibold">{cliente.vendedor_responsavel}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500">Última Compra</p>
+                          <p className="text-xs text-theme-muted">Última Compra</p>
                           <p className="text-sm">{cliente.ultima_compra ? formatDate(cliente.ultima_compra) : 'Nunca'}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500">Dias sem Compra</p>
+                          <p className="text-xs text-theme-muted">Dias sem Compra</p>
                           <p className={`text-sm ${cliente.dias_sem_compra > 20 ? 'text-orange-600 font-semibold' : ''}`}>
                             {cliente.dias_sem_compra} dias
                           </p>
@@ -1071,7 +1071,7 @@ export default function CRMVendas() {
                     <div className="lg:col-span-1">
                       <div className="space-y-2">
                         <div>
-                          <p className="text-xs text-gray-500">Churn Risk</p>
+                          <p className="text-xs text-theme-muted">Churn Risk</p>
                           <div className="flex items-center gap-2">
                             <span className={`text-lg font-bold px-3 py-1 rounded-full border ${getBadgeColorChurnRisk(cliente.churn_risk)}`}>
                               {cliente.churn_risk}%
@@ -1082,7 +1082,7 @@ export default function CRMVendas() {
                           )}
                         </div>
                         <div className="mt-3">
-                          <p className="text-xs text-gray-500 mb-1">Próxima Ação</p>
+                          <p className="text-xs text-theme-muted mb-1">Próxima Ação</p>
                           <p className="text-sm font-semibold">{cliente.proxima_acao}</p>
                         </div>
                       </div>
@@ -1092,12 +1092,12 @@ export default function CRMVendas() {
                   {/* Contatos */}
                   {cliente.contatos.length > 0 && (
                     <div className="mt-4 pt-4 border-t">
-                      <p className="text-xs text-gray-500 mb-2">Contatos Principais</p>
+                      <p className="text-xs text-theme-muted mb-2">Contatos Principais</p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {cliente.contatos.slice(0, 2).map(contato => (
                           <div key={contato.id} className="text-sm flex items-center gap-2">
                             <span className="font-semibold">{contato.nome}</span>
-                            <span className="text-gray-500">({contato.cargo})</span>
+                            <span className="text-theme-muted">({contato.cargo})</span>
                             <span className="text-xs text-gray-400">- {contato.email}</span>
                           </div>
                         ))}
@@ -1128,7 +1128,7 @@ export default function CRMVendas() {
                         {/* Coluna 1: Info Básica */}
                         <div className="lg:col-span-1">
                           <h3 className="font-bold">{oportunidade.titulo}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{oportunidade.cliente_nome}</p>
+                          <p className="text-sm text-theme-secondary mt-1">{oportunidade.cliente_nome}</p>
                           <div className="flex gap-2 mt-2">
                             <span className={`text-xs px-2 py-0.5 rounded-full border ${getBadgeColorEstagio(oportunidade.estagio)}`}>
                               {getEstagioLabel(oportunidade.estagio)}
@@ -1140,15 +1140,15 @@ export default function CRMVendas() {
                         <div className="lg:col-span-1">
                           <div className="space-y-2">
                             <div>
-                              <p className="text-xs text-gray-500">Valor Estimado</p>
+                              <p className="text-xs text-theme-muted">Valor Estimado</p>
                               <p className="font-bold text-lg">{formatCurrency(oportunidade.valor_estimado)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Probabilidade</p>
+                              <p className="text-xs text-theme-muted">Probabilidade</p>
                               <p className="font-semibold">{oportunidade.probabilidade}%</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Valor Ponderado</p>
+                              <p className="text-xs text-theme-muted">Valor Ponderado</p>
                               <p className="font-semibold text-green-600">
                                 {formatCurrency(oportunidade.valor_estimado * oportunidade.probabilidade / 100)}
                               </p>
@@ -1160,15 +1160,15 @@ export default function CRMVendas() {
                         <div className="lg:col-span-1">
                           <div className="space-y-2">
                             <div>
-                              <p className="text-xs text-gray-500">Criação</p>
+                              <p className="text-xs text-theme-muted">Criação</p>
                               <p className="text-sm">{formatDate(oportunidade.data_criacao)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Fechamento Previsto</p>
+                              <p className="text-xs text-theme-muted">Fechamento Previsto</p>
                               <p className="text-sm">{formatDate(oportunidade.data_fechamento_prevista)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Vendedor</p>
+                              <p className="text-xs text-theme-muted">Vendedor</p>
                               <p className="text-sm font-semibold">{oportunidade.vendedor_responsavel}</p>
                             </div>
                           </div>
@@ -1189,10 +1189,10 @@ export default function CRMVendas() {
                       {/* Produtos de Interesse */}
                       {oportunidade.produtos_interesse.length > 0 && (
                         <div className="mt-3 pt-3 border-t">
-                          <p className="text-xs text-gray-500 mb-2">Produtos de Interesse</p>
+                          <p className="text-xs text-theme-muted mb-2">Produtos de Interesse</p>
                           <div className="flex flex-wrap gap-2">
                             {oportunidade.produtos_interesse.map((produto, idx) => (
-                              <span key={idx} className="text-xs px-2 py-1 bg-gray-100 rounded border">
+                              <span key={idx} className="text-xs px-2 py-1 bg-theme-muted rounded border">
                                 {produto}
                               </span>
                             ))}
@@ -1220,20 +1220,20 @@ export default function CRMVendas() {
                   <h3 className="font-semibold mb-3">Resumo Geral</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="p-4 border rounded-lg">
-                      <p className="text-sm text-gray-500">Total de Clientes</p>
+                      <p className="text-sm text-theme-muted">Total de Clientes</p>
                       <p className="text-2xl font-bold">{clientes.length}</p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-theme-muted mt-1">
                         {clientesAtivos} ativos | {clientes.filter(c => c.status === 'prospecto').length} prospects
                       </p>
                     </div>
                     <div className="p-4 border rounded-lg">
-                      <p className="text-sm text-gray-500">Faturamento Total 12m</p>
+                      <p className="text-sm text-theme-muted">Faturamento Total 12m</p>
                       <p className="text-2xl font-bold">
                         {formatCurrency(clientes.reduce((sum, c) => sum + c.faturamento_ultimos_12m, 0))}
                       </p>
                     </div>
                     <div className="p-4 border rounded-lg">
-                      <p className="text-sm text-gray-500">Cirurgias/Mês Total</p>
+                      <p className="text-sm text-theme-muted">Cirurgias/Mês Total</p>
                       <p className="text-2xl font-bold">
                         {clientes.reduce((sum, c) => sum + c.cirurgias_mes, 0)}
                       </p>
@@ -1250,9 +1250,9 @@ export default function CRMVendas() {
                       const faturamentoTipo = clientesTipo.reduce((sum, c) => sum + c.faturamento_ultimos_12m, 0)
                       return (
                         <div key={tipo} className="p-4 border rounded-lg">
-                          <p className="text-sm text-gray-500 capitalize">{tipo.replace('_', ' ')}</p>
+                          <p className="text-sm text-theme-muted capitalize">{tipo.replace('_', ' ')}</p>
                           <p className="text-xl font-bold">{clientesTipo.length}</p>
-                          <p className="text-xs text-gray-500 mt-1">{formatCurrency(faturamentoTipo)}</p>
+                          <p className="text-xs text-theme-muted mt-1">{formatCurrency(faturamentoTipo)}</p>
                         </div>
                       )
                     })}
@@ -1268,9 +1268,9 @@ export default function CRMVendas() {
                       const faturamentoPorte = clientesPorte.reduce((sum, c) => sum + c.faturamento_ultimos_12m, 0)
                       return (
                         <div key={porte} className="p-4 border rounded-lg">
-                          <p className="text-sm text-gray-500 capitalize">{porte.replace('_', ' ')}</p>
+                          <p className="text-sm text-theme-muted capitalize">{porte.replace('_', ' ')}</p>
                           <p className="text-xl font-bold">{clientesPorte.length}</p>
-                          <p className="text-xs text-gray-500 mt-1">{formatCurrency(faturamentoPorte)}</p>
+                          <p className="text-xs text-theme-muted mt-1">{formatCurrency(faturamentoPorte)}</p>
                         </div>
                       )
                     })}
@@ -1307,7 +1307,7 @@ export default function CRMVendas() {
                           <div className="flex items-start justify-between">
                             <div>
                               <h3 className="font-bold text-lg">{previsao.cliente_nome}</h3>
-                              <p className="text-sm text-gray-600">{cliente.razao_social}</p>
+                              <p className="text-sm text-theme-secondary">{cliente.razao_social}</p>
                             </div>
                             <div className={`text-center px-4 py-2 rounded-lg border ${getBadgeColorChurnRisk(previsao.churn_probability)}`}>
                               <p className="text-xs">Churn Risk</p>
