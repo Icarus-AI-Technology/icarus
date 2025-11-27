@@ -20,10 +20,6 @@ export function GestaoCadastros() {
         { label: 'Pacientes', value: 0 },
         { label: 'Convênios', value: 0 }
       ]}
-      onAdd={() => console.log('Adicionar cadastro')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

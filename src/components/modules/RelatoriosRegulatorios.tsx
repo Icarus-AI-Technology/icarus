@@ -19,9 +19,6 @@ export function RelatoriosRegulatorios() {
         { label: 'Em Dia', value: 0 },
         { label: 'Próximo Vencimento', value: '-' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -20,9 +20,6 @@ export function NotificacoesInteligentes() {
         { label: 'Taxa Abertura', value: '0%' },
         { label: 'Alertas Críticos', value: 0 }
       ]}
-      onAdd={() => console.log('Nova notificação')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

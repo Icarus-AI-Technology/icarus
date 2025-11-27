@@ -19,9 +19,6 @@ export function GruposProdutosOPME() {
         { label: 'Categorias', value: 0 },
         { label: 'Produtos', value: 0 }
       ]}
-      onAdd={() => console.log('Adicionar grupo')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

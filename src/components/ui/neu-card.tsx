@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 export interface NeuCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'soft' | 'pressed' | 'flat';
+  variant?: 'soft' | 'pressed' | 'flat' | 'elevated';
   elevation?: 'low' | 'medium' | 'high';
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 }
@@ -10,8 +10,8 @@ export interface NeuCardProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * NeuCard - Neumorphic Card Component
  *
- * A card component with neumorphic design system following ICARUS patterns.
- * Provides soft, pressed, and flat variants with different elevation levels.
+ * A card component with neumorphic design system following ICARUS Dark Glass Medical patterns.
+ * Automatically adapts to dark/light mode using CSS variables.
  *
  * @example
  * // Soft card with medium elevation
@@ -38,24 +38,27 @@ export const NeuCard = React.forwardRef<HTMLDivElement, NeuCardProps>(
     },
     ref
   ) => {
-    // Variant styles
+    // Use CSS classes that respect dark/light mode from index.css
     const variantClasses = {
       soft: {
-        low: 'bg-gradient-to-br from-white to-gray-50 shadow-[4px_4px_8px_rgba(0,0,0,0.08),-4px_-4px_8px_rgba(255,255,255,0.9)]',
-        medium:
-          'bg-gradient-to-br from-white to-gray-50 shadow-[8px_8px_16px_rgba(0,0,0,0.1),-8px_-8px_16px_rgba(255,255,255,0.9)]',
-        high: 'bg-gradient-to-br from-white to-gray-50 shadow-[12px_12px_24px_rgba(0,0,0,0.12),-12px_-12px_24px_rgba(255,255,255,0.95)]',
+        low: 'neu-soft',
+        medium: 'neu-soft',
+        high: 'neu-elevated',
       },
       pressed: {
-        low: 'bg-gray-50 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.9)]',
-        medium:
-          'bg-gray-50 shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
-        high: 'bg-gray-50 shadow-[inset_6px_6px_12px_rgba(0,0,0,0.12),inset_-6px_-6px_12px_rgba(255,255,255,0.95)]',
+        low: 'neu-pressed',
+        medium: 'neu-pressed',
+        high: 'neu-pressed',
       },
       flat: {
-        low: 'bg-white border border-gray-200',
-        medium: 'bg-white border border-gray-300 shadow-sm',
-        high: 'bg-white border border-gray-400 shadow-md',
+        low: 'bg-theme-card',
+        medium: 'bg-theme-card shadow-sm',
+        high: 'bg-theme-card shadow-md',
+      },
+      elevated: {
+        low: 'neu-elevated',
+        medium: 'neu-elevated',
+        high: 'neu-elevated',
       },
     };
 

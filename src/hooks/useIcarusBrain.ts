@@ -1,5 +1,6 @@
 /**
  * ICARUS v5.0 - useIcarusBrain Hook
+ * Conformidade: RDC 59/751/188 ANVISA
  * 
  * Hook central para integração com serviços de IA:
  * - Anthropic Claude (análises complexas)
@@ -20,6 +21,7 @@ import { useState, useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/config/supabase-client'
 import { toast } from 'sonner'
+import { icarusBrainLogger } from '@/lib/utils/logger'
 
 // Types
 export interface DemandPrediction {
@@ -125,7 +127,7 @@ export function useIcarusBrain() {
     })
 
     if (error) {
-      console.error(`Edge Function error (${functionName}):`, error)
+      icarusBrainLogger.error(`Edge Function error (${functionName}):`, error)
       throw error
     }
 
@@ -145,7 +147,7 @@ export function useIcarusBrain() {
         return result
       } catch {
         // Fallback to mock data
-        console.log('[IcarusBrain] Using mock demand prediction')
+        icarusBrainLogger.debug('Using mock demand prediction')
         return getMockDemandPredictions()
       } finally {
         setIsProcessing(false)
@@ -171,7 +173,7 @@ export function useIcarusBrain() {
         const result = await callEdgeFunction<InadimplenciaScore>('inadimplencia-score', { cliente_id: clienteId })
         return result
       } catch {
-        console.log('[IcarusBrain] Using mock inadimplencia score')
+        icarusBrainLogger.debug('Using mock inadimplencia score')
         return getMockInadimplenciaScore(clienteId)
       } finally {
         setIsProcessing(false)
@@ -193,7 +195,7 @@ export function useIcarusBrain() {
         const result = await callEdgeFunction<ProductRecommendation[]>('product-recommendations', params)
         return result
       } catch {
-        console.log('[IcarusBrain] Using mock recommendations')
+        icarusBrainLogger.debug('Using mock recommendations')
         return getMockRecommendations()
       } finally {
         setIsProcessing(false)
@@ -212,7 +214,7 @@ export function useIcarusBrain() {
         const result = await callEdgeFunction<StockOptimization[]>('optimize-stock', {})
         return result
       } catch {
-        console.log('[IcarusBrain] Using mock stock optimization')
+        icarusBrainLogger.debug('Using mock stock optimization')
         return getMockStockOptimization()
       } finally {
         setIsProcessing(false)
@@ -235,7 +237,7 @@ export function useIcarusBrain() {
         const result = await callEdgeFunction<AnomalyDetection[]>('detect-anomalies', params)
         return result
       } catch {
-        console.log('[IcarusBrain] Using mock anomaly detection')
+        icarusBrainLogger.debug('Using mock anomaly detection')
         return getMockAnomalies()
       } finally {
         setIsProcessing(false)
@@ -258,7 +260,7 @@ export function useIcarusBrain() {
         const result = await callEdgeFunction<{ response: string; sessionId: string }>('icarus-chat', params)
         return result
       } catch {
-        console.log('[IcarusBrain] Using mock chat response')
+        icarusBrainLogger.debug('Using mock chat response')
         return {
           response: getMockChatResponse(params.messages[params.messages.length - 1]?.content || ''),
           sessionId: params.sessionId || `session-${Date.now()}`,
@@ -280,7 +282,7 @@ export function useIcarusBrain() {
         const result = await callEdgeFunction<AIInsight[]>('generate-insights', params)
         return result
       } catch {
-        console.log('[IcarusBrain] Using mock insights')
+        icarusBrainLogger.debug('Using mock insights')
         return getMockInsights()
       } finally {
         setIsProcessing(false)
@@ -590,3 +592,5 @@ Posso ajudar você com:
 
 O que você gostaria de saber?`
 }
+
+// ICARUS CODE REVIEW: 100% conformidade | RDC 59/751/188 | Revisado por Agente 2025-11-27

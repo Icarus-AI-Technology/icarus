@@ -20,10 +20,6 @@ export function ComprasInternacionais() {
         { label: 'Desembaraço', value: 0 },
         { label: 'Valor USD', value: '$ 0.00' }
       ]}
-      onAdd={() => console.log('Nova importação')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

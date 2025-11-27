@@ -20,9 +20,6 @@ export function WebhooksManagerModule() {
         { label: 'Taxa Sucesso', value: '0%' },
         { label: 'Falhas', value: 0 }
       ]}
-      onAdd={() => console.log('Novo webhook')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

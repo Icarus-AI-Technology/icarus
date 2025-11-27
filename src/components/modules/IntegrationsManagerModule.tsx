@@ -20,9 +20,6 @@ export function IntegrationsManagerModule() {
         { label: 'Webhooks', value: 0 },
         { label: 'Status', value: 'Online' }
       ]}
-      onAdd={() => console.log('Nova integração')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

@@ -19,10 +19,6 @@ export function ConfiguracoesAvancadas() {
         { label: 'Temas', value: 2 },
         { label: 'Idiomas', value: 2 }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar config')}
-      onImport={() => console.log('Importar config')}
     />
   )
 }

@@ -19,9 +19,6 @@ export function BIDashboardInteractive() {
         { label: 'Widgets', value: 0 },
         { label: 'Usuários Ativos', value: 0 }
       ]}
-      onAdd={() => console.log('Novo widget')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

@@ -20,10 +20,6 @@ export function ManutencaoPreventiva() {
         { label: 'Vencidas', value: 0 },
         { label: 'Taxa Conformidade', value: '0%' }
       ]}
-      onAdd={() => console.log('Agendar manutenção')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

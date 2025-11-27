@@ -20,9 +20,6 @@ export function IACentralModule() {
         { label: 'Confiança Média', value: '0%' },
         { label: 'Status', value: 'Online' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -20,9 +20,6 @@ export function TooltipAnalytics() {
         { label: 'Mais Acessado', value: '-' },
         { label: 'Taxa Ajuda', value: '0%' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -20,10 +20,6 @@ export function ContasReceberIA() {
         { label: 'Risco Alto (IA)', value: 0 },
         { label: 'Recebido (Mês)', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Novo título')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

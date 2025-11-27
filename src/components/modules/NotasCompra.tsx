@@ -19,11 +19,6 @@ export function NotasCompra() {
         { label: 'Aguardando Validação', value: 0 },
         { label: 'Valor Total', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Registrar NF')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
-      onImport={() => console.log('Importar XML')}
     />
   )
 }

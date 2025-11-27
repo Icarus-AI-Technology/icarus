@@ -19,9 +19,6 @@ export function GestaoUsuariosPermissoes() {
         { label: 'Administradores', value: 0 },
         { label: 'Perfis', value: 0 }
       ]}
-      onAdd={() => console.log('Adicionar usuário')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

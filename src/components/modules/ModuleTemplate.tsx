@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -6,14 +6,25 @@ import { Badge } from '@/components/ui/Badge'
 import { useTheme } from '@/hooks/useTheme'
 import { Plus, Search, Filter, Download, Upload } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { toast } from 'sonner'
 
 /**
  * ICARUS v5.0 - Template Padrão de Módulo
  * Design System: Dark Glass Medical (Neumorphism 3D)
+ * Conformidade: RDC 59/751/188 ANVISA
  * 
  * Este template serve como base para todos os módulos do sistema
  * Personalizar: title, description, icon, tableColumns, actions
  */
+
+/** Handlers padrão para ações de módulo - evita console.log em produção */
+const createDefaultHandlers = (moduleName: string) => ({
+  onAdd: () => toast.info(`Funcionalidade "Adicionar" em ${moduleName} será implementada`),
+  onSearch: (_query: string) => { /* Busca será implementada com Supabase */ },
+  onFilter: () => toast.info(`Filtros de ${moduleName} em desenvolvimento`),
+  onExport: () => toast.info(`Exportação de ${moduleName} em desenvolvimento`),
+  onImport: () => toast.info(`Importação de ${moduleName} em desenvolvimento`),
+})
 
 interface ModuleTemplateProps {
   title: string
@@ -54,14 +65,22 @@ export function ModuleTemplate({
   const { isDark } = useTheme()
   const [searchQuery, setSearchQuery] = useState('')
 
+  // Handlers padrão caso não sejam fornecidos
+  const defaults = createDefaultHandlers(title)
+  const handleAdd = onAdd ?? defaults.onAdd
+  const handleSearchFn = onSearch ?? defaults.onSearch
+  const handleFilter = onFilter ?? defaults.onFilter
+  const handleExport = onExport ?? defaults.onExport
+  const handleImport = onImport ?? defaults.onImport
+
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
   const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
   const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-500'
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useCallback((value: string) => {
     setSearchQuery(value)
-    onSearch?.(value)
-  }
+    handleSearchFn(value)
+  }, [handleSearchFn])
 
   return (
     <div className="space-y-6">
@@ -83,15 +102,13 @@ export function ModuleTemplate({
             <p className={`mt-1 ${textSecondary}`}>{description}</p>
           </div>
         </div>
-        {onAdd && (
-          <Button
-            onClick={onAdd}
-            className="flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Adicionar
-          </Button>
-        )}
+        <Button
+          onClick={handleAdd}
+          className="flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Adicionar
+        </Button>
       </div>
 
       {/* Stats Cards */}
@@ -131,35 +148,27 @@ export function ModuleTemplate({
         <CardContent className="pt-6">
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Search */}
-            {onSearch && (
-              <div className="flex-1 relative">
-                <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${textMuted}`} />
-                <Input
-                  placeholder="Buscar..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            )}
+            <div className="flex-1 relative">
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${textMuted}`} />
+              <Input
+                placeholder="Buscar..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="pl-10"
+              />
+            </div>
 
             {/* Action Buttons */}
             <div className="flex gap-2">
-              {onFilter && (
-                <Button variant="secondary" onClick={onFilter}>
-                  <Filter className="w-4 h-4" />
-                </Button>
-              )}
-              {onExport && (
-                <Button variant="secondary" onClick={onExport}>
-                  <Download className="w-4 h-4" />
-                </Button>
-              )}
-              {onImport && (
-                <Button variant="secondary" onClick={onImport}>
-                  <Upload className="w-4 h-4" />
-                </Button>
-              )}
+              <Button variant="secondary" onClick={handleFilter}>
+                <Filter className="w-4 h-4" />
+              </Button>
+              <Button variant="secondary" onClick={handleExport}>
+                <Download className="w-4 h-4" />
+              </Button>
+              <Button variant="secondary" onClick={handleImport}>
+                <Upload className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </CardContent>

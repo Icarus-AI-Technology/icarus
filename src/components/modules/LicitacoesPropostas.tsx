@@ -20,10 +20,6 @@ export function LicitacoesPropostas() {
         { label: 'Taxa de Ganho', value: '0%' },
         { label: 'Valor Total', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Nova licitação')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

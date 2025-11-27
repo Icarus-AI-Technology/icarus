@@ -20,10 +20,6 @@ export function FinanceiroAvancado() {
         { label: 'Saldo', value: 'R$ 0,00' },
         { label: 'Inadimplência', value: '0%' }
       ]}
-      onAdd={() => console.log('Nova conta')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -20,10 +20,6 @@ export function WorkflowBuilder() {
         { label: 'Taxa Sucesso', value: '0%' },
         { label: 'Tempo Economizado', value: '0h' }
       ]}
-      onAdd={() => console.log('Novo workflow')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -20,10 +20,6 @@ export function ComplianceAvancado() {
         { label: 'LGPD Conforme', value: '100%' },
         { label: 'ISO 27001', value: 'Ativo' }
       ]}
-      onAdd={() => console.log('Nova certificação')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -1,10 +1,12 @@
 /**
  * Web Vitals Monitoring - ICARUS v5.0
+ * Conformidade: RDC 59/751/188 ANVISA
  *
  * Tracks Core Web Vitals (LCP, INP, CLS, FCP, TTFB)
  * Integrates with Vercel Analytics when available
  */
 import { onLCP, onINP, onCLS, onFCP, onTTFB, type Metric } from 'web-vitals'
+import { perfLogger } from '@/lib/utils/logger'
 
 type MetricRating = 'good' | 'needs-improvement' | 'poor'
 
@@ -32,16 +34,7 @@ function reportMetric(metric: Metric): void {
 
   // Log to console in development
   if (import.meta.env.DEV) {
-    const color = metric.rating === 'good'
-      ? '#10B981'
-      : metric.rating === 'needs-improvement'
-        ? '#F59E0B'
-        : '#EF4444'
-
-    console.log(
-      `%c[Web Vitals] ${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`,
-      `color: ${color}; font-weight: bold;`
-    )
+    perfLogger.info(`${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`)
   }
 
   // Send to Vercel Analytics if available

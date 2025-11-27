@@ -20,10 +20,6 @@ export function ComplianceAuditoriaModule() {
         { label: 'Ações Corretivas', value: 0 },
         { label: 'Taxa Conformidade', value: '100%' }
       ]}
-      onAdd={() => console.log('Nova auditoria')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

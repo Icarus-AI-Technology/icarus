@@ -20,10 +20,6 @@ export function FaturamentoAvancado() {
         { label: 'Glosas', value: 0 },
         { label: 'Taxa Aprovação', value: '0%' }
       ]}
-      onAdd={() => console.log('Nova guia')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

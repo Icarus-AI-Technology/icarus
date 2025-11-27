@@ -20,9 +20,6 @@ export function AutomacaoIA() {
         { label: 'Taxa Sucesso', value: '0%' },
         { label: 'Tempo Economizado', value: '0h' }
       ]}
-      onAdd={() => console.log('Nova automação')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

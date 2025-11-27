@@ -18,9 +18,6 @@ export function RelatoriosFinanceiros() {
         { label: 'Relatórios Gerados', value: 0 },
         { label: 'Última Atualização', value: '-' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar PDF')}
     />
   )
 }

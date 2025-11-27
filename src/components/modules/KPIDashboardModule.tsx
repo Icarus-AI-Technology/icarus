@@ -19,9 +19,6 @@ export function KPIDashboardModule() {
         { label: 'Metas Atingidas', value: '0%' },
         { label: 'Alertas', value: 0 }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

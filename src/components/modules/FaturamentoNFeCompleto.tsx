@@ -20,10 +20,6 @@ export function FaturamentoNFeCompleto() {
         { label: 'Pendentes', value: 0 },
         { label: 'Taxa Sucesso', value: '0%' }
       ]}
-      onAdd={() => console.log('Emitir NFe')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

@@ -19,10 +19,6 @@ export function RelatoriosExecutivos() {
         { label: 'Gerados (Mês)', value: 0 },
         { label: 'Agendados', value: 0 }
       ]}
-      onAdd={() => console.log('Novo relatório')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar PDF')}
     />
   )
 }

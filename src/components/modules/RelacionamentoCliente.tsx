@@ -19,9 +19,6 @@ export function RelacionamentoCliente() {
         { label: 'NPS Médio', value: '0.0' },
         { label: 'Tempo Médio Resposta', value: '0h' }
       ]}
-      onAdd={() => console.log('Novo ticket')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

@@ -20,10 +20,6 @@ export function LogisticaAvancadaModule() {
         { label: 'Taxa Pontualidade', value: '0%' },
         { label: 'Rotas Otimizadas', value: 0 }
       ]}
-      onAdd={() => console.log('Nova entrega')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

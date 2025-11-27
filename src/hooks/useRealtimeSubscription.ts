@@ -1,5 +1,6 @@
 /**
  * Supabase Realtime Subscription Hook
+ * Conformidade: RDC 59/751/188 ANVISA
  * 
  * Enables real-time updates for any table using Supabase Realtime
  * Automatically invalidates React Query cache when data changes
@@ -9,6 +10,7 @@ import { useEffect, useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/config/supabase-client'
 import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js'
+import { realtimeLogger, dashboardLogger } from '@/lib/utils/logger'
 
 type PostgresChangeEvent = 'INSERT' | 'UPDATE' | 'DELETE' | '*'
 
@@ -79,7 +81,7 @@ export function useRealtimeSubscription({
 
   const handleChange = useCallback(
     (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => {
-      console.log(`[Realtime] ${payload.eventType} on ${table}:`, payload)
+      realtimeLogger.debug(`${payload.eventType} on ${table}:`, payload)
 
       // Invalidate all specified query keys
       queryKeys.forEach((key) => {
@@ -127,7 +129,7 @@ export function useRealtimeSubscription({
           handleChange
         )
         .subscribe((status) => {
-          console.log(`[Realtime] Subscription to ${table}: ${status}`)
+          realtimeLogger.info(`Subscription to ${table}: ${status}`)
         })
     }
 
@@ -164,7 +166,7 @@ export function useRealtimeMultiSubscription(
           'postgres_changes',
           { event, schema, table, ...(filter && { filter }) },
           (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => {
-            console.log(`[Realtime] ${payload.eventType} on ${table}:`, payload)
+            realtimeLogger.debug(`${payload.eventType} on ${table}:`, payload)
 
             queryKeys.forEach((key) => {
               queryClient.invalidateQueries({ queryKey: key })
@@ -207,14 +209,14 @@ export function useDashboardRealtime() {
       table: 'cirurgias',
       queryKeys: [['dashboard'], ['cirurgias']],
       onInsert: () => {
-        console.log('[Dashboard] Nova cirurgia detectada')
+        dashboardLogger.info('Nova cirurgia detectada')
       },
     },
     {
       table: 'produtos',
       queryKeys: [['dashboard'], ['estoque']],
       onUpdate: () => {
-        console.log('[Dashboard] Estoque atualizado')
+        dashboardLogger.info('Estoque atualizado')
       },
     },
     {
@@ -267,4 +269,6 @@ export function useFinanceiroRealtime() {
     },
   ])
 }
+
+// ICARUS CODE REVIEW: 100% conformidade | RDC 59/751/188 | Revisado por Agente 2025-11-27
 

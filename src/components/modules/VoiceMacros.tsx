@@ -19,9 +19,6 @@ export function VoiceMacros() {
         { label: 'Executadas (Hoje)', value: 0 },
         { label: 'Mais Usada', value: '-' }
       ]}
-      onAdd={() => console.log('Nova macro')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

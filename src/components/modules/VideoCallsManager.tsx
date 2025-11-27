@@ -20,9 +20,6 @@ export function VideoCallsManager() {
         { label: 'Duração Média', value: '0 min' },
         { label: 'Satisfação', value: '0%' }
       ]}
-      onAdd={() => console.log('Agendar chamada')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

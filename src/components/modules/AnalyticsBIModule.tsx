@@ -19,10 +19,6 @@ export function AnalyticsBIModule() {
         { label: 'Relatórios', value: 0 },
         { label: 'Fontes de Dados', value: 0 }
       ]}
-      onAdd={() => console.log('Novo dashboard')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

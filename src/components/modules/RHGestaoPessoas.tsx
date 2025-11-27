@@ -19,10 +19,6 @@ export function RHGestaoPessoas() {
         { label: 'Equipes', value: 0 },
         { label: 'Férias Pendentes', value: 0 }
       ]}
-      onAdd={() => console.log('Adicionar funcionário')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

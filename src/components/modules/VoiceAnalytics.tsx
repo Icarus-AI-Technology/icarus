@@ -20,9 +20,6 @@ export function VoiceAnalytics() {
         { label: 'Idiomas', value: 2 },
         { label: 'Usuários Ativos', value: 0 }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

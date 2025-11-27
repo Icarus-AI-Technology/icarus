@@ -20,10 +20,6 @@ export function APIGateway() {
         { label: 'Latência Média', value: '0ms' },
         { label: 'Taxa Erro', value: '0%' }
       ]}
-      onAdd={() => console.log('Novo endpoint')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar logs')}
     />
   )
 }

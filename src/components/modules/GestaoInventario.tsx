@@ -19,10 +19,6 @@ export function GestaoInventario() {
         { label: 'Produtos Contados', value: 0 },
         { label: 'Divergências', value: 0 }
       ]}
-      onAdd={() => console.log('Novo inventário')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

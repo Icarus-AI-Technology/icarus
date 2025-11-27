@@ -20,10 +20,6 @@ export function GestaoCompras() {
         { label: 'Valor Total (Mês)', value: 'R$ 0,00' },
         { label: 'Fornecedores', value: 0 }
       ]}
-      onAdd={() => console.log('Nova compra')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

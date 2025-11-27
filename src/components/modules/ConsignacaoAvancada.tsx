@@ -20,10 +20,6 @@ export function ConsignacaoAvancada() {
         { label: 'Valor Consignado', value: 'R$ 0,00' },
         { label: 'Taxa Retorno', value: '0%' }
       ]}
-      onAdd={() => console.log('Novo kit')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

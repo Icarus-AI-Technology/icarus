@@ -19,10 +19,6 @@ export function GestaoContabil() {
         { label: 'Contas Ativas', value: 0 },
         { label: 'Saldo Geral', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Novo lançamento')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

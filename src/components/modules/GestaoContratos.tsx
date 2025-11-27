@@ -19,10 +19,6 @@ export function GestaoContratos() {
         { label: 'Vencendo em 30 dias', value: 0 },
         { label: 'Valor Total', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Adicionar contrato')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

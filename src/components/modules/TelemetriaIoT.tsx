@@ -20,9 +20,6 @@ export function TelemetriaIoT() {
         { label: 'Localização GPS', value: '0 rastreados' },
         { label: 'Uptime', value: '0%' }
       ]}
-      onAdd={() => console.log('Adicionar dispositivo')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

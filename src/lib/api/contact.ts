@@ -1,5 +1,6 @@
 /**
  * Contact API Service - ICARUS v5.0
+ * Conformidade: RDC 59/751/188 ANVISA
  * 
  * Simula POST /api/contact (backend ainda não implementado)
  * Valida dados com Zod antes de enviar
@@ -7,6 +8,7 @@
  */
 import { z } from 'zod'
 import { supabase } from '@/lib/config/supabase-client'
+import { apiLogger } from '@/lib/utils/logger'
 
 // Schema de validação
 export const contactSchema = z.object({
@@ -94,8 +96,8 @@ export async function submitContact(data: ContactFormData): Promise<ContactRespo
       }
     }
 
-    // SIMULAÇÃO: Apenas log no console
-    console.log('📧 Mensagem de contato:', validated)
+    // SIMULAÇÃO: Apenas log em desenvolvimento
+    apiLogger.info('📧 Mensagem de contato:', validated)
 
     // Simular delay de rede (500ms)
     await new Promise((resolve) => setTimeout(resolve, 500))

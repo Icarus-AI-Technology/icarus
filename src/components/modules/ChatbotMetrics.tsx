@@ -20,9 +20,6 @@ export function ChatbotMetrics() {
         { label: 'Tempo Médio', value: '0 min' },
         { label: 'Satisfação', value: '0/5' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

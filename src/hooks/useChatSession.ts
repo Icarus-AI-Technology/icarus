@@ -1,11 +1,15 @@
 /**
  * Hook para gerenciamento de sessões de chat do ICARUS AI Assistant
+ * Conformidade: RDC 59/751/188 ANVISA
  * Integra com Edge Function `chat` no Supabase
  */
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import type { ChatMessage } from '@/components/chat/ChatWidget';
+import { createLogger } from '@/lib/utils/logger';
+
+const chatLogger = createLogger('Chat');
 
 interface ChatContext {
   empresaId?: string;
@@ -193,12 +197,12 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
 
       // Save feedback (for now, just log - could be extended to save to DB)
       if (sessionId) {
-        console.log('Feedback saved:', { messageId, feedback, feedbackText });
+        chatLogger.debug('Feedback saved:', { messageId, feedback, feedbackText });
       }
 
       return true;
     } catch (err) {
-      console.error('Error saving feedback:', err);
+      chatLogger.error('Error saving feedback:', err);
       return false;
     }
   }, [sessionId]);

@@ -20,10 +20,6 @@ export function EstoqueIAModule() {
         { label: 'Previsão Demanda', value: 'Calculando...' },
         { label: 'Economia IA', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Adicionar produto')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

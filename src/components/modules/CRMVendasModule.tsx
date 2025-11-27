@@ -20,10 +20,6 @@ export function CRMVendasModule() {
         { label: 'Taxa Conversão', value: '0%' },
         { label: 'Valor Pipeline', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Novo lead')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

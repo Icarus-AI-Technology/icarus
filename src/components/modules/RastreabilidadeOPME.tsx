@@ -20,9 +20,6 @@ export function RastreabilidadeOPME() {
         { label: 'Alertas Validade', value: 0 },
         { label: 'Conformidade', value: '100%' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

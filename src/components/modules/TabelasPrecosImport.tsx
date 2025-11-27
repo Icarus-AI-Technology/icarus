@@ -19,10 +19,6 @@ export function TabelasPrecosImport() {
         { label: 'Produtos Importados', value: 0 },
         { label: 'Taxa Sucesso', value: '0%' }
       ]}
-      onAdd={() => console.log('Nova importação')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onImport={() => console.log('Importar arquivo')}
-      onExport={() => console.log('Exportar template')}
     />
   )
 }

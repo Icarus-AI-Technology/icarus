@@ -19,8 +19,6 @@ export function ConfiguracoesSystemModule() {
         { label: 'Usuários', value: 0 },
         { label: 'Armazenamento', value: '0 GB' }
       ]}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
     />
   )
 }

@@ -19,10 +19,6 @@ export function ViabilidadeImportacao() {
         { label: 'Taxa Aprovação', value: '0%' },
         { label: 'Economia Estimada', value: 'R$ 0,00' }
       ]}
-      onAdd={() => console.log('Nova análise')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onExport={() => console.log('Exportar')}
     />
   )
 }

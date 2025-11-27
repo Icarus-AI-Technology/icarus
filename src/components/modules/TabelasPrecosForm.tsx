@@ -18,10 +18,6 @@ export function TabelasPrecosForm() {
         { label: 'Tabelas Cadastradas', value: 0 },
         { label: 'Pendentes Aprovação', value: 0 }
       ]}
-      onAdd={() => console.log('Nova tabela')}
-      onSearch={(query) => console.log('Buscar:', query)}
-      onFilter={() => console.log('Filtrar')}
-      onImport={() => console.log('Importar')}
     />
   )
 }
