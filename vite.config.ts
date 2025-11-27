@@ -43,11 +43,11 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules/@tanstack')) {
             return 'vendor-query'
           }
-          // Charts (heavy)
-          if (id.includes('node_modules/recharts') || 
-              id.includes('node_modules/d3')) {
-            return 'vendor-charts'
-          }
+          // Charts - deixar no bundle principal para evitar problemas de inicialização
+          // if (id.includes('node_modules/recharts') || 
+          //     id.includes('node_modules/d3')) {
+          //   return 'vendor-charts'
+          // }
           // Forms
           if (id.includes('node_modules/react-hook-form') || 
               id.includes('node_modules/@hookform') || 
