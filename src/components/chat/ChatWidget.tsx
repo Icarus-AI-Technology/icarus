@@ -8,6 +8,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useChatSession } from '@/hooks/useChatSession';
 import { ChatResponseCard, parseMessageContent, type ActionData, type ChatCardData } from './ChatResponseCard';
+import { useTheme } from '@/hooks/useTheme';
 
 export interface ChatMessage {
   id: string;
@@ -157,6 +158,8 @@ export function ChatWidget({
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { isDark } = useTheme();
+
   const {
     sessionId,
     messages,
@@ -169,6 +172,27 @@ export function ChatWidget({
 
   const [historyLoaded, setHistoryLoaded] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
+  // Neumorphic styles based on theme
+  const neuStyles = {
+    background: isDark ? '#15192B' : '#F3F4F6',
+    cardBg: isDark ? '#1A1F35' : '#FFFFFF',
+    cardHoverBg: isDark ? '#252B44' : '#E5E7EB',
+    textPrimary: isDark ? '#FFFFFF' : '#111827',
+    textSecondary: isDark ? '#94A3B8' : '#4B5563',
+    textMuted: isDark ? '#64748B' : '#6B7280',
+    border: isDark ? '#252B44' : '#D1D5DB',
+    // Neumorphic shadows
+    shadowElevated: isDark 
+      ? '6px 6px 12px rgba(0,0,0,0.4), -4px -4px 10px rgba(255,255,255,0.02)'
+      : '6px 6px 12px rgba(0,0,0,0.08), -4px -4px 10px rgba(255,255,255,0.9)',
+    shadowInset: isDark
+      ? 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
+      : 'inset 3px 3px 6px rgba(0,0,0,0.08), inset -3px -3px 6px rgba(255,255,255,0.8)',
+    shadowHover: isDark
+      ? '8px 8px 16px rgba(0,0,0,0.5), -6px -6px 14px rgba(255,255,255,0.03)'
+      : '8px 8px 16px rgba(0,0,0,0.12), -6px -6px 14px rgba(255,255,255,0.95)',
+  };
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -280,14 +304,16 @@ export function ChatWidget({
       className={cn(
         'fixed bottom-8 right-8 z-[9999]',
         'flex flex-col',
-        'bg-[#15192B]',
-        'border border-[#252B44]',
         'rounded-2xl overflow-hidden',
         'transition-all duration-300',
         isMinimized ? 'w-80 h-14' : 'w-[420px] h-[600px]'
       )}
       style={{
-        boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(99, 102, 241, 0.15)'
+        backgroundColor: neuStyles.background,
+        border: `1px solid ${neuStyles.border}`,
+        boxShadow: isDark 
+          ? '0 16px 48px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(99, 102, 241, 0.2)'
+          : '0 16px 48px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(99, 102, 241, 0.1)'
       }}
     >
       {/* Header */}
@@ -355,7 +381,10 @@ export function ChatWidget({
       {!isMinimized && (
         <>
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#15192B]">
+          <div 
+            className="flex-1 overflow-y-auto p-4 space-y-4"
+            style={{ backgroundColor: neuStyles.background }}
+          >
             {/* Welcome Message with Categories */}
             {messages.length === 0 && showCategories && (
               <div className="space-y-4">
@@ -364,56 +393,79 @@ export function ChatWidget({
                     className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
                     style={{
                       background: 'linear-gradient(135deg, #6366F1, #8B5CF6, #2DD4BF)',
-                      boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)'
+                      boxShadow: isDark 
+                        ? '0 8px 24px rgba(99, 102, 241, 0.4)' 
+                        : '0 8px 24px rgba(99, 102, 241, 0.3)'
                     }}
                   >
                     <Sparkles className="w-8 h-8 text-white" />
                   </div>
-                  <h4 className="font-semibold text-white mb-1">
+                  <h4 className="font-semibold mb-1" style={{ color: neuStyles.textPrimary }}>
                     Olá! Sou o ICARUS AI Assistant
                   </h4>
-                  <p className="text-sm text-[#94A3B8] mb-2">
+                  <p className="text-sm mb-2" style={{ color: neuStyles.textSecondary }}>
                     Seu copiloto inteligente para gestão OPME
                   </p>
-                  <p className="text-xs text-[#64748B]">
+                  <p className="text-xs" style={{ color: neuStyles.textMuted }}>
                     Selecione uma categoria ou digite sua pergunta
                   </p>
                 </div>
 
-                {/* Category Grid */}
+                {/* Category Grid - Neumorphic 3D */}
                 {!selectedCategory ? (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {SUGGESTION_CATEGORIES.map((category) => {
                       const IconComponent = category.icon;
                       return (
                         <button
                           key={category.id}
                           onClick={() => setSelectedCategory(category.id)}
-                          className="flex items-center gap-2 p-3 rounded-xl bg-[#1A1F35] hover:bg-[#252B44] transition-all text-left group"
+                          className="flex items-center gap-2 p-3 rounded-xl transition-all duration-200 text-left group hover:scale-[1.02] active:scale-[0.98]"
                           style={{
-                            boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02)'
+                            backgroundColor: neuStyles.cardBg,
+                            boxShadow: neuStyles.shadowElevated,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow = neuStyles.shadowHover;
+                            e.currentTarget.style.backgroundColor = neuStyles.cardHoverBg;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = neuStyles.shadowElevated;
+                            e.currentTarget.style.backgroundColor = neuStyles.cardBg;
                           }}
                         >
                           <div 
                             className="w-8 h-8 rounded-lg flex items-center justify-center"
-                            style={{ backgroundColor: `${category.color}20` }}
+                            style={{ 
+                              backgroundColor: `${category.color}${isDark ? '20' : '15'}`,
+                              boxShadow: isDark 
+                                ? 'inset 2px 2px 4px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(255,255,255,0.02)'
+                                : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -1px -1px 2px rgba(255,255,255,0.5)'
+                            }}
                           >
                             <IconComponent className="w-4 h-4" style={{ color: category.color }} />
                           </div>
-                          <span className="text-xs text-[#94A3B8] group-hover:text-white transition-colors">
+                          <span 
+                            className="text-xs transition-colors flex-1"
+                            style={{ color: neuStyles.textSecondary }}
+                          >
                             {category.title}
                           </span>
-                          <ChevronRight className="w-3 h-3 text-[#64748B] ml-auto group-hover:text-white transition-colors" />
+                          <ChevronRight 
+                            className="w-3 h-3 ml-auto transition-transform group-hover:translate-x-0.5" 
+                            style={{ color: neuStyles.textMuted }} 
+                          />
                         </button>
                       );
                     })}
                   </div>
                 ) : (
-                  // Selected Category Suggestions
-                  <div className="space-y-2">
+                  // Selected Category Suggestions - Neumorphic 3D
+                  <div className="space-y-3">
                     <button
                       onClick={() => setSelectedCategory(null)}
-                      className="flex items-center gap-2 text-xs text-[#94A3B8] hover:text-white transition-colors"
+                      className="flex items-center gap-2 text-xs transition-colors hover:opacity-80"
+                      style={{ color: neuStyles.textSecondary }}
                     >
                       <ChevronRight className="w-3 h-3 rotate-180" />
                       Voltar às categorias
@@ -422,9 +474,21 @@ export function ChatWidget({
                       <button
                         key={idx}
                         onClick={() => handleSuggestionClick(suggestion)}
-                        className="w-full text-left p-3 rounded-xl bg-[#1A1F35] hover:bg-[#252B44] text-sm text-[#94A3B8] hover:text-white transition-all"
+                        className="w-full text-left p-3 rounded-xl text-sm transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
                         style={{
-                          boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02)'
+                          backgroundColor: neuStyles.cardBg,
+                          color: neuStyles.textSecondary,
+                          boxShadow: neuStyles.shadowElevated,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.boxShadow = neuStyles.shadowHover;
+                          e.currentTarget.style.backgroundColor = neuStyles.cardHoverBg;
+                          e.currentTarget.style.color = neuStyles.textPrimary;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.boxShadow = neuStyles.shadowElevated;
+                          e.currentTarget.style.backgroundColor = neuStyles.cardBg;
+                          e.currentTarget.style.color = neuStyles.textSecondary;
                         }}
                       >
                         {suggestion}
@@ -447,19 +511,19 @@ export function ChatWidget({
                 {/* Avatar */}
                 <div
                   className={cn(
-                    'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
-                    message.role === 'user'
-                      ? 'bg-[#1A1F35]'
-                      : 'bg-[#6366F1]/20'
+                    'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0'
                   )}
                   style={{
+                    backgroundColor: message.role === 'user' 
+                      ? neuStyles.cardBg 
+                      : isDark ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.15)',
                     boxShadow: message.role === 'user' 
-                      ? 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -1px -1px 2px rgba(255,255,255,0.02)'
+                      ? neuStyles.shadowInset
                       : 'none'
                   }}
                 >
                   {message.role === 'user' ? (
-                    <User className="w-4 h-4 text-[#94A3B8]" />
+                    <User className="w-4 h-4" style={{ color: neuStyles.textSecondary }} />
                   ) : (
                     <Bot className="w-4 h-4 text-[#6366F1]" />
                   )}
@@ -471,12 +535,14 @@ export function ChatWidget({
                     className={cn(
                       'rounded-2xl px-4 py-2.5',
                       message.role === 'user'
-                        ? 'bg-[#6366F1] text-white rounded-tr-sm'
-                        : 'bg-[#1A1F35] text-white rounded-tl-sm'
+                        ? 'rounded-tr-sm'
+                        : 'rounded-tl-sm'
                     )}
                     style={{
+                      backgroundColor: message.role === 'user' ? '#6366F1' : neuStyles.cardBg,
+                      color: message.role === 'user' ? '#FFFFFF' : neuStyles.textPrimary,
                       boxShadow: message.role === 'assistant' 
-                        ? '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02)'
+                        ? neuStyles.shadowElevated
                         : '0 4px 12px rgba(99, 102, 241, 0.3)'
                     }}
                   >
@@ -520,7 +586,7 @@ export function ChatWidget({
                     'flex items-center gap-2 mt-1 px-1',
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   )}>
-                    <p className="text-[10px] text-[#64748B]">
+                    <p className="text-[10px]" style={{ color: neuStyles.textMuted }}>
                       {new Date(message.timestamp).toLocaleTimeString('pt-BR', {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -532,20 +598,34 @@ export function ChatWidget({
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => handleFeedback(message.id, 'positive')}
-                          className={cn(
-                            'p-1 rounded hover:bg-[#1A1F35] transition-colors',
-                            message.feedback === 'positive' ? 'text-green-400' : 'text-[#64748B]'
-                          )}
+                          className="p-1 rounded transition-colors"
+                          style={{ 
+                            color: message.feedback === 'positive' ? '#10B981' : neuStyles.textMuted,
+                            backgroundColor: 'transparent'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = neuStyles.cardBg;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }}
                           title="Resposta útil"
                         >
                           <ThumbsUp className="w-3 h-3" />
                         </button>
                         <button
                           onClick={() => handleFeedback(message.id, 'negative')}
-                          className={cn(
-                            'p-1 rounded hover:bg-[#1A1F35] transition-colors',
-                            message.feedback === 'negative' ? 'text-red-400' : 'text-[#64748B]'
-                          )}
+                          className="p-1 rounded transition-colors"
+                          style={{ 
+                            color: message.feedback === 'negative' ? '#EF4444' : neuStyles.textMuted,
+                            backgroundColor: 'transparent'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = neuStyles.cardBg;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }}
                           title="Resposta não útil"
                         >
                           <ThumbsDown className="w-3 h-3" />
@@ -560,17 +640,21 @@ export function ChatWidget({
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#6366F1]/20 flex items-center justify-center">
+                <div 
+                  className="w-8 h-8 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: isDark ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.15)' }}
+                >
                   <Loader2 className="w-4 h-4 text-[#6366F1] animate-spin" />
                 </div>
                 <div 
-                  className="bg-[#1A1F35] rounded-2xl rounded-tl-sm px-4 py-3"
+                  className="rounded-2xl rounded-tl-sm px-4 py-3"
                   style={{
-                    boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02)'
+                    backgroundColor: neuStyles.cardBg,
+                    boxShadow: neuStyles.shadowElevated
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-[#94A3B8]">Analisando</span>
+                    <span className="text-sm" style={{ color: neuStyles.textSecondary }}>Analisando</span>
                     <div className="flex gap-1">
                       <span className="w-1.5 h-1.5 bg-[#6366F1] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                       <span className="w-1.5 h-1.5 bg-[#8B5CF6] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -585,30 +669,55 @@ export function ChatWidget({
             <div ref={scrollRef} />
           </div>
 
-          {/* Command Suggestions Popup */}
+          {/* Command Suggestions Popup - Neumorphic */}
           {showCommands && (
             <div 
-              className="absolute bottom-[72px] left-3 right-3 bg-[#1A1F35] rounded-xl p-2 border border-[#252B44]"
+              className="absolute bottom-[72px] left-3 right-3 rounded-xl p-2"
               style={{
-                boxShadow: '0 -8px 24px rgba(0, 0, 0, 0.3)'
+                backgroundColor: neuStyles.cardBg,
+                border: `1px solid ${neuStyles.border}`,
+                boxShadow: isDark 
+                  ? '0 -8px 24px rgba(0, 0, 0, 0.4)' 
+                  : '0 -8px 24px rgba(0, 0, 0, 0.1)'
               }}
             >
-              <p className="text-xs text-[#64748B] px-2 py-1">Comandos rápidos</p>
+              <p className="text-xs px-2 py-1" style={{ color: neuStyles.textMuted }}>Comandos rápidos</p>
               {QUICK_COMMANDS.filter(cmd => cmd.command.includes(input.toLowerCase())).map((cmd, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleCommandClick(cmd.command)}
-                  className="w-full flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-[#252B44] transition-colors text-left"
+                  className="w-full flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left"
+                  style={{ color: neuStyles.textSecondary }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = neuStyles.cardHoverBg;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
                 >
-                  <code className="text-xs text-[#6366F1] bg-[#6366F1]/10 px-1.5 py-0.5 rounded">{cmd.command}</code>
-                  <span className="text-xs text-[#94A3B8]">{cmd.description}</span>
+                  <code 
+                    className="text-xs px-1.5 py-0.5 rounded"
+                    style={{ 
+                      color: '#6366F1', 
+                      backgroundColor: isDark ? 'rgba(99, 102, 241, 0.1)' : 'rgba(99, 102, 241, 0.08)' 
+                    }}
+                  >
+                    {cmd.command}
+                  </code>
+                  <span className="text-xs">{cmd.description}</span>
                 </button>
               ))}
             </div>
           )}
 
-          {/* Input Area */}
-          <div className="p-3 border-t border-[#252B44] bg-[#15192B]">
+          {/* Input Area - Neumorphic */}
+          <div 
+            className="p-3"
+            style={{ 
+              borderTop: `1px solid ${neuStyles.border}`,
+              backgroundColor: neuStyles.background 
+            }}
+          >
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -622,12 +731,12 @@ export function ChatWidget({
                 onClick={handleVoiceToggle}
                 className={cn(
                   'p-2.5 rounded-xl transition-all',
-                  isListening 
-                    ? 'bg-red-500 text-white animate-pulse' 
-                    : 'bg-[#1A1F35] text-[#94A3B8] hover:text-white'
+                  isListening && 'animate-pulse'
                 )}
                 style={{
-                  boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -1px -1px 2px rgba(255,255,255,0.02)'
+                  backgroundColor: isListening ? '#EF4444' : neuStyles.cardBg,
+                  color: isListening ? '#FFFFFF' : neuStyles.textSecondary,
+                  boxShadow: neuStyles.shadowInset
                 }}
                 title={isListening ? 'Parar gravação' : 'Usar voz'}
               >
@@ -642,9 +751,11 @@ export function ChatWidget({
                 onKeyDown={handleKeyDown}
                 placeholder="Digite ou use / para comandos..."
                 disabled={isLoading}
-                className="flex-1 px-4 py-2.5 bg-[#1A1F35] text-white placeholder-[#64748B] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  boxShadow: 'inset 3px 3px 6px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)'
+                  backgroundColor: neuStyles.cardBg,
+                  color: neuStyles.textPrimary,
+                  boxShadow: neuStyles.shadowInset,
                 }}
               />
               
@@ -653,7 +764,9 @@ export function ChatWidget({
                 disabled={isLoading || !input.trim()}
                 className="p-2.5 rounded-xl bg-[#6366F1] text-white hover:bg-[#4F46E5] focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 style={{
-                  boxShadow: '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02), 0 4px 12px rgba(99, 102, 241, 0.3)'
+                  boxShadow: isDark 
+                    ? '4px 4px 8px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.02), 0 4px 12px rgba(99, 102, 241, 0.3)'
+                    : '4px 4px 8px rgba(0,0,0,0.1), -2px -2px 4px rgba(255,255,255,0.8), 0 4px 12px rgba(99, 102, 241, 0.2)'
                 }}
                 title="Enviar mensagem"
                 aria-label="Enviar mensagem"
@@ -665,7 +778,7 @@ export function ChatWidget({
             {/* Footer Info */}
             <div className="flex items-center justify-between mt-2 px-1">
               <div className="flex items-center gap-2">
-                <p className="text-[10px] text-[#64748B]">
+                <p className="text-[10px]" style={{ color: neuStyles.textMuted }}>
                   {sessionId ? `Sessão: ${sessionId.slice(0, 8)}...` : 'Nova sessão'}
                 </p>
                 {historyLoaded && (
@@ -675,7 +788,7 @@ export function ChatWidget({
                   </span>
                 )}
               </div>
-              <p className="text-[10px] text-[#64748B]">
+              <p className="text-[10px]" style={{ color: neuStyles.textMuted }}>
                 Ctrl+K • Esc
               </p>
             </div>
