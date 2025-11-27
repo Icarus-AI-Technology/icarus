@@ -17,7 +17,7 @@ import { NavigationCategory } from '../types/navigation'
  */
 export const navigationConfig = [
   {
-    name: 'Principal',
+    name: 'Dashboard Principal',
     icon: LayoutDashboard,
     routes: [
       {
@@ -25,8 +25,8 @@ export const navigationConfig = [
         path: '/dashboard',
         name: 'Dashboard',
         icon: LayoutDashboard,
-        category: 'Principal',
-        description: 'Visão geral do sistema com KPIs e ações rápidas',
+        category: 'Dashboard Principal',
+        description: 'Visão geral do sistema ICARUS v5.0 com KPIs, ações rápidas e insights de IA',
         isImplemented: true
       }
     ]
