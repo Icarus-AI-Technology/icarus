@@ -303,21 +303,13 @@ export function HomePage() {
             {/* Visual Content with Neumorphic Glow Effect */}
             <div className="relative order-first lg:order-last">
               <div 
-                className="backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group animate-glow max-w-sm mx-auto lg:max-w-none"
-                style={{ 
-                  background: '#15192B',
-                  boxShadow: '8px 8px 20px rgba(0, 0, 0, 0.5), -6px -6px 16px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                }}
+                className="!bg-[#15192B] backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group animate-glow max-w-sm mx-auto lg:max-w-none shadow-[8px_8px_20px_rgba(0,0,0,0.5),-6px_-6px_16px_rgba(255,255,255,0.02),inset_0_1px_0_rgba(255,255,255,0.05)]"
               >
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6366F1]/20 to-[#2DD4BF]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
                 <div 
-                  className="aspect-square rounded-xl sm:rounded-2xl flex items-center justify-center relative overflow-hidden"
-                  style={{ 
-                    background: '#1A1F35',
-                    boxShadow: 'inset 6px 6px 12px rgba(0, 0, 0, 0.4), inset -4px -4px 10px rgba(255, 255, 255, 0.02)'
-                  }}
+                  className="aspect-square rounded-xl sm:rounded-2xl flex items-center justify-center relative overflow-hidden !bg-[#1A1F35] shadow-[inset_6px_6px_12px_rgba(0,0,0,0.4),inset_-4px_-4px_10px_rgba(255,255,255,0.02)]"
                 >
                   <BrainCircuit className="w-20 h-20 sm:w-32 sm:h-32 text-[#818CF8] animate-pulse relative z-10" strokeWidth={1.5} />
 
@@ -333,19 +325,11 @@ export function HomePage() {
 
               {/* Floating Stats Cards - Neumorphic Padrão (Hidden on mobile) */}
               <div 
-                className="hidden sm:block absolute -top-4 -right-4 backdrop-blur-sm p-3 sm:p-4 rounded-xl animate-bounce"
-                style={{ 
-                  background: '#15192B',
-                  boxShadow: '8px 8px 20px rgba(0, 0, 0, 0.5), -6px -6px 16px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                }}
+                className="hidden sm:block absolute -top-4 -right-4 backdrop-blur-sm p-3 sm:p-4 rounded-xl animate-bounce !bg-[#15192B] shadow-[8px_8px_20px_rgba(0,0,0,0.5),-6px_-6px_16px_rgba(255,255,255,0.02),inset_0_1px_0_rgba(255,255,255,0.05)]"
               >
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div 
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
-                    style={{ 
-                      background: '#1A1F35',
-                      boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
-                    }}
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center !bg-[#1A1F35] shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.02)]"
                   >
                     <TrendingUp className="w-5 h-5 sm:w-7 sm:h-7 text-[#10B981]" strokeWidth={2.5} />
                   </div>
@@ -358,15 +342,11 @@ export function HomePage() {
 
               {/* Demo Video Button - Neumorphic Padrão (Hidden on mobile) */}
               <div 
-                className="hidden sm:block absolute -bottom-4 -left-4 backdrop-blur-sm p-3 sm:p-4 rounded-xl hover:bg-[#1A1F35] transition-all cursor-pointer group/play"
-                style={{ 
-                  background: '#15192B',
-                  boxShadow: '8px 8px 20px rgba(0, 0, 0, 0.5), -6px -6px 16px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                }}
+                className="hidden sm:block absolute -bottom-4 -left-4 backdrop-blur-sm p-3 sm:p-4 rounded-xl hover:!bg-[#1A1F35] transition-all cursor-pointer group/play !bg-[#15192B] shadow-[8px_8px_20px_rgba(0,0,0,0.5),-6px_-6px_16px_rgba(255,255,255,0.02),inset_0_1px_0_rgba(255,255,255,0.05)]"
               >
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div 
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center group-hover/play:scale-110 transition-transform"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center group-hover/play:scale-110 transition-transform !bg-[#1A1F35] shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.02)]"
                     style={{ 
                       background: '#1A1F35',
                       boxShadow: 'inset 4px 4px 8px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.02)'
