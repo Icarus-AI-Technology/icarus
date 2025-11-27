@@ -6,6 +6,7 @@ import { formatCurrency } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { useDashboardKPIs, useDashboardStats } from '@/hooks/queries/useDashboardData'
 import { useTheme } from '@/hooks/useTheme'
+import { useDashboardRealtime } from '@/hooks/useRealtimeSubscription'
 import {
   Calendar, DollarSign, AlertCircle, BrainCircuit,
   TrendingUp, Clock, Star, Activity, BarChart2, PieChart as PieChartIcon
@@ -45,6 +46,9 @@ export function Dashboard() {
   // React Query hooks for data fetching
   const { data: kpis, isLoading: kpisLoading } = useDashboardKPIs()
   const { data: stats, isLoading: statsLoading } = useDashboardStats()
+  
+  // Enable real-time updates for dashboard data
+  useDashboardRealtime()
 
   // Combined loading state
   const loading = kpisLoading || statsLoading

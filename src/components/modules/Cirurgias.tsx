@@ -30,6 +30,7 @@ import {
   type CirurgiaFilters 
 } from '@/hooks/queries/useCirurgias'
 import { useHospitais, useMedicos } from '@/hooks/queries/useClientes'
+import { useCirurgiasRealtime } from '@/hooks/useRealtimeSubscription'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
@@ -197,6 +198,9 @@ export function Cirurgias() {
   const createMutation = useCreateCirurgia()
   const updateMutation = useUpdateCirurgia()
   const deleteMutation = useDeleteCirurgia()
+  
+  // Enable real-time updates
+  useCirurgiasRealtime()
 
   // Map data to local format for compatibility
   const surgeries: Surgery[] = (cirurgiasData || []).map(c => ({
