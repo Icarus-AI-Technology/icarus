@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { formatCurrency } from '@/lib/utils'
+import { useAIInsights, useDemandPredictions } from '@/hooks/queries/useIcarusBrainAI'
 
 type PeriodoAnalise = 'dia' | 'semana' | 'mes' | 'trimestre' | 'ano'
 
@@ -45,6 +46,10 @@ interface RelatorioAgendado {
 export default function AnalyticsBI() {
   const [activeTab, setActiveTab] = useState('overview')
   const [periodo, setPeriodo] = useState<PeriodoAnalise>('mes')
+  
+  // React Query hooks for AI-powered analytics
+  const { data: _aiInsights } = useAIInsights('analytics')
+  const { data: _demandPredictions } = useDemandPredictions()
 
   const [metricas] = useState<MetricaBI[]>([
     {

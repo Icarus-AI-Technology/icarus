@@ -10,6 +10,13 @@ import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { BrainCircuit, Zap, TrendingUp, Clock } from 'lucide-react'
+import { 
+  useAIInsights, 
+  useDemandPredictions, 
+  useChurnPredictions, 
+  useStockOptimization,
+  useRunAnalysis 
+} from '@/hooks/queries/useIcarusBrainAI'
 
 
 type StatusServico = 'ativo' | 'pausado' | 'treinando' | 'erro'
@@ -58,6 +65,13 @@ interface TreinamentoModelo {
 
 export default function IACentral() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks for AI data
+  const { data: _aiInsights } = useAIInsights('ia-central')
+  const { data: _demandPredictions } = useDemandPredictions()
+  const { data: _churnPredictions } = useChurnPredictions()
+  const { data: _stockOptimization } = useStockOptimization()
+  const runAnalysis = useRunAnalysis()
 
   const [servicos] = useState<ServicoIA[]>([
     {
