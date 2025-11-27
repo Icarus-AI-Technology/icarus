@@ -21,8 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useLotes, useLogisticaStats } from '@/hooks/queries/useLogistica'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
@@ -68,8 +68,11 @@ interface InventoryItem {
 }
 
 export function Inventario() {
-  const { supabase, isConfigured } = useSupabase()
   const [loading, setLoading] = useState(true)
+  
+  // React Query hooks
+  const { data: _lotesData } = useLotes()
+  const { data: _logisticaStats } = useLogisticaStats()
   const [inventories, setInventories] = useState<Inventory[]>([])
   const [selectedInventory, setSelectedInventory] = useState<Inventory | null>(null)
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([])

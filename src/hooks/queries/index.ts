@@ -24,3 +24,6 @@ export * from './useCompras'
 // Analytics & BI
 export * from './useAnalytics'
 
+// Logística & Rastreabilidade
+export * from './useLogistica'
+

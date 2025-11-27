@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { useLotes, useRastreabilidade } from '@/hooks/queries/useLogistica'
 
 type StatusRastreio = 'estoque' | 'consignado' | 'vendido' | 'devolvido' | 'vencido' | 'bloqueado'
 
@@ -63,6 +64,10 @@ interface AlertaRegulatorio {
 export default function RastreabilidadeOPME() {
   const [activeTab, setActiveTab] = useState('overview')
   const [searchTerm, setSearchTerm] = useState('')
+  
+  // React Query hooks
+  const { data: _lotesData } = useLotes()
+  const { data: _rastreabilidadeData } = useRastreabilidade(searchTerm)
 
   const [produtos] = useState<ProdutoRastreavel[]>([
     {

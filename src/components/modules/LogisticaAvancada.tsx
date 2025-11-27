@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { useLogisticaStats, useEntregas, useLotes } from '@/hooks/queries/useLogistica'
 
 type StatusEntrega = 'agendada' | 'coletada' | 'em_transito' | 'entregue' | 'falha' | 'devolvida'
 type TipoEntrega = 'expressa' | 'normal' | 'agendada' | 'urgente'
@@ -43,6 +44,11 @@ interface EventoRastreio {
 
 export default function LogisticaAvancada() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks
+  const { data: _stats } = useLogisticaStats()
+  const { data: _entregasData } = useEntregas()
+  const { data: _lotesData } = useLotes()
   const [entregas] = useState<Entrega[]>([
     {
       id: 1,

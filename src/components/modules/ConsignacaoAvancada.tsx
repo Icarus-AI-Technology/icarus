@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/Input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { useConsignacoes, useLogisticaStats } from '@/hooks/queries/useLogistica'
 
 type StatusConsignacao = 'ativa' | 'parcial_utilizada' | 'totalmente_utilizada' | 'vencida' | 'retornada'
 type TipoMovimento = 'envio' | 'utilizacao' | 'retorno' | 'reposicao'
@@ -59,6 +60,10 @@ interface FaturamentoConsignacao {
 
 export default function ConsignacaoAvancada() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks
+  const { data: _consignacoesData } = useConsignacoes()
+  const { data: _logisticaStats } = useLogisticaStats()
   const [consignacoes] = useState<ItemConsignacao[]>([
     {
       id: 1,
