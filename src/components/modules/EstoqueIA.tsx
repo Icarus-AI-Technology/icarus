@@ -47,6 +47,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
+import { useEstoqueStats, useProdutosEstoqueBaixo } from '@/hooks/queries/useEstoque'
 
 // ==================== INTERFACES ====================
 
@@ -198,6 +199,10 @@ export function EstoqueIA() {
     valor_consignado: 0,
   })
   const [loading, setLoading] = useState(true)
+  
+  // React Query hooks (data available for future integration)
+  const { data: _statsData } = useEstoqueStats()
+  const { data: _produtosCriticos } = useProdutosEstoqueBaixo()
 
   // IA
   const [previsoes, setPrevisoes] = useState<PrevisaoDemanda[]>([])
@@ -213,6 +218,8 @@ export function EstoqueIA() {
   // Modal
   const [produtoSelecionado, setProdutoSelecionado] = useState<ProdutoEstoque | null>(null)
   const [modalAberto, setModalAberto] = useState(false)
+  const [abaModal, setAbaModal] = useState('detalhes')
+  const [aiLoading, setAiLoading] = useState(false)
 
   // ==================== EFEITOS ====================
 
@@ -714,8 +721,12 @@ Forneça:
 3. Oportunidades de otimização
 4. Recomendações prioritárias (3-5 ações)`
 
-      const response = await chat(prompt)
-      setInsights(response)
+      // TODO: Integrate with IcarusBrain AI service
+      // const response = await chat(prompt)
+      setAiLoading(true)
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setInsights(`**Análise de Estoque - ${new Date().toLocaleDateString('pt-BR')}**\n\n${prompt.substring(0, 200)}...\n\n*Integração com IcarusBrain pendente*`)
+      setAiLoading(false)
     } catch (error) {
       console.error('Erro ao gerar insights:', error)
     }
@@ -807,8 +818,8 @@ Forneça:
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">📥 Entrada</Button>
-          <Button variant="outline">📤 Saída</Button>
+          <Button variant="secondary">📥 Entrada</Button>
+          <Button variant="secondary">📤 Saída</Button>
           <Button>+ Novo Produto</Button>
         </div>
       </div>
@@ -903,7 +914,7 @@ Forneça:
                         <strong>Ação:</strong> {alerta.acao_sugerida}
                       </p>
                     </div>
-                    <Button variant="outline" size="sm">Resolver</Button>
+                    <Button variant="secondary" size="sm">Resolver</Button>
                   </div>
                 </div>
               ))}
@@ -1375,7 +1386,7 @@ Forneça:
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setModalAberto(false)}>Fechar</Button>
+                <Button variant="secondary" onClick={() => setModalAberto(false)}>Fechar</Button>
               </DialogFooter>
             </>
           )}
