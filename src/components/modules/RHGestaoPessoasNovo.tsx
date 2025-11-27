@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { formatCurrency } from '@/lib/utils'
+import { useColaboradores, useRHStats, useDepartamentos, useFeriassolicitacoes, useBeneficios } from '@/hooks/queries/useRH'
 
 type StatusColaborador = 'ativo' | 'ferias' | 'afastado' | 'desligado'
 type Departamento = 'vendas' | 'logistica' | 'administrativo' | 'comercial' | 'ti'
@@ -27,6 +28,13 @@ interface Colaborador {
 
 export default function RHGestaoPessoasNovo() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks
+  const { data: _colaboradoresData } = useColaboradores()
+  const { data: _stats } = useRHStats()
+  const { data: _departamentos } = useDepartamentos()
+  const { data: _ferias } = useFeriassolicitacoes()
+  const { data: _beneficios } = useBeneficios()
 
   const [colaboradores] = useState<Colaborador[]>([
     {

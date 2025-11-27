@@ -33,3 +33,6 @@ export * from './useCompliance'
 // Relacionamento & Leads
 export * from './useRelacionamento'
 
+// RH & Colaboradores
+export * from './useRH'
+
