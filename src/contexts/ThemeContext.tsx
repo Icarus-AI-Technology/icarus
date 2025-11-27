@@ -19,6 +19,7 @@ export interface ThemeContextType {
   isDark: boolean;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const THEME_KEY = 'icarus-theme';

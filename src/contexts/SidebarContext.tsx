@@ -17,6 +17,7 @@ interface SidebarContextType {
   sidebarWidth: number;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 const SIDEBAR_WIDTH_EXPANDED = 256;

@@ -266,6 +266,7 @@ export function ChatResponseCard({ card, onAction }: ChatResponseCardProps) {
 /**
  * Função helper para parsear markdown e extrair cards estruturados
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function parseMessageContent(content: string): { text: string; cards: ChatCardData[] } {
   const cards: ChatCardData[] = [];
   let text = content;

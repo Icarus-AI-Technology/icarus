@@ -187,7 +187,7 @@ export function useAnvisa(options: UseAnvisaOptions = {}) {
     try {
       const resultado = await anvisa.buscar(termo)
       return resultado.registros
-    } catch (_error) {
+    } catch {
       toast.error('Erro ao buscar registros ANVISA')
       return []
     } finally {
@@ -283,7 +283,7 @@ export function useAnvisa(options: UseAnvisaOptions = {}) {
       if (error) throw error
       toast.success('Alerta resolvido')
       return true
-    } catch (_error) {
+    } catch {
       toast.error('Erro ao resolver alerta')
       return false
     }
