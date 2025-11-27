@@ -10,8 +10,10 @@ import { KPICard } from '@/components/ui/KPICard'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
-import { BarChart3, TrendingUp, TrendingDown, Target } from 'lucide-react'
+import { BarChart3, TrendingUp, TrendingDown, Target, BrainCircuit, Sparkles } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
+import { useAIInsights } from '@/hooks/queries/useIcarusBrainAI'
+import { useDashboardRealtime } from '@/hooks/useRealtimeSubscription'
 
 type CategoriaKPI = 'vendas' | 'financeiro' | 'operacional' | 'marketing' | 'qualidade'
 type TendenciaKPI = 'subindo' | 'estavel' | 'descendo'
@@ -43,6 +45,10 @@ interface AlertaKPI {
 export default function KPIDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
   const [categoria, setCategoria] = useState<CategoriaKPI | 'todas'>('todas')
+  
+  // React Query hooks for AI insights and real-time updates
+  const { data: aiInsights, isLoading: _insightsLoading } = useAIInsights('kpi-dashboard')
+  useDashboardRealtime()
 
   const [kpis] = useState<KPI[]>([
     {
