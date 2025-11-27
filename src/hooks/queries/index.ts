@@ -30,3 +30,6 @@ export * from './useLogistica'
 // Compliance & Auditoria
 export * from './useCompliance'
 
+// Relacionamento & Leads
+export * from './useRelacionamento'
+

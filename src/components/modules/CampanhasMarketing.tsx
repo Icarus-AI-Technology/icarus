@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { formatCurrency } from '@/lib/utils'
+import { useCampanhas, useRelacionamentoStats } from '@/hooks/queries/useRelacionamento'
 
 type StatusCampanha = 'planejada' | 'ativa' | 'pausada' | 'finalizada'
 type TipoCampanha = 'email' | 'whatsapp' | 'evento' | 'webinar' | 'conteudo'
@@ -31,6 +32,10 @@ interface Campanha {
 
 export default function CampanhasMarketing() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks
+  const { data: _campanhasData } = useCampanhas()
+  const { data: _stats } = useRelacionamentoStats()
 
   const [campanhas] = useState<Campanha[]>([
     {

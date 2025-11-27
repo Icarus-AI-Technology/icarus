@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { formatCurrency } from '@/lib/utils'
+import { useLeads, useRelacionamentoStats, usePipeline } from '@/hooks/queries/useRelacionamento'
 
 type StatusLead = 'novo' | 'qualificado' | 'em_negociacao' | 'ganho' | 'perdido'
 type OrigemLead = 'website' | 'indicacao' | 'evento' | 'cold_call' | 'marketing'
@@ -30,6 +31,11 @@ interface Lead {
 
 export default function GestaoLeads() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  // React Query hooks
+  const { data: _leadsData } = useLeads()
+  const { data: _stats } = useRelacionamentoStats()
+  const { data: _pipeline } = usePipeline()
 
   const [leads] = useState<Lead[]>([
     {
