@@ -22,11 +22,13 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useSupabase } from '@/hooks/useSupabase'
 import { useFornecedores, useComprasStats } from '@/hooks/queries/useCompras'
 import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   ShoppingCart, Plus, Search, Filter, Eye, Send, CheckCircle2,
+  Clock, DollarSign, Truck, Package, XCircle,
 } from 'lucide-react'
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -75,6 +77,9 @@ interface POItem {
 
 export function Compras() {
   const [loading, setLoading] = useState(true)
+  
+  // Supabase client
+  const { supabase, isConfigured } = useSupabase()
   
   // React Query hooks
   const { data: _fornecedoresData } = useFornecedores()

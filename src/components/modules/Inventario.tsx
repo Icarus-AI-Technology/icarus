@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useSupabase } from '@/hooks/useSupabase'
 import { useLotes, useLogisticaStats } from '@/hooks/queries/useLogistica'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
@@ -69,6 +70,9 @@ interface InventoryItem {
 
 export function Inventario() {
   const [loading, setLoading] = useState(true)
+  
+  // Supabase client
+  const { supabase, isConfigured } = useSupabase()
   
   // React Query hooks
   const { data: _lotesData } = useLotes()
@@ -599,10 +603,10 @@ export function Inventario() {
                       </div>
 
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="flex-1 bg-muted rounded-full h-2">
+                        <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
                           <div
-                            className="bg-primary h-2 rounded-full transition-all"
-                            style={{ width: `${(inventory.items_counted / inventory.total_items) * 100 || 0}%` }}
+                            className="bg-primary h-2 rounded-full transition-all w-(--progress)"
+                            style={{ '--progress': `${(inventory.items_counted / inventory.total_items) * 100 || 0}%` } as React.CSSProperties}
                           />
                         </div>
                         <span className="text-xs text-muted-foreground">

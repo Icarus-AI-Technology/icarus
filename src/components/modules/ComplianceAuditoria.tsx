@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/formatters'
 import { useComplianceStats, useAuditorias, useNaoConformidades, useAnvisaStatus, useLGPDStatus } from '@/hooks/queries/useCompliance'
 
 type StatusAuditoria = 'planejada' | 'em_andamento' | 'concluida' | 'nao_conformidade'
@@ -444,8 +444,8 @@ export default function ComplianceAuditoria() {
                       <div className="flex items-center gap-2 mt-2">
                         <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
                           <div
-                            className={`h-full ${conformes === reqs.length ? 'bg-green-500' : 'bg-yellow-500'}`}
-                            style={{ width: `${(conformes / reqs.length) * 100}%` }}
+                            className={`h-full w-(--progress) ${conformes === reqs.length ? 'bg-green-500' : 'bg-yellow-500'}`}
+                            style={{ '--progress': `${(conformes / reqs.length) * 100}%` } as React.CSSProperties}
                           ></div>
                         </div>
                         <span className="text-sm font-bold">

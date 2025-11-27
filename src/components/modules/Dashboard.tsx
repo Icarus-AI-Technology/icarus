@@ -21,12 +21,11 @@ const CustomTooltip = ({ active, payload, label, isDark = true }: { active?: boo
   if (active && payload && payload.length) {
     return (
       <div 
-        className="px-4 py-3 rounded-xl"
-        style={{
-          background: isDark ? '#1A1F35' : '#FFFFFF',
-          boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.5)' : '0 10px 30px rgba(0,0,0,0.15)',
-          color: isDark ? '#FFFFFF' : '#0F172A'
-        }}
+        className={`px-4 py-3 rounded-xl ${
+          isDark 
+            ? 'bg-[#1A1F35] text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)]' 
+            : 'bg-white text-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.15)]'
+        }`}
       >
         <p className={`text-sm font-medium ${isDark ? 'text-[#94A3B8]' : 'text-slate-500'}`}>{label}</p>
         <p className="text-lg font-bold">
@@ -71,8 +70,6 @@ export function Dashboard() {
   // Cores do tema
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
   const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
-  const _textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
-  const _cardBg = isDark ? 'bg-[#15192B]' : 'bg-white'
   const inputBg = isDark ? 'bg-[#1A1F35]' : 'bg-slate-100'
   const chartGridColor = isDark ? '#252B44' : '#E2E8F0'
   const chartLabelColor = isDark ? '#64748B' : '#64748B'
@@ -81,7 +78,7 @@ export function Dashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className={`text-3xl font-bold ${textPrimary} mb-2`}>Dashboard</h1>
+        <h1 className={`text-3xl font-bold ${textPrimary} mb-2`} data-testid="dashboard-heading">Dashboard</h1>
         <p className={textSecondary}>
           Visão geral do sistema ICARUS v5.0
         </p>
@@ -133,11 +130,11 @@ export function Dashboard() {
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList 
-          className={`${inputBg} p-1 rounded-xl`}
-          style={{ boxShadow: isDark 
-            ? 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(255,255,255,0.02)' 
-            : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -2px -2px 4px rgba(255,255,255,0.8)'
-          }}
+          className={`${inputBg} p-1 rounded-xl ${
+            isDark 
+              ? 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
+              : 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
+          }`}
         >
           <TabsTrigger 
             value="overview" 
@@ -235,7 +232,7 @@ export function Dashboard() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${name || ''}: ${((percent ?? 0) * 100).toFixed(0)}%`}
                     outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"
@@ -259,13 +256,11 @@ export function Dashboard() {
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
                   <div 
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ 
-                      background: isDark ? '#1A1F35' : '#F1F5F9',
-                      boxShadow: isDark 
-                        ? 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.02)'
-                        : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -1px -1px 3px rgba(255,255,255,0.8)'
-                    }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      isDark 
+                        ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]'
+                        : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.8)]'
+                    }`}
                   >
                     <TrendingUp className="w-4 h-4 text-[#10B981]" strokeWidth={2.5} />
                   </div>
@@ -287,13 +282,11 @@ export function Dashboard() {
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
                   <div 
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ 
-                      background: isDark ? '#1A1F35' : '#F1F5F9',
-                      boxShadow: isDark 
-                        ? 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.02)'
-                        : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -1px -1px 3px rgba(255,255,255,0.8)'
-                    }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      isDark 
+                        ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]'
+                        : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.8)]'
+                    }`}
                   >
                     <Clock className="w-4 h-4 text-[#3B82F6]" strokeWidth={2.5} />
                   </div>
@@ -315,13 +308,11 @@ export function Dashboard() {
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
                   <div 
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ 
-                      background: isDark ? '#1A1F35' : '#F1F5F9',
-                      boxShadow: isDark 
-                        ? 'inset 2px 2px 4px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.02)'
-                        : 'inset 2px 2px 4px rgba(0,0,0,0.05), inset -1px -1px 3px rgba(255,255,255,0.8)'
-                    }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      isDark 
+                        ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]'
+                        : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.8)]'
+                    }`}
                   >
                     <Star className="w-4 h-4 text-[#F59E0B]" strokeWidth={2.5} />
                   </div>
@@ -346,11 +337,7 @@ export function Dashboard() {
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
-                    boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
-                  }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center bg-linear-to-br from-indigo-500 to-purple-500 shadow-[0_4px_15px_rgba(99,102,241,0.4)]"
                 >
                   <BrainCircuit className="h-5 w-5 text-white" strokeWidth={2} />
                 </div>
@@ -360,14 +347,11 @@ export function Dashboard() {
             <CardContent className="space-y-4">
               {/* AI Insight 1 - Optimization */}
               <div 
-                className="p-4 rounded-xl"
-                style={{
-                  background: isDark ? '#1A1F35' : '#F8FAFC',
-                  boxShadow: isDark 
-                    ? '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)'
-                    : '3px 3px 6px rgba(0,0,0,0.06), -2px -2px 4px rgba(255,255,255,0.9)',
-                  borderLeft: '4px solid #3B82F6'
-                }}
+                className={`p-4 rounded-xl border-l-4 border-l-blue-500 ${
+                  isDark 
+                    ? 'bg-[#1A1F35] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
+                    : 'bg-slate-50 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
+                }`}
               >
                 <div className={`font-medium ${textPrimary} mb-2 flex items-center gap-2`}>
                   <Activity className="w-5 h-5 text-[#3B82F6]" />
@@ -384,14 +368,11 @@ export function Dashboard() {
 
               {/* AI Insight 2 - Positive Forecast */}
               <div 
-                className="p-4 rounded-xl"
-                style={{
-                  background: isDark ? '#1A1F35' : '#F8FAFC',
-                  boxShadow: isDark 
-                    ? '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)'
-                    : '3px 3px 6px rgba(0,0,0,0.06), -2px -2px 4px rgba(255,255,255,0.9)',
-                  borderLeft: '4px solid #10B981'
-                }}
+                className={`p-4 rounded-xl border-l-4 border-l-emerald-500 ${
+                  isDark 
+                    ? 'bg-[#1A1F35] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
+                    : 'bg-slate-50 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
+                }`}
               >
                 <div className={`font-medium ${textPrimary} mb-2 flex items-center gap-2`}>
                   <TrendingUp className="w-5 h-5 text-[#10B981]" />
@@ -408,14 +389,11 @@ export function Dashboard() {
 
               {/* AI Insight 3 - Attention Needed */}
               <div 
-                className="p-4 rounded-xl"
-                style={{
-                  background: isDark ? '#1A1F35' : '#F8FAFC',
-                  boxShadow: isDark 
-                    ? '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)'
-                    : '3px 3px 6px rgba(0,0,0,0.06), -2px -2px 4px rgba(255,255,255,0.9)',
-                  borderLeft: '4px solid #F59E0B'
-                }}
+                className={`p-4 rounded-xl border-l-4 border-l-amber-500 ${
+                  isDark 
+                    ? 'bg-[#1A1F35] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
+                    : 'bg-slate-50 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
+                }`}
               >
                 <div className={`font-medium ${textPrimary} mb-2 flex items-center gap-2`}>
                   <AlertCircle className="w-5 h-5 text-[#F59E0B]" />

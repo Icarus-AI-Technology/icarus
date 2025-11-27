@@ -4,6 +4,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/Label'
+import { Textarea } from '@/components/ui/Textarea'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
 import {
   Select,
   SelectContent,
@@ -56,6 +65,27 @@ export function Cadastros() {
   const [filterType, setFilterType] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [activeTab, setActiveTab] = useState('overview')
+
+  // Dialog states
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<CadastroItem | null>(null)
+
+  // Form state
+  const [formData, setFormData] = useState({
+    type: 'fornecedores' as CadastroType,
+    code: '',
+    name: '',
+    description: '',
+    cnpj: '',
+    cpf: '',
+    crm: '',
+    specialty: '',
+    state: '',
+    city: '',
+    active: true,
+  })
 
   const debouncedSearch = useDebounce(searchTerm, 300)
 
@@ -310,7 +340,7 @@ export function Cadastros() {
             Gestão centralizada de cadastros auxiliares do sistema
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
           <Plus className="h-4 w-4" />
           Novo Cadastro
         </Button>
@@ -405,9 +435,9 @@ export function Cadastros() {
                         <div key={item.id} className="flex items-center justify-between text-sm">
                           <span className="truncate">{item.name}</span>
                           {item.active ? (
-                            <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                           ) : (
-                            <XCircle className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                            <XCircle className="h-4 w-4 text-gray-400 shrink-0" />
                           )}
                         </div>
                       ))}
@@ -528,13 +558,37 @@ export function Cadastros() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="sm" onClick={() => {
+                          setSelectedItem(item)
+                          setIsViewDialogOpen(true)
+                        }} title="Visualizar">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="sm" onClick={() => {
+                          setSelectedItem(item)
+                          setFormData({
+                            type: item.type,
+                            code: item.code,
+                            name: item.name,
+                            description: item.description || '',
+                            cnpj: item.cnpj || '',
+                            cpf: item.cpf || '',
+                            crm: item.crm || '',
+                            specialty: item.specialty || '',
+                            state: item.state || '',
+                            city: item.city || '',
+                            active: item.active,
+                          })
+                          setIsEditDialogOpen(true)
+                        }} title="Editar">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="sm" onClick={() => {
+                          if (confirm('Tem certeza que deseja excluir este cadastro?')) {
+                            setCadastros(cadastros.filter(c => c.id !== item.id))
+                            toast.success('Cadastro excluído com sucesso!')
+                          }
+                        }} title="Excluir">
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
@@ -546,6 +600,414 @@ export function Cadastros() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Create Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Novo Cadastro</DialogTitle>
+            <DialogDescription>
+              Preencha os dados do novo cadastro
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="type">Tipo de Cadastro *</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value as CadastroType })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fornecedores">Fornecedor</SelectItem>
+                    <SelectItem value="hospitais">Hospital</SelectItem>
+                    <SelectItem value="medicos">Médico</SelectItem>
+                    <SelectItem value="especialidades">Especialidade</SelectItem>
+                    <SelectItem value="cidades">Cidade</SelectItem>
+                    <SelectItem value="cargos">Cargo</SelectItem>
+                    <SelectItem value="setores">Setor</SelectItem>
+                    <SelectItem value="centros_custo">Centro de Custo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="code">Código *</Label>
+                <Input
+                  id="code"
+                  placeholder="Código único"
+                  value={formData.code}
+                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="name">Nome *</Label>
+              <Input
+                id="name"
+                placeholder="Nome completo"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Descrição</Label>
+              <Textarea
+                id="description"
+                placeholder="Descrição detalhada..."
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
+            </div>
+
+            {(formData.type === 'fornecedores' || formData.type === 'hospitais') && (
+              <div className="space-y-2">
+                <Label htmlFor="cnpj">CNPJ</Label>
+                <Input
+                  id="cnpj"
+                  placeholder="00.000.000/0000-00"
+                  value={formData.cnpj}
+                  onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
+                />
+              </div>
+            )}
+
+            {formData.type === 'medicos' && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="crm">CRM</Label>
+                  <Input
+                    id="crm"
+                    placeholder="CRM/UF"
+                    value={formData.crm}
+                    onChange={(e) => setFormData({ ...formData, crm: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="specialty">Especialidade</Label>
+                  <Input
+                    id="specialty"
+                    placeholder="Especialidade médica"
+                    value={formData.specialty}
+                    onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
+                  />
+                </div>
+              </div>
+            )}
+
+            {(formData.type === 'cidades' || formData.type === 'hospitais' || formData.type === 'fornecedores') && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input
+                    id="city"
+                    placeholder="Cidade"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">Estado</Label>
+                  <Input
+                    id="state"
+                    placeholder="UF"
+                    maxLength={2}
+                    value={formData.state}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value.toUpperCase() })}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => {
+              setIsCreateDialogOpen(false)
+              setFormData({
+                type: 'fornecedores',
+                code: '',
+                name: '',
+                description: '',
+                cnpj: '',
+                cpf: '',
+                crm: '',
+                specialty: '',
+                state: '',
+                city: '',
+                active: true,
+              })
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              if (!formData.code || !formData.name) {
+                toast.error('Preencha os campos obrigatórios')
+                return
+              }
+              const newItem: CadastroItem = {
+                id: String(cadastros.length + 1),
+                type: formData.type,
+                code: formData.code,
+                name: formData.name,
+                description: formData.description || undefined,
+                cnpj: formData.cnpj || undefined,
+                cpf: formData.cpf || undefined,
+                crm: formData.crm || undefined,
+                specialty: formData.specialty || undefined,
+                state: formData.state || undefined,
+                city: formData.city || undefined,
+                active: true,
+                created_at: new Date().toISOString().split('T')[0],
+                updated_at: new Date().toISOString().split('T')[0],
+              }
+              setCadastros([...cadastros, newItem])
+              toast.success('Cadastro criado com sucesso!')
+              setIsCreateDialogOpen(false)
+              setFormData({
+                type: 'fornecedores',
+                code: '',
+                name: '',
+                description: '',
+                cnpj: '',
+                cpf: '',
+                crm: '',
+                specialty: '',
+                state: '',
+                city: '',
+                active: true,
+              })
+            }}>
+              Criar Cadastro
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Editar Cadastro</DialogTitle>
+            <DialogDescription>
+              {selectedItem?.code} - {selectedItem?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-type">Tipo de Cadastro</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value as CadastroType })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fornecedores">Fornecedor</SelectItem>
+                    <SelectItem value="hospitais">Hospital</SelectItem>
+                    <SelectItem value="medicos">Médico</SelectItem>
+                    <SelectItem value="especialidades">Especialidade</SelectItem>
+                    <SelectItem value="cidades">Cidade</SelectItem>
+                    <SelectItem value="cargos">Cargo</SelectItem>
+                    <SelectItem value="setores">Setor</SelectItem>
+                    <SelectItem value="centros_custo">Centro de Custo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-code">Código</Label>
+                <Input
+                  id="edit-code"
+                  value={formData.code}
+                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Nome *</Label>
+              <Input
+                id="edit-name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Descrição</Label>
+              <Textarea
+                id="edit-description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
+            </div>
+
+            {(formData.type === 'fornecedores' || formData.type === 'hospitais') && (
+              <div className="space-y-2">
+                <Label htmlFor="edit-cnpj">CNPJ</Label>
+                <Input
+                  id="edit-cnpj"
+                  value={formData.cnpj}
+                  onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
+                />
+              </div>
+            )}
+
+            {formData.type === 'medicos' && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-crm">CRM</Label>
+                  <Input
+                    id="edit-crm"
+                    value={formData.crm}
+                    onChange={(e) => setFormData({ ...formData, crm: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-specialty">Especialidade</Label>
+                  <Input
+                    id="edit-specialty"
+                    value={formData.specialty}
+                    onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="edit-active"
+                checked={formData.active}
+                onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                className="w-4 h-4"
+                title="Status ativo"
+              />
+              <Label htmlFor="edit-active">Ativo</Label>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => {
+              setIsEditDialogOpen(false)
+              setSelectedItem(null)
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              if (!formData.name) {
+                toast.error('Nome é obrigatório')
+                return
+              }
+              setCadastros(cadastros.map(item => 
+                item.id === selectedItem?.id 
+                  ? {
+                      ...item,
+                      type: formData.type,
+                      code: formData.code,
+                      name: formData.name,
+                      description: formData.description || undefined,
+                      cnpj: formData.cnpj || undefined,
+                      cpf: formData.cpf || undefined,
+                      crm: formData.crm || undefined,
+                      specialty: formData.specialty || undefined,
+                      state: formData.state || undefined,
+                      city: formData.city || undefined,
+                      active: formData.active,
+                      updated_at: new Date().toISOString().split('T')[0],
+                    }
+                  : item
+              ))
+              toast.success('Cadastro atualizado com sucesso!')
+              setIsEditDialogOpen(false)
+              setSelectedItem(null)
+            }}>
+              Salvar Alterações
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes do Cadastro</DialogTitle>
+            <DialogDescription>
+              {selectedItem?.code}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedItem && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Tipo</p>
+                  <p className="font-medium capitalize">{selectedItem.type.replace('_', ' ')}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  <Badge variant={selectedItem.active ? 'success' : 'secondary'}>
+                    {selectedItem.active ? 'Ativo' : 'Inativo'}
+                  </Badge>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sm text-muted-foreground">Nome</p>
+                  <p className="font-medium">{selectedItem.name}</p>
+                </div>
+                {selectedItem.description && (
+                  <div className="col-span-2">
+                    <p className="text-sm text-muted-foreground">Descrição</p>
+                    <p className="font-medium">{selectedItem.description}</p>
+                  </div>
+                )}
+                {selectedItem.cnpj && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">CNPJ</p>
+                    <p className="font-medium">{selectedItem.cnpj}</p>
+                  </div>
+                )}
+                {selectedItem.crm && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">CRM</p>
+                    <p className="font-medium">{selectedItem.crm}</p>
+                  </div>
+                )}
+                {selectedItem.specialty && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Especialidade</p>
+                    <p className="font-medium">{selectedItem.specialty}</p>
+                  </div>
+                )}
+                {selectedItem.city && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Localização</p>
+                    <p className="font-medium">{selectedItem.city}/{selectedItem.state}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-sm text-muted-foreground">Criado em</p>
+                  <p className="font-medium">{formatDate(selectedItem.created_at)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Atualizado em</p>
+                  <p className="font-medium">{formatDate(selectedItem.updated_at)}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => {
+              setIsViewDialogOpen(false)
+              setSelectedItem(null)
+            }}>
+              Fechar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

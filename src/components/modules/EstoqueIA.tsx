@@ -218,7 +218,7 @@ export function EstoqueIA() {
   // Modal
   const [produtoSelecionado, setProdutoSelecionado] = useState<ProdutoEstoque | null>(null)
   const [modalAberto, setModalAberto] = useState(false)
-  const [abaModal, setAbaModal] = useState('detalhes')
+  const [_abaModal, setAbaModal] = useState('detalhes')
   const [aiLoading, setAiLoading] = useState(false)
 
   // ==================== EFEITOS ====================

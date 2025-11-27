@@ -49,13 +49,70 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
 |-----------|------------|
 | **Frontend** | React 18.3.1 + TypeScript 5.8 + Vite 6.3 |
 | **Styling** | Tailwind CSS 4.1 + Radix UI |
-| **Database** | Supabase PostgreSQL 15 |
+| **Database** | Supabase PostgreSQL 15 + pgvector |
 | **Design System** | Dark Glass Medical (Neumorphism 3D) |
 | **Animações** | Motion (Framer Motion) 12.x |
 | **Gráficos** | Recharts 3.x |
 | **Ícones** | Lucide React |
-| **IA** | Claude Sonnet, GPT-4, TensorFlow.js |
+| **IA** | LangChain 0.3 + LangGraph 0.2 + Claude 3.5 Sonnet + GPT-4o |
+| **Backend** | Supabase Edge Functions (Deno/TS) |
 | **Deploy** | Vercel + GitHub Actions |
+
+---
+
+## 🧠 IA Avançada (Integração 2025)
+
+### LangChain + LangGraph + pgvector
+
+O ICARUS integra as mais recentes tecnologias de IA para gestão OPME:
+
+- **LangChain 0.3.1 + LangGraph 0.2.5**: Agentes reativos para RAG em estoque, cirurgias e farmacovigilância
+- **pgvector (Supabase)**: Embeddings vetoriais para busca semântica em catálogos ANVISA
+- **LLMs**: Claude 3.5 Sonnet (prioridade para raciocínio regulatório) + GPT-4o (embeddings)
+- **Backend**: Supabase Edge Functions (Deno/TS) para IcarusBrain serverless
+
+### Módulos com IA Integrada
+
+| Módulo | Funcionalidade IA | Status |
+|--------|-------------------|--------|
+| **Estoque IA** | RAG para previsão de demanda + rastreabilidade lote (RDC 59) | ✅ Novo |
+| **Cirurgias** | Análise preditiva de procedimentos + alertas ANVISA | ✅ Novo |
+| **Financeiro** | Score de inadimplência com análise semântica de NF-e | ✅ Novo |
+| **IcarusBrain** | Agente LangGraph para queries cross-módulo | ✅ Novo |
+| **Produtos OPME** | Busca semântica em 200+ itens reais (stents, implantes) | ✅ Novo |
+| **Faturamento** | Extração automática de NF-e via Claude Vision | ✅ Novo |
+
+### Ferramentas do Agente IA
+
+```typescript
+import { useLangChainTools } from '@/hooks/useLangChainTools'
+
+const { searchCatalog, sendToAgent, extractNFE } = useLangChainTools()
+
+// Busca semântica no catálogo OPME
+const results = await searchCatalog('stent coronário 3.0mm', {
+  anvisaValido: true,
+  classeRisco: ['III', 'IV'],
+  vencimentoApos: '2026-01-01'
+})
+
+// Chat com agente LangGraph
+const response = await sendToAgent(
+  'Qual estoque de stent Resolute 3.0x24mm na região Sudeste?'
+)
+
+// Extração de NF-e via Vision
+const nfe = await extractNFE(file) // Suporta XML, PDF, imagem
+```
+
+### Edge Functions Disponíveis
+
+| Função | Descrição |
+|--------|-----------|
+| `semantic-search` | Busca vetorial com filtros regulatórios ANVISA |
+| `langchain-agent` | Agente reativo com 5 ferramentas especializadas |
+| `extract-nfe` | Extração de NF-e via XML parser + Claude Vision |
+| `chat` | Chat conversacional com contexto de módulo |
 
 ---
 
@@ -189,32 +246,64 @@ const score = await analyze('inadimplencia', {
 
 ---
 
-## 🗄️ Supabase
+## 🗄️ Supabase + pgvector
 
 ### Configuração
 
 1. Crie um projeto no [Supabase](https://supabase.com)
-2. Configure as variáveis de ambiente:
+2. Habilite a extensão `pgvector` no SQL Editor
+3. Configure as variáveis de ambiente:
 
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua_chave_anon
+OPENAI_API_KEY=sk-...  # Para embeddings
+ANTHROPIC_API_KEY=sk-ant-...  # Para Claude Vision
 ```
+
+### Migrações (pgvector + OPME)
+
+```bash
+# Aplicar migrações
+supabase db push
+
+# Deploy Edge Functions
+supabase functions deploy langchain-agent
+supabase functions deploy semantic-search
+supabase functions deploy extract-nfe
+```
+
+### Tabelas Principais
+
+| Tabela | Descrição |
+|--------|-----------|
+| `catalogo_medico_embeddings` | Embeddings vetoriais para busca semântica ANVISA |
+| `ai_agent_tools_log` | Auditoria de execução de ferramentas IA |
+| `nfe_extractions` | NF-e extraídas automaticamente |
+| `audit_logs` | Logs de compliance (21 CFR Part 11) |
 
 ### Exemplo de Uso
 
 ```typescript
 import { supabase } from '@/lib/config/supabase-client'
 
-// Fetch
+// Busca tradicional
 const { data } = await supabase
   .from('produtos')
   .select('*')
 
-// Insert
-await supabase
-  .from('produtos')
-  .insert([{ nome: 'Produto 1' }])
+// Busca semântica via RPC (pgvector)
+const { data: results } = await supabase.rpc('busca_semantica_catalogo', {
+  query_embedding: embeddings,
+  match_threshold: 0.7,
+  match_count: 10,
+  filtro_anvisa_valido: true
+})
+
+// Chamar Edge Function
+const { data: agentResponse } = await supabase.functions.invoke('langchain-agent', {
+  body: { mensagem: 'Qual estoque de stents?', modulo: 'estoque' }
+})
 ```
 
 ---
@@ -247,7 +336,7 @@ Este projeto é propriedade da **Icarus AI Technology**.
 
 ## 🌟 Versão
 
-**v5.0** - Production Ready
+**v5.0** - Production Ready (LangChain Edition)
 
 ### Status do Projeto
 - ✅ Design System Dark Glass Medical
@@ -257,6 +346,21 @@ Este projeto é propriedade da **Icarus AI Technology**.
 - ✅ 11 módulos implementados
 - ✅ Assistente virtual integrado
 - ✅ Deploy automático Vercel
+- ✅ **LangChain + LangGraph** integrado
+- ✅ **pgvector** para busca semântica
+- ✅ **Claude Vision** para extração de NF-e
+- ✅ **Agente reativo** com 5 ferramentas
+- ✅ GitHub Actions CI/CD
+
+### Secrets Necessários (GitHub Actions)
+
+| Secret | Descrição |
+|--------|-----------|
+| `VERCEL_TOKEN` | Token de acesso Vercel |
+| `VERCEL_ORG_ID` | ID da organização Vercel |
+| `VERCEL_PROJECT_ID` | ID do projeto Vercel |
+| `SUPABASE_ACCESS_TOKEN` | Token de acesso Supabase CLI |
+| `SUPABASE_PROJECT_REF` | Referência do projeto Supabase |
 
 ---
 

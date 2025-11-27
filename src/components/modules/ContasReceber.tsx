@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useSupabase } from '@/hooks/useSupabase'
 import { useContasReceber, useFinanceiroStats } from '@/hooks/queries/useFinanceiro'
 import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
 import { validateAmount } from '@/lib/utils/validators'
@@ -54,6 +55,9 @@ interface Receivable {
 
 export function ContasReceber() {
   const [loading, setLoading] = useState(true)
+  
+  // Supabase client
+  const { supabase, isConfigured } = useSupabase()
   
   // React Query hooks
   const { data: _contasData } = useContasReceber()
@@ -189,7 +193,7 @@ export function ContasReceber() {
 
       if (error) throw error
 
-      const enrichedData = (data || []).map(r => ({
+      const enrichedData = (data || []).map((r: Receivable) => ({
         ...r,
         days_overdue: calculateDaysOverdue(r.due_date, r.status),
         status: getReceivableStatus(r)
@@ -525,10 +529,10 @@ export function ContasReceber() {
                         </div>
 
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="flex-1 bg-muted rounded-full h-2">
+                          <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
                             <div
-                              className="bg-primary h-2 rounded-full transition-all"
-                              style={{ width: `${percentPaid}%` }}
+                              className="bg-primary h-2 rounded-full transition-all w-(--progress)"
+                              style={{ '--progress': `${percentPaid}%` } as React.CSSProperties}
                             />
                           </div>
                           <span className="text-xs text-muted-foreground w-12 text-right">
@@ -602,7 +606,10 @@ export function ContasReceber() {
                   <Card key={index}>
                     <CardContent className="pt-6">
                       <div className="text-sm text-muted-foreground mb-1">{item.range}</div>
-                      <div className="text-2xl font-bold" style={{ color: item.color }}>
+                      <div 
+                        className="text-2xl font-bold text-(--item-color)" 
+                        style={{ '--item-color': item.color } as React.CSSProperties}
+                      >
                         {formatCurrency(item.valor)}
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">

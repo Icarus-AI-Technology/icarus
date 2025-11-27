@@ -15,7 +15,10 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
 
   return (
     <>
-      <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-[#0B0D16]' : 'bg-[#F1F5F9]'}`}>
+      <div 
+        className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-[#0B0D16]' : 'bg-[#F1F5F9]'}`}
+        data-testid="app-layout"
+      >
         {/* Sidebar */}
         <IcarusSidebar />
 
@@ -24,6 +27,7 @@ export function IcarusLayout({ children }: IcarusLayoutProps) {
 
         {/* Main Content - Estica/encolhe com a sidebar */}
         <main
+          role="main"
           className="pt-16 min-h-screen transition-all duration-300 ease-in-out"
           style={{ 
             marginLeft: `${sidebarWidth}px`,

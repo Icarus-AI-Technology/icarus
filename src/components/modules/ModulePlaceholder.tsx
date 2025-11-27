@@ -45,7 +45,8 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
   const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
   const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-400'
-  const _bgCard = isDark ? '#15192B' : '#FFFFFF'
+  // Card background - using CSS classes instead
+  // const _bgCard = isDark ? '#15192B' : '#FFFFFF'
   const bgInput = isDark ? '#1A1F35' : '#F1F5F9'
   
   const neuShadowOuter = isDark 
@@ -62,11 +63,7 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
       <div>
         <div className="flex items-center gap-4 mb-2">
           <div 
-            className="w-14 h-14 rounded-xl flex items-center justify-center"
-            style={{ 
-              background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
-              boxShadow: '0 6px 20px rgba(99, 102, 241, 0.4)'
-            }}
+            className="w-14 h-14 rounded-xl flex items-center justify-center bg-linear-to-br from-indigo-500 to-purple-500 shadow-[0_6px_20px_rgba(99,102,241,0.4)]"
           >
             <Icon className="h-7 w-7 text-white" strokeWidth={2} />
           </div>
@@ -85,11 +82,8 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <div 
-              className="w-10 h-10 rounded-lg flex items-center justify-center"
-              style={{ 
-                background: bgInput,
-                boxShadow: neuShadowInset
-              }}
+              className="w-10 h-10 rounded-lg flex items-center justify-center bg-(--bg-input) shadow-(--shadow-inset)"
+              style={{ '--bg-input': bgInput, '--shadow-inset': neuShadowInset } as React.CSSProperties}
             >
               <Rocket className="h-5 w-5 text-[#6366F1]" strokeWidth={2} />
             </div>
@@ -99,14 +93,10 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
         <CardContent className="space-y-4">
           {/* Alert Box */}
           <div 
-            className="flex items-start gap-3 p-4 rounded-xl"
-            style={{
-              background: bgInput,
-              boxShadow: neuShadowOuter,
-              borderLeft: '4px solid #3B82F6'
-            }}
+            className="flex items-start gap-3 p-4 rounded-xl border-l-4 border-l-blue-500 bg-(--bg-input) shadow-(--shadow-outer)"
+            style={{ '--bg-input': bgInput, '--shadow-outer': neuShadowOuter } as React.CSSProperties}
           >
-            <AlertCircle className="h-5 w-5 text-[#3B82F6] flex-shrink-0 mt-0.5" strokeWidth={2} />
+            <AlertCircle className="h-5 w-5 text-[#3B82F6] shrink-0 mt-0.5" strokeWidth={2} />
             <div className="text-sm">
               <p className={`font-medium ${textPrimary} mb-1`}>
                 Este módulo está planejado para implementação futura
@@ -123,13 +113,10 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
             {features.map((item, index) => (
               <div key={index} className="flex items-start gap-3">
                 <div 
-                  className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ 
-                    background: bgInput,
-                    boxShadow: neuShadowInset
-                  }}
+                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-(--bg-input) shadow-(--shadow-inset)"
+                  style={{ '--bg-input': bgInput, '--shadow-inset': neuShadowInset } as React.CSSProperties}
                 >
-                  <item.icon className="w-5 h-5" style={{ color: item.color }} strokeWidth={2.5} />
+                  <item.icon className="w-5 h-5 text-(--icon-color)" style={{ '--icon-color': item.color } as React.CSSProperties} strokeWidth={2.5} />
                 </div>
                 <div>
                   <div className={`font-medium ${textPrimary}`}>{item.title}</div>
@@ -140,8 +127,7 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
           </div>
 
           <div 
-            className="pt-4"
-            style={{ borderTop: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)' }}
+            className={`pt-4 border-t ${isDark ? 'border-white/5' : 'border-black/5'}`}
           >
             <p className={`text-sm ${textMuted}`}>
               Para mais informações sobre o roadmap do ICARUS v5.1, consulte a documentação
@@ -166,11 +152,8 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
             ].map((info, index) => (
               <div 
                 key={index}
-                className="p-3 rounded-lg"
-                style={{
-                  background: bgInput,
-                  boxShadow: neuShadowInset
-                }}
+                className="p-3 rounded-lg bg-(--bg-input) shadow-(--shadow-inset)"
+                style={{ '--bg-input': bgInput, '--shadow-inset': neuShadowInset } as React.CSSProperties}
               >
                 <span className={textMuted}>{info.label}:</span>
                 <span className={`ml-2 ${info.label === 'Módulo ID' ? 'font-mono' : ''} ${info.color}`}>

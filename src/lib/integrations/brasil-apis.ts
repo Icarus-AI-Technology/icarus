@@ -377,10 +377,12 @@ export class BrasilApiClient extends APIClient {
 
 // ============================================================================
 // CFM (Conselho Federal de Medicina) CLIENT
+// Uses InfoSimples API for reliable validation
 // ============================================================================
 
 export class CfmClient extends APIClient {
   private cache: APICache;
+  private useInfoSimples: boolean;
 
   constructor() {
     super({
@@ -389,6 +391,12 @@ export class CfmClient extends APIClient {
       retries: 2,
     });
     this.cache = new APICache(300000);
+    // Check if InfoSimples is configured
+    this.useInfoSimples = Boolean(
+      typeof window !== 'undefined' 
+        ? import.meta.env.VITE_INFOSIMPLES_KEY 
+        : false
+    );
   }
 
   /**
@@ -403,41 +411,83 @@ export class CfmClient extends APIClient {
    */
   private validateCrmFormat(crm: string, uf: string): boolean {
     const UFS = [
-      'AC',
-      'AL',
-      'AP',
-      'AM',
-      'BA',
-      'CE',
-      'DF',
-      'ES',
-      'GO',
-      'MA',
-      'MT',
-      'MS',
-      'MG',
-      'PA',
-      'PB',
-      'PR',
-      'PE',
-      'PI',
-      'RJ',
-      'RN',
-      'RS',
-      'RO',
-      'RR',
-      'SC',
-      'SP',
-      'SE',
-      'TO',
+      'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+      'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
+      'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
     ];
-    return /^\d{4,7}$/.test(crm) && UFS.includes(uf.toUpperCase());
+    return /^\d{4,10}$/.test(crm) && UFS.includes(uf.toUpperCase());
+  }
+
+  /**
+   * Lookup CRM via InfoSimples (preferred - faster, more reliable)
+   */
+  private async consultarViaInfoSimples(crm: string, uf: string): Promise<CfmMedico | null> {
+    try {
+      const { infosimples } = await import('@/lib/infosimples');
+      
+      const response = await infosimples.post<{
+        crm: string;
+        uf: string;
+        nome_completo: string;
+        situacao: string;
+        especialidades?: Array<{ nome: string; rqe?: string }>;
+        data_inscricao?: string;
+        endereco_profissional?: string;
+      }>('/consultas/cfm/crm', {
+        crm: crm.replace(/\D/g, ''),
+        uf: uf.toUpperCase()
+      });
+
+      if (response.code !== 200 || !response.data || response.data.length === 0) {
+        return null;
+      }
+
+      const data = response.data[0];
+      const situacao = data.situacao?.toUpperCase() || 'NAO_ENCONTRADO';
+
+      return {
+        crm: data.crm,
+        uf: data.uf,
+        nome: data.nome_completo,
+        situacao: situacao as CfmMedico['situacao'],
+        especialidades: data.especialidades?.map(e => e.nome),
+        dataInscricao: data.data_inscricao ? new Date(data.data_inscricao) : undefined,
+        enderecoProfissional: data.endereco_profissional,
+      };
+    } catch (error) {
+      console.warn('InfoSimples CFM query failed, falling back to Edge Function:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Lookup CRM via Edge Function (fallback)
+   */
+  private async consultarViaEdgeFunction(crm: string, uf: string): Promise<CfmMedico | null> {
+    const { supabase } = await import('@/lib/supabase/client');
+
+    const { data, error } = await supabase.functions.invoke('cfm-validar', {
+      body: { crm, uf },
+    });
+
+    if (error || !data?.medico) {
+      return null;
+    }
+
+    return {
+      crm: data.medico.crm,
+      uf: data.medico.uf,
+      nome: data.medico.nome_completo,
+      situacao: data.medico.situacao as CfmMedico['situacao'],
+      especialidades: data.medico.especialidades?.map((e: { nome: string }) => e.nome),
+      dataInscricao: data.medico.data_inscricao ? new Date(data.medico.data_inscricao) : undefined,
+      enderecoProfissional: data.medico.endereco_profissional,
+    };
   }
 
   /**
    * Lookup CRM
-   * Note: CFM doesn't have a public API, this would need to be done via web scraping
-   * or a third-party service. This implementation is a placeholder.
+   * Uses InfoSimples if configured, falls back to Edge Function
    */
   async consultarCrm(crm: string, uf: string): Promise<CfmMedico | null> {
     const formattedCrm = this.formatCrm(crm);
@@ -458,15 +508,19 @@ export class CfmClient extends APIClient {
     if (cached) return cached;
 
     try {
-      // This would need to use a Supabase Edge Function for web scraping
-      // or a third-party API service
-      const { supabase } = await import('@/lib/supabase/client');
+      let result: CfmMedico | null = null;
 
-      const { data, error } = await supabase.functions.invoke('cfm-consulta', {
-        body: { crm: formattedCrm, uf: formattedUf },
-      });
+      // Try InfoSimples first if configured
+      if (this.useInfoSimples) {
+        result = await this.consultarViaInfoSimples(formattedCrm, formattedUf);
+      }
 
-      if (error || !data) {
+      // Fallback to Edge Function
+      if (!result) {
+        result = await this.consultarViaEdgeFunction(formattedCrm, formattedUf);
+      }
+
+      if (!result) {
         return {
           crm: formattedCrm,
           uf: formattedUf,
@@ -474,18 +528,6 @@ export class CfmClient extends APIClient {
           situacao: 'NAO_ENCONTRADO',
         };
       }
-
-      const result: CfmMedico = {
-        crm: formattedCrm,
-        uf: formattedUf,
-        nome: data.nome,
-        situacao: data.situacao as CfmMedico['situacao'],
-        especialidades: data.especialidades,
-        dataInscricao: data.dataInscricao
-          ? new Date(data.dataInscricao)
-          : undefined,
-        enderecoProfissional: data.endereco,
-      };
 
       this.cache.set(cacheKey, result, 86400); // 24 hours
       return result;
@@ -497,6 +539,29 @@ export class CfmClient extends APIClient {
         situacao: 'NAO_ENCONTRADO',
       };
     }
+  }
+
+  /**
+   * Check if CRM is active
+   */
+  async verificarAtivo(crm: string, uf: string): Promise<{
+    ativo: boolean;
+    podeAtuar: boolean;
+    medico?: CfmMedico;
+  }> {
+    const medico = await this.consultarCrm(crm, uf);
+    
+    if (!medico || medico.situacao === 'NAO_ENCONTRADO') {
+      return { ativo: false, podeAtuar: false };
+    }
+
+    const ativo = medico.situacao === 'ATIVO';
+    
+    return {
+      ativo,
+      podeAtuar: ativo,
+      medico
+    };
   }
 
   /**

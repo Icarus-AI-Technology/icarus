@@ -54,7 +54,7 @@ function useEmpresaId(): string {
           .from('perfis')
           .select('empresa_id')
           .eq('usuario_id', userData.user.id)
-          .single();
+          .single() as { data: { empresa_id?: string } | null };
 
         if (perfil?.empresa_id) {
           setEmpresaId(perfil.empresa_id);
@@ -388,7 +388,7 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
           <div className="flex-1">
             <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
               <div
-                className={`h-full transition-all duration-500 ${
+                className={`h-full transition-all duration-500 w-(--progress) ${
                   stats.total > 0 && stats.connected / stats.total >= 0.8
                     ? 'bg-emerald-500'
                     : stats.total > 0 && stats.connected / stats.total >= 0.5
@@ -396,10 +396,8 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
                     : 'bg-red-500'
                 }`}
                 style={{
-                  width: `${
-                    stats.total > 0 ? (stats.connected / stats.total) * 100 : 0
-                  }%`,
-                }}
+                  '--progress': `${stats.total > 0 ? (stats.connected / stats.total) * 100 : 0}%`,
+                } as React.CSSProperties}
               />
             </div>
           </div>
@@ -439,9 +437,9 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
                   }`}
                 >
                   {h.status === 'error' ? (
-                    <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+                    <XCircle className="h-5 w-5 text-red-500 shrink-0" />
                   ) : (
-                    <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0" />
+                    <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" />
                   )}
                   <div className="flex-1">
                     <p

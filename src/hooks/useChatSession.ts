@@ -282,14 +282,39 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
   };
 }
 
-// API call helper
+// API call helper - tries langchain-agent first, falls back to chat, then mock
 async function callChatAPI(
   message: string,
   sessionId: string | null,
   context: ChatContext,
   _signal?: AbortSignal
 ): Promise<ChatResponse> {
-  // Try to use Edge Function
+  // Try LangChain Agent first (for advanced tool-based responses)
+  try {
+    const { data: agentData, error: agentError } = await supabase.functions.invoke('langchain-agent', {
+      body: {
+        mensagem: message,
+        usuario_id: sessionId,
+        contexto: context
+      }
+    });
+
+    if (!agentError && agentData?.success && agentData?.resposta) {
+      return {
+        response: agentData.resposta,
+        sessionId: sessionId || crypto.randomUUID(),
+        intent: agentData.ferramentas_usadas?.length > 0 ? 'tool_call' : 'chat',
+        actions: agentData.ferramentas_usadas?.map((tool: string) => ({
+          type: 'tool',
+          label: formatToolName(tool)
+        }))
+      };
+    }
+  } catch (err) {
+    console.warn('LangChain agent unavailable, trying chat function:', err);
+  }
+
+  // Fallback to regular chat Edge Function
   try {
     const { data, error } = await supabase.functions.invoke('chat', {
       body: {
@@ -309,6 +334,18 @@ async function callChatAPI(
     console.warn('API call failed, using fallback:', err);
     return getMockResponse(message, sessionId);
   }
+}
+
+// Format tool name for display
+function formatToolName(tool: string): string {
+  const toolNames: Record<string, string> = {
+    'estoque_disponivel': '📦 Estoque consultado',
+    'previsao_vencimento_lote': '⏰ Vencimentos verificados',
+    'busca_catalogo_anvisa': '🔍 Catálogo pesquisado',
+    'verificar_cirurgia_agendada': '🏥 Cirurgias verificadas',
+    'rastreabilidade_lote': '📋 Lote rastreado'
+  };
+  return toolNames[tool] || tool;
 }
 
 // Enhanced mock response for development/fallback

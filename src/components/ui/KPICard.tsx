@@ -8,6 +8,8 @@ export interface KPICardProps {
   value: string | number;
   icon?: LucideIcon;
   iconColor?: string;
+  /** @deprecated Use iconColor instead */
+  variant?: 'primary' | 'success' | 'warning' | 'danger' | 'default' | 'info';
   trend?: {
     value: number;
     direction: 'up' | 'down' | 'stable';
@@ -25,15 +27,29 @@ export interface KPICardProps {
  * - Colored icons via iconColor prop
  * - All cards follow the same neumorphic pattern
  */
+// Variant to color mapping
+const variantColors: Record<string, string> = {
+  primary: '#6366F1',
+  success: '#10B981',
+  warning: '#F59E0B',
+  danger: '#EF4444',
+  default: '#6366F1',
+  info: '#3B82F6',
+};
+
 export const KPICard: React.FC<KPICardProps> = ({
   title,
   value,
   icon: Icon,
-  iconColor = '#6366F1',
+  iconColor,
+  variant,
   trend,
   className = '',
 }) => {
   const { isDark } = useTheme();
+  
+  // Determine icon color: use explicit iconColor, or derive from variant, or default
+  const resolvedIconColor = iconColor || (variant ? variantColors[variant] : '#6366F1');
 
   // Neumorphic card styles - consistent for all cards
   const cardBg = isDark ? '#15192B' : '#FFFFFF';
@@ -75,7 +91,7 @@ export const KPICard: React.FC<KPICardProps> = ({
             <Icon 
               size={22} 
               strokeWidth={2.5} 
-              style={{ color: iconColor }}
+              style={{ color: resolvedIconColor }}
             />
           </div>
         )}

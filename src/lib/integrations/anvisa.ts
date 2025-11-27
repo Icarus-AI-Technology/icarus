@@ -1,13 +1,25 @@
 /**
  * ICARUS v5.0 - ANVISA API Integration
  * Medical device and product registry validation
+ * 
+ * Supports two backends:
+ * 1. InfoSimples API (preferred - faster, SLA 99.9%)
+ * 2. Direct ANVISA public API (fallback)
+ * 
+ * Conformidade: RDC 751/2022, RDC 16/2013, RDC 59/2008
  */
 
 import { APIClient, APICache } from './api-client';
+import { infosimples } from '@/lib/infosimples';
 import type { AnvisaRegistro, IntegrationHealth } from './types';
 
 // ANVISA API URL (public consultation)
 const ANVISA_API_URL = 'https://consultas.anvisa.gov.br/api';
+
+// Check if InfoSimples is configured
+const INFOSIMPLES_KEY = typeof window !== 'undefined'
+  ? import.meta.env.VITE_INFOSIMPLES_KEY
+  : undefined;
 
 /**
  * ANVISA Client
@@ -16,6 +28,7 @@ export class AnvisaClient extends APIClient {
   private cache: APICache;
   private lastHealthCheck: Date | null = null;
   private isAvailable: boolean = true;
+  private useInfoSimples: boolean;
 
   constructor() {
     super({
@@ -24,6 +37,7 @@ export class AnvisaClient extends APIClient {
       retries: 2,
     });
     this.cache = new APICache(60000); // 1 minute cleanup
+    this.useInfoSimples = Boolean(INFOSIMPLES_KEY);
   }
 
   // =========================================================================
@@ -46,7 +60,87 @@ export class AnvisaClient extends APIClient {
   }
 
   /**
+   * Lookup ANVISA registry via InfoSimples (preferred)
+   */
+  private async consultarViaInfoSimples(registro: string): Promise<AnvisaRegistro | null> {
+    try {
+      const response = await infosimples.post<{
+        numero_registro: string;
+        nome_comercial?: string;
+        titular?: string;
+        situacao?: string;
+        valido_ate?: string;
+        classe_risco?: string;
+        motivo_cancelamento?: string;
+      }>('/consultas/anvisa/registro', {
+        numero_registro: registro.replace(/\D/g, '')
+      });
+
+      if (response.code !== 200 || !response.data || response.data.length === 0) {
+        return null;
+      }
+
+      const data = response.data[0];
+      let situacao = data.situacao?.toUpperCase() || 'NAO_ENCONTRADO';
+      
+      // Check if expired
+      if (data.valido_ate && situacao === 'ATIVO') {
+        const dataValidade = new Date(data.valido_ate);
+        if (dataValidade < new Date()) {
+          situacao = 'VENCIDO';
+        }
+      }
+
+      return {
+        numero: data.numero_registro,
+        valido: situacao === 'ATIVO',
+        produto: data.nome_comercial,
+        empresa: data.titular,
+        vencimento: data.valido_ate ? new Date(data.valido_ate) : undefined,
+        classeRisco: data.classe_risco as AnvisaRegistro['classeRisco'],
+        situacao: situacao as AnvisaRegistro['situacao'],
+      };
+    } catch (error) {
+      console.warn('InfoSimples ANVISA query failed, falling back to direct API:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Lookup ANVISA registry via direct API (fallback)
+   */
+  private async consultarViaDireta(registro: string): Promise<AnvisaRegistro> {
+    const data = await this.withRetry(async () => {
+      return this.get<{
+        numero: string;
+        nomeProduto?: string;
+        nomeEmpresa?: string;
+        dataVencimento?: string;
+        classeRisco?: string;
+        situacao?: string;
+        categoriaReguladora?: string;
+        finalidade?: string;
+        apresentacao?: string;
+      }>(`/produto/${registro}`);
+    });
+
+    return {
+      numero: registro,
+      valido: data.situacao === 'ATIVO',
+      produto: data.nomeProduto,
+      empresa: data.nomeEmpresa,
+      vencimento: data.dataVencimento ? new Date(data.dataVencimento) : undefined,
+      classeRisco: data.classeRisco as AnvisaRegistro['classeRisco'],
+      situacao: (data.situacao ?? 'NAO_ENCONTRADO') as AnvisaRegistro['situacao'],
+      categoriaReguladora: data.categoriaReguladora,
+      finalidade: data.finalidade,
+      apresentacao: data.apresentacao,
+    };
+  }
+
+  /**
    * Lookup ANVISA registry
+   * Uses InfoSimples if configured, falls back to direct ANVISA API
    */
   async consultarRegistro(
     registro: string,
@@ -72,35 +166,21 @@ export class AnvisaClient extends APIClient {
     }
 
     try {
-      // Query ANVISA API
-      const data = await this.withRetry(async () => {
-        return this.get<{
-          numero: string;
-          nomeProduto?: string;
-          nomeEmpresa?: string;
-          dataVencimento?: string;
-          classeRisco?: string;
-          situacao?: string;
-          categoriaReguladora?: string;
-          finalidade?: string;
-          apresentacao?: string;
-        }>(`/produto/${formattedRegistry}`);
-      });
+      let result: AnvisaRegistro;
 
-      const result: AnvisaRegistro = {
-        numero: formattedRegistry,
-        valido: data.situacao === 'ATIVO',
-        produto: data.nomeProduto,
-        empresa: data.nomeEmpresa,
-        vencimento: data.dataVencimento
-          ? new Date(data.dataVencimento)
-          : undefined,
-        classeRisco: data.classeRisco as AnvisaRegistro['classeRisco'],
-        situacao: (data.situacao ?? 'NAO_ENCONTRADO') as AnvisaRegistro['situacao'],
-        categoriaReguladora: data.categoriaReguladora,
-        finalidade: data.finalidade,
-        apresentacao: data.apresentacao,
-      };
+      // Try InfoSimples first if configured (faster, more reliable)
+      if (this.useInfoSimples) {
+        const infoSimplesResult = await this.consultarViaInfoSimples(formattedRegistry);
+        if (infoSimplesResult) {
+          result = infoSimplesResult;
+        } else {
+          // Fallback to direct API
+          result = await this.consultarViaDireta(formattedRegistry);
+        }
+      } else {
+        // Direct ANVISA API
+        result = await this.consultarViaDireta(formattedRegistry);
+      }
 
       // Cache result
       this.cache.set(cacheKey, result, cacheExpiry);

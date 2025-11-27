@@ -61,7 +61,7 @@ export default function IACentral() {
   const [activeTab, setActiveTab] = useState('overview')
   
   // IcarusBrain hooks
-  const { isProcessing, predictDemand, optimizeStock, detectAnomalies, generateInsights } = useIcarusBrain()
+  const { isProcessing, predictDemand: _predictDemand, optimizeStock: _optimizeStock, detectAnomalies: _detectAnomalies, generateInsights: _generateInsights } = useIcarusBrain()
   const { data: aiInsights } = useAIInsights()
   const { data: demandPredictions } = useDemandPredictions()
   
@@ -361,8 +361,8 @@ export default function IACentral() {
                       </div>
                       <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-500"
-                          style={{ width: `${treino.progresso}%` }}
+                          className="h-full bg-blue-500 w-(--progress)"
+                          style={{ '--progress': `${treino.progresso}%` } as React.CSSProperties}
                         ></div>
                       </div>
                       <div className="text-xs text-gray-600 mt-2">Dataset: {treino.dataset}</div>
@@ -491,8 +491,8 @@ export default function IACentral() {
                         </div>
                         <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-blue-500"
-                            style={{ width: `${treino.progresso}%` }}
+                            className="h-full bg-blue-500 w-(--progress)"
+                            style={{ '--progress': `${treino.progresso}%` } as React.CSSProperties}
                           ></div>
                         </div>
                       </div>

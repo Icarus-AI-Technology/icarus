@@ -4,7 +4,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/Label'
+import { Textarea } from '@/components/ui/Textarea'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/Dialog'
 import {
   Select,
@@ -78,6 +85,25 @@ export function Licitacoes() {
   // State
   const [loading, setLoading] = useState(true)
   const [licitacoes, setLicitacoes] = useState<Licitacao[]>([])
+  
+  // Dialogs
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+  const [selectedLicitacao, setSelectedLicitacao] = useState<Licitacao | null>(null)
+
+  // Form state
+  const [formData, setFormData] = useState({
+    number: '',
+    process_number: '',
+    modality: 'pregao' as LicitacaoModality,
+    entity: '',
+    entity_type: 'estadual' as 'municipal' | 'estadual' | 'federal',
+    description: '',
+    estimated_value: '',
+    opening_date: '',
+    closing_date: '',
+    proposal_deadline: '',
+  })
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterModality, setFilterModality] = useState<string>('all')
@@ -243,17 +269,17 @@ export function Licitacoes() {
     {
       modality: 'Pregão',
       value: licitacoes.filter(l => l.modality === 'pregao')
-        .reduce((sum, l) => sum + l.estimated__value, 0) / 1000
+        .reduce((sum, l) => sum + l.estimated_value, 0) / 1000
     },
     {
       modality: 'Concorrência',
       value: licitacoes.filter(l => l.modality === 'concorrencia')
-        .reduce((sum, l) => sum + l.estimated__value, 0) / 1000
+        .reduce((sum, l) => sum + l.estimated_value, 0) / 1000
     },
     {
       modality: 'Tomada de Preços',
       value: licitacoes.filter(l => l.modality === 'tomada_precos')
-        .reduce((sum, l) => sum + l.estimated__value, 0) / 1000
+        .reduce((sum, l) => sum + l.estimated_value, 0) / 1000
     }
   ].filter(item => item.value > 0)
 
@@ -333,7 +359,7 @@ export function Licitacoes() {
             Gestão de licitações públicas e processos licitatórios
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
           <Plus className="h-4 w-4" />
           Nova Licitação
         </Button>
@@ -420,7 +446,7 @@ export function Licitacoes() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${name || ''}: ${((percent || 0) * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -496,7 +522,7 @@ export function Licitacoes() {
                     <SelectItem value="tomada_precos">Tomada de Preços</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button variant="outline" className="gap-2">
+                <Button variant="secondary" className="gap-2">
                   <Download className="h-4 w-4" />
                   Exportar
                 </Button>
@@ -552,7 +578,10 @@ export function Licitacoes() {
                         </div>
                       )}
                     </div>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="sm" title="Visualizar" onClick={() => {
+                      setSelectedLicitacao(lic)
+                      setIsViewDialogOpen(true)
+                    }}>
                       <Eye className="h-4 w-4" />
                     </Button>
                   </div>
@@ -586,8 +615,8 @@ export function Licitacoes() {
                       </div>
                       <div className="flex-1 h-8 bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-green-500"
-                          style={{ width: `${rate}%` }}
+                          className="h-full bg-green-500 w-(--progress)"
+                          style={{ '--progress': `${rate}%` } as React.CSSProperties}
                         />
                       </div>
                       <div className="text-sm font-medium w-16 text-right">
@@ -601,6 +630,266 @@ export function Licitacoes() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Create Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Nova Licitação</DialogTitle>
+            <DialogDescription>
+              Cadastre uma nova licitação para acompanhamento
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="number">Número da Licitação *</Label>
+                <Input
+                  id="number"
+                  placeholder="001/2025"
+                  value={formData.number}
+                  onChange={(e) => setFormData({ ...formData, number: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="process_number">Número do Processo</Label>
+                <Input
+                  id="process_number"
+                  placeholder="12345/2025"
+                  value={formData.process_number}
+                  onChange={(e) => setFormData({ ...formData, process_number: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="modality">Modalidade *</Label>
+                <Select
+                  value={formData.modality}
+                  onValueChange={(value) => setFormData({ ...formData, modality: value as LicitacaoModality })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pregao">Pregão</SelectItem>
+                    <SelectItem value="concorrencia">Concorrência</SelectItem>
+                    <SelectItem value="tomada_precos">Tomada de Preços</SelectItem>
+                    <SelectItem value="convite">Convite</SelectItem>
+                    <SelectItem value="rdc">RDC</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="entity_type">Esfera *</Label>
+                <Select
+                  value={formData.entity_type}
+                  onValueChange={(value) => setFormData({ ...formData, entity_type: value as 'municipal' | 'estadual' | 'federal' })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="municipal">Municipal</SelectItem>
+                    <SelectItem value="estadual">Estadual</SelectItem>
+                    <SelectItem value="federal">Federal</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="entity">Órgão/Entidade *</Label>
+              <Input
+                id="entity"
+                placeholder="Nome do órgão licitante"
+                value={formData.entity}
+                onChange={(e) => setFormData({ ...formData, entity: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Descrição do Objeto *</Label>
+              <Textarea
+                id="description"
+                placeholder="Descrição detalhada do objeto da licitação..."
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="estimated_value">Valor Estimado (R$)</Label>
+              <Input
+                id="estimated_value"
+                type="number"
+                placeholder="0,00"
+                value={formData.estimated_value}
+                onChange={(e) => setFormData({ ...formData, estimated_value: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="opening_date">Data Abertura *</Label>
+                <Input
+                  id="opening_date"
+                  type="date"
+                  value={formData.opening_date}
+                  onChange={(e) => setFormData({ ...formData, opening_date: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="closing_date">Data Encerramento</Label>
+                <Input
+                  id="closing_date"
+                  type="date"
+                  value={formData.closing_date}
+                  onChange={(e) => setFormData({ ...formData, closing_date: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="proposal_deadline">Prazo Proposta *</Label>
+                <Input
+                  id="proposal_deadline"
+                  type="date"
+                  value={formData.proposal_deadline}
+                  onChange={(e) => setFormData({ ...formData, proposal_deadline: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => {
+              setIsCreateDialogOpen(false)
+              setFormData({ number: '', process_number: '', modality: 'pregao', entity: '', entity_type: 'estadual', description: '', estimated_value: '', opening_date: '', closing_date: '', proposal_deadline: '' })
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              if (!formData.number || !formData.entity || !formData.description || !formData.opening_date || !formData.proposal_deadline) {
+                toast.error('Preencha os campos obrigatórios')
+                return
+              }
+              const newLic: Licitacao = {
+                id: String(licitacoes.length + 1),
+                code: `LIC-${String(licitacoes.length + 1).padStart(3, '0')}`,
+                number: formData.number,
+                process_number: formData.process_number,
+                modality: formData.modality,
+                entity: formData.entity,
+                entity_type: formData.entity_type,
+                description: formData.description,
+                estimated_value: Number(formData.estimated_value) || 0,
+                opening_date: formData.opening_date,
+                closing_date: formData.closing_date,
+                proposal_deadline: formData.proposal_deadline,
+                status: 'open',
+                items_count: 0,
+                created_at: new Date().toISOString().split('T')[0],
+                updated_at: new Date().toISOString().split('T')[0],
+              }
+              setLicitacoes([...licitacoes, newLic])
+              toast.success('Licitação cadastrada com sucesso!')
+              setIsCreateDialogOpen(false)
+              setFormData({ number: '', process_number: '', modality: 'pregao', entity: '', entity_type: 'estadual', description: '', estimated_value: '', opening_date: '', closing_date: '', proposal_deadline: '' })
+            }}>
+              Cadastrar Licitação
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes da Licitação</DialogTitle>
+            <DialogDescription>{selectedLicitacao?.code}</DialogDescription>
+          </DialogHeader>
+          {selectedLicitacao && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Número</p>
+                  <p className="font-medium">{selectedLicitacao.number}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Processo</p>
+                  <p className="font-medium">{selectedLicitacao.process_number}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Modalidade</p>
+                  <p className="font-medium capitalize">{selectedLicitacao.modality.replace('_', ' ')}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Esfera</p>
+                  <p className="font-medium capitalize">{selectedLicitacao.entity_type}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sm text-muted-foreground">Órgão</p>
+                  <p className="font-medium">{selectedLicitacao.entity}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sm text-muted-foreground">Descrição</p>
+                  <p className="font-medium">{selectedLicitacao.description}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Estimado</p>
+                  <p className="font-medium">{formatCurrency(selectedLicitacao.estimated_value)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  <Badge 
+                    variant={
+                      selectedLicitacao.status === 'won' ? 'success' :
+                      selectedLicitacao.status === 'lost' ? 'destructive' :
+                      selectedLicitacao.status === 'cancelled' ? 'secondary' :
+                      'default'
+                    }
+                    className={
+                      selectedLicitacao.status === 'open' ? 'bg-amber-500 text-white' :
+                      selectedLicitacao.status === 'proposal_sent' ? 'bg-blue-500 text-white' :
+                      selectedLicitacao.status === 'in_analysis' ? 'bg-purple-500 text-white' :
+                      ''
+                    }
+                  >
+                    {selectedLicitacao.status === 'open' ? 'Aberta' : 
+                     selectedLicitacao.status === 'proposal_sent' ? 'Proposta Enviada' :
+                     selectedLicitacao.status === 'in_analysis' ? 'Em Análise' :
+                     selectedLicitacao.status === 'won' ? 'Vencida' :
+                     selectedLicitacao.status === 'lost' ? 'Perdida' : 'Cancelada'}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Data Abertura</p>
+                  <p className="font-medium">{formatDate(selectedLicitacao.opening_date)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Prazo Proposta</p>
+                  <p className="font-medium">{formatDate(selectedLicitacao.proposal_deadline)}</p>
+                </div>
+                {selectedLicitacao.our_proposal_value && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nossa Proposta</p>
+                    <p className="font-medium text-primary">{formatCurrency(selectedLicitacao.our_proposal_value)}</p>
+                  </div>
+                )}
+                {selectedLicitacao.winner && (
+                  <div className="col-span-2 p-3 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">Vencedor</p>
+                    <p className="font-medium">{selectedLicitacao.winner} - {formatCurrency(selectedLicitacao.winning_value || 0)}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => { setIsViewDialogOpen(false); setSelectedLicitacao(null) }}>Fechar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -40,14 +40,24 @@
  */
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/Label'
+import { Textarea } from '@/components/ui/Textarea'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import { useHospitais } from '@/hooks/queries/useClientes'
+import { toast } from 'sonner'
 
 // ==================== INTERFACES ====================
 
@@ -206,6 +216,35 @@ export default function CRMVendas() {
   const [filtroStatus, setFiltroStatus] = useState<string>('todos')
   const [filtroRegiao, setFiltroRegiao] = useState<string>('todos')
   const [busca, setBusca] = useState('')
+
+  // Dialogs
+  const [clienteDialogOpen, setClienteDialogOpen] = useState(false)
+  const [oportunidadeDialogOpen, setOportunidadeDialogOpen] = useState(false)
+  const [viewClienteDialogOpen, setViewClienteDialogOpen] = useState(false)
+  const [selectedCliente, setSelectedCliente] = useState<Cliente | null>(null)
+
+  // Form state - Cliente
+  const [clienteForm, setClienteForm] = useState({
+    razao_social: '',
+    nome_fantasia: '',
+    cnpj: '',
+    tipo: 'hospital' as TipoCliente,
+    porte: 'medio' as PorteCliente,
+    cidade: '',
+    estado: '',
+    regiao: '',
+    vendedor_responsavel: '',
+  })
+
+  // Form state - Oportunidade
+  const [oportunidadeForm, setOportunidadeForm] = useState({
+    titulo: '',
+    cliente_id: 0,
+    valor_estimado: '',
+    data_previsao_fechamento: '',
+    descricao: '',
+    produtos: '',
+  })
 
   // ==================== MOCK DATA ====================
 
@@ -1361,6 +1400,441 @@ export default function CRMVendas() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Dialog: Novo Cliente */}
+      <Dialog open={clienteDialogOpen} onOpenChange={setClienteDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Cadastrar Novo Cliente</DialogTitle>
+            <DialogDescription>
+              Preencha os dados do cliente B2B
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="razao_social">Razão Social *</Label>
+                <Input
+                  id="razao_social"
+                  placeholder="Razão Social da empresa"
+                  value={clienteForm.razao_social}
+                  onChange={(e) => setClienteForm({ ...clienteForm, razao_social: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nome_fantasia">Nome Fantasia *</Label>
+                <Input
+                  id="nome_fantasia"
+                  placeholder="Nome fantasia"
+                  value={clienteForm.nome_fantasia}
+                  onChange={(e) => setClienteForm({ ...clienteForm, nome_fantasia: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="cnpj">CNPJ *</Label>
+                <Input
+                  id="cnpj"
+                  placeholder="00.000.000/0000-00"
+                  value={clienteForm.cnpj}
+                  onChange={(e) => setClienteForm({ ...clienteForm, cnpj: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tipo">Tipo de Cliente *</Label>
+                <Select
+                  value={clienteForm.tipo}
+                  onValueChange={(value) => setClienteForm({ ...clienteForm, tipo: value as TipoCliente })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hospital">Hospital</SelectItem>
+                    <SelectItem value="clinica">Clínica</SelectItem>
+                    <SelectItem value="plano_saude">Plano de Saúde</SelectItem>
+                    <SelectItem value="laboratorio">Laboratório</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="porte">Porte</Label>
+                <Select
+                  value={clienteForm.porte}
+                  onValueChange={(value) => setClienteForm({ ...clienteForm, porte: value as PorteCliente })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o porte" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pequeno">Pequeno</SelectItem>
+                    <SelectItem value="medio">Médio</SelectItem>
+                    <SelectItem value="grande">Grande</SelectItem>
+                    <SelectItem value="extra_grande">Extra Grande</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vendedor">Vendedor Responsável</Label>
+                <Input
+                  id="vendedor"
+                  placeholder="Nome do vendedor"
+                  value={clienteForm.vendedor_responsavel}
+                  onChange={(e) => setClienteForm({ ...clienteForm, vendedor_responsavel: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="cidade">Cidade *</Label>
+                <Input
+                  id="cidade"
+                  placeholder="Cidade"
+                  value={clienteForm.cidade}
+                  onChange={(e) => setClienteForm({ ...clienteForm, cidade: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="estado">Estado *</Label>
+                <Input
+                  id="estado"
+                  placeholder="UF"
+                  maxLength={2}
+                  value={clienteForm.estado}
+                  onChange={(e) => setClienteForm({ ...clienteForm, estado: e.target.value.toUpperCase() })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="regiao">Região</Label>
+                <Select
+                  value={clienteForm.regiao}
+                  onValueChange={(value) => setClienteForm({ ...clienteForm, regiao: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Região" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Norte">Norte</SelectItem>
+                    <SelectItem value="Nordeste">Nordeste</SelectItem>
+                    <SelectItem value="Centro-Oeste">Centro-Oeste</SelectItem>
+                    <SelectItem value="Sudeste">Sudeste</SelectItem>
+                    <SelectItem value="Sul">Sul</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => {
+              setClienteDialogOpen(false)
+              setClienteForm({
+                razao_social: '',
+                nome_fantasia: '',
+                cnpj: '',
+                tipo: 'hospital',
+                porte: 'medio',
+                cidade: '',
+                estado: '',
+                regiao: '',
+                vendedor_responsavel: '',
+              })
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              if (!clienteForm.razao_social || !clienteForm.nome_fantasia || !clienteForm.cnpj) {
+                toast.error('Preencha os campos obrigatórios')
+                return
+              }
+              const newCliente: Cliente = {
+                id: clientes.length + 1,
+                razao_social: clienteForm.razao_social,
+                nome_fantasia: clienteForm.nome_fantasia,
+                cnpj: clienteForm.cnpj,
+                tipo: clienteForm.tipo,
+                porte: clienteForm.porte,
+                status: 'prospecto',
+                nivel_relacionamento: 'bronze',
+                cidade: clienteForm.cidade,
+                estado: clienteForm.estado,
+                regiao: clienteForm.regiao || 'Sudeste',
+                data_inicio: new Date().toISOString().split('T')[0],
+                vendedor_responsavel: clienteForm.vendedor_responsavel || 'A definir',
+                territorio: clienteForm.regiao || 'Sudeste',
+                faturamento_mensal_medio: 0,
+                faturamento_ultimos_12m: 0,
+                crescimento_percentual: 0,
+                ticket_medio_cirurgia: 0,
+                cirurgias_mes: 0,
+                produtos_mais_comprados: [],
+                churn_risk: 0,
+                dias_sem_compra: 0,
+                contatos: [],
+                ultima_interacao: new Date().toISOString().split('T')[0],
+                ultima_compra: new Date().toISOString().split('T')[0],
+                proxima_acao: 'Qualificar lead',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              }
+              setClientes([...clientes, newCliente])
+              toast.success('Cliente cadastrado com sucesso!')
+              setClienteDialogOpen(false)
+              setClienteForm({
+                razao_social: '',
+                nome_fantasia: '',
+                cnpj: '',
+                tipo: 'hospital',
+                porte: 'medio',
+                cidade: '',
+                estado: '',
+                regiao: '',
+                vendedor_responsavel: '',
+              })
+            }}>
+              Cadastrar Cliente
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: Nova Oportunidade */}
+      <Dialog open={oportunidadeDialogOpen} onOpenChange={setOportunidadeDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Nova Oportunidade</DialogTitle>
+            <DialogDescription>
+              Cadastre uma nova oportunidade de negócio
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="titulo_opp">Título da Oportunidade *</Label>
+              <Input
+                id="titulo_opp"
+                placeholder="Ex: Contrato anual de próteses"
+                value={oportunidadeForm.titulo}
+                onChange={(e) => setOportunidadeForm({ ...oportunidadeForm, titulo: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="cliente_opp">Cliente *</Label>
+                <Select
+                  value={String(oportunidadeForm.cliente_id) || ''}
+                  onValueChange={(value) => setOportunidadeForm({ ...oportunidadeForm, cliente_id: Number(value) })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o cliente" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {clientes.map((cliente) => (
+                      <SelectItem key={cliente.id} value={String(cliente.id)}>
+                        {cliente.nome_fantasia}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="valor_opp">Valor Estimado (R$) *</Label>
+                <Input
+                  id="valor_opp"
+                  type="number"
+                  placeholder="0,00"
+                  value={oportunidadeForm.valor_estimado}
+                  onChange={(e) => setOportunidadeForm({ ...oportunidadeForm, valor_estimado: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="data_prev">Previsão de Fechamento</Label>
+                <Input
+                  id="data_prev"
+                  type="date"
+                  value={oportunidadeForm.data_previsao_fechamento}
+                  onChange={(e) => setOportunidadeForm({ ...oportunidadeForm, data_previsao_fechamento: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="produtos_opp">Produtos Principais</Label>
+                <Input
+                  id="produtos_opp"
+                  placeholder="Próteses, Implantes..."
+                  value={oportunidadeForm.produtos}
+                  onChange={(e) => setOportunidadeForm({ ...oportunidadeForm, produtos: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="descricao_opp">Descrição</Label>
+              <Textarea
+                id="descricao_opp"
+                placeholder="Detalhes da oportunidade..."
+                value={oportunidadeForm.descricao}
+                onChange={(e) => setOportunidadeForm({ ...oportunidadeForm, descricao: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => {
+              setOportunidadeDialogOpen(false)
+              setOportunidadeForm({
+                titulo: '',
+                cliente_id: 0,
+                valor_estimado: '',
+                data_previsao_fechamento: '',
+                descricao: '',
+                produtos: '',
+              })
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              if (!oportunidadeForm.titulo || !oportunidadeForm.cliente_id || !oportunidadeForm.valor_estimado) {
+                toast.error('Preencha os campos obrigatórios')
+                return
+              }
+              const cliente = clientes.find(c => c.id === oportunidadeForm.cliente_id)
+              const newOpp: Oportunidade = {
+                id: oportunidades.length + 1,
+                cliente_id: oportunidadeForm.cliente_id,
+                cliente_nome: cliente?.nome_fantasia || '',
+                titulo: oportunidadeForm.titulo,
+                descricao: oportunidadeForm.descricao || '',
+                valor_estimado: Number(oportunidadeForm.valor_estimado),
+                estagio: 'prospeccao',
+                probabilidade: 10,
+                data_criacao: new Date().toISOString().split('T')[0],
+                data_fechamento_prevista: oportunidadeForm.data_previsao_fechamento || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                vendedor_responsavel: cliente?.vendedor_responsavel || 'A definir',
+                produtos_interesse: oportunidadeForm.produtos.split(',').map(p => p.trim()).filter(Boolean),
+                quantidade_cirurgias_mes: 0,
+                concorrentes: [],
+                diferenciais: [],
+                proxima_acao: 'Agendar reunião',
+                data_proxima_acao: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              }
+              setOportunidades([...oportunidades, newOpp])
+              toast.success('Oportunidade criada com sucesso!')
+              setOportunidadeDialogOpen(false)
+              setOportunidadeForm({
+                titulo: '',
+                cliente_id: 0,
+                valor_estimado: '',
+                data_previsao_fechamento: '',
+                descricao: '',
+                produtos: '',
+              })
+            }}>
+              Criar Oportunidade
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: Visualizar Cliente */}
+      <Dialog open={viewClienteDialogOpen} onOpenChange={setViewClienteDialogOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes do Cliente</DialogTitle>
+            <DialogDescription>
+              {selectedCliente?.nome_fantasia}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedCliente && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Razão Social</p>
+                  <p className="font-medium">{selectedCliente.razao_social}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">CNPJ</p>
+                  <p className="font-medium">{selectedCliente.cnpj}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Tipo</p>
+                  <p className="font-medium capitalize">{selectedCliente.tipo.replace('_', ' ')}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Porte</p>
+                  <p className="font-medium capitalize">{selectedCliente.porte.replace('_', ' ')}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Localização</p>
+                  <p className="font-medium">{selectedCliente.cidade} - {selectedCliente.estado}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Região</p>
+                  <p className="font-medium">{selectedCliente.regiao}</p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-semibold mb-3">Métricas Financeiras</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">Faturamento 12 meses</p>
+                    <p className="text-xl font-bold">{formatCurrency(selectedCliente.faturamento_ultimos_12m)}</p>
+                  </div>
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">Ticket Médio Cirurgia</p>
+                    <p className="text-xl font-bold">{formatCurrency(selectedCliente.ticket_medio_cirurgia)}</p>
+                  </div>
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">Crescimento</p>
+                    <p className={`text-xl font-bold ${selectedCliente.crescimento_percentual >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {selectedCliente.crescimento_percentual >= 0 ? '+' : ''}{selectedCliente.crescimento_percentual.toFixed(1)}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-semibold mb-3">Relacionamento</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Vendedor Responsável</p>
+                    <p className="font-medium">{selectedCliente.vendedor_responsavel}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Última Interação</p>
+                    <p className="font-medium">{formatDate(selectedCliente.ultima_interacao)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Próxima Ação</p>
+                    <p className="font-medium">{selectedCliente.proxima_acao}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Churn Risk</p>
+                    <p className={`font-medium ${selectedCliente.churn_risk >= 50 ? 'text-red-600' : 'text-green-600'}`}>
+                      {selectedCliente.churn_risk}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => {
+              setViewClienteDialogOpen(false)
+              setSelectedCliente(null)
+            }}>
+              Fechar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

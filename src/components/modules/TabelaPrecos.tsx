@@ -4,7 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/Label'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/Dialog'
 import {
   Select,
@@ -58,6 +64,24 @@ export function TabelaPrecos() {
   const [filterType, setFilterType] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [activeTab, setActiveTab] = useState('overview')
+
+  // Dialogs
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+  const [selectedTable, setSelectedTable] = useState<PriceTable | null>(null)
+
+  // Form state
+  const [formData, setFormData] = useState({
+    code: '',
+    name: '',
+    type: 'hospital' as PriceTableType,
+    customer_name: '',
+    valid_from: '',
+    valid_until: '',
+    markup: '',
+    discount: '',
+  })
 
   const debouncedSearch = useDebounce(searchTerm, 300)
 
@@ -257,7 +281,7 @@ export function TabelaPrecos() {
             Gestão de tabelas de preços para hospitais, convênios e licitações
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
           <Plus className="h-4 w-4" />
           Nova Tabela
         </Button>
@@ -342,7 +366,7 @@ export function TabelaPrecos() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${name || ''}: ${((percent || 0) * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -418,7 +442,7 @@ export function TabelaPrecos() {
                     <SelectItem value="expired">Expirada</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button variant="outline" className="gap-2">
+                <Button variant="secondary" className="gap-2">
                   <Download className="h-4 w-4" />
                   Exportar
                 </Button>
@@ -466,16 +490,48 @@ export function TabelaPrecos() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="sm" title="Visualizar" onClick={() => {
+                        setSelectedTable(table)
+                        setIsViewDialogOpen(true)
+                      }}>
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="sm" title="Editar" onClick={() => {
+                        setSelectedTable(table)
+                        setFormData({
+                          code: table.code,
+                          name: table.name,
+                          type: table.type,
+                          customer_name: table.customer_name || '',
+                          valid_from: table.valid_from,
+                          valid_until: table.valid_until || '',
+                          markup: String(table.markup),
+                          discount: String(table.discount),
+                        })
+                        setIsEditDialogOpen(true)
+                      }}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="sm" title="Duplicar" onClick={() => {
+                        const newTable: PriceTable = {
+                          ...table,
+                          id: String(priceTables.length + 1),
+                          code: `${table.code}-COPY`,
+                          name: `${table.name} (Cópia)`,
+                          created_at: new Date().toISOString().split('T')[0],
+                          updated_at: new Date().toISOString().split('T')[0],
+                        }
+                        setPriceTables([...priceTables, newTable])
+                        toast.success('Tabela duplicada com sucesso!')
+                      }}>
                         <Copy className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="sm" title="Excluir" onClick={() => {
+                        if (confirm('Tem certeza que deseja excluir esta tabela?')) {
+                          setPriceTables(priceTables.filter(t => t.id !== table.id))
+                          toast.success('Tabela excluída com sucesso!')
+                        }
+                      }}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -502,8 +558,8 @@ export function TabelaPrecos() {
                     </div>
                     <div className="flex-1 h-8 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-primary"
-                        style={{ width: `${(table.items_count / totalItems) * 100}%` }}
+                        className="h-full bg-primary w-(--progress)"
+                        style={{ '--progress': `${(table.items_count / totalItems) * 100}%` } as React.CSSProperties}
                       />
                     </div>
                     <div className="text-sm font-medium w-16 text-right">
@@ -516,6 +572,288 @@ export function TabelaPrecos() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Create Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Nova Tabela de Preços</DialogTitle>
+            <DialogDescription>
+              Crie uma nova tabela de preços para seus clientes
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="code">Código *</Label>
+                <Input
+                  id="code"
+                  placeholder="TAB-001"
+                  value={formData.code}
+                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="type">Tipo *</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value as PriceTableType })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hospital">Hospital</SelectItem>
+                    <SelectItem value="convenio">Convênio</SelectItem>
+                    <SelectItem value="particular">Particular</SelectItem>
+                    <SelectItem value="licitacao">Licitação</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="name">Nome da Tabela *</Label>
+              <Input
+                id="name"
+                placeholder="Nome descritivo da tabela"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="customer_name">Cliente (opcional)</Label>
+              <Input
+                id="customer_name"
+                placeholder="Nome do cliente específico"
+                value={formData.customer_name}
+                onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="valid_from">Válido de *</Label>
+                <Input
+                  id="valid_from"
+                  type="date"
+                  value={formData.valid_from}
+                  onChange={(e) => setFormData({ ...formData, valid_from: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="valid_until">Válido até</Label>
+                <Input
+                  id="valid_until"
+                  type="date"
+                  value={formData.valid_until}
+                  onChange={(e) => setFormData({ ...formData, valid_until: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="markup">Markup (%) *</Label>
+                <Input
+                  id="markup"
+                  type="number"
+                  placeholder="0"
+                  value={formData.markup}
+                  onChange={(e) => setFormData({ ...formData, markup: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="discount">Desconto (%) *</Label>
+                <Input
+                  id="discount"
+                  type="number"
+                  placeholder="0"
+                  value={formData.discount}
+                  onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => {
+              setIsCreateDialogOpen(false)
+              setFormData({ code: '', name: '', type: 'hospital', customer_name: '', valid_from: '', valid_until: '', markup: '', discount: '' })
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              if (!formData.code || !formData.name || !formData.valid_from || !formData.markup || !formData.discount) {
+                toast.error('Preencha os campos obrigatórios')
+                return
+              }
+              const newTable: PriceTable = {
+                id: String(priceTables.length + 1),
+                code: formData.code,
+                name: formData.name,
+                type: formData.type,
+                status: 'active',
+                customer_name: formData.customer_name || undefined,
+                valid_from: formData.valid_from,
+                valid_until: formData.valid_until || undefined,
+                markup: Number(formData.markup),
+                discount: Number(formData.discount),
+                items_count: 0,
+                created_at: new Date().toISOString().split('T')[0],
+                updated_at: new Date().toISOString().split('T')[0],
+              }
+              setPriceTables([...priceTables, newTable])
+              toast.success('Tabela criada com sucesso!')
+              setIsCreateDialogOpen(false)
+              setFormData({ code: '', name: '', type: 'hospital', customer_name: '', valid_from: '', valid_until: '', markup: '', discount: '' })
+            }}>
+              Criar Tabela
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Editar Tabela de Preços</DialogTitle>
+            <DialogDescription>
+              {selectedTable?.code} - {selectedTable?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-code">Código</Label>
+                <Input
+                  id="edit-code"
+                  value={formData.code}
+                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-type">Tipo</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value as PriceTableType })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hospital">Hospital</SelectItem>
+                    <SelectItem value="convenio">Convênio</SelectItem>
+                    <SelectItem value="particular">Particular</SelectItem>
+                    <SelectItem value="licitacao">Licitação</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Nome</Label>
+              <Input
+                id="edit-name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-markup">Markup (%)</Label>
+                <Input
+                  id="edit-markup"
+                  type="number"
+                  value={formData.markup}
+                  onChange={(e) => setFormData({ ...formData, markup: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-discount">Desconto (%)</Label>
+                <Input
+                  id="edit-discount"
+                  type="number"
+                  value={formData.discount}
+                  onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => { setIsEditDialogOpen(false); setSelectedTable(null) }}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              setPriceTables(priceTables.map(t => 
+                t.id === selectedTable?.id 
+                  ? { ...t, code: formData.code, name: formData.name, type: formData.type, markup: Number(formData.markup), discount: Number(formData.discount), updated_at: new Date().toISOString().split('T')[0] }
+                  : t
+              ))
+              toast.success('Tabela atualizada com sucesso!')
+              setIsEditDialogOpen(false)
+              setSelectedTable(null)
+            }}>
+              Salvar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes da Tabela</DialogTitle>
+            <DialogDescription>{selectedTable?.code}</DialogDescription>
+          </DialogHeader>
+          {selectedTable && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Nome</p>
+                  <p className="font-medium">{selectedTable.name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Tipo</p>
+                  <p className="font-medium capitalize">{selectedTable.type}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  <Badge variant={selectedTable.status === 'active' ? 'success' : 'secondary'}>
+                    {selectedTable.status === 'active' ? 'Ativa' : selectedTable.status}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Cliente</p>
+                  <p className="font-medium">{selectedTable.customer_name || 'Geral'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Validade</p>
+                  <p className="font-medium">{formatDate(selectedTable.valid_from)} - {selectedTable.valid_until ? formatDate(selectedTable.valid_until) : 'Indeterminado'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Produtos</p>
+                  <p className="font-medium">{selectedTable.items_count} itens</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Markup</p>
+                  <p className="font-medium text-green-600">+{selectedTable.markup}%</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Desconto</p>
+                  <p className="font-medium text-orange-600">-{selectedTable.discount}%</p>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => { setIsViewDialogOpen(false); setSelectedTable(null) }}>Fechar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

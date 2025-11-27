@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { BarChart3, TrendingUp, TrendingDown, Target } from 'lucide-react'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/lib/utils/formatters'
 import { useKPIs, useRevenueData, usePerformanceData, useTrendData } from '@/hooks/queries/useAnalytics'
 import { useDashboardRealtime } from '@/hooks/useRealtimeSubscription'
 
@@ -376,8 +376,8 @@ export default function KPIDashboard() {
                         <div className="mt-2">
                           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div
-                              className={`h-full ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : kpi.atingimento >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                              style={{ width: `${Math.min(kpi.atingimento, 100)}%` }}
+                              className={`h-full w-(--progress) ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : kpi.atingimento >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                              style={{ '--progress': `${Math.min(kpi.atingimento, 100)}%` } as React.CSSProperties}
                             ></div>
                           </div>
                         </div>
@@ -491,8 +491,8 @@ export default function KPIDashboard() {
                     <div>
                       <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className={`h-full ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : kpi.atingimento >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                          style={{ width: `${Math.min(kpi.atingimento, 100)}%` }}
+                          className={`h-full w-(--progress) ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : kpi.atingimento >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                          style={{ '--progress': `${Math.min(kpi.atingimento, 100)}%` } as React.CSSProperties}
                         ></div>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">{kpi.periodo}</p>
@@ -577,8 +577,8 @@ export default function KPIDashboard() {
                         <div className="mt-2">
                           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div
-                              className={`h-full ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
-                              style={{ width: `${Math.min(kpi.atingimento, 100)}%` }}
+                              className={`h-full w-(--progress) ${kpi.atingimento >= 100 ? 'bg-green-500' : kpi.atingimento >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
+                              style={{ '--progress': `${Math.min(kpi.atingimento, 100)}%` } as React.CSSProperties}
                             ></div>
                           </div>
                         </div>

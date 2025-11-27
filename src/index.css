@@ -118,6 +118,10 @@
   --neu-soft:
     6px 6px 16px rgba(0, 0, 0, 0.4),
     -4px -4px 12px rgba(255, 255, 255, 0.02);
+  
+  /* LangChain/IA Components */
+  --neumorphic: 8px 8px 16px #0a0c14, -8px -8px 16px #0f1220;
+  --inset: inset 4px 4px 8px #0a0c14, inset -4px -4px 8px #0f1220;
 }
 
 /* === MODO CLARO (Azul claro, SEM marrom) === */
@@ -327,6 +331,10 @@ body {
   border: none !important;
   box-shadow: var(--neu-soft);
 }
+
+/* LangChain/IA Utility Classes */
+.neumorphic { box-shadow: var(--neumorphic); }
+.inset { box-shadow: var(--inset); }
 
 .glass-card {
   background: rgba(21, 25, 43, 0.85);

@@ -115,6 +115,7 @@ export function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-4 rounded-xl bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30"
                   required
+                  data-testid="login-username"
                 />
               </div>
 
@@ -133,6 +134,7 @@ export function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full px-4 py-4 pr-14 rounded-xl bg-[#1A1F35] text-white placeholder-[#64748B] neu-pressed focus:outline-none focus:ring-2 focus:ring-[#6366F1]/30"
                     required
+                    data-testid="login-password"
                   />
                   <button
                     type="button"
@@ -163,6 +165,7 @@ export function LoginPage() {
                 type="submit"
                 disabled={loading}
                 className="w-full h-14 rounded-xl btn-gradient text-white font-medium text-base disabled:opacity-50"
+                data-testid="login-submit"
               >
                 {loading ? (
                   <span className="flex items-center gap-2 justify-center">

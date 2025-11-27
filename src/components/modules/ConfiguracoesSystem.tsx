@@ -4,7 +4,7 @@
  * Descrição: Parametrização do sistema - Impostos, margens, regras de negócio
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
@@ -54,6 +54,8 @@ export default function ConfiguracoesSystem() {
                         type="number"
                         className="neu-input w-20 text-center"
                         defaultValue={item.aliquota}
+                        title={`Alíquota de ${item.imposto}`}
+                        aria-label={`Alíquota de ${item.imposto}`}
                       />
                       <span className="text-sm text-muted-foreground">%</span>
                     </div>
@@ -80,23 +82,27 @@ export default function ConfiguracoesSystem() {
                   <div className="font-semibold mb-2">{item.categoria}</div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-muted-foreground">Margem Mínima</label>
+                      <label htmlFor={`margem-min-${item.categoria}`} className="text-xs text-muted-foreground">Margem Mínima</label>
                       <div className="flex items-center gap-2">
                         <input
+                          id={`margem-min-${item.categoria}`}
                           type="number"
                           className="neu-input"
                           defaultValue={item.margem_min}
+                          title={`Margem mínima para ${item.categoria}`}
                         />
                         <span className="text-sm text-muted-foreground">%</span>
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs text-muted-foreground">Margem Máxima</label>
+                      <label htmlFor={`margem-max-${item.categoria}`} className="text-xs text-muted-foreground">Margem Máxima</label>
                       <div className="flex items-center gap-2">
                         <input
+                          id={`margem-max-${item.categoria}`}
                           type="number"
                           className="neu-input"
                           defaultValue={item.margem_max}
+                          title={`Margem máxima para ${item.categoria}`}
                         />
                         <span className="text-sm text-muted-foreground">%</span>
                       </div>
@@ -124,7 +130,7 @@ export default function ConfiguracoesSystem() {
                 <div key={idx} className="p-3 border border-border rounded-lg flex justify-between items-center neu-soft">
                   <span className="font-semibold">{item.regra}</span>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="neu-checkbox" defaultChecked={item.ativo} />
+                    <input type="checkbox" className="neu-checkbox" defaultChecked={item.ativo} title={`Ativar/desativar ${item.regra}`} />
                     <span className="text-sm">{item.ativo ? 'Ativo' : 'Inativo'}</span>
                   </label>
                 </div>
@@ -141,16 +147,16 @@ export default function ConfiguracoesSystem() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="p-3 border border-border rounded-lg neu-soft">
-                <label className="font-semibold block mb-2">Dias para Vencimento de Nota</label>
-                <input type="number" className="neu-input" defaultValue="30" />
+                <label htmlFor="dias-vencimento" className="font-semibold block mb-2">Dias para Vencimento de Nota</label>
+                <input id="dias-vencimento" type="number" className="neu-input" defaultValue="30" title="Dias para vencimento de nota" />
               </div>
               <div className="p-3 border border-border rounded-lg neu-soft">
-                <label className="font-semibold block mb-2">Limite de Crédito Padrão</label>
-                <input type="number" className="neu-input" defaultValue="100000" />
+                <label htmlFor="limite-credito" className="font-semibold block mb-2">Limite de Crédito Padrão</label>
+                <input id="limite-credito" type="number" className="neu-input" defaultValue="100000" title="Limite de crédito padrão" />
               </div>
               <div className="p-3 border border-border rounded-lg neu-soft">
-                <label className="font-semibold block mb-2">Dias de Garantia Padrão</label>
-                <input type="number" className="neu-input" defaultValue="365" />
+                <label htmlFor="dias-garantia" className="font-semibold block mb-2">Dias de Garantia Padrão</label>
+                <input id="dias-garantia" type="number" className="neu-input" defaultValue="365" title="Dias de garantia padrão" />
               </div>
               <Button className="w-full">Salvar Parâmetros</Button>
             </CardContent>

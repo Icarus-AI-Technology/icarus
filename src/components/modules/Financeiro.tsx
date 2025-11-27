@@ -5,6 +5,13 @@ import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { Input } from '@/components/ui/Input'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -12,12 +19,13 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useSupabase } from '@/hooks/useSupabase'
 import { useFinanceiroStats, useFluxoCaixa } from '@/hooks/queries/useFinanceiro'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
   DollarSign, TrendingUp, CreditCard, AlertCircle,
-  Calendar, Download, Filter, Search, CheckCircle2, Clock, BarChart3,
+  Calendar, Download, Filter, Search, CheckCircle2, Clock, BarChart3, Eye,
 } from 'lucide-react'
 import {
   BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
@@ -60,6 +68,9 @@ interface FinancialMetrics {
 export function Financeiro() {
   const [loading, setLoading] = useState(true)
   
+  // Supabase client
+  const { supabase, isConfigured } = useSupabase()
+  
   // React Query hooks
   const { data: _financeiroStats } = useFinanceiroStats()
   const { data: _fluxoCaixa } = useFluxoCaixa('mes')
@@ -77,6 +88,12 @@ export function Financeiro() {
   const debouncedSearch = useDebounce(searchTerm, 300)
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [periodFilter, setPeriodFilter] = useState<string>('30')
+
+  // Dialogs
+  const [isViewInvoiceOpen, setIsViewInvoiceOpen] = useState(false)
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
+  const [isViewReceivableOpen, setIsViewReceivableOpen] = useState(false)
+  const [selectedReceivable, setSelectedReceivable] = useState<AccountReceivable | null>(null)
 
   // Mock data
   const mockInvoices: Invoice[] = [
@@ -344,7 +361,7 @@ export function Financeiro() {
               <SelectItem value="365">Último ano</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={handleExportData} variant="outline" className="gap-2">
+          <Button onClick={handleExportData} variant="secondary" className="gap-2">
             <Download className="h-4 w-4" />
             Exportar
           </Button>
@@ -652,6 +669,12 @@ export function Financeiro() {
                           )}
                         </div>
                       </div>
+                      <Button variant="ghost" size="sm" title="Visualizar" onClick={() => {
+                        setSelectedInvoice(invoice)
+                        setIsViewInvoiceOpen(true)
+                      }}>
+                        <Eye className="h-4 w-4" />
+                      </Button>
                     </div>
                   ))
                 )}
@@ -753,10 +776,10 @@ export function Financeiro() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-muted rounded-full h-2">
+                          <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
                             <div
-                              className="bg-primary h-2 rounded-full transition-all"
-                              style={{ width: `${percentPaid}%` }}
+                              className="bg-primary h-2 rounded-full transition-all w-(--progress)"
+                              style={{ '--progress': `${percentPaid}%` } as React.CSSProperties}
                             />
                           </div>
                           <div className="flex items-center gap-2">
@@ -764,6 +787,12 @@ export function Financeiro() {
                               {percentPaid.toFixed(0)}%
                             </span>
                             {getReceivableStatusBadge(receivable.status)}
+                            <Button variant="ghost" size="sm" title="Visualizar" onClick={() => {
+                              setSelectedReceivable(receivable)
+                              setIsViewReceivableOpen(true)
+                            }}>
+                              <Eye className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -775,6 +804,106 @@ export function Financeiro() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* View Invoice Dialog */}
+      <Dialog open={isViewInvoiceOpen} onOpenChange={setIsViewInvoiceOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes da Fatura</DialogTitle>
+            <DialogDescription>{selectedInvoice?.invoice_number}</DialogDescription>
+          </DialogHeader>
+          {selectedInvoice && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Cliente</p>
+                  <p className="font-medium">{selectedInvoice.customer_name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  {getInvoiceStatusBadge(selectedInvoice.status)}
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Data Emissão</p>
+                  <p className="font-medium">{formatDate(selectedInvoice.issue_date)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Data Vencimento</p>
+                  <p className="font-medium">{formatDate(selectedInvoice.due_date)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Total</p>
+                  <p className="font-medium text-lg">{formatCurrency(selectedInvoice.total_amount)}</p>
+                </div>
+                {selectedInvoice.payment_date && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Data Pagamento</p>
+                    <p className="font-medium text-green-600">{formatDate(selectedInvoice.payment_date)}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => { setIsViewInvoiceOpen(false); setSelectedInvoice(null) }}>Fechar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Receivable Dialog */}
+      <Dialog open={isViewReceivableOpen} onOpenChange={setIsViewReceivableOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes do Título a Receber</DialogTitle>
+            <DialogDescription>{selectedReceivable?.invoice_number}</DialogDescription>
+          </DialogHeader>
+          {selectedReceivable && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Cliente</p>
+                  <p className="font-medium">{selectedReceivable.customer_name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  {getReceivableStatusBadge(selectedReceivable.status)}
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Data Vencimento</p>
+                  <p className="font-medium">{formatDate(selectedReceivable.due_date)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Total</p>
+                  <p className="font-medium">{formatCurrency(selectedReceivable.amount)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Pago</p>
+                  <p className="font-medium text-green-600">{formatCurrency(selectedReceivable.amount_paid)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Restante</p>
+                  <p className="font-medium text-orange-600">{formatCurrency(selectedReceivable.amount - selectedReceivable.amount_paid)}</p>
+                </div>
+              </div>
+              <div className="pt-4 border-t">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm text-muted-foreground">Progresso do pagamento:</span>
+                  <span className="font-medium">{((selectedReceivable.amount_paid / selectedReceivable.amount) * 100).toFixed(0)}%</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+                  <div
+                    className="bg-primary h-3 rounded-full transition-all w-(--progress)"
+                    style={{ '--progress': `${(selectedReceivable.amount_paid / selectedReceivable.amount) * 100}%` } as React.CSSProperties}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => { setIsViewReceivableOpen(false); setSelectedReceivable(null) }}>Fechar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

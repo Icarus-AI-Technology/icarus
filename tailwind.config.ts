@@ -104,10 +104,23 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       boxShadow: {
+        // Neumorphic 3D - Dark Mode
+        'neumorphic': '8px 8px 16px #0a0c14, -8px -8px 16px #0f1220',
+        'neumorphic-inset': 'inset 4px 4px 8px #0a0c14, inset -4px -4px 8px #0f1220',
+        'neumorphic-soft': '6px 6px 12px rgba(0, 0, 0, 0.4), -4px -4px 10px rgba(255, 255, 255, 0.02)',
+        'neumorphic-hover': '10px 10px 20px rgba(0, 0, 0, 0.5), -6px -6px 14px rgba(255, 255, 255, 0.03)',
+        // Neumorphic 3D - Light Mode
         'neu-soft': '8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.9)',
         'neu-hard': '12px 12px 24px rgba(0, 0, 0, 0.15), -12px -12px 24px rgba(255, 255, 255, 1)',
         'neu-inset': 'inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.9)',
         'neu-hover': '6px 6px 12px rgba(0, 0, 0, 0.12), -6px -6px 12px rgba(255, 255, 255, 0.95)',
+        // Glow effects
+        'glow-primary': '0 0 20px rgba(99, 102, 241, 0.4)',
+        'glow-teal': '0 0 20px rgba(45, 212, 191, 0.4)',
+        'glow-success': '0 0 20px rgba(16, 185, 129, 0.4)',
+      },
+      backdropBlur: {
+        xs: '2px',
       },
       keyframes: {
         'accordion-down': {
@@ -128,5 +141,21 @@ export default {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
+    // Custom neumorphism utilities
+    function({ addUtilities }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void }) {
+      addUtilities({
+        '.neumorphic': {
+          'box-shadow': '8px 8px 16px #0a0c14, -8px -8px 16px #0f1220',
+        },
+        '.glass': {
+          'background': 'rgba(21, 25, 43, 0.8)',
+          'backdrop-filter': 'blur(10px)',
+        },
+        '.glass-light': {
+          'background': 'rgba(255, 255, 255, 0.8)',
+          'backdrop-filter': 'blur(10px)',
+        },
+      })
+    },
   ],
 } satisfies Config
