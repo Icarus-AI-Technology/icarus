@@ -3,7 +3,7 @@ import { Truck } from 'lucide-react'
 
 /**
  * Módulo: Logística Avançada
- * Categoria: Sistema & Integrações
+ * Categoria: Estoque & Consignação
  * Descrição: Gestão logística completa com roteirização
  */
 

@@ -199,6 +199,15 @@ export const navigationConfig = [
         category: 'Estoque & Consignação',
         description: 'Manutenção preventiva de equipamentos OPME',
         isImplemented: true
+      },
+      {
+        id: 'logistica-avancada',
+        path: '/logistica-avancada',
+        name: 'Logística Avançada',
+        icon: Truck,
+        category: 'Estoque & Consignação',
+        description: 'Gestão logística completa com roteirização',
+        isImplemented: true
       }
     ]
   },
@@ -585,15 +594,6 @@ export const navigationConfig = [
         icon: Zap,
         category: 'Sistema & Integrações',
         description: 'Gerenciamento de webhooks',
-        isImplemented: true
-      },
-      {
-        id: 'logistica-avancada',
-        path: '/logistica-avancada',
-        name: 'Logística Avançada',
-        icon: Truck,
-        category: 'Sistema & Integrações',
-        description: 'Gestão logística completa com roteirização',
         isImplemented: true
       }
     ]
