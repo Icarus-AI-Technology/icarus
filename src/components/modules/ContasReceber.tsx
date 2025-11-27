@@ -19,8 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useContasReceber, useFinanceiroStats } from '@/hooks/queries/useFinanceiro'
 import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
 import { validateAmount } from '@/lib/utils/validators'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
@@ -53,8 +53,11 @@ interface Receivable {
 
 
 export function ContasReceber() {
-  const { supabase, isConfigured } = useSupabase()
   const [loading, setLoading] = useState(true)
+  
+  // React Query hooks
+  const { data: _contasData } = useContasReceber()
+  const { data: _financeiroStats } = useFinanceiroStats()
   const [receivables, setReceivables] = useState<Receivable[]>([])
   const [selectedReceivable, setSelectedReceivable] = useState<Receivable | null>(null)
   const [searchTerm, setSearchTerm] = useState('')

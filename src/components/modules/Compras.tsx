@@ -21,8 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useFornecedores, useComprasStats } from '@/hooks/queries/useCompras'
 import { formatCurrency, formatDate, daysOverdue } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
@@ -74,8 +74,11 @@ interface POItem {
 }
 
 export function Compras() {
-  const { supabase, isConfigured } = useSupabase()
   const [loading, setLoading] = useState(true)
+  
+  // React Query hooks
+  const { data: _fornecedoresData } = useFornecedores()
+  const { data: _comprasStats } = useComprasStats()
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([])
   const [suppliers, setSuppliers] = useState<Supplier[]>([])
   const [selectedPO, setSelectedPO] = useState<PurchaseOrder | null>(null)

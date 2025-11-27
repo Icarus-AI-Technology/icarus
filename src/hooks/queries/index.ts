@@ -18,3 +18,6 @@ export * from './useFinanceiro'
 // Clientes (Hospitais, Médicos)
 export * from './useClientes'
 
+// Compras (Fornecedores, Pedidos)
+export * from './useCompras'
+

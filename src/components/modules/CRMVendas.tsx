@@ -47,6 +47,7 @@ import { Input } from '@/components/ui/Input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
+import { useHospitais } from '@/hooks/queries/useClientes'
 
 // ==================== INTERFACES ====================
 
@@ -190,6 +191,9 @@ interface PrevisaoIA {
 // ==================== COMPONENTE PRINCIPAL ====================
 
 export default function CRMVendas() {
+  // React Query hooks
+  const { data: _hospitaisData } = useHospitais()
+  
   // State
   const [activeTab, setActiveTab] = useState('overview')
   const [clientes, setClientes] = useState<Cliente[]>([])
