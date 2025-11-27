@@ -8,9 +8,16 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useConfiguracoes, useAdminStats, usePerfis, useUsuarios } from '@/hooks/queries/useAdmin'
 
 export default function ConfiguracoesSystem() {
   const [activeTab, setActiveTab] = useState('impostos')
+  
+  // React Query hooks
+  const { data: _configuracoes } = useConfiguracoes()
+  const { data: _adminStats } = useAdminStats()
+  const { data: _perfis } = usePerfis()
+  const { data: _usuarios } = useUsuarios()
 
   return (
     <div className="p-6 space-y-6">

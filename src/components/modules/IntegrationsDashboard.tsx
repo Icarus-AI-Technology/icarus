@@ -23,6 +23,7 @@ import {
 import { Card, Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
 import { useIntegrations } from '@/hooks/useIntegrations';
 import { supabase } from '@/lib/supabase/client';
+import { useIntegracoesConfig, useWebhooks, useApiKeys, useAdminStats } from '@/hooks/queries/useAdmin';
 import type { IntegrationHealth, IntegrationStatus } from '@/lib/integrations/types';
 
 // ============================================================================
@@ -247,6 +248,12 @@ export function IntegrationsDashboard({ empresaId: propEmpresaId }: Integrations
     lastCheck,
     checkAllHealth,
   } = useIntegrations({ empresaId, autoRefresh: true, refreshInterval: 5 * 60 * 1000 });
+
+  // React Query hooks for admin data
+  const { data: _integracoesConfig } = useIntegracoesConfig();
+  const { data: _webhooks } = useWebhooks();
+  const { data: _apiKeys } = useApiKeys();
+  const { data: _adminStats } = useAdminStats();
 
   const [activeTab, setActiveTab] = useState('all');
 

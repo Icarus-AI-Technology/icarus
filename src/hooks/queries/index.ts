@@ -36,3 +36,6 @@ export * from './useRelacionamento'
 // RH & Colaboradores
 export * from './useRH'
 
+// Admin & Configurações
+export * from './useAdmin'
+
