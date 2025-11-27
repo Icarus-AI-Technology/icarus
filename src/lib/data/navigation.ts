@@ -213,7 +213,7 @@ export const navigationConfig = [
         icon: ShoppingCart,
         category: 'Compras & Fornecedores',
         description: 'Gestão completa de compras e cotações',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'notas-compra',
@@ -222,7 +222,7 @@ export const navigationConfig = [
         icon: Receipt,
         category: 'Compras & Fornecedores',
         description: 'Registro e validação de notas fiscais de compra',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'compras-internacionais',
@@ -231,7 +231,7 @@ export const navigationConfig = [
         icon: Globe,
         category: 'Compras & Fornecedores',
         description: 'Importação de produtos OPME (SISCOMEX)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'viabilidade-importacao',
@@ -240,7 +240,7 @@ export const navigationConfig = [
         icon: TrendingUp,
         category: 'Compras & Fornecedores',
         description: 'Análise de viabilidade financeira de importações',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -255,7 +255,7 @@ export const navigationConfig = [
         icon: Users,
         category: 'Vendas & CRM',
         description: 'CRM completo com funil de vendas',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'campanhas-marketing',
@@ -264,7 +264,7 @@ export const navigationConfig = [
         icon: Megaphone,
         category: 'Vendas & CRM',
         description: 'Gestão de campanhas de marketing digital',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'tabelas-precos-import',
@@ -273,7 +273,7 @@ export const navigationConfig = [
         icon: FileSpreadsheet,
         category: 'Vendas & CRM',
         description: 'Importação em massa de tabelas de preços',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'qualidade-certificacao',
@@ -282,7 +282,7 @@ export const navigationConfig = [
         icon: Shield,
         category: 'Vendas & CRM',
         description: 'Gestão de qualidade e certificações (ISO, ANVISA)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'video-calls-manager',
@@ -291,7 +291,7 @@ export const navigationConfig = [
         icon: Video,
         category: 'Vendas & CRM',
         description: 'Videochamadas integradas para atendimento',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -306,7 +306,7 @@ export const navigationConfig = [
         icon: DollarSign,
         category: 'Financeiro & Faturamento',
         description: 'Gestão financeira completa (contas a pagar/receber)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'contas-receber-ia',
@@ -315,7 +315,7 @@ export const navigationConfig = [
         icon: TrendingUp,
         category: 'Financeiro & Faturamento',
         description: 'Gestão de recebíveis com IA (score inadimplência)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'faturamento-avancado',
@@ -324,7 +324,7 @@ export const navigationConfig = [
         icon: FileText,
         category: 'Financeiro & Faturamento',
         description: 'Faturamento hospitalar (TISS, AMB, CBHPM)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'faturamento-nfe-completo',
@@ -342,7 +342,7 @@ export const navigationConfig = [
         icon: FileSpreadsheet,
         category: 'Financeiro & Faturamento',
         description: 'Contabilidade e plano de contas',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'relatorios-financeiros',
@@ -351,7 +351,7 @@ export const navigationConfig = [
         icon: BarChart3,
         category: 'Financeiro & Faturamento',
         description: 'Relatórios financeiros gerenciais (DRE, Fluxo de Caixa)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'relatorios-regulatorios',
@@ -360,7 +360,7 @@ export const navigationConfig = [
         icon: FileCheck,
         category: 'Financeiro & Faturamento',
         description: 'Relatórios regulatórios (SPED, DCTF, DIRF)',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -375,7 +375,7 @@ export const navigationConfig = [
         icon: Shield,
         category: 'Compliance & Auditoria',
         description: 'Auditoria interna e compliance regulatório',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'compliance-avancado',
@@ -384,7 +384,7 @@ export const navigationConfig = [
         icon: Lock,
         category: 'Compliance & Auditoria',
         description: 'Compliance avançado (LGPD, ISO 27001, 21 CFR Part 11)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'notificacoes-inteligentes',
@@ -393,7 +393,7 @@ export const navigationConfig = [
         icon: Bell,
         category: 'Compliance & Auditoria',
         description: 'Sistema de notificações inteligentes e alertas',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -408,7 +408,7 @@ export const navigationConfig = [
         icon: Brain,
         category: 'IA & Automação',
         description: 'Centro de controle de IA (IcarusBrain)',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'automacao-ia',
@@ -417,7 +417,7 @@ export const navigationConfig = [
         icon: Zap,
         category: 'IA & Automação',
         description: 'Automações inteligentes baseadas em IA',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'chatbot-metrics',
@@ -426,7 +426,7 @@ export const navigationConfig = [
         icon: MessageSquare,
         category: 'IA & Automação',
         description: 'Métricas e análises do chatbot IA',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'voice-analytics',
@@ -435,7 +435,7 @@ export const navigationConfig = [
         icon: Activity,
         category: 'IA & Automação',
         description: 'Análise de voz e comandos por voz',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'voice-biometrics',
@@ -444,7 +444,7 @@ export const navigationConfig = [
         icon: Fingerprint,
         category: 'IA & Automação',
         description: 'Biometria por voz para autenticação',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'voice-macros',
@@ -453,7 +453,7 @@ export const navigationConfig = [
         icon: Mic,
         category: 'IA & Automação',
         description: 'Macros ativadas por comandos de voz',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'tooltip-analytics',
@@ -462,7 +462,7 @@ export const navigationConfig = [
         icon: Target,
         category: 'IA & Automação',
         description: 'Analytics de tooltips e ajuda contextual',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'workflow-builder',
@@ -471,7 +471,7 @@ export const navigationConfig = [
         icon: Workflow,
         category: 'IA & Automação',
         description: 'Construtor visual de workflows automatizados',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
@@ -486,7 +486,7 @@ export const navigationConfig = [
         icon: Settings,
         category: 'Sistema & Integrações',
         description: 'Configurações gerais do sistema',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'configuracoes-avancadas',
@@ -495,7 +495,7 @@ export const navigationConfig = [
         icon: FileCog,
         category: 'Sistema & Integrações',
         description: 'Configurações avançadas e personalizações',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'system-health',
@@ -504,7 +504,7 @@ export const navigationConfig = [
         icon: Heart,
         category: 'Sistema & Integrações',
         description: 'Monitoramento de saúde do sistema',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'kpi-dashboard',
@@ -513,7 +513,7 @@ export const navigationConfig = [
         icon: PieChart,
         category: 'Sistema & Integrações',
         description: 'Dashboard executivo de KPIs',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'analytics-bi',
@@ -522,7 +522,7 @@ export const navigationConfig = [
         icon: BarChart3,
         category: 'Sistema & Integrações',
         description: 'Business Intelligence e análises avançadas',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'analytics-predicao',
@@ -531,7 +531,7 @@ export const navigationConfig = [
         icon: TrendingUp,
         category: 'Sistema & Integrações',
         description: 'Predições e forecasting com IA',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'bi-dashboard-interactive',
@@ -540,7 +540,7 @@ export const navigationConfig = [
         icon: Activity,
         category: 'Sistema & Integrações',
         description: 'Dashboard BI interativo e customizável',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'relatorios-executivos',
@@ -549,7 +549,7 @@ export const navigationConfig = [
         icon: FileText,
         category: 'Sistema & Integrações',
         description: 'Relatórios executivos para diretoria',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'integracoes-avancadas',
@@ -558,7 +558,7 @@ export const navigationConfig = [
         icon: Plug,
         category: 'Sistema & Integrações',
         description: 'Integrações com sistemas externos',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'integrations-manager',
@@ -567,7 +567,7 @@ export const navigationConfig = [
         icon: Database,
         category: 'Sistema & Integrações',
         description: 'Gerenciamento de integrações ativas',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'api-gateway',
@@ -576,7 +576,7 @@ export const navigationConfig = [
         icon: Webhook,
         category: 'Sistema & Integrações',
         description: 'Gateway de APIs e webhooks',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'webhooks-manager',
@@ -585,7 +585,7 @@ export const navigationConfig = [
         icon: Zap,
         category: 'Sistema & Integrações',
         description: 'Gerenciamento de webhooks',
-        isImplemented: false
+        isImplemented: true
       },
       {
         id: 'logistica-avancada',
@@ -594,7 +594,7 @@ export const navigationConfig = [
         icon: Truck,
         category: 'Sistema & Integrações',
         description: 'Gestão logística completa com roteirização',
-        isImplemented: false
+        isImplemented: true
       }
     ]
   },
