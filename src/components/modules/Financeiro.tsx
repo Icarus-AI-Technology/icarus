@@ -11,8 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useSupabase } from '@/hooks/useSupabase'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useFinanceiroStats, useFluxoCaixa } from '@/hooks/queries/useFinanceiro'
 import { formatCurrency, formatDate } from '@/lib/utils/formatters'
 import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton'
 import {
@@ -58,8 +58,11 @@ interface FinancialMetrics {
 }
 
 export function Financeiro() {
-  const { supabase, isConfigured } = useSupabase()
   const [loading, setLoading] = useState(true)
+  
+  // React Query hooks
+  const { data: _financeiroStats } = useFinanceiroStats()
+  const { data: _fluxoCaixa } = useFluxoCaixa('mes')
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [receivables, setReceivables] = useState<AccountReceivable[]>([])
   const [metrics, setMetrics] = useState<FinancialMetrics>({
