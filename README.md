@@ -351,3 +351,4 @@ Propriedade da **Icarus AI Technology**.
 ---
 
 **Desenvolvido com ❤️ pela equipe Icarus AI Technology**
+
