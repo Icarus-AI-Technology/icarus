@@ -140,11 +140,11 @@ export function useDashboardStats() {
             { dia: 'Sex', cirurgias: 14 },
           ],
           productCategoryData: [
-            { name: 'Cardiologia', value: 30, color: '#6366F1' },
-            { name: 'Ortopedia', value: 25, color: '#10B981' },
-            { name: 'Neurocirurgia', value: 20, color: '#F59E0B' },
-            { name: 'Oftalmologia', value: 15, color: '#EF4444' },
-            { name: 'Outros', value: 10, color: '#8B5CF6' },
+            { name: 'Cardiologia (CRM)', value: 35, color: '#6366F1' },
+            { name: 'Cirurgia Vascular', value: 30, color: '#10B981' },
+            { name: 'Eletrofisiologia', value: 15, color: '#F59E0B' },
+            { name: 'Hemodinâmica', value: 12, color: '#EF4444' },
+            { name: 'Outros', value: 8, color: '#8B5CF6' },
           ],
         }
       }
@@ -251,11 +251,11 @@ export function useDashboardStats() {
             { dia: 'Sex', cirurgias: 14 },
           ],
           productCategoryData: [
-            { name: 'Cardiologia', value: 30, color: '#6366F1' },
-            { name: 'Ortopedia', value: 25, color: '#10B981' },
-            { name: 'Neurocirurgia', value: 20, color: '#F59E0B' },
-            { name: 'Oftalmologia', value: 15, color: '#EF4444' },
-            { name: 'Outros', value: 10, color: '#8B5CF6' },
+            { name: 'Cardiologia (CRM)', value: 35, color: '#6366F1' },
+            { name: 'Cirurgia Vascular', value: 30, color: '#10B981' },
+            { name: 'Eletrofisiologia', value: 15, color: '#F59E0B' },
+            { name: 'Hemodinâmica', value: 12, color: '#EF4444' },
+            { name: 'Outros', value: 8, color: '#8B5CF6' },
           ],
         }
       }

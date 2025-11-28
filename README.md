@@ -3,10 +3,12 @@
 **ERP Enterprise para OPME** (Órteses, Próteses e Materiais Especiais) com **Inteligência Artificial**
 
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?logo=vite)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?logo=tailwind-css)](https://tailwindcss.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3FCF8E?logo=supabase)](https://supabase.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL_16-3FCF8E?logo=supabase)](https://supabase.com/)
+
+**🔗 Produção:** https://icarus-g7taqo9op-daxs-projects-5db3d203.vercel.app
 
 ---
 
@@ -34,12 +36,16 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
 
 ### ✨ Principais Funcionalidades
 
-- 🏥 **Gestão de Cirurgias** - Controle completo de procedimentos cirúrgicos
-- 📦 **Estoque Inteligente** - Previsão de demanda com IA
-- 💰 **Financeiro** - Controle de faturamento e inadimplência
-- 🤖 **IcarusBrain** - IA integrada para análises preditivas
-- 📊 **Dashboards** - Visualizações em tempo real
-- 🎨 **Dark Glass Medical** - Design System moderno e profissional
+- 🏥 **Gestão de Cirurgias** - Kanban completo com 12 status, rastreabilidade OPME
+- 📦 **Estoque Inteligente** - Previsão de demanda com IA, alertas preditivos
+- 💰 **Financeiro Avançado** - Conciliação ML, Pluggy/DDA, gestão fiscal
+- 🤖 **IcarusBrain** - 9 Agentes IA especializados (LangGraph)
+- 📊 **Dashboards** - Smart View com ML nativo
+- 🎨 **Dark Glass Medical** - Design System neumórfico 3D
+- 📱 **Mobile App** - React Native para instrumentadores
+- 🔊 **Voice Commands** - Operações hands-free
+- 🔗 **Blockchain** - Audit trail para compliance
+- 📄 **Qualidade** - Gestão de documentos ANVISA e Cartas de Comercialização
 
 ---
 
@@ -47,78 +53,100 @@ ICARUS é um sistema ERP completo desenvolvido com as mais modernas tecnologias 
 
 | Categoria | Tecnologia |
 |-----------|------------|
-| **Frontend** | React 18.3.1 + TypeScript 5.8 + Vite 6.3 |
+| **Frontend** | React 18.3.1 + TypeScript 5.9 + Vite 6.4 |
 | **Styling** | Tailwind CSS 4.1 + Radix UI |
-| **Database** | Supabase PostgreSQL 15 + pgvector |
+| **Database** | Supabase PostgreSQL 16 + pgvector + HNSW |
 | **Design System** | Dark Glass Medical (Neumorphism 3D) |
-| **Animações** | Motion (Framer Motion) 12.x |
-| **Gráficos** | Recharts 3.x |
+| **Animações** | Framer Motion 12.x |
+| **Gráficos** | Recharts 2.15 |
 | **Ícones** | Lucide React |
 | **IA** | LangChain 0.3 + LangGraph 0.2 + Claude 3.5 Sonnet + GPT-4o |
 | **Backend** | Supabase Edge Functions (Deno/TS) |
+| **Mobile** | React Native + Expo SDK 50 |
 | **Deploy** | Vercel + GitHub Actions |
+| **Cache** | Redis |
+| **Blockchain** | SHA-256 + Proof of Work |
 
 ---
 
-## 🧠 IA Avançada (Integração 2025)
+## 🧠 IA Avançada - 9 Agentes Especializados
 
-### LangChain + LangGraph + pgvector
+### Agentes LangGraph Implementados
 
-O ICARUS integra as mais recentes tecnologias de IA para gestão OPME:
-
-- **LangChain 0.3.1 + LangGraph 0.2.5**: Agentes reativos para RAG em estoque, cirurgias e farmacovigilância
-- **pgvector (Supabase)**: Embeddings vetoriais para busca semântica em catálogos ANVISA
-- **LLMs**: Claude 3.5 Sonnet (prioridade para raciocínio regulatório) + GPT-4o (embeddings)
-- **Backend**: Supabase Edge Functions (Deno/TS) para IcarusBrain serverless
+| Agente | Funcionalidade |
+|--------|----------------|
+| **TrainingTutor** | Treinamento RDC 59, simulações interativas |
+| **TestCertifier** | Avaliação e certificação digital |
+| **ErrorPredictor** | Previsão de falhas, alertas proativos |
+| **AutoCorrector** | Correção automática de dados |
+| **UserGuide** | Onboarding e ajuda contextual |
+| **LogAuditor** | Auditoria de logs e compliance |
+| **FraudDetector** | Detecção de anomalias e fraudes |
+| **AnvisaTutor** | Especialista em ANVISA/RDCs |
+| **BaseAgent** | Framework base para novos agentes |
 
 ### Módulos com IA Integrada
 
 | Módulo | Funcionalidade IA | Status |
 |--------|-------------------|--------|
-| **Estoque IA** | RAG para previsão de demanda + rastreabilidade lote (RDC 59) | ✅ Novo |
-| **Cirurgias** | Análise preditiva de procedimentos + alertas ANVISA | ✅ Novo |
-| **Financeiro** | Score de inadimplência com análise semântica de NF-e | ✅ Novo |
-| **IcarusBrain** | Agente LangGraph para queries cross-módulo | ✅ Novo |
-| **Produtos OPME** | Busca semântica em 200+ itens reais (stents, implantes) | ✅ Novo |
-| **Faturamento** | Extração automática de NF-e via Claude Vision | ✅ Novo |
+| **Estoque IA** | RAG + previsão de demanda + alertas | ✅ |
+| **Cirurgias** | Kit inteligente + análise preditiva | ✅ |
+| **Financeiro** | Conciliação ML + score inadimplência | ✅ |
+| **Smart View** | Dashboard com ML nativo | ✅ |
+| **Qualidade** | Alertas preditivos de vencimento | ✅ |
+| **Compliance** | Treinamento e certificação | ✅ |
 
-### Ferramentas do Agente IA
+### Uso dos Agentes
 
 ```typescript
-import { useLangChainTools } from '@/hooks/useLangChainTools'
+import { useIcarusBrain } from '@/hooks/useIcarusBrain'
+import { createAgent } from '@/lib/ai/agents'
 
-const { searchCatalog, sendToAgent, extractNFE } = useLangChainTools()
+// Usar hook centralizado
+const { predict, analyze, recommend } = useIcarusBrain()
 
-// Busca semântica no catálogo OPME
-const results = await searchCatalog('stent coronário 3.0mm', {
-  anvisaValido: true,
-  classeRisco: ['III', 'IV'],
-  vencimentoApos: '2026-01-01'
+// Criar agente específico
+const anvisaTutor = createAgent('anvisa-tutor')
+const response = await anvisaTutor.execute({
+  action: 'consultar_rdc',
+  params: { numeroRDC: '665' }
 })
-
-// Chat com agente LangGraph
-const response = await sendToAgent(
-  'Qual estoque de stent Resolute 3.0x24mm na região Sudeste?'
-)
-
-// Extração de NF-e via Vision
-const nfe = await extractNFE(file) // Suporta XML, PDF, imagem
 ```
 
-### Edge Functions Disponíveis
+---
 
-| Função | Descrição |
+## 📊 58 Módulos Implementados
+
+### Módulos com Funcionalidade Completa (12)
+
+| Módulo | Descrição |
 |--------|-----------|
-| `semantic-search` | Busca vetorial com filtros regulatórios ANVISA |
-| `langchain-agent` | Agente reativo com 5 ferramentas especializadas |
-| `extract-nfe` | Extração de NF-e via XML parser + Claude Vision |
-| `chat` | Chat conversacional com contexto de módulo |
+| **Dashboard** | KPIs, gráficos, ações rápidas, IA insights |
+| **Cirurgias** | Kanban 12 colunas, mapa, formulários completos |
+| **Estoque IA** | CRUD, alertas, previsão IA |
+| **Financeiro** | Contas, conciliação ML, gestão fiscal |
+| **Cadastros** | CRUD completo 8 entidades |
+| **RH** | DIRF 2025, folha, PJ, NR-1 |
+| **Configurações** | Certificado digital, logo, CNPJ |
+| **Manufatura** | MRP integrado, produção |
+| **Smart View** | ML nativo, predições |
+| **Qualidade** | Documentos ANVISA, cartas comercialização |
+| **Compliance** | ANVISA, ISO 42001, LGPD |
+| **Licitações** | Processos, editais, propostas |
+
+### Módulos com Template Base (46)
+
+Todos os demais módulos utilizam o `ModuleTemplate` com:
+- ✅ Header com ícone e título
+- ✅ Barra de ações (busca, filtros, export)
+- ✅ Cards de estatísticas
+- ✅ Tabela de dados
+- ✅ Design Dark Glass Medical
+- ✅ Responsividade
 
 ---
 
 ## 🎨 Dark Glass Medical Design System
-
-O ICARUS utiliza o **Dark Glass Medical**, um design system moderno baseado em:
 
 ### Características
 - 🌙 **Dark Mode** como padrão
@@ -141,18 +169,65 @@ O ICARUS utiliza o **Dark Glass Medical**, um design system moderno baseado em:
 --danger: #EF4444           /* Vermelho - Erros */
 --text-primary: #FFFFFF     /* Texto principal */
 --text-secondary: #94A3B8   /* Texto secundário */
---text-muted: #64748B       /* Texto desabilitado */
 ```
 
-### Componentes Principais
+### Componentes UI
 
-- ✅ **Card** - Container com efeito neumórfico 3D
-- ✅ **KPICard** - Cards de métricas com ícones coloridos
-- ✅ **Button** - Botões com variantes (primary, secondary, ghost)
-- ✅ **Input** - Campos com efeito inset neumórfico
-- ✅ **Sidebar** - Navegação colapsável com transições suaves
-- ✅ **Topbar** - Barra superior com busca e notificações
-- ✅ **ChatWidget** - Assistente virtual flutuante
+| Componente | Descrição |
+|------------|-----------|
+| **Card** | Container neumórfico 3D |
+| **KPICard** | Métricas com ícones coloridos |
+| **Button** | Gradiente indigo, variantes |
+| **Input** | Efeito inset neumórfico |
+| **Dialog** | Modal glassmorphism |
+| **Tabs** | Navegação animada |
+| **MaskedInput** | Validação visual em tempo real |
+
+---
+
+## 🔄 Módulo Cirurgias - Fluxo Completo
+
+### Kanban (12 Colunas)
+
+```
+1. Pedido Médico     → 2. Cotação           → 3. Aguardando Autorização
+4. Autorizada        → 5. Agendada          → 6. Logística
+7. Em Cirurgia       → 8. Logística Reversa → 9. Pós-Cirúrgico
+10. Aguard. Faturamento → 11. Fatur. Parcial → 12. Faturada
+```
+
+### Sub-módulos
+
+- ✅ KanbanCirurgias - Drag & drop visual
+- ✅ MapaCirurgias - Timeline horizontal
+- ✅ CadastroPaciente - Rastreabilidade OPME
+- ✅ KitOPMEInteligente - Sugestões IA
+- ✅ DashboardCirurgico - Métricas tempo real
+- ✅ AutorizacaoPrevia - Workflow convênios
+- ✅ RastreamentoRFID - IoT integration
+- ✅ PortaisOPME - Integração portais
+
+---
+
+## 📄 Módulo Qualidade - Gestão de Documentos
+
+### Funcionalidades
+
+- 📁 **Upload de Documentos** - Qualquer documento da empresa
+- 🏥 **Documentos ANVISA** - Checklist obrigatórios (AFE, AE, Licenças)
+- 📜 **Cartas de Comercialização** - Controle de validade por fabricante
+- ⏰ **Alertas Preditivos** - 90/60/30/15 dias antes do vencimento
+- 🤖 **IA Preditiva** - Análise inteligente de renovações
+
+### Documentos ANVISA Obrigatórios
+
+- ✅ Autorização de Funcionamento (AFE)
+- ✅ Autorização Especial (AE)
+- ✅ Licença Sanitária Estadual/Municipal
+- ✅ CNES
+- ✅ CRT
+- ✅ Manual de Boas Práticas
+- ✅ POPs Obrigatórios
 
 ---
 
@@ -162,87 +237,35 @@ O ICARUS utiliza o **Dark Glass Medical**, um design system moderno baseado em:
 icarus/
 ├── src/
 │   ├── components/
-│   │   ├── ui/                 # Componentes base
-│   │   │   ├── Button.tsx
-│   │   │   ├── Card.tsx
-│   │   │   ├── Input.tsx
-│   │   │   ├── KPICard.tsx
-│   │   │   └── ...
-│   │   ├── layout/             # Layout components
-│   │   │   ├── IcarusLayout.tsx
-│   │   │   ├── IcarusSidebar.tsx
-│   │   │   └── IcarusTopbar.tsx
-│   │   ├── modules/            # Módulos do sistema
-│   │   │   ├── Dashboard.tsx
-│   │   │   └── ...
-│   │   └── chat/               # Assistente virtual
-│   │       └── ChatWidget.tsx
-│   ├── pages/                  # Páginas
-│   │   ├── HomePage.tsx
-│   │   ├── LoginPage.tsx
-│   │   └── ...
-│   ├── hooks/                  # Hooks customizados
-│   │   ├── useTheme.ts
-│   │   ├── useSidebar.ts
-│   │   └── useIcarusBrain.ts
-│   ├── contexts/               # React Contexts
-│   │   ├── ThemeContext.tsx
-│   │   └── SidebarContext.tsx
-│   ├── lib/                    # Utilitários
-│   │   ├── utils.ts
-│   │   └── data/navigation.ts
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── index.css               # CSS Variables + Tailwind
-├── docs/                       # Documentação
-├── public/
-│   └── favicon.svg
-├── package.json
-├── vite.config.ts
-├── tailwind.config.ts
-└── tsconfig.json
+│   │   ├── ui/                    # 25+ componentes base
+│   │   ├── layout/                # IcarusLayout, Sidebar, Topbar
+│   │   ├── modules/               # 58 módulos ERP
+│   │   │   ├── analytics/         # SmartViewDashboard
+│   │   │   ├── cirurgias/         # 10 sub-módulos
+│   │   │   ├── estoque/           # ConteineresInteligentes, IoT
+│   │   │   ├── financeiro/        # 6 sub-módulos
+│   │   │   ├── manufatura/        # ManufaturaLeveMRP
+│   │   │   └── qualidade/         # GestaoDocumentosQualidade
+│   │   └── chat/                  # ChatWidget IA
+│   ├── hooks/                     # 30+ hooks customizados
+│   ├── lib/
+│   │   ├── ai/agents/             # 9 agentes LangGraph
+│   │   ├── blockchain/            # Audit trail
+│   │   ├── cache/                 # Redis
+│   │   ├── compliance/            # ANVISA, ISO, LGPD
+│   │   ├── export/                # BI Export
+│   │   ├── integrations/          # APIs externas
+│   │   └── voice/                 # Voice commands
+│   ├── contexts/                  # React Contexts
+│   ├── pages/                     # Páginas principais
+│   └── types/                     # TypeScript types
+├── supabase/
+│   ├── migrations/                # 10+ migrations
+│   └── functions/                 # Edge Functions
+├── mobile/                        # React Native app
+├── tests/e2e/                     # Playwright tests
+└── docs/                          # Documentação
 ```
-
----
-
-## 🧠 Integração com IA
-
-### IcarusBrain
-
-```typescript
-import { useIcarusBrain } from '@/hooks/useIcarusBrain'
-
-const { predict, analyze, recommend } = useIcarusBrain()
-
-// Previsão de demanda
-const forecast = await predict('demanda', {
-  produto_id: '123',
-  dias: 30
-})
-
-// Score de inadimplência
-const score = await analyze('inadimplencia', {
-  cliente_id: '456'
-})
-```
-
----
-
-## 📊 Módulos Disponíveis
-
-| Módulo | Status | Descrição |
-|--------|--------|-----------|
-| Dashboard | ✅ | Visão geral do sistema |
-| Cirurgias | ✅ | Gestão de procedimentos |
-| Estoque IA | ✅ | Controle inteligente |
-| Financeiro | ✅ | Faturamento e cobrança |
-| CRM & Vendas | ✅ | Gestão de clientes |
-| Compras | ✅ | Gestão de fornecedores |
-| Produtos OPME | ✅ | Cadastro de produtos |
-| Contas a Receber | ✅ | Gestão de recebíveis |
-| Faturamento NFe | ✅ | Emissão de notas fiscais |
-| Inventário | ✅ | Controle de inventário |
-| Licitações | ✅ | Gestão de licitações |
 
 ---
 
@@ -250,117 +273,80 @@ const score = await analyze('inadimplencia', {
 
 ### Configuração
 
-1. Crie um projeto no [Supabase](https://supabase.com)
-2. Habilite a extensão `pgvector` no SQL Editor
-3. Configure as variáveis de ambiente:
-
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua_chave_anon
-OPENAI_API_KEY=sk-...  # Para embeddings
-ANTHROPIC_API_KEY=sk-ant-...  # Para Claude Vision
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-### Migrações (pgvector + OPME)
+### Edge Functions
 
-```bash
-# Aplicar migrações
-supabase db push
-
-# Deploy Edge Functions
-supabase functions deploy langchain-agent
-supabase functions deploy semantic-search
-supabase functions deploy extract-nfe
-```
-
-### Tabelas Principais
-
-| Tabela | Descrição |
+| Função | Descrição |
 |--------|-----------|
-| `catalogo_medico_embeddings` | Embeddings vetoriais para busca semântica ANVISA |
-| `ai_agent_tools_log` | Auditoria de execução de ferramentas IA |
-| `nfe_extractions` | NF-e extraídas automaticamente |
-| `audit_logs` | Logs de compliance (21 CFR Part 11) |
-
-### Exemplo de Uso
-
-```typescript
-import { supabase } from '@/lib/config/supabase-client'
-
-// Busca tradicional
-const { data } = await supabase
-  .from('produtos')
-  .select('*')
-
-// Busca semântica via RPC (pgvector)
-const { data: results } = await supabase.rpc('busca_semantica_catalogo', {
-  query_embedding: embeddings,
-  match_threshold: 0.7,
-  match_count: 10,
-  filtro_anvisa_valido: true
-})
-
-// Chamar Edge Function
-const { data: agentResponse } = await supabase.functions.invoke('langchain-agent', {
-  body: { mensagem: 'Qual estoque de stents?', modulo: 'estoque' }
-})
-```
+| `semantic-search` | Busca vetorial HNSW |
+| `langchain-agent` | Agente reativo |
+| `extract-nfe` | Extração NF-e Vision |
+| `whatsapp-webhook` | Bot WhatsApp |
+| `cache-redis` | Cache distribuído |
 
 ---
 
-## 📝 Scripts Disponíveis
+## 📝 Scripts
 
 ```bash
-pnpm dev          # Servidor de desenvolvimento (port 5173)
-pnpm build        # Build de produção
-pnpm preview      # Preview do build
-pnpm lint         # Executar linter
-pnpm type-check   # Verificar tipos TypeScript
+pnpm dev          # Desenvolvimento (port 5173)
+pnpm build        # Build produção
+pnpm preview      # Preview build
+pnpm lint         # Linter
+pnpm type-check   # TypeScript check
+pnpm test         # Vitest
+pnpm test:e2e     # Playwright
 ```
 
 ---
 
-## 🔧 Suporte
+## 📚 Documentação
 
-- **Issues**: [GitHub Issues](https://github.com/Icarus-AI-Technology/icarus/issues)
-- **Docs**: Ver pasta `/docs/` para guias completos
-- **Troubleshooting**: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+| Documento | Descrição |
+|-----------|-----------|
+| `CLAUDE.md` | Contexto para Claude Code |
+| `docs/AUDITORIA-COMPLETA-2025-11-28.md` | Auditoria completa |
+| `docs/DIAGNOSTICO-FUNCIONALIDADES-IA-2025.md` | Diagnóstico IA |
+| `docs/PLANO-MELHORIAS-IA-2025.md` | Roadmap IA |
+| `docs/ICARUS-INDICE-MESTRE-58-MODULOS.md` | Índice módulos |
+
+---
+
+## 🌟 Status do Projeto
+
+### Implementado ✅
+
+- ✅ 58 módulos ERP
+- ✅ 9 agentes IA LangGraph
+- ✅ Design System Dark Glass Medical
+- ✅ Kanban Cirurgias 12 colunas
+- ✅ Qualidade com alertas preditivos
+- ✅ Mobile App React Native
+- ✅ Voice Commands
+- ✅ Blockchain Audit Trail
+- ✅ WhatsApp Bot
+- ✅ BI Export (Power BI, Tableau)
+- ✅ pgvector HNSW
+- ✅ Redis Cache
+- ✅ RAGAS Evaluation
+- ✅ Human-in-the-Loop
+- ✅ Deploy Vercel
+
+### Versão
+
+**v5.0.3** - Production Ready (28/11/2025)
 
 ---
 
 ## 📝 Licença
 
-Este projeto é propriedade da **Icarus AI Technology**.
-
----
-
-## 🌟 Versão
-
-**v5.0** - Production Ready (LangChain Edition)
-
-### Status do Projeto
-- ✅ Design System Dark Glass Medical
-- ✅ 14+ componentes otimizados
-- ✅ Dark mode como padrão
-- ✅ Sidebar colapsável com transições
-- ✅ 11 módulos implementados
-- ✅ Assistente virtual integrado
-- ✅ Deploy automático Vercel
-- ✅ **LangChain + LangGraph** integrado
-- ✅ **pgvector** para busca semântica
-- ✅ **Claude Vision** para extração de NF-e
-- ✅ **Agente reativo** com 5 ferramentas
-- ✅ GitHub Actions CI/CD
-
-### Secrets Necessários (GitHub Actions)
-
-| Secret | Descrição |
-|--------|-----------|
-| `VERCEL_TOKEN` | Token de acesso Vercel |
-| `VERCEL_ORG_ID` | ID da organização Vercel |
-| `VERCEL_PROJECT_ID` | ID do projeto Vercel |
-| `SUPABASE_ACCESS_TOKEN` | Token de acesso Supabase CLI |
-| `SUPABASE_PROJECT_REF` | Referência do projeto Supabase |
+Propriedade da **Icarus AI Technology**.
 
 ---
 

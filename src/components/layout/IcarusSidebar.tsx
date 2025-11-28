@@ -8,16 +8,17 @@ import { useSidebar } from '@/hooks/useSidebar'
 
 // Paleta de cores para ícones (sem repetição por categoria)
 const categoryColors: Record<string, string> = {
-  'Principal': '#6366F1',           // Indigo
-  'Cadastros & Gestão': '#F97316',  // Orange (laranja)
-  'Core Business': '#2DD4BF',       // Teal
-  'Compras & Fornecedores': '#8B5CF6', // Purple
-  'Operações & Logística': '#EC4899',  // Pink
-  'Analytics & BI': '#3B82F6',      // Blue
-  'Marketing & Vendas': '#10B981',  // Emerald
-  'Automação & IA': '#F59E0B',      // Amber
-  'Integrações': '#14B8A6',         // Cyan
-  'Dev Tools': '#A855F7',           // Violet
+  'Dashboard Principal': '#6366F1',   // Indigo
+  'Cadastros & Gestão': '#F97316',    // Orange
+  'Cirurgias & Procedimentos': '#2DD4BF', // Teal
+  'Estoque & Consignação': '#8B5CF6', // Purple
+  'Compras & Fornecedores': '#EC4899', // Pink
+  'Vendas & CRM': '#10B981',          // Emerald
+  'Financeiro & Faturamento': '#3B82F6', // Blue
+  'Compliance & Auditoria': '#EF4444', // Red
+  'IA & Automação': '#F59E0B',        // Amber
+  'Sistema & Integrações': '#14B8A6', // Cyan
+  'Dev Tools': '#A855F7',             // Violet
 }
 
 // Cores variadas para ícones de rotas (cíclico)
@@ -146,39 +147,69 @@ export function IcarusSidebar() {
           const isExpanded = expandedCategories.includes(category.name)
           const CategoryIcon = category.icon
           const categoryColor = categoryColors[category.name] || routeIconColors[categoryIndex % routeIconColors.length]
+          const hasOnlyOneRoute = category.routes.length === 1
+          const singleRoute = hasOnlyOneRoute ? category.routes[0] : null
 
           return (
             <div key={category.name}>
-              {/* Category Header */}
-              <button
-                onClick={() => toggleCategory(category.name)}
-                className={cn(
-                  "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
-                  isDark 
-                    ? "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100",
-                  isCollapsed && "justify-center"
-                )}
-              >
-                <CategoryIcon 
-                  className="h-5 w-5 flex-shrink-0" 
-                  strokeWidth={2}
-                  style={{ color: categoryColor }}
-                />
-                {!isCollapsed && (
-                  <>
+              {/* Category Header - Se tiver apenas 1 rota, navega diretamente */}
+              {hasOnlyOneRoute && singleRoute ? (
+                <Link
+                  to={singleRoute.path}
+                  className={cn(
+                    "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                    location.pathname === singleRoute.path
+                      ? (isDark ? "bg-[#1A1F35] text-white" : "bg-slate-100 text-slate-900")
+                      : (isDark ? "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"),
+                    isCollapsed && "justify-center"
+                  )}
+                  style={location.pathname === singleRoute.path ? { 
+                    boxShadow: isDark 
+                      ? '4px 4px 8px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.02)'
+                      : '3px 3px 6px rgba(0,0,0,0.06), -2px -2px 4px rgba(255,255,255,0.9)',
+                    borderLeft: `3px solid ${categoryColor}`
+                  } : {}}
+                >
+                  <CategoryIcon 
+                    className="h-5 w-5 flex-shrink-0" 
+                    strokeWidth={2}
+                    style={{ color: categoryColor }}
+                  />
+                  {!isCollapsed && (
                     <span className="flex-1 text-left">{category.name}</span>
-                    {isExpanded ? (
-                      <ChevronDown className={`h-4 w-4 ${textMuted}`} />
-                    ) : (
-                      <ChevronRight className={`h-4 w-4 ${textMuted}`} />
-                    )}
-                  </>
-                )}
-              </button>
+                  )}
+                </Link>
+              ) : (
+                <button
+                  onClick={() => toggleCategory(category.name)}
+                  className={cn(
+                    "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                    isDark 
+                      ? "text-[#94A3B8] hover:text-white hover:bg-[#1A1F35]"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100",
+                    isCollapsed && "justify-center"
+                  )}
+                >
+                  <CategoryIcon 
+                    className="h-5 w-5 flex-shrink-0" 
+                    strokeWidth={2}
+                    style={{ color: categoryColor }}
+                  />
+                  {!isCollapsed && (
+                    <>
+                      <span className="flex-1 text-left">{category.name}</span>
+                      {isExpanded ? (
+                        <ChevronDown className={`h-4 w-4 ${textMuted}`} />
+                      ) : (
+                        <ChevronRight className={`h-4 w-4 ${textMuted}`} />
+                      )}
+                    </>
+                  )}
+                </button>
+              )}
 
-              {/* Routes */}
-              {isExpanded && !isCollapsed && (
+              {/* Routes - Só mostra se tiver mais de 1 rota */}
+              {!hasOnlyOneRoute && isExpanded && !isCollapsed && (
                 <div className="ml-2 mt-1 space-y-0.5">
                   {category.routes.map((route, routeIndex) => {
                     const RouteIcon = route.icon

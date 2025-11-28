@@ -190,7 +190,7 @@ export function HomePage() {
   const ctaFade = useFadeIn({ threshold: 0.3 })
 
   return (
-    <div className="min-h-screen bg-[#0B0D16] relative overflow-hidden" data-orx-ignore="true">
+    <div className="min-h-screen bg-[#0B0D16] relative overflow-hidden dark" data-orx-ignore="true" data-theme="dark">
       {/* Animated background glow - Dark Glass Style */}
       <div className="fixed inset-0 pointer-events-none">
         <div

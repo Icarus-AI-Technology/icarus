@@ -10,34 +10,10 @@ export interface NeuInputProps
 
 /**
  * NeuInput - Neumorphic Input Component
+ * Dark Glass Medical Design System
  *
  * An input component with neumorphic design system following ICARUS patterns.
  * Supports labels, error messages, and helper text.
- *
- * @example
- * // Basic input with label
- * <NeuInput
- *   label="Nome do Produto"
- *   placeholder="Ex: Prótese de Joelho"
- *   type="text"
- * />
- *
- * @example
- * // Input with error
- * <NeuInput
- *   label="Email"
- *   type="email"
- *   error="Email inválido"
- *   placeholder="seu@email.com"
- * />
- *
- * @example
- * // Input with helper text
- * <NeuInput
- *   label="Código"
- *   placeholder="PRO-001"
- *   helperText="Formato: PRO-XXX"
- * />
  */
 export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
   (
@@ -57,7 +33,7 @@ export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#94A3B8] mb-2">
             {label}
           </label>
         )}
@@ -66,15 +42,15 @@ export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
           type={type}
           className={cn(
             'w-full px-4 py-2.5 rounded-xl',
-            'bg-gray-50 text-gray-900',
-            'shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
+            'bg-[#1A1F35] text-white',
+            'shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.02)]',
             'border border-transparent',
             'transition-all duration-200',
-            'placeholder:text-gray-400',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'placeholder:text-[#64748B]',
+            'focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             hasError &&
-              'border-red-300 focus:ring-red-500 shadow-[inset_4px_4px_8px_rgba(239,68,68,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
+              'border-red-500/50 focus:ring-red-500 shadow-[inset_4px_4px_8px_rgba(239,68,68,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.02)]',
             className
           )}
           disabled={disabled}
@@ -87,7 +63,7 @@ export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
         {error && (
           <p
             id={`${props.id}-error`}
-            className="mt-1.5 text-sm text-red-600"
+            className="mt-1.5 text-sm text-red-400"
             role="alert"
           >
             {error}
@@ -96,7 +72,7 @@ export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
         {helperText && !error && (
           <p
             id={`${props.id}-helper`}
-            className="mt-1.5 text-sm text-gray-500"
+            className="mt-1.5 text-sm text-[#64748B]"
           >
             {helperText}
           </p>

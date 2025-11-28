@@ -13,27 +13,10 @@ export interface NeuTextareaProps
 
 /**
  * NeuTextarea - Neumorphic Textarea Component
+ * Dark Glass Medical Design System
  *
  * A textarea component with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports labels, character count, validation, and resizing options.
- *
- * @example
- * // Basic textarea
- * <NeuTextarea
- *   label="Observações"
- *   placeholder="Digite suas observações..."
- *   rows={4}
- * />
- *
- * @example
- * // Textarea with character count
- * <NeuTextarea
- *   label="Descrição"
- *   placeholder="Descreva o produto..."
- *   maxLength={500}
- *   showCharCount
- *   error={errors.descricao}
- * />
  */
 export const NeuTextarea = React.forwardRef<
   HTMLTextAreaElement,
@@ -70,7 +53,7 @@ export const NeuTextarea = React.forwardRef<
       <div className="w-full">
         {/* Label */}
         {label && (
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#94A3B8] mb-2">
             {label}
           </label>
         )}
@@ -83,15 +66,15 @@ export const NeuTextarea = React.forwardRef<
           maxLength={maxLength}
           className={cn(
             'w-full px-4 py-2.5 rounded-xl',
-            'bg-gray-50 text-gray-900',
-            'shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
+            'bg-[#1A1F35] text-white',
+            'shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.02)]',
             'border border-transparent',
             'transition-all duration-200',
-            'placeholder:text-gray-400',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
+            'placeholder:text-[#64748B]',
+            'focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             hasError &&
-              'border-red-300 focus:ring-red-500 shadow-[inset_4px_4px_8px_rgba(239,68,68,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
+              'border-red-500/50 focus:ring-red-500 shadow-[inset_4px_4px_8px_rgba(239,68,68,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.02)]',
             resizeClasses[resize],
             className
           )}
@@ -111,12 +94,12 @@ export const NeuTextarea = React.forwardRef<
         <div className="flex items-center justify-between mt-1.5">
           <div className="flex-1">
             {error && (
-              <p id={`${props.id}-error`} className="text-sm text-red-600" role="alert">
+              <p id={`${props.id}-error`} className="text-sm text-red-400" role="alert">
                 {error}
               </p>
             )}
             {helperText && !error && (
-              <p id={`${props.id}-helper`} className="text-sm text-gray-500">
+              <p id={`${props.id}-helper`} className="text-sm text-[#64748B]">
                 {helperText}
               </p>
             )}
@@ -126,7 +109,7 @@ export const NeuTextarea = React.forwardRef<
             <div
               className={cn(
                 'text-sm',
-                currentLength > maxLength * 0.9 ? 'text-orange-600' : 'text-gray-500'
+                currentLength > maxLength * 0.9 ? 'text-orange-400' : 'text-[#64748B]'
               )}
             >
               {currentLength} / {maxLength}

@@ -16,41 +16,10 @@ export interface NeuModalProps {
 
 /**
  * NeuModal - Neumorphic Modal Component
+ * Dark Glass Medical Design System
  *
  * A modal dialog with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports multiple sizes, custom footers, and overlay interactions.
- *
- * @example
- * // Basic modal
- * <NeuModal
- *   open={isOpen}
- *   onClose={() => setIsOpen(false)}
- *   title="Confirmar ação"
- *   description="Tem certeza que deseja continuar?"
- * >
- *   <p>Conteúdo do modal</p>
- * </NeuModal>
- *
- * @example
- * // Modal with custom footer
- * <NeuModal
- *   open={isOpen}
- *   onClose={() => setIsOpen(false)}
- *   title="Editar Produto"
- *   size="lg"
- *   footer={
- *     <div className="flex gap-3 justify-end">
- *       <NeuButton variant="secondary" onClick={handleCancel}>
- *         Cancelar
- *       </NeuButton>
- *       <NeuButton variant="primary" onClick={handleSave}>
- *         Salvar
- *       </NeuButton>
- *     </div>
- *   }
- * >
- *   <form>...</form>
- * </NeuModal>
  */
 export const NeuModal: React.FC<NeuModalProps> = ({
   open,
@@ -107,7 +76,7 @@ export const NeuModal: React.FC<NeuModalProps> = ({
     >
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         onClick={closeOnOverlayClick ? onClose : undefined}
         aria-hidden="true"
       />
@@ -115,9 +84,9 @@ export const NeuModal: React.FC<NeuModalProps> = ({
       {/* Modal Content */}
       <div
         className={cn(
-          'relative w-full bg-gradient-to-br from-white to-gray-50',
+          'relative w-full bg-[#15192B]',
           'rounded-2xl',
-          'shadow-[12px_12px_24px_rgba(0,0,0,0.15),-12px_-12px_24px_rgba(255,255,255,1)]',
+          'shadow-[12px_12px_24px_rgba(0,0,0,0.5),-8px_-8px_20px_rgba(255,255,255,0.02)]',
           'max-h-[90vh] overflow-hidden flex flex-col',
           'animate-in fade-in zoom-in-95 duration-200',
           sizeClasses[size]
@@ -125,12 +94,12 @@ export const NeuModal: React.FC<NeuModalProps> = ({
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-start justify-between p-6 border-b border-gray-200">
+          <div className="flex items-start justify-between p-6 border-b border-white/5">
             <div className="flex-1">
               {title && (
                 <h2
                   id="modal-title"
-                  className="text-xl font-semibold text-gray-900"
+                  className="text-xl font-semibold text-white"
                 >
                   {title}
                 </h2>
@@ -138,7 +107,7 @@ export const NeuModal: React.FC<NeuModalProps> = ({
               {description && (
                 <p
                   id="modal-description"
-                  className="mt-1 text-sm text-gray-600"
+                  className="mt-1 text-sm text-[#94A3B8]"
                 >
                   {description}
                 </p>
@@ -148,11 +117,11 @@ export const NeuModal: React.FC<NeuModalProps> = ({
               <button
                 onClick={onClose}
                 className={cn(
-                  'ml-4 p-2 rounded-xl text-gray-400 hover:text-gray-600',
+                  'ml-4 p-2 rounded-xl text-[#64748B] hover:text-white',
                   'transition-all duration-200',
-                  'shadow-[4px_4px_8px_rgba(0,0,0,0.08),-4px_-4px_8px_rgba(255,255,255,0.9)]',
-                  'hover:shadow-[6px_6px_12px_rgba(0,0,0,0.12),-6px_-6px_12px_rgba(255,255,255,0.95)]',
-                  'focus:outline-none focus:ring-2 focus:ring-primary-500'
+                  'shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]',
+                  'hover:shadow-[6px_6px_12px_rgba(0,0,0,0.4),-4px_-4px_10px_rgba(255,255,255,0.02)]',
+                  'focus:outline-none focus:ring-2 focus:ring-[#6366F1]'
                 )}
                 aria-label="Close modal"
               >
@@ -163,13 +132,13 @@ export const NeuModal: React.FC<NeuModalProps> = ({
         )}
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 text-white">
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="p-6 border-t border-gray-200 bg-gray-50/50">
+          <div className="p-6 border-t border-white/5 bg-[#1A1F35]">
             {footer}
           </div>
         )}

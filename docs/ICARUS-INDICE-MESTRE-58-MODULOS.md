@@ -468,7 +468,67 @@ Exemplos:
 
 ---
 
+---
+
+## 🆕 ATUALIZAÇÕES RECENTES (v5.0.3 - 28/11/2025)
+
+### Novos Módulos/Sub-módulos Implementados
+
+| Módulo | Arquivo | Descrição |
+|--------|---------|-----------|
+| **Smart View Dashboard** | `SmartViewDashboard.tsx` | Dashboard com ML nativo |
+| **Manufatura MRP** | `ManufaturaLeveMRP.tsx` | MRP integrado para kits |
+| **Gestão Documentos Qualidade** | `GestaoDocumentosQualidade.tsx` | Docs ANVISA + Cartas Comercialização |
+
+### Agentes IA Implementados (9)
+
+| Agente | Arquivo | Funcionalidade |
+|--------|---------|----------------|
+| **TrainingTutor** | `training-tutor.ts` | Treinamento RDC 59 |
+| **TestCertifier** | `test-certifier.ts` | Certificação digital |
+| **ErrorPredictor** | `error-predictor.ts` | Previsão de falhas |
+| **AutoCorrector** | `auto-corrector.ts` | Correção automática |
+| **UserGuide** | `user-guide.ts` | Onboarding |
+| **LogAuditor** | `log-auditor.ts` | Auditoria logs |
+| **FraudDetector** | `fraud-detector.ts` | Detecção fraudes |
+| **AnvisaTutor** | `anvisa-tutor.ts` | Especialista ANVISA |
+| **BaseAgent** | `base-agent.ts` | Framework base |
+
+### Integrações Adicionadas
+
+- ✅ Microsoft Graph API (Outlook)
+- ✅ WhatsApp Bot
+- ✅ Voice Commands (Web Speech API)
+- ✅ Blockchain Audit Trail
+- ✅ Redis Cache
+- ✅ BI Export (Power BI, Tableau)
+- ✅ API Gateway Templates (SAP)
+
+### Módulo Cirurgias - Sub-módulos
+
+| Sub-módulo | Arquivo | Status |
+|------------|---------|--------|
+| KanbanCirurgias | `KanbanCirurgias.tsx` | ✅ Completo |
+| MapaCirurgias | `MapaCirurgias.tsx` | ✅ Completo |
+| CadastroPaciente | `CadastroPaciente.tsx` | ✅ Completo |
+| KitOPMEInteligente | `KitOPMEInteligente.tsx` | ✅ Completo |
+| DashboardCirurgico | `DashboardCirurgico.tsx` | ✅ Completo |
+| AutorizacaoPrevia | `AutorizacaoPrevia.tsx` | ✅ Completo |
+| FontesPagadoras | `FontesPagadoras.tsx` | ✅ Completo |
+| RastreamentoRFID | `RastreamentoRFID.tsx` | ✅ Completo |
+| PortaisOPME | `PortaisOPME.tsx` | ✅ Completo |
+
+### Módulo Qualidade - Funcionalidades
+
+- ✅ Upload de documentos gerais
+- ✅ Documentos ANVISA obrigatórios (AFE, AE, Licenças)
+- ✅ Cartas de Comercialização com validade
+- ✅ Alertas preditivos (90/60/30/15 dias)
+- ✅ IA preditiva para renovações
+
+---
+
 **Documento mantido por:** Equipe ICARUS Desenvolvimento  
-**Última atualização:** 23 de Novembro de 2025  
-**Versão:** 1.0.0  
+**Última atualização:** 28 de Novembro de 2025  
+**Versão:** 1.1.0  
 **Status:** ✅ Final

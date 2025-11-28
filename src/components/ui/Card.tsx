@@ -1,31 +1,25 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { useTheme } from "@/hooks/useTheme"
 
 /**
  * Card Component - Dark Glass Medical Design System
  * 
  * ICARUS v5.1 - Neumorphic 3D card with no borders
- * Uses useTheme hook for proper dark/light mode support
+ * SEMPRE usa modo dark - Dark Glass Medical Design System
  */
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, style, ...props }, ref) => {
-    const { isDark } = useTheme()
-    
     return (
       <div
         ref={ref}
         className={cn(
-          "rounded-2xl transition-all duration-300",
-          isDark ? "text-white" : "text-slate-900",
+          "rounded-2xl transition-all duration-300 text-white",
           className
         )}
         style={{
-          backgroundColor: isDark ? '#15192B' : '#FFFFFF',
-          boxShadow: isDark 
-            ? '8px 8px 16px rgba(0,0,0,0.4), -6px -6px 14px rgba(255,255,255,0.02)'
-            : '8px 8px 16px rgba(0,0,0,0.08), -6px -6px 14px rgba(255,255,255,0.9)',
+          backgroundColor: '#15192B',
+          boxShadow: '8px 8px 16px rgba(0,0,0,0.4), -6px -6px 14px rgba(255,255,255,0.02)',
           ...style
         }}
         {...props}
@@ -39,8 +33,6 @@ const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { isDark } = useTheme()
-  
   return (
     <div
       ref={ref}
@@ -49,7 +41,7 @@ const CardHeader = React.forwardRef<
         className
       )}
       style={{
-        borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`
+        borderBottom: '1px solid rgba(255,255,255,0.05)'
       }}
       {...props}
     />
@@ -61,14 +53,11 @@ const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => {
-  const { isDark } = useTheme()
-  
   return (
     <h3
       ref={ref}
       className={cn(
-        "text-lg font-semibold leading-none tracking-tight",
-        isDark ? "text-white" : "text-slate-900",
+        "text-lg font-semibold leading-none tracking-tight text-white",
         className
       )}
       {...props}
@@ -81,14 +70,11 @@ const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { isDark } = useTheme()
-  
   return (
     <p
       ref={ref}
       className={cn(
-        "text-sm",
-        isDark ? "text-[#94A3B8]" : "text-slate-600",
+        "text-sm text-[#94A3B8]",
         className
       )}
       {...props}
@@ -109,8 +95,6 @@ const CardFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { isDark } = useTheme()
-  
   return (
     <div
       ref={ref}
@@ -119,7 +103,7 @@ const CardFooter = React.forwardRef<
         className
       )}
       style={{
-        borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`
+        borderTop: '1px solid rgba(255,255,255,0.05)'
       }}
       {...props}
     />

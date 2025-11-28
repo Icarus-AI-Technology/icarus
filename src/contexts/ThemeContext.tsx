@@ -4,8 +4,11 @@
  * Controla modo claro/escuro em todo o sistema
  * Dark Glass Medical Design System
  * 
- * @version 5.1.0
- * @date 2025-11-26
+ * NOTA: Por padrão, o sistema usa SEMPRE modo dark.
+ * O modo claro está desabilitado para garantir consistência visual.
+ * 
+ * @version 5.1.1
+ * @date 2025-11-28
  */
 
 import { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
@@ -25,49 +28,44 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(undefine
 const THEME_KEY = 'icarus-theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // Check localStorage on init
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(THEME_KEY) as Theme | null;
-      if (stored) return stored;
-      
-      // Check system preference
-      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-        return 'light';
-      }
-    }
-    return 'dark'; // Default to dark
-  });
+  // SEMPRE iniciar com dark mode - Dark Glass Medical Design System
+  const [theme, setThemeState] = useState<Theme>('dark');
 
-  // Apply theme to document
+  // Apply theme to document - SEMPRE dark
   useEffect(() => {
     const root = document.documentElement;
     
-    if (theme === 'light') {
-      root.classList.add('light');
-      root.classList.remove('dark');
-    } else {
-      root.classList.add('dark');
-      root.classList.remove('light');
-    }
+    // Forçar modo dark SEMPRE
+    root.classList.add('dark');
+    root.classList.remove('light');
     
-    localStorage.setItem(THEME_KEY, theme);
-  }, [theme]);
+    // Também aplicar no body para garantir
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+    
+    // Definir atributo data-theme para CSS
+    root.setAttribute('data-theme', 'dark');
+    
+    localStorage.setItem(THEME_KEY, 'dark');
+  }, []);
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    setThemeState(newTheme);
+  // Mesmo que setTheme seja chamado, forçar dark
+  const setTheme = useCallback((_newTheme: Theme) => {
+    // Ignorar tentativas de mudar para light - sempre manter dark
+    setThemeState('dark');
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setThemeState(prev => prev === 'dark' ? 'light' : 'dark');
+    // Desabilitado - sempre dark
+    // setThemeState(prev => prev === 'dark' ? 'light' : 'dark');
   }, []);
 
   return (
     <ThemeContext.Provider value={{ 
-      theme, 
+      theme: 'dark', // Sempre retornar dark
       toggleTheme, 
       setTheme,
-      isDark: theme === 'dark'
+      isDark: true // Sempre true
     }}>
       {children}
     </ThemeContext.Provider>

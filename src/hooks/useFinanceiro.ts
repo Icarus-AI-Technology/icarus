@@ -60,3 +60,42 @@ export function useLancamentosContabeis() {
   })
 }
 
+/**
+ * Hook agregador para gestão financeira
+ * Retorna todos os hooks financeiros em um único objeto
+ */
+export function useFinanceiro() {
+  const contasReceber = useContasReceber()
+  const contasPagar = useContasPagar()
+  const notasFiscais = useNotasFiscais()
+  const boletos = useBoletos()
+  const lancamentos = useLancamentosContabeis()
+
+  return {
+    contasReceber,
+    contasPagar,
+    notasFiscais,
+    boletos,
+    lancamentos,
+    // Estatísticas agregadas
+    stats: {
+      totalReceber: contasReceber.data?.reduce((sum, c) => sum + (c.valor || 0), 0) ?? 0,
+      totalPagar: contasPagar.data?.reduce((sum, c) => sum + (c.valor || 0), 0) ?? 0,
+      totalNotasFiscais: notasFiscais.data?.length ?? 0,
+      totalBoletos: boletos.data?.length ?? 0,
+      totalLancamentos: lancamentos.data?.length ?? 0,
+    },
+    // Status de carregamento
+    isLoading: contasReceber.isLoading || contasPagar.isLoading || 
+               notasFiscais.isLoading || boletos.isLoading || lancamentos.isLoading,
+    // Erros
+    errors: [
+      contasReceber.error,
+      contasPagar.error,
+      notasFiscais.error,
+      boletos.error,
+      lancamentos.error,
+    ].filter(Boolean),
+  }
+}
+

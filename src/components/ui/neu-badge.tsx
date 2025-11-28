@@ -12,25 +12,10 @@ export interface NeuBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 /**
  * NeuBadge - Neumorphic Badge Component
+ * Dark Glass Medical Design System
  *
  * A badge component with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports multiple variants, sizes, icons, and dot indicators.
- *
- * @example
- * // Basic badge
- * <NeuBadge variant="success">Ativo</NeuBadge>
- *
- * @example
- * // Badge with icon
- * <NeuBadge variant="primary" icon={Check} size="md">
- *   Aprovado
- * </NeuBadge>
- *
- * @example
- * // Badge with dot indicator
- * <NeuBadge variant="warning" dot>
- *   Pendente
- * </NeuBadge>
  */
 export const NeuBadge = React.forwardRef<HTMLSpanElement, NeuBadgeProps>(
   (
@@ -46,26 +31,26 @@ export const NeuBadge = React.forwardRef<HTMLSpanElement, NeuBadgeProps>(
     },
     ref
   ) => {
-    // Variant styles
+    // Variant styles - Dark Glass Medical
     const variantClasses = {
       primary: outline
-        ? 'bg-primary-50 text-primary-700 border-primary-200'
-        : 'bg-primary-500 text-white',
+        ? 'bg-[#6366F1]/20 text-[#818CF8] border-[#6366F1]/30'
+        : 'bg-[#6366F1] text-white',
       success: outline
-        ? 'bg-success-50 text-success-700 border-success-200'
-        : 'bg-success-500 text-white',
+        ? 'bg-[#10B981]/20 text-[#10B981] border-[#10B981]/30'
+        : 'bg-[#10B981] text-white',
       warning: outline
-        ? 'bg-warning-50 text-warning-700 border-warning-200'
-        : 'bg-warning-500 text-white',
+        ? 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/30'
+        : 'bg-[#F59E0B] text-white',
       danger: outline
-        ? 'bg-danger-50 text-danger-700 border-danger-200'
-        : 'bg-danger-500 text-white',
+        ? 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/30'
+        : 'bg-[#EF4444] text-white',
       info: outline
-        ? 'bg-blue-50 text-blue-700 border-blue-200'
-        : 'bg-blue-500 text-white',
+        ? 'bg-[#3B82F6]/20 text-[#3B82F6] border-[#3B82F6]/30'
+        : 'bg-[#3B82F6] text-white',
       neutral: outline
-        ? 'bg-gray-50 text-gray-700 border-gray-200'
-        : 'bg-gray-500 text-white',
+        ? 'bg-[#64748B]/20 text-[#94A3B8] border-[#64748B]/30'
+        : 'bg-[#64748B] text-white',
     };
 
     // Size styles
@@ -92,7 +77,7 @@ export const NeuBadge = React.forwardRef<HTMLSpanElement, NeuBadgeProps>(
         ref={ref}
         className={cn(
           'inline-flex items-center font-medium rounded-lg',
-          'shadow-[2px_2px_4px_rgba(0,0,0,0.1),-2px_-2px_4px_rgba(255,255,255,0.7)]',
+          'shadow-[2px_2px_4px_rgba(0,0,0,0.3),-1px_-1px_3px_rgba(255,255,255,0.02)]',
           'transition-all duration-200',
           outline && 'border',
           variantClasses[variant],
