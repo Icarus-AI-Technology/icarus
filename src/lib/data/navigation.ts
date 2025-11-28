@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react'
 import {
   LayoutDashboard, Package, Calendar, DollarSign, Users,
   ShoppingCart, FileText, Settings, BarChart3, Truck, Shield,
@@ -6,31 +7,93 @@ import {
   Globe, Lock, ClipboardCheck, Heart, Boxes, Eye, Mail,
   Plug, ClipboardList, PieChart, Briefcase, Scale,
   Receipt, FileCheck, Container, FileCog, Database,
-  UserPlus, Target, Megaphone, HeartHandshake, Mic, Gauge
+  UserPlus, Target, Megaphone, HeartHandshake, Mic, Gauge,
+  Factory
 } from 'lucide-react'
 import { NavigationCategory } from '../types/navigation'
 
 /**
  * ICARUS v5.0 - Navegação Completa dos 58 Módulos
  * Organização: 10 categorias conforme documentação oficial
- * Fase 0: Apenas Dashboard implementado, demais módulos serão implementados em fases
+ * Referência: ICARUS-58-MODULOS-DOCUMENTACAO-TECNICA-COMPLETA.md
+ * Status: 100% dos módulos implementados
  */
 export const navigationConfig = [
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 1: DASHBOARD & ANALYTICS (6 módulos - #01 a #06)
+  // ═══════════════════════════════════════════════════════════════════
   {
-    name: 'Dashboard Principal',
+    name: 'Dashboard & Analytics',
     icon: LayoutDashboard,
     routes: [
       {
         id: 'dashboard',
         path: '/dashboard',
-        name: 'Dashboard',
+        name: 'Dashboard Principal',
         icon: LayoutDashboard,
-        category: 'Dashboard Principal',
+        category: 'Dashboard & Analytics',
         description: 'Visão geral do sistema ICARUS v5.0 com KPIs, ações rápidas e insights de IA',
+        isImplemented: true
+      },
+      {
+        id: 'kpi-dashboard',
+        path: '/kpi-dashboard',
+        name: 'KPI Dashboard',
+        icon: PieChart,
+        category: 'Dashboard & Analytics',
+        description: 'Dashboard executivo consolidado de KPIs',
+        isImplemented: true
+      },
+      {
+        id: 'analytics-bi',
+        path: '/analytics-bi',
+        name: 'Analytics BI',
+        icon: BarChart3,
+        category: 'Dashboard & Analytics',
+        description: 'Business Intelligence e análises avançadas',
+        isImplemented: true
+      },
+      {
+        id: 'analytics-predicao',
+        path: '/analytics-predicao',
+        name: 'Analytics Predição',
+        icon: TrendingUp,
+        category: 'Dashboard & Analytics',
+        description: 'Predições e forecasting com IA (Prophet, ARIMA)',
+        isImplemented: true
+      },
+      {
+        id: 'bi-dashboard-interactive',
+        path: '/bi-dashboard-interactive',
+        name: 'BI Dashboard Interactive',
+        icon: Activity,
+        category: 'Dashboard & Analytics',
+        description: 'Dashboard BI interativo e customizável',
+        isImplemented: true
+      },
+      {
+        id: 'relatorios-executivos',
+        path: '/relatorios-executivos',
+        name: 'Relatórios Executivos',
+        icon: FileText,
+        category: 'Dashboard & Analytics',
+        description: 'Relatórios executivos para diretoria',
+        isImplemented: true
+      },
+      {
+        id: 'smart-view-dashboard',
+        path: '/smart-view-dashboard',
+        name: 'Smart View ML',
+        icon: Brain,
+        category: 'Dashboard & Analytics',
+        description: 'Dashboard inteligente com insights de Machine Learning',
         isImplemented: true
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 2: CADASTROS & GESTÃO (8 módulos - #07 a #14)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Cadastros & Gestão',
     icon: ClipboardList,
@@ -109,6 +172,9 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 3: CIRURGIAS & PROCEDIMENTOS (4 módulos - #15 a #18)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Cirurgias & Procedimentos',
     icon: Calendar,
@@ -151,6 +217,10 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 4: ESTOQUE & CONSIGNAÇÃO (6 módulos - #19 a #23 + #58)
+  // Nota: Logística Avançada (#58) movido para cá por decisão do usuário
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Estoque & Consignação',
     icon: Package,
@@ -208,9 +278,21 @@ export const navigationConfig = [
         category: 'Estoque & Consignação',
         description: 'Gestão logística completa com roteirização',
         isImplemented: true
+      },
+      {
+        id: 'manufatura-mrp',
+        path: '/manufatura-mrp',
+        name: 'Manufatura & MRP',
+        icon: Factory,
+        category: 'Estoque & Consignação',
+        description: 'Manufatura leve de kits OPME e planejamento MRP',
+        isImplemented: true
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 5: COMPRAS & FORNECEDORES (4 módulos - #24 a #27)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Compras & Fornecedores',
     icon: ShoppingCart,
@@ -253,6 +335,9 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 6: VENDAS & CRM (5 módulos - #28 a #32)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Vendas & CRM',
     icon: Briefcase,
@@ -304,6 +389,9 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 7: FINANCEIRO & FATURAMENTO (7 módulos - #33 a #39)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Financeiro & Faturamento',
     icon: DollarSign,
@@ -373,6 +461,9 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 8: COMPLIANCE & AUDITORIA (3 módulos - #40 a #42)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Compliance & Auditoria',
     icon: Lock,
@@ -406,6 +497,9 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 9: IA & AUTOMAÇÃO (8 módulos - #43 a #50)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'IA & Automação',
     icon: Brain,
@@ -484,6 +578,10 @@ export const navigationConfig = [
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA 10: SISTEMA & INTEGRAÇÕES (7 módulos - #51 a #57)
+  // Nota: Módulos de Analytics movidos para "Dashboard & Analytics"
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Sistema & Integrações',
     icon: Settings,
@@ -516,57 +614,12 @@ export const navigationConfig = [
         isImplemented: true
       },
       {
-        id: 'kpi-dashboard',
-        path: '/kpi-dashboard',
-        name: 'KPI Dashboard',
-        icon: PieChart,
-        category: 'Sistema & Integrações',
-        description: 'Dashboard executivo de KPIs',
-        isImplemented: true
-      },
-      {
-        id: 'analytics-bi',
-        path: '/analytics-bi',
-        name: 'Analytics BI',
-        icon: BarChart3,
-        category: 'Sistema & Integrações',
-        description: 'Business Intelligence e análises avançadas',
-        isImplemented: true
-      },
-      {
-        id: 'analytics-predicao',
-        path: '/analytics-predicao',
-        name: 'Analytics Predição',
-        icon: TrendingUp,
-        category: 'Sistema & Integrações',
-        description: 'Predições e forecasting com IA',
-        isImplemented: true
-      },
-      {
-        id: 'bi-dashboard-interactive',
-        path: '/bi-dashboard-interactive',
-        name: 'BI Dashboard Interactive',
-        icon: Activity,
-        category: 'Sistema & Integrações',
-        description: 'Dashboard BI interativo e customizável',
-        isImplemented: true
-      },
-      {
-        id: 'relatorios-executivos',
-        path: '/relatorios-executivos',
-        name: 'Relatórios Executivos',
-        icon: FileText,
-        category: 'Sistema & Integrações',
-        description: 'Relatórios executivos para diretoria',
-        isImplemented: true
-      },
-      {
         id: 'integracoes-avancadas',
         path: '/integracoes-avancadas',
         name: 'Integrações Avançadas',
         icon: Plug,
         category: 'Sistema & Integrações',
-        description: 'Integrações com sistemas externos',
+        description: 'Integrações com sistemas externos (SAP, TOTVS, ERPs)',
         isImplemented: true
       },
       {
@@ -584,7 +637,7 @@ export const navigationConfig = [
         name: 'API Gateway',
         icon: Webhook,
         category: 'Sistema & Integrações',
-        description: 'Gateway de APIs e webhooks',
+        description: 'Gateway de APIs, rate limiting e documentação',
         isImplemented: true
       },
       {
@@ -593,11 +646,14 @@ export const navigationConfig = [
         name: 'Webhooks Manager',
         icon: Zap,
         category: 'Sistema & Integrações',
-        description: 'Gerenciamento de webhooks',
+        description: 'Gerenciamento de webhooks e eventos',
         isImplemented: true
       }
     ]
   },
+  // ═══════════════════════════════════════════════════════════════════
+  // CATEGORIA EXTRA: DEV TOOLS (2 módulos - não documentados oficialmente)
+  // ═══════════════════════════════════════════════════════════════════
   {
     name: 'Dev Tools',
     icon: Eye,
@@ -624,29 +680,41 @@ export const navigationConfig = [
   }
 ] as const satisfies readonly NavigationCategory[]
 
-// Helper to get all routes flat
-type NavigationRoute = (typeof navigationConfig)[number]['routes'][number]
-type ImplementedRoute = Extract<NavigationRoute, { isImplemented: true }>
-
-export type ImplementedRouteId = ImplementedRoute['id']
-
-export const implementedRouteIds: ImplementedRouteId[] = navigationConfig.flatMap(
-  category =>
-    category.routes
-      .filter((route): route is ImplementedRoute => route.isImplemented === true)
-      .map(route => route.id)
-)
-
-export const getAllRoutes = () => {
-  return navigationConfig.flatMap(category => category.routes)
+// Helper types - using interface for better extensibility
+interface RouteItem {
+  id: string
+  path: string
+  name: string
+  icon: ComponentType<{ className?: string }>
+  category: string
+  description: string
+  isImplemented: boolean
 }
 
+// Get all routes as a flat array
+export function getAllRoutes(): RouteItem[] {
+  const routes: RouteItem[] = []
+  for (const category of navigationConfig) {
+    for (const route of category.routes) {
+      routes.push(route as RouteItem)
+    }
+  }
+  return routes
+}
+
+// Get all implemented route IDs
+export const implementedRouteIds: string[] = getAllRoutes()
+  .filter(route => route.isImplemented)
+  .map(route => route.id)
+
+export type ImplementedRouteId = (typeof implementedRouteIds)[number]
+
 // Helper to get route by ID
-export const getRouteById = (id: string) => {
+export function getRouteById(id: string): RouteItem | undefined {
   return getAllRoutes().find(route => route.id === id)
 }
 
 // Helper to get implemented routes
-export const getImplementedRoutes = () => {
+export function getImplementedRoutes(): RouteItem[] {
   return getAllRoutes().filter(route => route.isImplemented)
 }

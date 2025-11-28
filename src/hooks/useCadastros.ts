@@ -91,3 +91,55 @@ export function useContratos() {
   })
 }
 
+/**
+ * Hook agregador para gestão de cadastros
+ * Retorna todos os hooks de cadastro em um único objeto
+ */
+export function useCadastros() {
+  const medicos = useMedicos()
+  const hospitais = useHospitais()
+  const pacientes = usePacientes()
+  const convenios = useConvenios()
+  const fornecedores = useFornecedores()
+  const produtosOPME = useProdutosOPME()
+  const usuarios = useUsuarios()
+  const contratos = useContratos()
+
+  return {
+    medicos,
+    hospitais,
+    pacientes,
+    convenios,
+    fornecedores,
+    produtosOPME,
+    usuarios,
+    contratos,
+    // Estatísticas agregadas
+    stats: {
+      totalMedicos: medicos.data?.length ?? 0,
+      totalHospitais: hospitais.data?.length ?? 0,
+      totalPacientes: pacientes.data?.length ?? 0,
+      totalConvenios: convenios.data?.length ?? 0,
+      totalFornecedores: fornecedores.data?.length ?? 0,
+      totalProdutos: produtosOPME.data?.length ?? 0,
+      totalUsuarios: usuarios.data?.length ?? 0,
+      totalContratos: contratos.data?.length ?? 0,
+    },
+    // Status de carregamento
+    isLoading: medicos.isLoading || hospitais.isLoading || pacientes.isLoading || 
+               convenios.isLoading || fornecedores.isLoading || produtosOPME.isLoading ||
+               usuarios.isLoading || contratos.isLoading,
+    // Erros
+    errors: [
+      medicos.error,
+      hospitais.error,
+      pacientes.error,
+      convenios.error,
+      fornecedores.error,
+      produtosOPME.error,
+      usuarios.error,
+      contratos.error,
+    ].filter(Boolean),
+  }
+}
+

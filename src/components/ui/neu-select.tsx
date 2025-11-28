@@ -23,31 +23,10 @@ export interface NeuSelectProps {
 
 /**
  * NeuSelect - Neumorphic Select Component
+ * Dark Glass Medical Design System
  *
  * A select dropdown with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports labels, validation, and custom styling.
- *
- * @example
- * // Basic select
- * <NeuSelect
- *   label="Status"
- *   placeholder="Selecione um status"
- *   options={[
- *     { value: 'ativo', label: 'Ativo' },
- *     { value: 'inativo', label: 'Inativo' },
- *   ]}
- *   value={status}
- *   onChange={setStatus}
- * />
- *
- * @example
- * // Select with error
- * <NeuSelect
- *   label="Categoria"
- *   options={categories}
- *   error="Categoria obrigatória"
- *   required
- * />
  */
 export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
   (
@@ -95,9 +74,9 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
     return (
       <div ref={ref} className={cn('w-full', className)}>
         {label && (
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#94A3B8] mb-2">
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className="text-red-400 ml-1">*</span>}
           </label>
         )}
 
@@ -109,14 +88,14 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
             disabled={disabled}
             className={cn(
               'w-full px-4 py-2.5 rounded-xl text-left',
-              'bg-gray-50 text-gray-900',
-              'shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
+              'bg-[#1A1F35] text-white',
+              'shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.02)]',
               'border border-transparent',
               'transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
+              'focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               hasError &&
-                'border-red-300 focus:ring-red-500 shadow-[inset_4px_4px_8px_rgba(239,68,68,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]'
+                'border-red-500/50 focus:ring-red-500 shadow-[inset_4px_4px_8px_rgba(239,68,68,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.02)]'
             )}
             aria-haspopup="listbox"
             aria-expanded={isOpen}
@@ -124,14 +103,14 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
             <div className="flex items-center justify-between">
               <span
                 className={cn(
-                  selectedOption ? 'text-gray-900' : 'text-gray-400'
+                  selectedOption ? 'text-white' : 'text-[#64748B]'
                 )}
               >
                 {selectedOption?.label || placeholder}
               </span>
               <ChevronDown
                 className={cn(
-                  'w-5 h-5 text-gray-400 transition-transform',
+                  'w-5 h-5 text-[#64748B] transition-transform',
                   isOpen && 'rotate-180'
                 )}
               />
@@ -143,9 +122,9 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
             <div
               className={cn(
                 'absolute z-10 w-full mt-2',
-                'bg-gradient-to-br from-white to-gray-50',
+                'bg-[#1A1F35]',
                 'rounded-xl',
-                'shadow-[8px_8px_16px_rgba(0,0,0,0.1),-8px_-8px_16px_rgba(255,255,255,0.9)]',
+                'shadow-[8px_8px_16px_rgba(0,0,0,0.4),-6px_-6px_14px_rgba(255,255,255,0.02)]',
                 'max-h-60 overflow-auto',
                 'animate-in fade-in slide-in-from-top-2 duration-200'
               )}
@@ -158,11 +137,11 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
                   onClick={() => handleSelect(option)}
                   disabled={option.disabled}
                   className={cn(
-                    'w-full px-4 py-2.5 text-left',
+                    'w-full px-4 py-2.5 text-left text-white',
                     'transition-colors duration-150',
-                    'hover:bg-gray-100/70',
+                    'hover:bg-[#252B44]',
                     'disabled:opacity-50 disabled:cursor-not-allowed',
-                    option.value === value && 'bg-primary-50 text-primary-700',
+                    option.value === value && 'bg-[#6366F1]/20 text-[#818CF8]',
                     'first:rounded-t-xl last:rounded-b-xl',
                     'flex items-center justify-between'
                   )}
@@ -171,7 +150,7 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
                 >
                   <span>{option.label}</span>
                   {option.value === value && (
-                    <Check className="w-5 h-5 text-primary-500" />
+                    <Check className="w-5 h-5 text-[#6366F1]" />
                   )}
                 </button>
               ))}
@@ -181,12 +160,12 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
 
         {/* Helper/Error Text */}
         {error && (
-          <p className="mt-1.5 text-sm text-red-600" role="alert">
+          <p className="mt-1.5 text-sm text-red-400" role="alert">
             {error}
           </p>
         )}
         {helperText && !error && (
-          <p className="mt-1.5 text-sm text-gray-500">{helperText}</p>
+          <p className="mt-1.5 text-sm text-[#64748B]">{helperText}</p>
         )}
       </div>
     );

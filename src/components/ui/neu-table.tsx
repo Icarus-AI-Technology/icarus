@@ -30,30 +30,10 @@ type SortConfig = {
 
 /**
  * NeuTable - Neumorphic Table Component
+ * Dark Glass Medical Design System
  *
  * A table component with neumorphic design following ICARUS Dark Glass Medical patterns.
  * Supports sorting, custom rendering, row actions, and loading states.
- *
- * @example
- * // Basic table
- * <NeuTable
- *   data={products}
- *   columns={[
- *     { key: 'codigo', label: 'Código', sortable: true },
- *     { key: 'nome', label: 'Nome', sortable: true },
- *     { key: 'preco', label: 'Preço', render: (v) => `R$ ${v.toFixed(2)}` },
- *   ]}
- * />
- *
- * @example
- * // Table with row click
- * <NeuTable
- *   data={items}
- *   columns={columns}
- *   onRowClick={(row) => handleEdit(row)}
- *   hoverable
- *   striped
- * />
  */
 export function NeuTable<T extends Record<string, unknown>>({
   data,
@@ -99,12 +79,12 @@ export function NeuTable<T extends Record<string, unknown>>({
   // Get sort icon
   const getSortIcon = (key: string) => {
     if (!sortConfig || sortConfig.key !== key) {
-      return <ArrowUpDown className="w-4 h-4 text-gray-400" />;
+      return <ArrowUpDown className="w-4 h-4 text-[#64748B]" />;
     }
     return sortConfig.direction === 'asc' ? (
-      <ArrowUp className="w-4 h-4 text-primary-500" />
+      <ArrowUp className="w-4 h-4 text-[#6366F1]" />
     ) : (
-      <ArrowDown className="w-4 h-4 text-primary-500" />
+      <ArrowDown className="w-4 h-4 text-[#6366F1]" />
     );
   };
 
@@ -112,8 +92,8 @@ export function NeuTable<T extends Record<string, unknown>>({
     <div
       className={cn(
         'w-full rounded-2xl overflow-hidden',
-        'bg-gradient-to-br from-white to-gray-50',
-        'shadow-[8px_8px_16px_rgba(0,0,0,0.1),-8px_-8px_16px_rgba(255,255,255,0.9)]',
+        'bg-[#15192B]',
+        'shadow-[8px_8px_16px_rgba(0,0,0,0.4),-6px_-6px_14px_rgba(255,255,255,0.02)]',
         className
       )}
     >
@@ -121,14 +101,14 @@ export function NeuTable<T extends Record<string, unknown>>({
         <table className="w-full">
           {/* Header */}
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50/50">
+            <tr className="border-b border-white/5 bg-[#1A1F35]">
               {columns.map((column) => (
                 <th
                   key={column.key}
                   className={cn(
                     compact ? 'px-4 py-2' : 'px-6 py-4',
-                    'text-left text-xs font-semibold text-gray-700 uppercase tracking-wider',
-                    column.sortable && 'cursor-pointer select-none hover:bg-gray-100/50',
+                    'text-left text-xs font-semibold text-[#94A3B8] uppercase tracking-wider',
+                    column.sortable && 'cursor-pointer select-none hover:bg-[#252B44]',
                     column.headerClassName
                   )}
                   onClick={column.sortable ? () => handleSort(column.key) : undefined}
@@ -147,15 +127,15 @@ export function NeuTable<T extends Record<string, unknown>>({
             {loading ? (
               <tr>
                 <td colSpan={columns.length} className="px-6 py-12 text-center">
-                  <div className="flex items-center justify-center gap-2 text-gray-500">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-500 border-t-transparent" />
+                  <div className="flex items-center justify-center gap-2 text-[#94A3B8]">
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#6366F1] border-t-transparent" />
                     <span>Carregando...</span>
                   </div>
                 </td>
               </tr>
             ) : sortedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={columns.length} className="px-6 py-12 text-center text-[#64748B]">
                   {emptyMessage}
                 </td>
               </tr>
@@ -164,9 +144,9 @@ export function NeuTable<T extends Record<string, unknown>>({
                 <tr
                   key={rowIndex}
                   className={cn(
-                    'border-b border-gray-100 transition-colors',
-                    striped && rowIndex % 2 === 1 && 'bg-gray-50/30',
-                    hoverable && 'hover:bg-gray-100/50',
+                    'border-b border-white/5 transition-colors',
+                    striped && rowIndex % 2 === 1 && 'bg-[#1A1F35]/50',
+                    hoverable && 'hover:bg-[#252B44]',
                     onRowClick && 'cursor-pointer'
                   )}
                   onClick={onRowClick ? () => onRowClick(row, rowIndex) : undefined}
@@ -176,7 +156,7 @@ export function NeuTable<T extends Record<string, unknown>>({
                       key={column.key}
                       className={cn(
                         compact ? 'px-4 py-2' : 'px-6 py-4',
-                        'text-sm text-gray-900',
+                        'text-sm text-white',
                         column.className
                       )}
                     >

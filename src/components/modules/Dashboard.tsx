@@ -7,9 +7,11 @@ import { ModuleLoadingSkeleton } from '@/components/common/ModuleLoadingSkeleton
 import { useDashboardKPIs, useDashboardStats } from '@/hooks/queries/useDashboardData'
 import { useTheme } from '@/hooks/useTheme'
 import { useDashboardRealtime } from '@/hooks/useRealtimeSubscription'
+import { CalendarioCompacto } from './dashboard/CalendarioCompacto'
 import {
   Calendar, DollarSign, AlertCircle, BrainCircuit,
-  TrendingUp, Clock, Star, Activity, BarChart2, PieChart as PieChartIcon
+  TrendingUp, Clock, Star, Activity, BarChart2, PieChart as PieChartIcon,
+  Plus, FileText, ShoppingCart, UserPlus, Settings
 } from 'lucide-react'
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -84,123 +86,129 @@ export function Dashboard() {
         </p>
       </div>
 
-      {/* KPIs - Dark neumorphic cards with colored icons */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Cirurgias Hoje - Calendar (Cyan) */}
-        <KPICard
-          title="Cirurgias Hoje"
-          value={kpis?.surgeriesToday || 0}
-          icon={Calendar}
-          iconColor="#2DD4BF"
-          trend={{
-            value: Math.abs(kpis?.surgeriesChange || 0),
-            direction: (kpis?.surgeriesChange || 0) > 0 ? 'up' : (kpis?.surgeriesChange || 0) < 0 ? 'down' : 'stable'
-          }}
-        />
+      {/* SEÇÃO SUPERIOR: KPIs + Calendário */}
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
+        {/* KPIs - 3 colunas em desktop */}
+        <div className="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Cirurgias Hoje - Calendar (Cyan) */}
+          <KPICard
+            title="Cirurgias Hoje"
+            value={kpis?.surgeriesToday || 0}
+            icon={Calendar}
+            iconColor="#2DD4BF"
+            trend={{
+              value: Math.abs(kpis?.surgeriesChange || 0),
+              direction: (kpis?.surgeriesChange || 0) > 0 ? 'up' : (kpis?.surgeriesChange || 0) < 0 ? 'down' : 'stable'
+            }}
+          />
 
-        {/* Estoque Crítico - AlertCircle (Red) */}
-        <KPICard
-          title="Estoque Crítico"
-          value={kpis?.criticalStock || 0}
-          icon={AlertCircle}
-          iconColor="#EF4444"
-        />
+          {/* Estoque Crítico - AlertCircle (Red) */}
+          <KPICard
+            title="Estoque Crítico"
+            value={kpis?.criticalStock || 0}
+            icon={AlertCircle}
+            iconColor="#EF4444"
+          />
 
-        {/* Faturamento - DollarSign (Green) */}
-        <KPICard
-          title="Faturamento"
-          value={formatCurrency(kpis?.revenue || 0)}
-          icon={DollarSign}
-          iconColor="#10B981"
-          trend={{
-            value: kpis?.revenueChange || 0,
-            direction: 'up'
-          }}
-        />
+          {/* Faturamento - DollarSign (Green) */}
+          <KPICard
+            title="Faturamento"
+            value={formatCurrency(kpis?.revenue || 0)}
+            icon={DollarSign}
+            iconColor="#10B981"
+            trend={{
+              value: kpis?.revenueChange || 0,
+              direction: 'up'
+            }}
+          />
 
-        {/* IA Status - BrainCircuit (Purple) */}
-        <KPICard
-          title="IcarusBrain"
-          value={(kpis?.aiStatus || 'offline') === 'online' ? 'Online' : 'Offline'}
-          icon={BrainCircuit}
-          iconColor="#8B5CF6"
-        />
+          {/* IA Status - BrainCircuit (Purple) */}
+          <KPICard
+            title="IcarusBrain"
+            value={(kpis?.aiStatus || 'offline') === 'online' ? 'Online' : 'Offline'}
+            icon={BrainCircuit}
+            iconColor="#8B5CF6"
+          />
+        </div>
+
+        {/* Calendário Compacto - 1 coluna à direita */}
+        <div className="xl:col-span-1 xl:row-span-2">
+          <CalendarioCompacto />
+        </div>
+
+        {/* Ações Rápidas - 3 colunas abaixo dos KPIs */}
+        <div className="xl:col-span-3">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className={`text-lg font-semibold ${textPrimary}`}>
+                Ações Rápidas
+              </CardTitle>
+              <p className={`text-sm ${textSecondary}`}>
+                Acesso rápido às operações mais utilizadas
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-3">
+                {/* Novo Pedido */}
+                <button
+                  className="btn-quick-action flex flex-col items-center justify-center min-w-[110px] h-[85px] px-3 py-2"
+                  onClick={() => window.location.href = '/compras-gestao'}
+                >
+                  <Plus className="w-5 h-5 mb-1.5" strokeWidth={2} />
+                  <span className="text-xs font-medium">Novo Pedido</span>
+                </button>
+
+                {/* Nova NF */}
+                <button
+                  className="btn-quick-action flex flex-col items-center justify-center min-w-[110px] h-[85px] px-3 py-2"
+                  onClick={() => window.location.href = '/faturamento-nfe-completo'}
+                >
+                  <FileText className="w-5 h-5 mb-1.5" strokeWidth={2} />
+                  <span className="text-xs font-medium">Nova NF</span>
+                </button>
+
+                {/* Orçamento */}
+                <button
+                  className="btn-quick-action flex flex-col items-center justify-center min-w-[110px] h-[85px] px-3 py-2"
+                  onClick={() => window.location.href = '/cirurgias-procedimentos'}
+                >
+                  <ShoppingCart className="w-5 h-5 mb-1.5" strokeWidth={2} />
+                  <span className="text-xs font-medium">Orçamento</span>
+                </button>
+
+                {/* Cadastro */}
+                <button
+                  className="btn-quick-action flex flex-col items-center justify-center min-w-[110px] h-[85px] px-3 py-2"
+                  onClick={() => window.location.href = '/gestao-cadastros'}
+                >
+                  <UserPlus className="w-5 h-5 mb-1.5" strokeWidth={2} />
+                  <span className="text-xs font-medium">Cadastro</span>
+                </button>
+
+                {/* Relatórios */}
+                <button
+                  className="btn-quick-action flex flex-col items-center justify-center min-w-[110px] h-[85px] px-3 py-2"
+                  onClick={() => window.location.href = '/relatorios-executivos'}
+                >
+                  <BarChart2 className="w-5 h-5 mb-1.5" strokeWidth={2} />
+                  <span className="text-xs font-medium">Relatórios</span>
+                </button>
+
+                {/* Configurar */}
+                <button
+                  className="btn-quick-action flex flex-col items-center justify-center min-w-[110px] h-[85px] px-3 py-2"
+                  onClick={() => window.location.href = '/configuracoes-system'}
+                >
+                  <Settings className="w-5 h-5 mb-1.5" strokeWidth={2} />
+                  <span className="text-xs font-medium">Configurar</span>
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Ações Rápidas */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-[#6366F1]" />
-            Ações Rápidas
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Nova Cirurgia */}
-            <button
-              className={`p-4 rounded-xl text-left transition-all duration-200 ${
-                isDark
-                  ? 'bg-[#1A1F35] hover:bg-[#1F2440] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
-                  : 'bg-slate-50 hover:bg-slate-100 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
-              }`}
-              onClick={() => window.location.href = '/cirurgias-procedimentos'}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#2DD4BF]/20 flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-[#2DD4BF]" />
-                </div>
-                <div>
-                  <div className={`font-semibold ${textPrimary}`}>Nova Cirurgia</div>
-                  <div className={`text-sm ${textSecondary}`}>Agendar procedimento</div>
-                </div>
-              </div>
-            </button>
-
-            {/* Adicionar Produto */}
-            <button
-              className={`p-4 rounded-xl text-left transition-all duration-200 ${
-                isDark
-                  ? 'bg-[#1A1F35] hover:bg-[#1F2440] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
-                  : 'bg-slate-50 hover:bg-slate-100 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
-              }`}
-              onClick={() => window.location.href = '/grupos-produtos-opme'}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-[#8B5CF6]" />
-                </div>
-                <div>
-                  <div className={`font-semibold ${textPrimary}`}>Adicionar Produto</div>
-                  <div className={`text-sm ${textSecondary}`}>Cadastrar OPME</div>
-                </div>
-              </div>
-            </button>
-
-            {/* Emitir NFe */}
-            <button
-              className={`p-4 rounded-xl text-left transition-all duration-200 ${
-                isDark
-                  ? 'bg-[#1A1F35] hover:bg-[#1F2440] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
-                  : 'bg-slate-50 hover:bg-slate-100 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
-              }`}
-              onClick={() => window.location.href = '/faturamento-nfe-completo'}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#10B981]/20 flex items-center justify-center">
-                  <DollarSign className="w-5 h-5 text-[#10B981]" />
-                </div>
-                <div>
-                  <div className={`font-semibold ${textPrimary}`}>Emitir NFe</div>
-                  <div className={`text-sm ${textSecondary}`}>Nota fiscal eletrônica</div>
-                </div>
-              </div>
-            </button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Tabs */}
+      {/* Tabs - Conteúdo principal */}
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList 
           className={`${inputBg} p-1 rounded-xl ${
@@ -244,7 +252,7 @@ export function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={280}>
                   <LineChart data={revenueData}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
                     <XAxis dataKey="month" stroke={chartLabelColor} fontSize={12} />
@@ -272,7 +280,7 @@ export function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={surgeriesData}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
                     <XAxis dataKey="dia" stroke={chartLabelColor} fontSize={12} />
@@ -298,7 +306,7 @@ export function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
                     data={productCategoryData}
@@ -452,7 +460,7 @@ export function Dashboard() {
                   Previsão Positiva
                 </div>
                 <p className={`text-sm ${textSecondary}`}>
-                  Tendência de crescimento de 18% em cirurgias de Ortopedia
+                  Tendência de crescimento de 18% em procedimentos de Cirurgia Vascular
                   para o próximo trimestre baseado em dados históricos.
                 </p>
                 <Badge className="mt-3 bg-[#10B981]/20 text-[#10B981] border-none">

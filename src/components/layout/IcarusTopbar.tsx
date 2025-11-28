@@ -207,6 +207,38 @@ export function IcarusTopbar() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Botão Logout Rápido - SVG Vermelho com Neumorphism */}
+          <button
+            className="w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+            style={{
+              background: isDark 
+                ? 'rgba(239, 68, 68, 0.15)' 
+                : 'rgba(239, 68, 68, 0.1)',
+              border: '2px solid #EF4444',
+              boxShadow: isDark
+                ? '4px 4px 10px rgba(0,0,0,0.4), -3px -3px 8px rgba(255,255,255,0.02), 0 0 15px rgba(239, 68, 68, 0.2), inset 0 0 20px rgba(239, 68, 68, 0.1)'
+                : '3px 3px 8px rgba(0,0,0,0.1), -2px -2px 6px rgba(255,255,255,0.9), 0 0 12px rgba(239, 68, 68, 0.15)'
+            }}
+            aria-label="Sair do sistema"
+            title="Sair"
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="#EF4444"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {/* Seta para direita */}
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
         </div>
       </div>
     </header>

@@ -73,6 +73,7 @@ const IntegrationsManagerModule = lazy(() => import('@/components/modules/Integr
 const APIGateway = lazy(() => import('@/components/modules/APIGateway').then(m => ({ default: m.APIGateway })))
 const WebhooksManagerModule = lazy(() => import('@/components/modules/WebhooksManagerModule').then(m => ({ default: m.WebhooksManagerModule })))
 const LogisticaAvancadaModule = lazy(() => import('@/components/modules/LogisticaAvancadaModule').then(m => ({ default: m.LogisticaAvancadaModule })))
+const ManufaturaLeveMRP = lazy(() => import('@/components/modules/manufatura/ManufaturaLeveMRP').then(m => ({ default: m.ManufaturaLeveMRP })))
 
 // Analytics
 const KPIDashboardModule = lazy(() => import('@/components/modules/KPIDashboardModule').then(m => ({ default: m.KPIDashboardModule })))
@@ -80,6 +81,7 @@ const AnalyticsBIModule = lazy(() => import('@/components/modules/AnalyticsBIMod
 const AnalyticsPredicaoModule = lazy(() => import('@/components/modules/AnalyticsPredicaoModule').then(m => ({ default: m.AnalyticsPredicaoModule })))
 const BIDashboardInteractive = lazy(() => import('@/components/modules/BIDashboardInteractive').then(m => ({ default: m.BIDashboardInteractive })))
 const RelatoriosExecutivos = lazy(() => import('@/components/modules/RelatoriosExecutivos').then(m => ({ default: m.RelatoriosExecutivos })))
+const SmartViewDashboard = lazy(() => import('@/components/modules/analytics/SmartViewDashboard').then(m => ({ default: m.SmartViewDashboard })))
 
 // Dev Tools (mantidos para desenvolvimento)
 const ShowcasePage = lazy(() => import('@/pages/ShowcasePage').then(m => ({ default: m.ShowcasePage })))
@@ -177,6 +179,7 @@ export const moduleComponents = {
   'api-gateway': APIGateway,
   'webhooks-manager': WebhooksManagerModule,
   'logistica-avancada': LogisticaAvancadaModule,
+  'manufatura-mrp': ManufaturaLeveMRP,
 
   // Analytics
   'kpi-dashboard': KPIDashboardModule,
@@ -184,6 +187,7 @@ export const moduleComponents = {
   'analytics-predicao': AnalyticsPredicaoModule,
   'bi-dashboard-interactive': BIDashboardInteractive,
   'relatorios-executivos': RelatoriosExecutivos,
+  'smart-view-dashboard': SmartViewDashboard,
 
   // Dev Tools
   'showcase': ShowcasePage,

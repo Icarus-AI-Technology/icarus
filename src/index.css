@@ -124,107 +124,16 @@
   --inset: inset 4px 4px 8px #0a0c14, inset -4px -4px 8px #0f1220;
 }
 
-/* === MODO CLARO (Azul claro, SEM marrom) === */
-.light {
-  --background: 241 245 249;        /* #F1F5F9 Slate */
-  --foreground: 15 23 42;           /* #0F172A */
-  --bg-primary: #F1F5F9;
-  --bg-secondary: #FFFFFF;
-  --bg-tertiary: #E2E8F0;
-  --bg-elevated: #CBD5E1;
-  --bg-card: #FFFFFF;
-  
-  --card: 255 255 255;
-  --card-foreground: 15 23 42;
-  
-  --popover: 255 255 255;
-  --popover-foreground: 15 23 42;
-  
-  --secondary: 226 232 240;
-  --secondary-foreground: 15 23 42;
-  
-  --muted: 226 232 240;
-  --muted-foreground: 71 85 105;
-  
-  --accent: 45 212 191;
-  --accent-foreground: 255 255 255;
-  
-  --border: 203 213 225;
-  --border-default: rgba(99, 102, 241, 0.15);
-  --border-subtle: transparent;
-  
-  --input: 226 232 240;
-  
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #64748B;
-  
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
-  
-  --neu-light: rgba(255, 255, 255, 0.9);
-  --neu-dark: rgba(0, 0, 0, 0.12);
-  --neu-elevated: 
-    6px 6px 16px rgba(0, 0, 0, 0.1),
-    -4px -4px 12px rgba(255, 255, 255, 0.9);
-  --neu-pressed:
-    inset 4px 4px 10px rgba(0, 0, 0, 0.1),
-    inset -3px -3px 8px rgba(255, 255, 255, 0.8);
-  --neu-soft:
-    4px 4px 12px rgba(0, 0, 0, 0.08),
-    -3px -3px 10px rgba(255, 255, 255, 0.9);
-}
+/* === MODO CLARO DESABILITADO ===
+   ICARUS v5.1 usa SEMPRE Dark Glass Medical Design System
+   Variáveis .light removidas para evitar conflitos visuais
+   ============================================ */
 
-/* Light mode overrides for specific elements */
-.light .neu-card {
-  background: #FFFFFF;
-  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.1), -4px -4px 12px rgba(255, 255, 255, 0.9);
-}
-
-.light .neu-soft {
-  background: #FFFFFF;
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.08), -3px -3px 10px rgba(255, 255, 255, 0.9);
-}
-
-.light .neu-elevated {
-  background: #FFFFFF;
-  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.1), -4px -4px 12px rgba(255, 255, 255, 0.9);
-}
-
-.light .neu-pressed,
-.light .neu-inset {
-  background: #F1F5F9;
-  box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.08), inset -2px -2px 6px rgba(255, 255, 255, 0.9);
-}
-
-.light input[type="text"],
-.light input[type="email"],
-.light input[type="password"],
-.light input[type="tel"],
-.light input[type="number"],
-.light textarea,
-.light select {
-  background: #F1F5F9 !important;
-  color: #0F172A !important;
-  box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.06), inset -2px -2px 6px rgba(255, 255, 255, 0.9) !important;
-}
-
-.light input::placeholder,
-.light textarea::placeholder {
-  color: #64748B !important;
-}
-
-.light input[type="checkbox"] {
-  background: #F1F5F9 !important;
-  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.08), inset -2px -2px 5px rgba(255, 255, 255, 0.9);
-}
-
-.light input[type="checkbox"]:checked {
-  background: linear-gradient(145deg, #6366F1, #4F46E5) !important;
-}
+/* ============================================
+   LIGHT MODE DESABILITADO
+   ICARUS v5.1 usa SEMPRE Dark Glass Medical
+   Estilos .light removidos para evitar conflitos
+   ============================================ */
 
 /* ============================================
    BASE STYLES
@@ -407,6 +316,38 @@ body {
     -3px -3px 10px rgba(255, 255, 255, 0.025),
     0 6px 24px rgba(99, 102, 241, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Botão de ação rápida - Dashboard */
+.btn-quick-action {
+  background: linear-gradient(145deg, #6366F1, #4F46E5);
+  color: white !important;
+  border: none !important;
+  border-radius: 0.875rem;
+  cursor: pointer;
+  box-shadow:
+    4px 4px 12px rgba(0, 0, 0, 0.3),
+    -2px -2px 8px rgba(255, 255, 255, 0.02),
+    0 4px 16px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+}
+
+.btn-quick-action:hover {
+  background: linear-gradient(145deg, #818CF8, #6366F1);
+  transform: translateY(-2px);
+  box-shadow:
+    6px 6px 16px rgba(0, 0, 0, 0.35),
+    -3px -3px 10px rgba(255, 255, 255, 0.025),
+    0 6px 24px rgba(99, 102, 241, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-quick-action:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.1);
 }
 
 /* Botão secundário neumórfico */
@@ -830,60 +771,37 @@ a:focus-visible {
    Dark Glass Medical Design System
    ============================================ */
 
-/* Text Colors - Auto dark/light */
+/* Text Colors - Dark Mode Only */
 .text-theme-primary {
   color: var(--text-primary, #F9FAFB);
-}
-.light .text-theme-primary {
-  color: #111827;
 }
 
 .text-theme-secondary {
   color: var(--text-secondary, #94A3B8);
 }
-.light .text-theme-secondary {
-  color: #4B5563;
-}
 
 .text-theme-muted {
   color: var(--text-muted, #64748B);
 }
-.light .text-theme-muted {
-  color: #6B7280;
-}
 
-/* Background Colors - Auto dark/light */
+/* Background Colors - Dark Mode Only */
 .bg-theme-card {
   background: var(--bg-card, #15192B);
-}
-.light .bg-theme-card {
-  background: #FFFFFF;
 }
 
 .bg-theme-elevated {
   background: var(--bg-elevated, #1F2642);
 }
-.light .bg-theme-elevated {
-  background: #F9FAFB;
-}
 
 .bg-theme-muted {
   background: rgba(100, 116, 139, 0.2);
 }
-.light .bg-theme-muted {
-  background: #F3F4F6;
-}
 
-/* Status Badges - Dark Mode Optimized */
+/* Status Badges - Dark Mode Only */
 .badge-success {
   background: rgba(16, 185, 129, 0.15);
   color: #10B981;
   border: 1px solid rgba(16, 185, 129, 0.3);
-}
-.light .badge-success {
-  background: #D1FAE5;
-  color: #065F46;
-  border: 1px solid #A7F3D0;
 }
 
 .badge-danger {
@@ -891,21 +809,11 @@ a:focus-visible {
   color: #EF4444;
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
-.light .badge-danger {
-  background: #FEE2E2;
-  color: #991B1B;
-  border: 1px solid #FECACA;
-}
 
 .badge-warning {
   background: rgba(245, 158, 11, 0.15);
   color: #F59E0B;
   border: 1px solid rgba(245, 158, 11, 0.3);
-}
-.light .badge-warning {
-  background: #FEF3C7;
-  color: #92400E;
-  border: 1px solid #FDE68A;
 }
 
 .badge-neutral {
@@ -913,18 +821,10 @@ a:focus-visible {
   color: #94A3B8;
   border: 1px solid rgba(100, 116, 139, 0.3);
 }
-.light .badge-neutral {
-  background: #F3F4F6;
-  color: #374151;
-  border: 1px solid #E5E7EB;
-}
 
 /* Progress Bars */
 .progress-bar-bg {
   background: rgba(100, 116, 139, 0.2);
-}
-.light .progress-bar-bg {
-  background: #E5E7EB;
 }
 
 /* Table Styles */
@@ -932,23 +832,13 @@ a:focus-visible {
   background: var(--bg-secondary, #15192B);
   color: var(--text-secondary, #94A3B8);
 }
-.light .table-header {
-  background: #F9FAFB;
-  color: #6B7280;
-}
 
 .table-row {
   border-bottom: 1px solid rgba(100, 116, 139, 0.1);
 }
-.light .table-row {
-  border-bottom: 1px solid #E5E7EB;
-}
 
 .table-row:hover {
   background: rgba(99, 102, 241, 0.05);
-}
-.light .table-row:hover {
-  background: #F3F4F6;
 }
 
 /* ============================================
@@ -965,22 +855,11 @@ a:focus-visible {
   box-shadow: inset 3px 3px 6px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(255,255,255,0.02);
   transition: all 0.2s ease;
 }
-.light .neu-input {
-  background: #F1F5F9;
-  color: #111827;
-  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
-}
 .neu-input:focus {
   outline: none;
   box-shadow: 
     inset 3px 3px 6px rgba(0,0,0,0.4), 
     inset -2px -2px 4px rgba(255,255,255,0.02),
-    0 0 0 2px rgba(99, 102, 241, 0.3);
-}
-.light .neu-input:focus {
-  box-shadow: 
-    inset 2px 2px 4px rgba(0,0,0,0.08), 
-    inset -2px -2px 4px rgba(255,255,255,0.8),
     0 0 0 2px rgba(99, 102, 241, 0.3);
 }
 
@@ -995,10 +874,6 @@ a:focus-visible {
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-}
-.light .neu-checkbox {
-  background: #F1F5F9;
-  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.08), inset -1px -1px 2px rgba(255,255,255,0.8);
 }
 .neu-checkbox:checked {
   background: linear-gradient(135deg, #6366F1, #8B5CF6);
@@ -1029,11 +904,6 @@ a:focus-visible {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.light .neu-select {
-  background: #F1F5F9;
-  color: #111827;
-  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
-}
 .neu-select:focus {
   outline: none;
   box-shadow: 
@@ -1054,11 +924,7 @@ a:focus-visible {
   min-height: 100px;
   transition: all 0.2s ease;
 }
-.light .neu-textarea {
-  background: #F1F5F9;
-  color: #111827;
-  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
-}
+
 .neu-textarea:focus {
   outline: none;
   box-shadow: 
@@ -1070,7 +936,4 @@ a:focus-visible {
 /* Pressed/Inset effect for form containers */
 .neu-pressed {
   box-shadow: inset 3px 3px 6px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(255,255,255,0.02);
-}
-.light .neu-pressed {
-  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
 }

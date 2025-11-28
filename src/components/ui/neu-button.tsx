@@ -19,34 +19,10 @@ export interface NeuButtonProps
 
 /**
  * NeuButton - Neumorphic Button Component
+ * Dark Glass Medical Design System
  *
  * A button component with neumorphic design system following ICARUS patterns.
  * Supports multiple variants, sizes, loading states, and 3D icons.
- *
- * @example
- * // Primary button with icon
- * <NeuButton
- *   variant="soft"
- *   icon={<Icon3D name="save" />}
- *   iconPosition="left"
- *   loading={isSaving}
- *   onClick={handleSave}
- * >
- *   Salvar
- * </NeuButton>
- *
- * @example
- * // Danger button with confirmation
- * <NeuButton
- *   variant="danger"
- *   confirmDialog={{
- *     title: "Confirmar exclusão",
- *     message: "Esta ação não pode ser desfeita"
- *   }}
- *   onClick={handleDelete}
- * >
- *   Deletar
- * </NeuButton>
  */
 export const NeuButton = React.forwardRef<HTMLButtonElement, NeuButtonProps>(
   (
@@ -76,17 +52,17 @@ export const NeuButton = React.forwardRef<HTMLButtonElement, NeuButtonProps>(
       onClick?.(e);
     };
 
-    // Variant styles
+    // Variant styles - Dark Glass Medical
     const variantClasses = {
       primary:
-        'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-[4px_4px_8px_rgba(0,0,0,0.15),-4px_-4px_8px_rgba(255,255,255,0.1)] hover:shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.15)]',
+        'bg-gradient-to-br from-[#6366F1] to-[#4F46E5] text-white shadow-[4px_4px_8px_rgba(0,0,0,0.4),-3px_-3px_6px_rgba(255,255,255,0.02)] hover:shadow-[6px_6px_12px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.02)]',
       secondary:
-        'bg-gray-100 text-gray-700 shadow-[4px_4px_8px_rgba(0,0,0,0.1),-4px_-4px_8px_rgba(255,255,255,0.9)] hover:shadow-[6px_6px_12px_rgba(0,0,0,0.15),-6px_-6px_12px_rgba(255,255,255,1)]',
-      soft: 'bg-gradient-to-br from-white to-gray-50 text-gray-800 shadow-[8px_8px_16px_rgba(0,0,0,0.1),-8px_-8px_16px_rgba(255,255,255,0.9)] hover:shadow-[12px_12px_24px_rgba(0,0,0,0.15),-12px_-12px_24px_rgba(255,255,255,1)]',
+        'bg-[#1A1F35] text-white shadow-[4px_4px_8px_rgba(0,0,0,0.4),-3px_-3px_6px_rgba(255,255,255,0.02)] hover:shadow-[6px_6px_12px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.02)] hover:bg-[#252B44]',
+      soft: 'bg-[#15192B] text-white shadow-[8px_8px_16px_rgba(0,0,0,0.4),-6px_-6px_14px_rgba(255,255,255,0.02)] hover:shadow-[12px_12px_24px_rgba(0,0,0,0.5),-8px_-8px_20px_rgba(255,255,255,0.02)]',
       pressed:
-        'bg-gray-50 text-gray-700 shadow-[inset_4px_4px_8px_rgba(0,0,0,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]',
+        'bg-[#1A1F35] text-white shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.02)]',
       danger:
-        'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-[4px_4px_8px_rgba(0,0,0,0.15),-4px_-4px_8px_rgba(255,255,255,0.1)] hover:shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.15)]',
+        'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-[4px_4px_8px_rgba(0,0,0,0.4),-3px_-3px_6px_rgba(255,255,255,0.02)] hover:shadow-[6px_6px_12px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.02)]',
     };
 
     // Size styles
@@ -103,7 +79,7 @@ export const NeuButton = React.forwardRef<HTMLButtonElement, NeuButtonProps>(
         className={cn(
           'inline-flex items-center justify-center font-medium',
           'transition-all duration-200 ease-in-out',
-          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+          'focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:ring-offset-2 focus:ring-offset-[#0B0D16]',
           'disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none',
           variantClasses[variant],
           sizeClasses[size],

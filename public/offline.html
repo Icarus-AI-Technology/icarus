@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6366F1">
+  <title>ICARUS - Modo Offline</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/icons/icon-192x192.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #0B0D16 0%, #15192B 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 480px;
+      text-align: center;
+    }
+    
+    .icon-container {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.4),
+        -6px -6px 14px rgba(255, 255, 255, 0.02);
+    }
+    
+    .icon-container svg {
+      width: 64px;
+      height: 64px;
+      color: #6366F1;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    p {
+      color: #94A3B8;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    button {
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: #6366F1;
+      color: #fff;
+      box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.3),
+        -4px -4px 10px rgba(255, 255, 255, 0.02);
+    }
+    
+    .btn-primary:hover {
+      background: #4F46E5;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #94A3B8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    
+    .offline-features {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .offline-features h3 {
+      font-size: 0.875rem;
+      color: #6366F1;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .feature-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #94A3B8;
+      font-size: 0.9rem;
+    }
+    
+    .feature-item svg {
+      width: 20px;
+      height: 20px;
+      color: #10B981;
+    }
+    
+    .status-indicator {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      color: #EF4444;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #EF4444;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @media (max-width: 480px) {
+      h1 { font-size: 1.5rem; }
+      p { font-size: 1rem; }
+      .icon-container {
+        width: 100px;
+        height: 100px;
+      }
+      .icon-container svg {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon-container">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
+      </svg>
+    </div>
+    
+    <h1>Você está offline</h1>
+    <p>
+      Não foi possível conectar ao servidor. Verifique sua conexão com a internet 
+      e tente novamente.
+    </p>
+    
+    <div class="actions">
+      <button class="btn-primary" onclick="location.reload()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Tentar Novamente
+      </button>
+      
+      <button class="btn-secondary" onclick="goToCachedDashboard()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Ver Dados em Cache
+      </button>
+    </div>
+    
+    <div class="offline-features">
+      <h3>Funcionalidades Disponíveis Offline</h3>
+      <div class="feature-list">
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Consultar cirurgias agendadas
+        </div>
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Verificar estoque de produtos
+        </div>
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Acessar cadastros de clientes
+        </div>
+        <div class="feature-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Visualizar relatórios em cache
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="status-indicator">
+    <span class="status-dot"></span>
+    Sem conexão
+  </div>
+  
+  <script>
+    // Verificar conexão periodicamente
+    function checkConnection() {
+      if (navigator.onLine) {
+        location.reload();
+      }
+    }
+    
+    // Verificar a cada 5 segundos
+    setInterval(checkConnection, 5000);
+    
+    // Evento de reconexão
+    window.addEventListener('online', () => {
+      location.reload();
+    });
+    
+    // Tentar acessar dashboard em cache
+    function goToCachedDashboard() {
+      window.location.href = '/dashboard';
+    }
+  </script>
+</body>
+</html>
+
