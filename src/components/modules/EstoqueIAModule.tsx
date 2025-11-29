@@ -42,15 +42,7 @@ import {
   MapPin,
   Activity
 } from 'lucide-react'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer
-} from 'recharts'
+import { InteractiveChart } from '@/components/charts/InteractiveCharts'
 
 // Componente de carrossel de tabs
 import CadastroTabsCarousel, { CarouselTab } from '@/components/cadastros/CadastroTabsCarousel'
@@ -649,40 +641,36 @@ export function EstoqueIAModule() {
         {/* Previsão IA Tab */}
         <TabsContent value="previsao" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-[#8B5CF6]" />
-                  Previsão de Demanda (IA)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={mockPrevisaoDemanda}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                    <XAxis dataKey="mes" stroke={textMuted} fontSize={12} />
-                    <YAxis stroke={textMuted} fontSize={12} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Line
-                      type="monotone"
-                      dataKey="previsto"
-                      stroke="#8B5CF6"
-                      strokeWidth={3}
-                      dot={{ fill: '#8B5CF6', strokeWidth: 2 }}
-                      name="Previsto"
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="real"
-                      stroke="#10B981"
-                      strokeWidth={3}
-                      dot={{ fill: '#10B981', strokeWidth: 2 }}
-                      name="Real"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* Previsão de Demanda com Drill-Down */}
+            <InteractiveChart
+              title="Previsão de Demanda (IA)"
+              subtitle="Prophet + LightGBM - Acurácia 95%"
+              type="area"
+              data={mockPrevisaoDemanda}
+              dataKey="previsto"
+              xAxisKey="mes"
+              showTrend
+              enableDrillDown
+              drillDownLevels={[
+                {
+                  name: 'Por Categoria',
+                  data: [
+                    { mes: 'Cardíaco', previsto: 450 },
+                    { mes: 'Vascular', previsto: 320 },
+                    { mes: 'Ortopédico', previsto: 180 },
+                  ]
+                },
+                {
+                  name: 'Por Produto',
+                  data: [
+                    { mes: 'Stent Abbott', previsto: 150 },
+                    { mes: 'Cateter Medtronic', previsto: 120 },
+                    { mes: 'Marcapasso Boston', previsto: 100 },
+                  ]
+                }
+              ]}
+              onExport={() => console.log('Exportar previsão')}
+            />
 
             <Card>
               <CardHeader>
