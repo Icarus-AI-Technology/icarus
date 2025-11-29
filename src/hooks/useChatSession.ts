@@ -107,9 +107,12 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
     };
   }, [context]);
 
-  // Send message to chat API
-  const sendMessage = useCallback(async (messageText: string): Promise<string | null> => {
-    if (!messageText.trim()) return null;
+  // Send message to chat API (with optional attachments)
+  const sendMessage = useCallback(async (
+    messageText: string, 
+    options?: { attachments?: Array<{ name: string; type: string; base64?: string; mimeType: string }> }
+  ): Promise<string | null> => {
+    if (!messageText.trim() && (!options?.attachments || options.attachments.length === 0)) return null;
 
     // Cancel any pending request
     if (abortControllerRef.current) {
@@ -120,11 +123,17 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
     setIsLoading(true);
     setError(null);
 
+    // Build user message content
+    const hasAttachments = options?.attachments && options.attachments.length > 0;
+    const attachmentInfo = hasAttachments 
+      ? `\n\n📎 Anexos: ${options.attachments.map(a => a.name).join(', ')}`
+      : '';
+
     // Add user message immediately
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: 'user',
-      content: messageText,
+      content: messageText + attachmentInfo,
       timestamp: new Date()
     };
 
@@ -135,7 +144,8 @@ export function useChatSession(options: UseChatSessionOptions = {}) {
         messageText, 
         sessionId, 
         getCurrentContext(),
-        abortControllerRef.current.signal
+        abortControllerRef.current.signal,
+        options?.attachments
       );
 
       // Update session ID if new

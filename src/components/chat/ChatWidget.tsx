@@ -3,11 +3,12 @@ import {
   Send, Bot, User, Minimize2, Maximize2, X, Sparkles, RefreshCw,
   Package, Calendar, DollarSign, Truck, ShieldCheck, TrendingUp,
   BarChart3, Settings, ThumbsUp, ThumbsDown,
-  Mic, MicOff, ChevronRight, Loader2, History
+  Mic, MicOff, ChevronRight, Loader2, History, Paperclip
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChatSession } from '@/hooks/useChatSession';
 import { ChatResponseCard, parseMessageContent, type ActionData, type ChatCardData } from './ChatResponseCard';
+import { ChatAttachments, AttachButton, type AttachedFile } from './ChatAttachments';
 import { useTheme } from '@/hooks/useTheme';
 
 export interface ChatMessage {
@@ -155,6 +156,8 @@ export function ChatWidget({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showCommands, setShowCommands] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [showAttachments, setShowAttachments] = useState(false);
+  const [attachments, setAttachments] = useState<AttachedFile[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -220,16 +223,40 @@ export function ChatWidget({
     }
   }, [messages.length]);
 
+  // Handlers para anexos
+  const handleAttach = useCallback((files: AttachedFile[]) => {
+    setAttachments(prev => [...prev, ...files]);
+  }, []);
+
+  const handleRemoveAttachment = useCallback((id: string) => {
+    setAttachments(prev => prev.filter(a => a.id !== id));
+  }, []);
+
   const handleSend = useCallback(async () => {
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && attachments.length === 0) || isLoading) return;
 
     const messageText = input.trim();
     setInput('');
     setShowCommands(false);
     setShowCategories(false);
+    setShowAttachments(false);
 
-    await sendMessage(messageText);
-  }, [input, isLoading, sendMessage]);
+    // Incluir anexos na mensagem se houver
+    if (attachments.length > 0) {
+      const attachmentData = attachments.map(a => ({
+        name: a.file.name,
+        type: a.type,
+        base64: a.base64,
+        mimeType: a.file.type,
+      }));
+      
+      // Enviar mensagem com anexos
+      await sendMessage(messageText || 'Analise os documentos anexados', { attachments: attachmentData });
+      setAttachments([]); // Limpar anexos após envio
+    } else {
+      await sendMessage(messageText);
+    }
+  }, [input, isLoading, sendMessage, attachments]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -710,6 +737,26 @@ export function ChatWidget({
             </div>
           )}
 
+          {/* Attachments Panel */}
+          {showAttachments && (
+            <div 
+              className="p-3 border-t"
+              style={{ 
+                borderColor: neuStyles.border,
+                backgroundColor: neuStyles.background 
+              }}
+            >
+              <ChatAttachments
+                attachments={attachments}
+                onAttach={handleAttach}
+                onRemove={handleRemoveAttachment}
+                disabled={isLoading}
+                maxFiles={5}
+                maxSizeMB={10}
+              />
+            </div>
+          )}
+
           {/* Input Area - Neumorphic */}
           <div 
             className="p-3"
@@ -725,6 +772,29 @@ export function ChatWidget({
               }}
               className="flex gap-2"
             >
+              {/* Attach Button */}
+              <button
+                type="button"
+                onClick={() => setShowAttachments(!showAttachments)}
+                className={cn(
+                  'p-2.5 rounded-xl transition-all relative',
+                  showAttachments && 'ring-2 ring-violet-500'
+                )}
+                style={{
+                  backgroundColor: attachments.length > 0 ? 'rgba(139, 92, 246, 0.2)' : neuStyles.cardBg,
+                  color: attachments.length > 0 ? '#8B5CF6' : neuStyles.textSecondary,
+                  boxShadow: neuStyles.shadowInset
+                }}
+                title="Anexar documentos (PDF, XML, imagens)"
+              >
+                <Paperclip className="w-5 h-5" />
+                {attachments.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-violet-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">
+                    {attachments.length}
+                  </span>
+                )}
+              </button>
+
               {/* Voice Button */}
               <button
                 type="button"
@@ -749,7 +819,7 @@ export function ChatWidget({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Digite ou use / para comandos..."
+                placeholder={attachments.length > 0 ? "Descreva o que deseja analisar..." : "Digite ou use / para comandos..."}
                 disabled={isLoading}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
@@ -761,7 +831,7 @@ export function ChatWidget({
               
               <button
                 type="submit"
-                disabled={isLoading || !input.trim()}
+                disabled={isLoading || (!input.trim() && attachments.length === 0)}
                 className="p-2.5 rounded-xl bg-[#6366F1] text-white hover:bg-[#4F46E5] focus:outline-none focus:ring-2 focus:ring-[#6366F1]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 style={{
                   boxShadow: isDark 
