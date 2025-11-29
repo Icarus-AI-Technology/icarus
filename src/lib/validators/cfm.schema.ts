@@ -2,8 +2,6 @@
  * Validações Oficiais CFM/CRM/TISS - Zod Schemas
  * 
  * ICARUS v5.1 - Conformidade:
- * - Resolução CFM 1.638/2002 (Prontuário Eletrônico)
- * - Lei 13.787/2018 (Digitalização de Prontuários)
  * - RN 506 ANS (TISS - Troca de Informações em Saúde Suplementar)
  * - Portaria MS 1.820/2009 (Carta de Direitos dos Usuários)
  */
@@ -141,19 +139,7 @@ export const tipoSanguineoSchema = z.enum([
 })
 
 /**
- * 12. Prescrição Médica - Validação básica
- */
-export const prescricaoSchema = z.object({
-  medicamento: z.string().min(3, 'Nome do medicamento muito curto'),
-  dosagem: z.string().min(1, 'Dosagem obrigatória'),
-  via_administracao: z.enum(['VO', 'IV', 'IM', 'SC', 'SL', 'TD', 'INAL', 'OCULAR', 'OTOLOGICA', 'NASAL', 'RETAL', 'VAGINAL']),
-  frequencia: z.string().min(1, 'Frequência obrigatória'),
-  duracao_dias: z.number().int().positive().optional(),
-  observacoes: z.string().max(500).optional(),
-})
-
-/**
- * 13. Alergia
+ * 12. Alergia
  */
 export const alergiaSchema = z.object({
   substancia: z.string().min(2, 'Nome da substância muito curto'),
@@ -162,25 +148,10 @@ export const alergiaSchema = z.object({
   observacoes: z.string().max(500).optional(),
 })
 
-/**
- * 14. Sinais Vitais
- */
-export const sinaisVitaisSchema = z.object({
-  pressao_sistolica: z.number().int().min(50).max(300),
-  pressao_diastolica: z.number().int().min(30).max(200),
-  frequencia_cardiaca: z.number().int().min(30).max(250),
-  frequencia_respiratoria: z.number().int().min(8).max(60),
-  temperatura: z.number().min(32).max(45),
-  saturacao_o2: z.number().int().min(50).max(100),
-  glicemia: z.number().int().min(20).max(600).optional(),
-  peso_kg: z.number().min(0.5).max(500).optional(),
-  altura_cm: z.number().int().min(30).max(280).optional(),
-})
-
 // ==================== SCHEMAS COMPOSTOS ====================
 
 /**
- * Paciente completo com validações CFM
+ * Paciente para rastreabilidade OPME
  */
 export const pacienteSchema = z.object({
   nome_completo: z.string().min(5, 'Nome muito curto').max(200),
@@ -202,7 +173,7 @@ export const pacienteSchema = z.object({
 })
 
 /**
- * Médico completo com validações CFM
+ * Médico completo com validações CRM
  */
 export const medicoSchema = z.object({
   nome_completo: z.string().min(5, 'Nome muito curto').max(200),
@@ -218,7 +189,7 @@ export const medicoSchema = z.object({
 })
 
 /**
- * Cirurgia/Procedimento com validações ANVISA + CFM
+ * Cirurgia/Procedimento com validações ANVISA + CRM
  */
 export const cirurgiaSchema = z.object({
   paciente_id: z.string().uuid('ID do paciente inválido'),
@@ -254,49 +225,12 @@ export const cirurgiaSchema = z.object({
   observacoes: z.string().max(2000).optional(),
 })
 
-/**
- * Prontuário Eletrônico - Evolução
- */
-export const evolucaoProntuarioSchema = z.object({
-  paciente_id: z.string().uuid(),
-  medico_crm: crmSchema,
-  data_atendimento: z.string().datetime(),
-  
-  // Anamnese
-  queixa_principal: z.string().min(10, 'Queixa principal muito curta').max(1000),
-  historia_doenca_atual: z.string().max(5000).optional(),
-  
-  // Exame físico
-  sinais_vitais: sinaisVitaisSchema.optional(),
-  exame_fisico: z.string().max(5000).optional(),
-  
-  // Diagnósticos
-  hipotese_diagnostica: z.array(cid10Schema).optional(),
-  diagnostico_definitivo: z.array(cid10Schema).optional(),
-  
-  // Conduta
-  prescricoes: z.array(prescricaoSchema).optional(),
-  exames_solicitados: z.array(z.string()).optional(),
-  procedimentos_realizados: z.array(tussSchema).optional(),
-  
-  // Plano
-  plano_terapeutico: z.string().max(2000).optional(),
-  orientacoes: z.string().max(2000).optional(),
-  retorno: z.string().optional(),
-  
-  // Assinatura digital (hash)
-  assinatura_digital: z.string().optional(),
-})
-
 // ==================== TYPES ====================
 
 export type Paciente = z.infer<typeof pacienteSchema>
 export type Medico = z.infer<typeof medicoSchema>
 export type Cirurgia = z.infer<typeof cirurgiaSchema>
-export type EvolucaoProntuario = z.infer<typeof evolucaoProntuarioSchema>
-export type Prescricao = z.infer<typeof prescricaoSchema>
 export type Alergia = z.infer<typeof alergiaSchema>
-export type SinaisVitais = z.infer<typeof sinaisVitaisSchema>
 
 // ==================== HELPERS ====================
 
@@ -345,37 +279,3 @@ export function calcularIdade(dataNascimento: string): number {
   
   return idade
 }
-
-/**
- * Calcula IMC (Índice de Massa Corporal)
- */
-export function calcularIMC(pesoKg: number, alturaCm: number): number {
-  const alturaM = alturaCm / 100
-  return Number((pesoKg / (alturaM * alturaM)).toFixed(1))
-}
-
-/**
- * Classifica IMC
- */
-export function classificarIMC(imc: number): string {
-  if (imc < 18.5) return 'Abaixo do peso'
-  if (imc < 25) return 'Peso normal'
-  if (imc < 30) return 'Sobrepeso'
-  if (imc < 35) return 'Obesidade grau I'
-  if (imc < 40) return 'Obesidade grau II'
-  return 'Obesidade grau III'
-}
-
-/**
- * Verifica se pressão arterial está alterada
- */
-export function classificarPressaoArterial(sistolica: number, diastolica: number): string {
-  if (sistolica < 90 || diastolica < 60) return 'Hipotensão'
-  if (sistolica < 120 && diastolica < 80) return 'Normal'
-  if (sistolica < 130 && diastolica < 85) return 'Normal-alta'
-  if (sistolica < 140 || diastolica < 90) return 'Pré-hipertensão'
-  if (sistolica < 160 || diastolica < 100) return 'Hipertensão estágio 1'
-  if (sistolica < 180 || diastolica < 110) return 'Hipertensão estágio 2'
-  return 'Crise hipertensiva'
-}
-

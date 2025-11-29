@@ -1,7 +1,7 @@
 /**
  * Testes - Validadores CFM/CRM
  * 
- * ICARUS v5.1 - Conformidade CFM 1.638/2002, Lei 13.787/2018
+ * ICARUS v5.1 - Conformidade RN 506 ANS (TISS)
  */
 
 import { describe, it, expect } from 'vitest'
@@ -21,9 +21,6 @@ import {
   extrairUFdoCRM,
   formatCID10,
   calcularIdade,
-  calcularIMC,
-  classificarIMC,
-  classificarPressaoArterial,
 } from '../cfm.schema'
 
 describe('CRM', () => {
@@ -239,29 +236,4 @@ describe('Helpers CFM', () => {
     const anoPassado = new Date(hoje.getFullYear() - 30, hoje.getMonth(), hoje.getDate())
     expect(calcularIdade(anoPassado.toISOString().split('T')[0])).toBe(30)
   })
-
-  it('deve calcular IMC corretamente', () => {
-    expect(calcularIMC(70, 175)).toBeCloseTo(22.9, 1)
-    expect(calcularIMC(80, 180)).toBeCloseTo(24.7, 1)
-  })
-
-  it('deve classificar IMC corretamente', () => {
-    expect(classificarIMC(17)).toBe('Abaixo do peso')
-    expect(classificarIMC(22)).toBe('Peso normal')
-    expect(classificarIMC(27)).toBe('Sobrepeso')
-    expect(classificarIMC(32)).toBe('Obesidade grau I')
-    expect(classificarIMC(37)).toBe('Obesidade grau II')
-    expect(classificarIMC(42)).toBe('Obesidade grau III')
-  })
-
-  it('deve classificar pressão arterial corretamente', () => {
-    expect(classificarPressaoArterial(85, 55)).toBe('Hipotensão')
-    expect(classificarPressaoArterial(115, 75)).toBe('Normal')
-    expect(classificarPressaoArterial(125, 82)).toBe('Normal-alta')
-    expect(classificarPressaoArterial(135, 88)).toBe('Pré-hipertensão')
-    expect(classificarPressaoArterial(150, 95)).toBe('Hipertensão estágio 1')
-    expect(classificarPressaoArterial(170, 105)).toBe('Hipertensão estágio 2')
-    expect(classificarPressaoArterial(185, 115)).toBe('Crise hipertensiva')
-  })
 })
-

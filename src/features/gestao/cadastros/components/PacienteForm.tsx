@@ -2,7 +2,7 @@
  * Formulário de Cadastro de Paciente
  * 
  * ICARUS v5.1 - Dark Glass Medical Design System
- * Conformidade: LGPD, CFM 1.638/2002, Lei 13.787/2018
+ * Conformidade: LGPD, RN 506 ANS (TISS)
  */
 
 'use client'
