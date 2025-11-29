@@ -376,6 +376,170 @@ export function useTabelasPrecos() {
   })
 }
 
+// ========================================
+// HOOKS ADICIONAIS - MÉDIO PRAZO
+// ========================================
+
+// Sprint 4 - Compras (2 adicionais)
+export function useComprasInternacionais() {
+  return useModuleData({
+    tableName: 'compras_internacionais',
+    selectFields: '*, fornecedor:fornecedores(nome_fantasia), status_li, status_di',
+    orderBy: { column: 'data_proforma', ascending: false },
+  })
+}
+
+export function useViabilidadeImportacao() {
+  return useModuleData({
+    tableName: 'simulacoes_importacao',
+    selectFields: '*, produto:produtos(nome), cenarios:cenarios_importacao(count)',
+    orderBy: { column: 'created_at', ascending: false },
+  })
+}
+
+// Sprint 5 - Vendas/CRM (2 adicionais)
+export function useTabelasPrecosImport() {
+  return useModuleData({
+    tableName: 'importacoes_tabelas_precos',
+    selectFields: '*, usuario:usuarios(nome), status, items_processados',
+    orderBy: { column: 'data_importacao', ascending: false },
+  })
+}
+
+export function useVideoCallsManager() {
+  return useModuleData({
+    tableName: 'video_calls',
+    selectFields: '*, participantes:call_participantes(count), gravacao_url',
+    orderBy: { column: 'agendado_para', ascending: false },
+  })
+}
+
+// Sprint 6 - Financeiro (3 adicionais)
+export function useGestaoContabil() {
+  return useModuleData({
+    tableName: 'lancamentos_contabeis',
+    selectFields: '*, plano_conta:plano_contas(codigo, nome)',
+    orderBy: { column: 'data_lancamento', ascending: false },
+  })
+}
+
+export function useRelatoriosFinanceiros() {
+  return useModuleData({
+    tableName: 'relatorios_financeiros',
+    selectFields: '*, tipo, gerado_por:usuarios(nome)',
+    orderBy: { column: 'gerado_em', ascending: false },
+  })
+}
+
+export function useRelatoriosRegulatorios() {
+  return useModuleData({
+    tableName: 'relatorios_regulatorios',
+    selectFields: '*, tipo, status_envio, protocolo_rfb',
+    filters: { competencia: new Date().getFullYear().toString() },
+    orderBy: { column: 'competencia', ascending: false },
+  })
+}
+
+// Sprint 7 - Compliance (1 adicional)
+export function useComplianceAvancado() {
+  return useModuleData({
+    tableName: 'compliance_checks',
+    selectFields: '*, tipo, status, gaps:compliance_gaps(count)',
+    orderBy: { column: 'ultima_verificacao', ascending: false },
+  })
+}
+
+// Sprint 8 - IA e Automação (6 adicionais)
+export function useChatbotMetrics() {
+  return useModuleData({
+    tableName: 'chatbot_metricas',
+    selectFields: '*, conversas_total, satisfacao_media, intencoes:chatbot_intencoes(count)',
+    orderBy: { column: 'data', ascending: false },
+  })
+}
+
+export function useVoiceAnalytics() {
+  return useModuleData({
+    tableName: 'voice_analytics',
+    selectFields: '*, transcricoes:voice_transcricoes(count), sentimento_medio',
+    orderBy: { column: 'data_analise', ascending: false },
+  })
+}
+
+export function useVoiceBiometrics() {
+  return useModuleData({
+    tableName: 'voice_biometrics',
+    selectFields: '*, usuario:usuarios(nome), ultima_verificacao, taxa_acerto',
+    filters: { ativo: true },
+  })
+}
+
+export function useVoiceMacros() {
+  return useModuleData({
+    tableName: 'voice_macros',
+    selectFields: '*, comando, acao, usuario:usuarios(nome), vezes_usado',
+    orderBy: { column: 'vezes_usado', ascending: false },
+  })
+}
+
+export function useTooltipAnalytics() {
+  return useModuleData({
+    tableName: 'tooltip_analytics',
+    selectFields: '*, tooltip_id, visualizacoes, cliques, tempo_medio',
+    orderBy: { column: 'visualizacoes', ascending: false },
+  })
+}
+
+export function useAutomacaoIA() {
+  return useModuleData({
+    tableName: 'automacoes_ia',
+    selectFields: '*, nome, tipo, status, execucoes:automacao_execucoes(count)',
+    filters: { ativo: true },
+  })
+}
+
+// Sprint 9 - Sistema e Integrações (5 adicionais)
+export function useConfiguracoesAvancadas() {
+  return useModuleData({
+    tableName: 'configuracoes_sistema',
+    selectFields: '*, categoria, chave, valor, tipo',
+    orderBy: { column: 'categoria', ascending: true },
+  })
+}
+
+export function useSystemHealth() {
+  return useModuleData({
+    tableName: 'system_health_metrics',
+    selectFields: '*, servico, status, uptime, ultima_verificacao',
+    orderBy: { column: 'ultima_verificacao', ascending: false },
+    enableRealtime: true, // Monitoramento em tempo real
+  })
+}
+
+export function useIntegracoesAvancadas() {
+  return useModuleData({
+    tableName: 'integracoes_config',
+    selectFields: '*, nome, tipo, status, ultima_sync',
+    filters: { ativa: true },
+  })
+}
+
+export function useIntegrationsManager() {
+  return useModuleData({
+    tableName: 'api_tokens',
+    selectFields: '*, nome, tipo, rate_limit, requests_hoje',
+    orderBy: { column: 'requests_hoje', ascending: false },
+  })
+}
+
+export function useLogisticaAvancada() {
+  return useModuleData({
+    tableName: 'rotas_entrega',
+    selectFields: '*, motorista:usuarios(nome), veiculo:veiculos(*), entregas:entregas(count)',
+    filters: { data: new Date().toISOString().split('T')[0] },
+  })
+}
+
 /**
  * Hook para estatísticas/KPIs agregados
  */
