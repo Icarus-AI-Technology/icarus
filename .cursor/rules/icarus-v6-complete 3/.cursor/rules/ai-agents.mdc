@@ -1,0 +1,322 @@
+---
+description: Regras para LangChain 0.3, LangGraph 0.2 e agentes IA
+globs: ["src/lib/langchain*.ts", "supabase/functions/**/*.ts", "**/agent*.ts"]
+---
+
+# Agentes IA - LangChain 0.3 + LangGraph 0.2
+
+## Configuração de LLMs
+
+### Claude 3.5 Sonnet (Primary)
+```typescript
+import { ChatAnthropic } from '@langchain/anthropic';
+
+const claude = new ChatAnthropic({
+  modelName: 'claude-3-5-sonnet-20241022',
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+  temperature: 0.3,
+  maxTokens: 4096,
+});
+```
+
+### GPT-4o (Secondary)
+```typescript
+import { ChatOpenAI } from '@langchain/openai';
+
+const gpt4o = new ChatOpenAI({
+  modelName: 'gpt-4o',
+  openAIApiKey: process.env.OPENAI_API_KEY,
+  temperature: 0.3,
+  maxTokens: 4096,
+});
+```
+
+### Embeddings
+```typescript
+import { OpenAIEmbeddings } from '@langchain/openai';
+
+const embeddings = new OpenAIEmbeddings({
+  modelName: 'text-embedding-3-small', // 1536 dimensões
+  openAIApiKey: process.env.OPENAI_API_KEY,
+});
+```
+
+## LangGraph Workflows
+
+### Definir State
+```typescript
+import { StateGraph, END, START } from '@langchain/langgraph';
+
+interface WorkflowState {
+  input: string;
+  processed: any[];
+  result: string;
+  messages: BaseMessage[];
+}
+```
+
+### Criar Graph
+```typescript
+const graph = new StateGraph<WorkflowState>({
+  channels: {
+    input: { value: (x, y) => y ?? x, default: () => '' },
+    processed: { value: (x, y) => [...(x || []), ...(y || [])], default: () => [] },
+    result: { value: (x, y) => y ?? x, default: () => '' },
+    messages: { value: (x, y) => [...(x || []), ...(y || [])], default: () => [] },
+  },
+});
+```
+
+### Adicionar Nodes
+```typescript
+// Node simples
+graph.addNode('process', async (state) => {
+  const response = await claude.invoke([
+    new SystemMessage('Você é um assistente...'),
+    new HumanMessage(state.input),
+  ]);
+  return { result: response.content };
+});
+
+// Node com conditional
+graph.addConditionalEdges('analyze', (state) => {
+  if (state.needsReview) return 'review';
+  return 'output';
+});
+```
+
+### Definir Edges
+```typescript
+graph.addEdge(START, 'process');
+graph.addEdge('process', 'analyze');
+graph.addEdge('analyze', 'output');
+graph.addEdge('output', END);
+
+const app = graph.compile();
+```
+
+### Executar
+```typescript
+const result = await app.invoke({
+  input: 'Analise as transações...',
+});
+```
+
+## Workflow de Auditoria Financeira
+
+```typescript
+// State
+interface AuditState {
+  transactions: Transaction[];
+  categorized: CategorizedTransaction[];
+  anomalies: Anomaly[];
+  fees: FeeAnalysis;
+  suggestions: Suggestion[];
+  report: string;
+}
+
+// Nodes
+async function categorize(state: AuditState) {
+  const response = await claude.invoke([
+    new SystemMessage(CATEGORIZE_PROMPT),
+    new HumanMessage(JSON.stringify(state.transactions)),
+  ]);
+  return { categorized: JSON.parse(response.content) };
+}
+
+async function detectAnomalies(state: AuditState) {
+  const response = await claude.invoke([
+    new SystemMessage(ANOMALY_PROMPT),
+    new HumanMessage(JSON.stringify(state.categorized)),
+  ]);
+  return { anomalies: JSON.parse(response.content) };
+}
+
+// Flow
+START → categorize → detect_anomalies → analyze_fees → generate_suggestions → generate_report → END
+```
+
+## Prompts Padrão
+
+### Sistema Geral
+```typescript
+const SYSTEM_PROMPT = `Você é IcarusBrain, assistente IA do ICARUS v6.0 para gestão de OPME.
+
+Contexto:
+- Empresa de distribuição de materiais médicos (OPME)
+- Foco em cirurgias ortopédicas
+- Compliance: ANVISA RDC 665/2022, LGPD
+
+Capacidades:
+- Análise financeira e auditoria
+- Gestão de cirurgias e estoque
+- Rastreabilidade de implantes
+- Relatórios e insights
+
+Seja conciso, profissional e proativo. Responda em português.`;
+```
+
+### Categorização de Transações
+```typescript
+const CATEGORIZE_PROMPT = `Categorize transações bancárias para empresa OPME.
+
+Categorias:
+- RECEITA_OPERACIONAL: Vendas de produtos
+- CUSTO_MERCADORIA: Compra de OPME
+- DESPESA_OPERACIONAL: Salários, aluguel
+- DESPESA_FINANCEIRA: Juros, tarifas
+- TRIBUTARIO: Impostos
+- OUTROS: Não classificável
+
+Retorne JSON: [{id, categoria, subcategoria, score}]
+Score: 0-100 (confiança)`;
+```
+
+### Detecção de Anomalias
+```typescript
+const ANOMALY_PROMPT = `Detecte anomalias em transações:
+
+1. Duplicidades (mesmo valor/descrição)
+2. Valores fora do padrão
+3. Fornecedores suspeitos
+4. Horários atípicos
+5. Padrões circulares
+6. Fragmentação
+
+Retorne JSON: [{transacao_id, tipo, severidade, descricao, confianca}]
+Severidade: baixa | media | alta | critica`;
+```
+
+## RAG com pgvector
+
+### Criar Embedding
+```typescript
+async function createEmbedding(text: string): Promise<number[]> {
+  const result = await embeddings.embedQuery(text);
+  return result;
+}
+```
+
+### Buscar Contexto
+```typescript
+import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
+
+const vectorStore = new SupabaseVectorStore(embeddings, {
+  client: supabase,
+  tableName: 'ml_vectors',
+  queryName: 'search_vectors',
+});
+
+const results = await vectorStore.similaritySearch(query, 5);
+```
+
+### RAG Chain
+```typescript
+async function ragQuery(question: string, empresaId: string) {
+  // 1. Buscar contexto
+  const embedding = await createEmbedding(question);
+  const { data: docs } = await supabase.rpc('search_vectors', {
+    query_embedding: embedding,
+    p_empresa_id: empresaId,
+    match_count: 5,
+  });
+
+  // 2. Construir prompt com contexto
+  const context = docs.map(d => d.content).join('\n\n');
+  
+  // 3. Gerar resposta
+  const response = await claude.invoke([
+    new SystemMessage(`Contexto:\n${context}\n\nResponda baseado no contexto acima.`),
+    new HumanMessage(question),
+  ]);
+
+  return response.content;
+}
+```
+
+## Structured Output
+
+### Com Zod
+```typescript
+import { z } from 'zod';
+import { StructuredOutputParser } from 'langchain/output_parsers';
+
+const outputSchema = z.object({
+  categoria: z.string(),
+  score: z.number().min(0).max(100),
+  justificativa: z.string(),
+});
+
+const parser = StructuredOutputParser.fromZodSchema(outputSchema);
+const formatInstructions = parser.getFormatInstructions();
+
+const response = await claude.invoke([
+  new SystemMessage(`${PROMPT}\n\n${formatInstructions}`),
+  new HumanMessage(input),
+]);
+
+const parsed = await parser.parse(response.content);
+```
+
+## Edge Function com IA
+
+```typescript
+serve(async (req) => {
+  const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY')! });
+
+  const { message, context } = await req.json();
+
+  const response = await anthropic.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 2048,
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: message }],
+  });
+
+  return new Response(
+    JSON.stringify({ response: response.content[0].text }),
+    { headers: corsHeaders }
+  );
+});
+```
+
+## Cache de Respostas (Redis)
+
+```typescript
+import { redis, CACHE_TTL, queryWithCache } from '@/lib/redis';
+
+const cacheKey = `embedding:${sha256(text)}`;
+
+const embedding = await queryWithCache(
+  cacheKey,
+  CACHE_TTL.EMBEDDING,
+  () => embeddings.embedQuery(text)
+);
+```
+
+## Anti-padrões
+
+```typescript
+// ❌ Hardcoded API keys
+const anthropic = new Anthropic({ apiKey: 'sk-ant-...' });
+
+// ✅ Usar variáveis de ambiente
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+// ❌ Ignorar erros de parsing
+const result = JSON.parse(response.content);
+
+// ✅ Tratar erros
+try {
+  const result = JSON.parse(response.content);
+} catch (e) {
+  console.error('Failed to parse LLM response:', e);
+  // Retry ou fallback
+}
+
+// ❌ Prompt genérico
+'Analise isso'
+
+// ✅ Prompt específico com formato de saída
+'Analise as transações e retorne JSON: [{...}]'
+```

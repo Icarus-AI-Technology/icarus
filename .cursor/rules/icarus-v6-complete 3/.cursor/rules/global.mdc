@@ -1,0 +1,118 @@
+---
+description: Regras globais do ICARUS v6.0 - Sistema de Gestão OPME
+globs: ["**/*.{ts,tsx,sql,css}"]
+alwaysApply: true
+---
+
+# ICARUS v6.0 - Sistema de Gestão OPME
+
+## Stack Tecnológica Oficial (OBRIGATÓRIO)
+- **Frontend**: React 18.3.1, TypeScript 5.9, Vite 6.4, Tailwind CSS 4.1
+- **UI**: Radix UI, Framer Motion 12.x, Recharts 2.15, Lucide React
+- **Backend**: Supabase Edge Functions (Deno), PostgreSQL 16
+- **Vector Search**: pgvector com HNSW (NÃO usar IVFFlat)
+- **IA**: LangChain 0.3, LangGraph 0.2, Claude 3.5 Sonnet, GPT-4o
+- **Cache**: Redis (Upstash)
+- **Mobile**: React Native + Expo SDK 50
+
+## Design System: Dark Glass Medical
+
+### Cores
+```css
+/* Backgrounds */
+--bg-primary: #050508;
+--bg-secondary: #0a0a0f;
+--bg-tertiary: #12121a;
+--bg-elevated: #1a1a24;
+
+/* Glass */
+--glass-bg: rgba(255, 255, 255, 0.03);
+--glass-border: rgba(255, 255, 255, 0.08);
+--glass-blur: 16px;
+
+/* Accents */
+--accent-primary: #3b82f6;
+--accent-secondary: #14b8a6;
+
+/* Status */
+--status-success: #22c55e;
+--status-warning: #f59e0b;
+--status-danger: #ef4444;
+--status-info: #06b6d4;
+
+/* Text */
+--text-primary: #f8fafc;
+--text-secondary: #94a3b8;
+--text-muted: #64748b;
+```
+
+### Neumorphic Shadows
+```css
+/* Outer (elevado) */
+box-shadow: 4px 4px 8px rgba(0,0,0,0.5), -4px -4px 8px rgba(255,255,255,0.03);
+
+/* Inner (pressionado) */
+box-shadow: inset 4px 4px 8px rgba(0,0,0,0.5), inset -4px -4px 8px rgba(255,255,255,0.03);
+
+/* Glow */
+box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+```
+
+## Convenções de Código
+
+### Nomenclatura
+- Componentes: PascalCase (`GlassCard.tsx`)
+- Hooks: camelCase com prefixo "use" (`useAuth.ts`)
+- Funções: camelCase (`formatCurrency`)
+- Arquivos: kebab-case (`data-display.tsx`)
+- Tabelas SQL: snake_case português (`cirurgia_materiais`)
+- Variáveis: camelCase
+
+### Imports
+```typescript
+// Sempre usar alias @/
+import { GlassCard } from '@/components/ui/primitives';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
+```
+
+### TypeScript
+- Sempre strict mode
+- Tipos explícitos em funções públicas
+- Interfaces para objetos, types para unions
+- Nunca usar `any` sem justificativa
+
+## Compliance Obrigatório
+
+### ANVISA RDC 665/2022
+- Rastreabilidade completa de OPME
+- Registros imutáveis (tabela rastreabilidade_opme)
+- Hash SHA-256 por registro
+
+### LGPD
+- Consentimento documentado
+- Direitos do titular (15 dias)
+- Anonimização de dados
+- Log de acesso a dados pessoais
+
+### Segurança
+- Row Level Security (RLS) em TODAS as tabelas
+- Blockchain Audit Log com Proof of Work
+- Multi-tenancy por empresa_id
+
+## Estrutura de Arquivos
+
+```
+src/
+├── components/ui/     # Componentes reutilizáveis
+├── hooks/             # Custom hooks
+├── lib/               # Utilitários e configurações
+├── pages/             # Páginas/rotas
+├── types/             # Tipos TypeScript
+└── styles/            # CSS global
+
+supabase/
+├── migrations/        # SQL migrations
+└── functions/         # Edge Functions
+```

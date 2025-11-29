@@ -1,0 +1,259 @@
+---
+description: Regras para PostgreSQL 16, Supabase e pgvector
+globs: ["**/*.sql", "supabase/**/*", "src/lib/*supabase*"]
+---
+
+# Database - PostgreSQL 16 + Supabase
+
+## Estrutura Obrigatória de Tabelas
+
+### Campos Padrão
+```sql
+CREATE TABLE nome_tabela (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
+  -- campos específicos --
+  criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Trigger de updated_at
+CREATE TRIGGER tr_nome_tabela_updated 
+  BEFORE UPDATE ON nome_tabela 
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- RLS obrigatório
+ALTER TABLE nome_tabela ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nome_tabela FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY rls_nome_tabela_select ON nome_tabela 
+  FOR SELECT USING (empresa_id = current_empresa());
+CREATE POLICY rls_nome_tabela_insert ON nome_tabela 
+  FOR INSERT WITH CHECK (empresa_id = current_empresa());
+CREATE POLICY rls_nome_tabela_update ON nome_tabela 
+  FOR UPDATE USING (empresa_id = current_empresa());
+```
+
+### Soft Delete
+```sql
+-- Adicionar campo
+excluido_em TIMESTAMPTZ
+
+-- Índices devem filtrar
+CREATE INDEX idx_tabela_empresa ON tabela(empresa_id) WHERE excluido_em IS NULL;
+```
+
+## pgvector com HNSW
+
+### Criar Índice (CORRETO)
+```sql
+-- ✅ USAR HNSW
+CREATE INDEX idx_ml_vectors_hnsw ON ml_vectors 
+USING hnsw (embedding vector_cosine_ops)
+WITH (m = 16, ef_construction = 64);
+
+-- ❌ NÃO USAR IVFFlat (deprecated para este projeto)
+-- CREATE INDEX ... USING ivfflat ...
+```
+
+### Configurar Busca
+```sql
+-- Ajustar precisão (maior = mais preciso, mais lento)
+SET hnsw.ef_search = 100;
+```
+
+### Função de Busca
+```sql
+CREATE OR REPLACE FUNCTION search_vectors(
+  query_embedding vector(1536),
+  p_empresa_id UUID,
+  p_source_type TEXT DEFAULT NULL,
+  match_threshold FLOAT DEFAULT 0.7,
+  match_count INT DEFAULT 10
+)
+RETURNS TABLE (
+  id UUID,
+  content TEXT,
+  metadata JSONB,
+  similarity FLOAT
+)
+LANGUAGE plpgsql AS $$
+BEGIN
+  PERFORM set_config('hnsw.ef_search', '100', true);
+  
+  RETURN QUERY
+  SELECT 
+    v.id,
+    v.content,
+    v.metadata,
+    1 - (v.embedding <=> query_embedding) AS similarity
+  FROM ml_vectors v
+  WHERE 
+    v.empresa_id = p_empresa_id
+    AND (p_source_type IS NULL OR v.source_type = p_source_type)
+    AND 1 - (v.embedding <=> query_embedding) > match_threshold
+  ORDER BY v.embedding <=> query_embedding
+  LIMIT match_count;
+END;
+$$;
+```
+
+## Blockchain Audit Log
+
+### Minerar Bloco
+```sql
+SELECT mine_audit_block(
+  p_empresa_id := 'uuid-empresa',
+  p_usuario_id := 'uuid-usuario',
+  p_tabela := 'nome_tabela',
+  p_registro_id := 'uuid-registro',
+  p_acao := 'INSERT', -- INSERT, UPDATE, DELETE
+  p_dados_antes := NULL,
+  p_dados_depois := '{"campo": "valor"}'::jsonb,
+  p_difficulty := 2
+);
+```
+
+### Validar Chain
+```sql
+SELECT * FROM validate_blockchain('uuid-empresa');
+-- Retorna: valid, total_blocks, invalid_block, error_message
+```
+
+## Supabase Client (TypeScript)
+
+### Configuração
+```typescript
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/types/database';
+
+export const supabase = createClient<Database>(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+```
+
+### Queries Tipadas
+```typescript
+// Select
+const { data, error } = await supabase
+  .from('cirurgias')
+  .select(`
+    *,
+    hospital:hospitais(*),
+    medico:medicos(*),
+    materiais:cirurgia_materiais(*, produto:produtos(*))
+  `)
+  .eq('empresa_id', empresaId)
+  .order('data_agendamento', { ascending: true });
+
+// Insert
+const { data, error } = await supabase
+  .from('cirurgias')
+  .insert({ ...dados })
+  .select()
+  .single();
+
+// Update
+const { error } = await supabase
+  .from('cirurgias')
+  .update({ status: 'confirmada' })
+  .eq('id', cirurgiaId);
+
+// Delete (soft)
+const { error } = await supabase
+  .from('cirurgias')
+  .update({ excluido_em: new Date().toISOString() })
+  .eq('id', cirurgiaId);
+```
+
+### Realtime
+```typescript
+const channel = supabase
+  .channel('realtime:cirurgias')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'cirurgias' },
+    (payload) => {
+      console.log('Change:', payload);
+    }
+  )
+  .subscribe();
+
+// Cleanup
+supabase.removeChannel(channel);
+```
+
+### RPC (Funções)
+```typescript
+// Busca semântica
+const { data } = await supabase.rpc('search_vectors', {
+  query_embedding: embedding,
+  p_empresa_id: empresaId,
+  match_threshold: 0.7,
+  match_count: 10,
+});
+
+// Validar blockchain
+const { data } = await supabase.rpc('validate_blockchain', {
+  p_empresa_id: empresaId,
+});
+```
+
+## Edge Functions
+
+### Template Básico
+```typescript
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
+
+  try {
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')! // Bypass RLS
+    );
+
+    const { action, ...params } = await req.json();
+    
+    // Lógica aqui
+
+    return new Response(
+      JSON.stringify({ success: true, data }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers: corsHeaders }
+    );
+  }
+});
+```
+
+## Convenções SQL
+
+### Nomenclatura
+- Tabelas: snake_case português (`cirurgia_materiais`)
+- Campos: snake_case português (`data_agendamento`)
+- PKs: sempre `id`
+- FKs: `{tabela_singular}_id` (`hospital_id`)
+- Índices: `idx_{tabela}_{campo}`
+- Triggers: `tr_{tabela}_{acao}`
+- Policies: `rls_{tabela}_{operacao}`
+
+### Tipos de Dados
+- IDs: `UUID`
+- Dinheiro: `DECIMAL(15,2)` ou `DECIMAL(15,4)`
+- Timestamps: `TIMESTAMPTZ`
+- JSON: `JSONB`
+- Texto longo: `TEXT`
+- Enums: `VARCHAR(N) CHECK (...)`
