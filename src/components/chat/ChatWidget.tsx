@@ -49,7 +49,7 @@ const SUGGESTION_CATEGORIES: SuggestionCategory[] = [
     id: 'financeiro',
     title: 'Financeiro',
     icon: DollarSign,
-    color: '#F59E0B',
+    color: '#8b5cf6',
     suggestions: [
       'Qual o fluxo de caixa desta semana?',
       'Mostre clientes inadimplentes',

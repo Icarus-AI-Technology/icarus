@@ -143,7 +143,7 @@ function EventoIcon({ tipo }: { tipo: EventoAgenda['tipo'] }) {
     case 'consulta':
       return <User className={`${iconClass} text-green-400`} />
     case 'tarefa':
-      return <FileText className={`${iconClass} text-amber-400`} />
+      return <FileText className={`${iconClass} text-violet-300`} />
     case 'lembrete':
       return <Bell className={`${iconClass} text-purple-400`} />
     default:
@@ -155,7 +155,7 @@ function PrioridadeBadge({ prioridade }: { prioridade: EventoAgenda['prioridade'
   const configs = {
     baixa: { label: 'Baixa', color: 'bg-slate-500/20 text-slate-400' },
     media: { label: 'Média', color: 'bg-blue-500/20 text-blue-400' },
-    alta: { label: 'Alta', color: 'bg-orange-500/20 text-orange-400' },
+    alta: { label: 'Alta', color: 'bg-red-500/20 text-pink-400' },
     urgente: { label: 'Urgente', color: 'bg-red-500/20 text-red-400' },
   }
   
@@ -168,7 +168,7 @@ function PrioridadeBadge({ prioridade }: { prioridade: EventoAgenda['prioridade'
 
 function StatusIndicator({ status }: { status: EventoAgenda['status'] }) {
   const configs = {
-    pendente: { color: 'bg-amber-500', pulse: false },
+    pendente: { color: 'bg-violet-500', pulse: false },
     confirmado: { color: 'bg-emerald-500', pulse: false },
     em_andamento: { color: 'bg-blue-500', pulse: true },
     concluido: { color: 'bg-slate-500', pulse: false },
@@ -193,8 +193,8 @@ function AlertaCard({
 }) {
   const prioridadeConfig = {
     info: { bg: 'border-l-blue-500', icon: <Sparkles className="w-4 h-4 text-blue-400" /> },
-    atencao: { bg: 'border-l-amber-500', icon: <AlertCircle className="w-4 h-4 text-amber-400" /> },
-    urgente: { bg: 'border-l-orange-500', icon: <Bell className="w-4 h-4 text-orange-400" /> },
+    atencao: { bg: 'border-l-violet-500', icon: <AlertCircle className="w-4 h-4 text-violet-300" /> },
+    urgente: { bg: 'border-l-red-500', icon: <Bell className="w-4 h-4 text-pink-400" /> },
     critico: { bg: 'border-l-red-500', icon: <AlertCircle className="w-4 h-4 text-red-400" /> },
   }
   

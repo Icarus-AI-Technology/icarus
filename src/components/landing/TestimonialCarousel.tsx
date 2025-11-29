@@ -88,7 +88,7 @@ export function TestimonialCarousel() {
                 key={i}
                 className={`w-5 h-5 ${
                   i < currentTestimonial.rating
-                    ? 'fill-yellow-400 text-yellow-400'
+                    ? 'fill-cyan-400 text-cyan-300'
                     : 'text-gray-600'
                 }`}
               />

@@ -265,7 +265,7 @@ const MOCK_NCM_ISENCOES: NCMIsencao[] = [
 const DADOS_IMPOSTOS_PIE = [
   { name: 'ICMS', value: 325000, color: '#6366F1' },
   { name: 'PIS', value: 36775, color: '#10B981' },
-  { name: 'COFINS', value: 169400, color: '#F59E0B' },
+  { name: 'COFINS', value: 169400, color: '#8b5cf6' },
   { name: 'IRPJ', value: 67500, color: '#EF4444' },
   { name: 'CSLL', value: 40500, color: '#8B5CF6' },
   { name: 'ISS', value: 42500, color: '#3B82F6' },
@@ -312,7 +312,7 @@ export function GestaoFiscal() {
   const getStatusConfig = (status: string) => {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       apurado: { cor: '#3B82F6', texto: 'Apurado', icon: Calculator },
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       pago: { cor: '#10B981', texto: 'Pago', icon: CheckCircle },
       parcelado: { cor: '#8B5CF6', texto: 'Parcelado', icon: Layers },
       vencido: { cor: '#EF4444', texto: 'Vencido', icon: AlertTriangle },
@@ -320,7 +320,7 @@ export function GestaoFiscal() {
       transmitida: { cor: '#10B981', texto: 'Transmitida', icon: Send },
       processada: { cor: '#10B981', texto: 'Processada', icon: CheckCircle },
       erro: { cor: '#EF4444', texto: 'Erro', icon: XCircle },
-      retificada: { cor: '#F59E0B', texto: 'Retificada', icon: RefreshCw },
+      retificada: { cor: '#8b5cf6', texto: 'Retificada', icon: RefreshCw },
     }
     return configs[status] || { cor: '#6B7280', texto: status, icon: Info }
   }
@@ -328,7 +328,7 @@ export function GestaoFiscal() {
   const getSeveridadeConfig = (severidade: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       info: { cor: '#3B82F6', texto: 'Info' },
-      warning: { cor: '#F59E0B', texto: 'Atenção' },
+      warning: { cor: '#8b5cf6', texto: 'Atenção' },
       critical: { cor: '#EF4444', texto: 'Crítico' },
     }
     return configs[severidade] || { cor: '#6B7280', texto: severidade }
@@ -454,12 +454,12 @@ export function GestaoFiscal() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>A Pagar</p>
-                <p className={`text-lg font-bold text-[#F59E0B]`}>{formatCompact(resumo.totalAPagar)}</p>
+                <p className={`text-lg font-bold text-[#8b5cf6]`}>{formatCompact(resumo.totalAPagar)}</p>
               </div>
             </div>
           </CardContent>
@@ -579,7 +579,7 @@ export function GestaoFiscal() {
                       <Legend />
                       <Bar dataKey="icms" name="ICMS" fill="#6366F1" radius={[4, 4, 0, 0]} />
                       <Bar dataKey="pis" name="PIS" fill="#10B981" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="cofins" name="COFINS" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="cofins" name="COFINS" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                       <Bar dataKey="irpj" name="IRPJ" fill="#EF4444" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -592,7 +592,7 @@ export function GestaoFiscal() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Calendar className="w-5 h-5 text-[#F59E0B]" />
+                <Calendar className="w-5 h-5 text-[#8b5cf6]" />
                 Próximos Vencimentos
               </CardTitle>
             </CardHeader>
@@ -816,7 +816,7 @@ export function GestaoFiscal() {
                           <Badge className={
                             ncm.tipoIsencao === 'Isenção' ? 'bg-green-500/20 text-green-500' :
                             ncm.tipoIsencao === 'Redução Base' ? 'bg-blue-500/20 text-blue-500' :
-                            'bg-yellow-500/20 text-yellow-500'
+                            'bg-cyan-500/20 text-cyan-400'
                           }>
                             {ncm.tipoIsencao}
                           </Badge>
@@ -856,7 +856,7 @@ export function GestaoFiscal() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-[#F59E0B]" />
+                <Bell className="w-5 h-5 text-[#8b5cf6]" />
                 Alertas Fiscais
               </CardTitle>
             </CardHeader>
@@ -894,7 +894,7 @@ export function GestaoFiscal() {
                           )}
                           <div className={`mt-2 p-2 rounded-lg ${isDark ? 'bg-[#0F1220]' : 'bg-slate-50'}`}>
                             <p className={`text-xs ${textSecondary}`}>
-                              <Zap className="w-3 h-3 inline mr-1 text-[#F59E0B]" />
+                              <Zap className="w-3 h-3 inline mr-1 text-[#8b5cf6]" />
                               {alerta.acaoSugerida}
                             </p>
                           </div>

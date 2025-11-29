@@ -76,7 +76,7 @@ function KanbanCard({ cirurgia, onClick, compacto = false }: KanbanCardProps) {
   // Determinar cor do card baseado em alertas/urgência
   const getCardBorderColor = () => {
     if (cirurgia.tipo_cirurgia === 'urgencia') return 'border-l-red-500'
-    if (cirurgia.faturamento_status === 'glosado') return 'border-l-orange-500'
+    if (cirurgia.faturamento_status === 'glosado') return 'border-l-red-500'
     return 'border-l-transparent'
   }
 
@@ -340,13 +340,13 @@ export function KanbanCirurgias({
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
+            <div className="w-3 h-3 rounded-full bg-cyan-500" />
             <span className={`text-sm ${textSecondary}`}>
               <span className={`font-semibold ${textPrimary}`}>{stats.emAndamento}</span> Em Andamento
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-orange-500" />
+            <div className="w-3 h-3 rounded-full bg-red-500" />
             <span className={`text-sm ${textSecondary}`}>
               <span className={`font-semibold ${textPrimary}`}>{stats.pendenteFaturamento}</span> Pendente Faturamento
             </span>
@@ -397,7 +397,7 @@ export function KanbanCirurgias({
           <span className={`text-xs ${textSecondary}`}>Pendente/Urgência</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-orange-500" />
+          <div className="w-3 h-3 rounded-full bg-red-500" />
           <span className={`text-xs ${textSecondary}`}>Em Processamento</span>
         </div>
         <div className="flex items-center gap-2">

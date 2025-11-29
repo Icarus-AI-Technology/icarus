@@ -217,7 +217,7 @@ export function useCFM(options: UseCFMOptions = {}) {
   const getStatusColor = (situacao: SituacaoCRM): string => {
     const cores: Record<string, string> = {
       'ATIVO': '#10B981',
-      'INATIVO': '#F59E0B',
+      'INATIVO': '#8b5cf6',
       'SUSPENSO': '#EF4444',
       'CASSADO': '#EF4444',
       'CANCELADO': '#EF4444',

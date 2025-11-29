@@ -195,7 +195,7 @@ function getCorEvento(tipo: EventoAgenda['tipo']): string {
     licitacao: '#8B5CF6',
     treinamento: '#10B981',
     auditoria: '#EC4899',
-    manutencao: '#F59E0B',
+    manutencao: '#8b5cf6',
     vencimento: '#F97316',
     entrevista: '#14B8A6',
     consulta: '#6366F1',

@@ -222,13 +222,13 @@ export function KitOPMEInteligente() {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       montado: { cor: '#10B981', texto: 'Montado', icon: CheckCircle },
       em_montagem: { cor: '#3B82F6', texto: 'Em Montagem', icon: Clock },
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: AlertTriangle },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: AlertTriangle },
       expedido: { cor: '#8B5CF6', texto: 'Expedido', icon: Package },
       retornado: { cor: '#6B7280', texto: 'Retornado', icon: ArrowLeft },
       disponivel: { cor: '#10B981', texto: 'Disponível', icon: CheckCircle },
       reservado: { cor: '#3B82F6', texto: 'Reservado', icon: Tag },
       indisponivel: { cor: '#EF4444', texto: 'Indisponível', icon: XCircle },
-      alternativa: { cor: '#F59E0B', texto: 'Alternativa', icon: Puzzle },
+      alternativa: { cor: '#8b5cf6', texto: 'Alternativa', icon: Puzzle },
       ok: { cor: '#10B981', texto: 'OK', icon: ShieldCheck },
       vencida: { cor: '#EF4444', texto: 'Vencida', icon: ShieldAlert },
     }
@@ -238,7 +238,7 @@ export function KitOPMEInteligente() {
   const getImpactoConfig = (impacto: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       alto: { cor: '#EF4444', texto: 'Alto' },
-      medio: { cor: '#F59E0B', texto: 'Médio' },
+      medio: { cor: '#8b5cf6', texto: 'Médio' },
       baixo: { cor: '#10B981', texto: 'Baixo' },
     }
     return configs[impacto] || { cor: '#6B7280', texto: impacto }
@@ -350,12 +350,12 @@ export function KitOPMEInteligente() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Pendentes</p>
-                <p className={`text-2xl font-bold text-[#F59E0B]`}>{resumo.pendentes}</p>
+                <p className={`text-2xl font-bold text-[#8b5cf6]`}>{resumo.pendentes}</p>
               </div>
             </div>
           </CardContent>
@@ -714,7 +714,7 @@ export function KitOPMEInteligente() {
                         </div>
                         {item.alternativas && item.alternativas.length > 0 && (
                           <div className={`mt-2 p-2 rounded-lg ${isDark ? 'bg-[#0F1220]' : 'bg-slate-50'}`}>
-                            <p className={`text-xs text-[#F59E0B] mb-1`}>
+                            <p className={`text-xs text-[#8b5cf6] mb-1`}>
                               <Puzzle className="w-3 h-3 inline mr-1" />
                               Alternativa disponível:
                             </p>

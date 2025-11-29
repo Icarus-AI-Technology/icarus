@@ -58,7 +58,7 @@ const MOCK_KPI_DATA = {
 
 const MOCK_CIRURGIAS_POR_STATUS = [
   { status: 'Agendadas', quantidade: 45, cor: '#3B82F6' },
-  { status: 'Em Andamento', quantidade: 8, cor: '#F59E0B' },
+  { status: 'Em Andamento', quantidade: 8, cor: '#8b5cf6' },
   { status: 'Realizadas', quantidade: 132, cor: '#10B981' },
   { status: 'Canceladas', quantidade: 5, cor: '#EF4444' },
   { status: 'Pendentes', quantidade: 12, cor: '#8B5CF6' },
@@ -127,7 +127,7 @@ export function DashboardCirurgico() {
   const borderColor = isDark ? 'border-[#252B44]' : 'border-slate-200'
 
   // Chart colors
-  const chartColors = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899']
+  const chartColors = ['#6366F1', '#10B981', '#8b5cf6', '#EF4444', '#8B5CF6', '#EC4899']
 
   // Helpers
   const formatCurrency = (value: number) => {
@@ -143,7 +143,7 @@ export function DashboardCirurgico() {
   const getAlertConfig = (tipo: string) => {
     const configs: Record<string, { cor: string; icon: any }> = {
       urgente: { cor: '#EF4444', icon: AlertTriangle },
-      aviso: { cor: '#F59E0B', icon: Bell },
+      aviso: { cor: '#8b5cf6', icon: Bell },
       info: { cor: '#3B82F6', icon: Bell },
       sucesso: { cor: '#10B981', icon: CheckCircle },
     }
@@ -277,8 +277,8 @@ export function DashboardCirurgico() {
                     <span className="text-xs text-[#10B981]">+8% vs mês anterior</span>
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-[#F59E0B]" />
+                <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                  <DollarSign className="w-6 h-6 text-[#8b5cf6]" />
                 </div>
               </div>
             </CardContent>
@@ -435,7 +435,7 @@ export function DashboardCirurgico() {
         <Card className={cardBg}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-[#F59E0B]" />
+              <Star className="w-5 h-5 text-[#8b5cf6]" />
               Top Procedimentos
             </CardTitle>
           </CardHeader>
@@ -446,7 +446,7 @@ export function DashboardCirurgico() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        idx === 0 ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
+                        idx === 0 ? 'bg-[#8b5cf6]/20 text-[#8b5cf6]' :
                         idx === 1 ? 'bg-[#94A3B8]/20 text-[#94A3B8]' :
                         idx === 2 ? 'bg-[#CD7F32]/20 text-[#CD7F32]' :
                         'bg-gray-500/20 text-gray-500'
@@ -491,7 +491,7 @@ export function DashboardCirurgico() {
                     <div className="text-right">
                       <p className={`font-bold ${textPrimary}`}>{med.cirurgias}</p>
                       <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 text-[#F59E0B] fill-[#F59E0B]" />
+                        <Star className="w-3 h-3 text-[#8b5cf6] fill-[#8b5cf6]" />
                         <span className={`text-xs ${textSecondary}`}>{med.avaliacao}</span>
                       </div>
                     </div>
@@ -550,7 +550,7 @@ export function DashboardCirurgico() {
             {MOCK_PROXIMAS_CIRURGIAS.map((cir) => (
               <div key={cir.id} className={`p-4 rounded-xl ${inputBg} border ${borderColor}`}>
                 <div className="flex items-center justify-between mb-2">
-                  <Badge className={cir.status === 'confirmada' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}>
+                  <Badge className={cir.status === 'confirmada' ? 'bg-green-500/20 text-green-500' : 'bg-cyan-500/20 text-cyan-400'}>
                     {cir.status === 'confirmada' ? 'Confirmada' : 'Pendente'}
                   </Badge>
                   <span className={`font-bold ${textPrimary}`}>{cir.horario}</span>

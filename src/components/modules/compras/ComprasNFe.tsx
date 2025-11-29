@@ -368,7 +368,7 @@ export function ComprasNFe() {
 
   const getStatusConfig = (status: string) => {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       processada: { cor: '#3B82F6', texto: 'Processada', icon: CheckCircle },
       estoque_gerado: { cor: '#10B981', texto: 'Estoque Gerado', icon: Package },
       pagar_gerado: { cor: '#8B5CF6', texto: 'Pagar Gerado', icon: CreditCard },
@@ -376,7 +376,7 @@ export function ComprasNFe() {
       erro: { cor: '#EF4444', texto: 'Erro', icon: XCircle },
       cancelada: { cor: '#6B7280', texto: 'Cancelada', icon: XCircle },
       rascunho: { cor: '#6B7280', texto: 'Rascunho', icon: FileText },
-      aprovacao: { cor: '#F59E0B', texto: 'Em Aprovação', icon: Clock },
+      aprovacao: { cor: '#8b5cf6', texto: 'Em Aprovação', icon: Clock },
       aprovado: { cor: '#10B981', texto: 'Aprovado', icon: CheckCircle },
       enviado: { cor: '#3B82F6', texto: 'Enviado', icon: Send },
       parcial: { cor: '#8B5CF6', texto: 'Parcial', icon: Layers },
@@ -448,9 +448,9 @@ export function ComprasNFe() {
                 ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
                 : 'bg-slate-100'
             }`}
-            style={{ backgroundColor: '#F59E0B20' }}
+            style={{ backgroundColor: '#8b5cf620' }}
           >
-            <ShoppingCart className="w-7 h-7 text-[#F59E0B]" />
+            <ShoppingCart className="w-7 h-7 text-[#8b5cf6]" />
           </div>
           <div>
             <h1 className={`text-2xl font-bold ${textPrimary}`}>Compras</h1>
@@ -496,8 +496,8 @@ export function ComprasNFe() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <FileText className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>NFe Pendentes</p>
@@ -566,7 +566,7 @@ export function ComprasNFe() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <FileText className="w-5 h-5 text-[#F59E0B]" />
+                  <FileText className="w-5 h-5 text-[#8b5cf6]" />
                   Últimas Notas Fiscais
                 </CardTitle>
               </CardHeader>
@@ -937,7 +937,7 @@ export function ComprasNFe() {
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star 
                                   key={star}
-                                  className={`w-4 h-4 ${star <= Math.floor(fornecedor.avaliacao) ? 'text-[#F59E0B] fill-[#F59E0B]' : 'text-gray-400'}`}
+                                  className={`w-4 h-4 ${star <= Math.floor(fornecedor.avaliacao) ? 'text-[#8b5cf6] fill-[#8b5cf6]' : 'text-gray-400'}`}
                                 />
                               ))}
                               <span className={`text-sm ${textSecondary} ml-1`}>{fornecedor.avaliacao}</span>
@@ -977,7 +977,7 @@ export function ComprasNFe() {
                 {MOCK_SUGESTOES_IA.map((sug) => {
                   const impactoConfig: Record<string, { cor: string; texto: string }> = {
                     alto: { cor: '#EF4444', texto: 'Alto' },
-                    medio: { cor: '#F59E0B', texto: 'Médio' },
+                    medio: { cor: '#8b5cf6', texto: 'Médio' },
                     baixo: { cor: '#10B981', texto: 'Baixo' },
                   }
                   const impacto = impactoConfig[sug.impacto]
@@ -1043,7 +1043,7 @@ export function ComprasNFe() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-[#F59E0B]" />
+              <FileText className="w-5 h-5 text-[#8b5cf6]" />
               NF {notaSelecionada?.numero} / {notaSelecionada?.serie}
             </DialogTitle>
           </DialogHeader>

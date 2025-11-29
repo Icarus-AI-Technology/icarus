@@ -105,7 +105,7 @@ export function IcarusTopbar() {
               <div className="space-y-2 p-1">
                 {[
                   { title: 'Cirurgia agendada', desc: 'Nova cirurgia de João Silva agendada para amanhã', time: '5 minutos atrás', color: '#6366F1' },
-                  { title: 'Estoque baixo', desc: 'Produto STN-CARD-001 com estoque abaixo do mínimo', time: '1 hora atrás', color: '#F59E0B' },
+                  { title: 'Estoque baixo', desc: 'Produto STN-CARD-001 com estoque abaixo do mínimo', time: '1 hora atrás', color: '#8b5cf6' },
                   { title: 'NFe emitida', desc: 'Nota fiscal #12345 emitida com sucesso', time: '3 horas atrás', color: '#10B981' }
                 ].map((notif, i) => (
                   <div 

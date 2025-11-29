@@ -399,9 +399,9 @@ export function GestaoCadastros() {
                 ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
                 : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
             }`}
-            style={{ backgroundColor: '#F59E0B15' }}
+            style={{ backgroundColor: '#8b5cf615' }}
           >
-            <FileText className="w-7 h-7 text-[#F59E0B]" />
+            <FileText className="w-7 h-7 text-[#8b5cf6]" />
           </div>
           <div>
             <h1 className={`text-3xl font-bold ${textPrimary}`}>Gestão de Cadastros</h1>
@@ -660,7 +660,7 @@ export function GestaoCadastros() {
                           <Badge className={`border-none ${
                             convenio.tipo === 'convenio' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' :
                             convenio.tipo === 'sus' ? 'bg-[#10B981]/20 text-[#10B981]' :
-                            'bg-[#F59E0B]/20 text-[#F59E0B]'
+                            'bg-[#8b5cf6]/20 text-[#8b5cf6]'
                           }`}>
                             {convenio.tipo === 'convenio' ? 'Convênio' : convenio.tipo === 'sus' ? 'SUS' : 'Particular'}
                           </Badge>

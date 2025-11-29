@@ -49,7 +49,7 @@ const funcionariosData = [
 const departamentosData = [
   { name: 'Logística', value: 18, color: '#6366F1' },
   { name: 'Comercial', value: 12, color: '#10B981' },
-  { name: 'Administrativo', value: 10, color: '#F59E0B' },
+  { name: 'Administrativo', value: 10, color: '#8b5cf6' },
   { name: 'Operacional', value: 16, color: '#3B82F6' },
 ]
 
@@ -530,7 +530,7 @@ export function RHGestaoPessoas() {
           title="Férias Pendentes"
           value={8}
           icon={Calendar}
-          iconColor="#F59E0B"
+          iconColor="#8b5cf6"
         />
         <KPICard
           title="Turnover Anual"
@@ -662,7 +662,7 @@ export function RHGestaoPessoas() {
                           turno.cobertura >= 95
                             ? 'bg-[#10B981]/20 text-[#10B981]'
                             : turno.cobertura >= 90
-                            ? 'bg-[#F59E0B]/20 text-[#F59E0B]'
+                            ? 'bg-[#8b5cf6]/20 text-[#8b5cf6]'
                             : 'bg-[#EF4444]/20 text-[#EF4444]'
                         }
                       >
@@ -675,7 +675,7 @@ export function RHGestaoPessoas() {
                           turno.cobertura >= 95
                             ? 'bg-[#10B981]'
                             : turno.cobertura >= 90
-                            ? 'bg-[#F59E0B]'
+                            ? 'bg-[#8b5cf6]'
                             : 'bg-[#EF4444]'
                         }`}
                         style={{ width: `${turno.cobertura}%` }}
@@ -730,8 +730,8 @@ export function RHGestaoPessoas() {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-[#F59E0B]" />
+                  <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-[#8b5cf6]" />
                   </div>
                   <div>
                     <p className={textSecondary}>Encargos</p>
@@ -793,10 +793,10 @@ export function RHGestaoPessoas() {
                 </div>
                 <div className={`p-4 rounded-xl ${inputBg} flex items-center justify-between`}>
                   <div className="flex items-center gap-3">
-                    <AlertCircle className="w-5 h-5 text-[#F59E0B]" />
+                    <AlertCircle className="w-5 h-5 text-[#8b5cf6]" />
                     <span className={textPrimary}>Prazo entrega DIRF</span>
                   </div>
-                  <Badge className="bg-[#F59E0B]/20 text-[#F59E0B]">28/02/2025</Badge>
+                  <Badge className="bg-[#8b5cf6]/20 text-[#8b5cf6]">28/02/2025</Badge>
                 </div>
               </CardContent>
             </Card>

@@ -5,7 +5,7 @@ import { LucideIcon } from 'lucide-react';
 export interface NeomorphicIconBoxProps {
   icon: LucideIcon | React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }> | React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
-  colorVariant?: 'cyan' | 'indigo' | 'green' | 'purple' | 'orange' | 'blue' | 'red' | 'yellow';
+  colorVariant?: 'cyan' | 'indigo' | 'green' | 'purple' | 'red' | 'blue' | 'pink' | 'teal';
   className?: string;
 }
 
@@ -36,16 +36,16 @@ export const NeomorphicIconBox: React.FC<NeomorphicIconBoxProps> = ({
     lg: 28,
   };
 
-  // Icon colors only (background is always dark)
+  // Icon colors only (background is always dark) - Dark Glass Medical palette
   const iconColors: Record<string, string> = {
     cyan: '#2DD4BF',
     indigo: '#6366F1',
     green: '#10B981',
     purple: '#8B5CF6',
-    orange: '#F59E0B',
+    pink: '#EC4899',
     blue: '#3B82F6',
     red: '#EF4444',
-    yellow: '#F59E0B',
+    teal: '#14B8A6',
   };
 
   const renderIcon = () => {

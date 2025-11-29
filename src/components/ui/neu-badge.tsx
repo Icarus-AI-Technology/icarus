@@ -40,8 +40,8 @@ export const NeuBadge = React.forwardRef<HTMLSpanElement, NeuBadgeProps>(
         ? 'bg-[#10B981]/20 text-[#10B981] border-[#10B981]/30'
         : 'bg-[#10B981] text-white',
       warning: outline
-        ? 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/30'
-        : 'bg-[#F59E0B] text-white',
+        ? 'bg-[#8b5cf6]/20 text-[#8b5cf6] border-[#8b5cf6]/30'
+        : 'bg-[#8b5cf6] text-white',
       danger: outline
         ? 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/30'
         : 'bg-[#EF4444] text-white',

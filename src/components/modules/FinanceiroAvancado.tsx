@@ -316,7 +316,7 @@ export function FinanceiroAvancado() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { color: string; label: string }> = {
-      pendente: { color: 'bg-[#F59E0B]/20 text-[#F59E0B]', label: 'Pendente' },
+      pendente: { color: 'bg-[#8b5cf6]/20 text-[#8b5cf6]', label: 'Pendente' },
       pago: { color: 'bg-[#10B981]/20 text-[#10B981]', label: 'Pago' },
       recebido: { color: 'bg-[#10B981]/20 text-[#10B981]', label: 'Recebido' },
       vencido: { color: 'bg-[#EF4444]/20 text-[#EF4444]', label: 'Vencido' },
@@ -399,7 +399,7 @@ export function FinanceiroAvancado() {
           title="Contas Vencidas"
           value={contasVencidas}
           icon={AlertCircle}
-          iconColor="#F59E0B"
+          iconColor="#8b5cf6"
         />
       </div>
 
@@ -494,7 +494,7 @@ export function FinanceiroAvancado() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-[#F59E0B]" />
+                <Calendar className="w-5 h-5 text-[#8b5cf6]" />
                 Próximos Vencimentos (7 dias)
               </CardTitle>
             </CardHeader>
@@ -710,7 +710,7 @@ export function FinanceiroAvancado() {
                           {mov.conciliado ? (
                             <Badge className="bg-[#10B981]/20 text-[#10B981] border-none text-xs">Conciliado</Badge>
                           ) : (
-                            <Badge className="bg-[#F59E0B]/20 text-[#F59E0B] border-none text-xs">Pendente</Badge>
+                            <Badge className="bg-[#8b5cf6]/20 text-[#8b5cf6] border-none text-xs">Pendente</Badge>
                           )}
                         </div>
                         {!mov.conciliado && (

@@ -357,7 +357,7 @@ export function LicitacoesCompleto() {
       aberto: { cor: '#10B981', texto: 'Aberto', icon: CheckCircle },
       em_andamento: { cor: '#3B82F6', texto: 'Em Andamento', icon: Clock },
       encerrado: { cor: '#6B7280', texto: 'Encerrado', icon: XCircle },
-      suspenso: { cor: '#F59E0B', texto: 'Suspenso', icon: AlertTriangle },
+      suspenso: { cor: '#8b5cf6', texto: 'Suspenso', icon: AlertTriangle },
       cancelado: { cor: '#EF4444', texto: 'Cancelado', icon: XCircle },
       adjudicado: { cor: '#8B5CF6', texto: 'Adjudicado', icon: Award },
       homologado: { cor: '#10B981', texto: 'Homologado', icon: CheckCircle },
@@ -365,10 +365,10 @@ export function LicitacoesCompleto() {
       enviada: { cor: '#3B82F6', texto: 'Enviada', icon: Send },
       aceita: { cor: '#10B981', texto: 'Aceita', icon: CheckCircle },
       recusada: { cor: '#EF4444', texto: 'Recusada', icon: XCircle },
-      vencedora: { cor: '#F59E0B', texto: 'Vencedora', icon: Crown },
+      vencedora: { cor: '#8b5cf6', texto: 'Vencedora', icon: Crown },
       valido: { cor: '#10B981', texto: 'Válido', icon: CheckCircle },
       vencido: { cor: '#EF4444', texto: 'Vencido', icon: AlertTriangle },
-      a_vencer: { cor: '#F59E0B', texto: 'A Vencer', icon: Clock },
+      a_vencer: { cor: '#8b5cf6', texto: 'A Vencer', icon: Clock },
       pendente: { cor: '#6B7280', texto: 'Pendente', icon: FileClock },
       anexado: { cor: '#3B82F6', texto: 'Anexado', icon: FileCheck },
       validado: { cor: '#10B981', texto: 'Validado', icon: CheckCircle },
@@ -379,7 +379,7 @@ export function LicitacoesCompleto() {
   const getViabilidadeConfig = (viabilidade: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       alta: { cor: '#10B981', texto: 'Alta' },
-      media: { cor: '#F59E0B', texto: 'Média' },
+      media: { cor: '#8b5cf6', texto: 'Média' },
       baixa: { cor: '#EF4444', texto: 'Baixa' },
     }
     return configs[viabilidade] || { cor: '#6B7280', texto: viabilidade }
@@ -476,8 +476,8 @@ export function LicitacoesCompleto() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Award className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Award className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Vencidos</p>
@@ -609,7 +609,7 @@ export function LicitacoesCompleto() {
                             </Badge>
                           )}
                           {processo.favorito && (
-                            <Star className="w-4 h-4 text-[#F59E0B] fill-[#F59E0B]" />
+                            <Star className="w-4 h-4 text-[#8b5cf6] fill-[#8b5cf6]" />
                           )}
                         </div>
                         <p className={`font-medium ${textPrimary} mb-1`}>{processo.orgao}</p>
@@ -699,7 +699,7 @@ export function LicitacoesCompleto() {
                               <span className={`text-xs ${textSecondary}`}>Score IA</span>
                               <span className={`font-bold ${
                                 edital.scoreIA >= 80 ? 'text-[#10B981]' :
-                                edital.scoreIA >= 50 ? 'text-[#F59E0B]' : 'text-[#EF4444]'
+                                edital.scoreIA >= 50 ? 'text-[#8b5cf6]' : 'text-[#EF4444]'
                               }`}>{edital.scoreIA}%</span>
                             </div>
                             <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
@@ -708,7 +708,7 @@ export function LicitacoesCompleto() {
                                 style={{ 
                                   width: `${edital.scoreIA}%`,
                                   backgroundColor: edital.scoreIA >= 80 ? '#10B981' :
-                                    edital.scoreIA >= 50 ? '#F59E0B' : '#EF4444'
+                                    edital.scoreIA >= 50 ? '#8b5cf6' : '#EF4444'
                                 }}
                               />
                             </div>
@@ -834,7 +834,7 @@ export function LicitacoesCompleto() {
                 {[
                   { titulo: 'Descrição de Produtos', icon: Package, desc: 'Descrição detalhada com specs ANVISA', cor: '#6366F1' },
                   { titulo: 'Info ANVISA Automática', icon: Shield, desc: 'Busca registro e validade', cor: '#10B981' },
-                  { titulo: 'Upload de Logo', icon: FileImage, desc: 'Personalização da proposta', cor: '#F59E0B' },
+                  { titulo: 'Upload de Logo', icon: FileImage, desc: 'Personalização da proposta', cor: '#8b5cf6' },
                   { titulo: 'PDF Profissional', icon: FileText, desc: 'Geração automática formatada', cor: '#8B5CF6' },
                 ].map((item) => (
                   <div 
@@ -860,10 +860,10 @@ export function LicitacoesCompleto() {
         <TabsContent value="habilitacao" className="space-y-4">
           {/* Alertas de Documentos */}
           {(stats.documentosVencidos > 0 || stats.documentosAVencer > 0) && (
-            <Card className={`border-l-4 ${stats.documentosVencidos > 0 ? 'border-l-red-500' : 'border-l-yellow-500'}`}>
+            <Card className={`border-l-4 ${stats.documentosVencidos > 0 ? 'border-l-red-500' : 'border-l-cyan-500'}`}>
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <AlertTriangle className={`w-6 h-6 ${stats.documentosVencidos > 0 ? 'text-red-500' : 'text-yellow-500'}`} />
+                  <AlertTriangle className={`w-6 h-6 ${stats.documentosVencidos > 0 ? 'text-red-500' : 'text-cyan-400'}`} />
                   <div>
                     <p className={`font-medium ${textPrimary}`}>
                       {stats.documentosVencidos > 0 
@@ -898,7 +898,7 @@ export function LicitacoesCompleto() {
                       key={doc.id}
                       className={`p-4 rounded-xl ${inputBg} border ${borderColor} ${
                         doc.status === 'vencido' ? 'border-l-4 border-l-red-500' :
-                        doc.status === 'a_vencer' ? 'border-l-4 border-l-yellow-500' : ''
+                        doc.status === 'a_vencer' ? 'border-l-4 border-l-cyan-500' : ''
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -915,7 +915,7 @@ export function LicitacoesCompleto() {
                               {doc.orgaoEmissor} • Validade: {new Date(doc.dataValidade).toLocaleDateString('pt-BR')}
                             </p>
                             {doc.diasParaVencer !== undefined && doc.status !== 'vencido' && (
-                              <p className={`text-xs ${doc.diasParaVencer <= 30 ? 'text-yellow-500' : textSecondary}`}>
+                              <p className={`text-xs ${doc.diasParaVencer <= 30 ? 'text-cyan-400' : textSecondary}`}>
                                 <Clock className="w-3 h-3 inline mr-1" />
                                 {doc.diasParaVencer} dias para vencer
                               </p>
@@ -948,7 +948,7 @@ export function LicitacoesCompleto() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-[#F59E0B]" />
+                <Zap className="w-5 h-5 text-[#8b5cf6]" />
                 Validação Automática
               </CardTitle>
             </CardHeader>

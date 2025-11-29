@@ -13,7 +13,7 @@ export function NotificacoesInteligentes() {
       title="Notificações Inteligentes"
       description="Sistema de notificações inteligentes e alertas"
       icon={Bell}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Notificações Ativas', value: 0 },
         { label: 'Enviadas (Hoje)', value: 0 },

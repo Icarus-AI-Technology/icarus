@@ -13,7 +13,7 @@ export function ViabilidadeImportacao() {
       title="Viabilidade Importação"
       description="Análise de viabilidade financeira de importações"
       icon={TrendingUp}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Análises Realizadas', value: 0 },
         { label: 'Taxa Aprovação', value: '0%' },

@@ -561,11 +561,11 @@ export function ConfiguracoesSystemModule() {
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                         certificado.status === 'valido' ? 'bg-green-500/20' :
-                        certificado.status === 'expirando' ? 'bg-yellow-500/20' : 'bg-red-500/20'
+                        certificado.status === 'expirando' ? 'bg-cyan-500/20' : 'bg-red-500/20'
                       }`}>
                         <FileKey className={`w-6 h-6 ${
                           certificado.status === 'valido' ? 'text-green-500' :
-                          certificado.status === 'expirando' ? 'text-yellow-500' : 'text-red-500'
+                          certificado.status === 'expirando' ? 'text-cyan-400' : 'text-red-500'
                         }`} />
                       </div>
                       <div>
@@ -573,7 +573,7 @@ export function ConfiguracoesSystemModule() {
                         <div className="flex items-center gap-2 mt-1">
                           <Badge className={
                             certificado.status === 'valido' ? 'bg-green-500/20 text-green-500' :
-                            certificado.status === 'expirando' ? 'bg-yellow-500/20 text-yellow-500' : 
+                            certificado.status === 'expirando' ? 'bg-cyan-500/20 text-cyan-400' : 
                             'bg-red-500/20 text-red-500'
                           }>
                             {certificado.tipo}

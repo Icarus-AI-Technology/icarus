@@ -16,7 +16,7 @@ const categoryColors: Record<string, string> = {
   'Vendas & CRM': '#10B981',          // Emerald
   'Financeiro & Faturamento': '#3B82F6', // Blue
   'Compliance & Auditoria': '#EF4444', // Red
-  'IA & Automação': '#F59E0B',        // Amber
+  'IA & Automação': '#8b5cf6',        // Amber
   'Sistema & Integrações': '#14B8A6', // Cyan
   'Dev Tools': '#A855F7',             // Violet
 }
@@ -26,7 +26,7 @@ const routeIconColors = [
   '#6366F1', // Indigo
   '#2DD4BF', // Teal
   '#8B5CF6', // Purple
-  '#F59E0B', // Amber
+  '#8b5cf6', // Amber
   '#3B82F6', // Blue
   '#10B981', // Emerald
   '#EC4899', // Pink
@@ -245,7 +245,7 @@ export function IcarusSidebar() {
                         {!isImplemented && (
                           <span 
                             className="text-[10px] px-1.5 py-0.5 rounded-full"
-                            style={{ backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#F59E0B' }}
+                            style={{ backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#8b5cf6' }}
                           >
                             Em breve
                           </span>

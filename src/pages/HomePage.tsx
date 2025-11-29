@@ -72,7 +72,7 @@ export function HomePage() {
       title: 'Automação Total',
       description:
         'Automatize processos repetitivos e ganhe até 70% de produtividade.',
-      gradientFrom: '#F59E0B',
+      gradientFrom: '#8b5cf6',
       gradientTo: '#EF4444',
     },
     {
@@ -89,7 +89,7 @@ export function HomePage() {
       description:
         'Desenvolvido especificamente para gestão de Órteses, Próteses e Materiais Especiais.',
       gradientFrom: '#EF4444',
-      gradientTo: '#F59E0B',
+      gradientTo: '#8b5cf6',
     },
     {
       icon: TrendingUp,

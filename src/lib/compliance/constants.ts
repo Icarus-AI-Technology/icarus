@@ -275,7 +275,7 @@ export const AUDIT_TYPES = {
 
 export const COMPLIANCE_STATUS = {
   COMPLIANT: { label: 'Conforme', color: 'green', score: 100 },
-  PARTIAL: { label: 'Parcialmente Conforme', color: 'yellow', score: 70 },
+  PARTIAL: { label: 'Parcialmente Conforme', color: 'cyan', score: 70 },
   NON_COMPLIANT: { label: 'Não Conforme', color: 'red', score: 0 },
   NOT_APPLICABLE: { label: 'Não Aplicável', color: 'gray', score: null },
   PENDING: { label: 'Pendente', color: 'blue', score: null }
@@ -285,8 +285,8 @@ export const COMPLIANCE_STATUS = {
 
 export const RISK_LEVELS = {
   CRITICAL: { label: 'Crítico', color: 'red', priority: 1 },
-  HIGH: { label: 'Alto', color: 'orange', priority: 2 },
-  MEDIUM: { label: 'Médio', color: 'yellow', priority: 3 },
+  HIGH: { label: 'Alto', color: 'red', priority: 2 },
+  MEDIUM: { label: 'Médio', color: 'cyan', priority: 3 },
   LOW: { label: 'Baixo', color: 'green', priority: 4 }
 } as const
 

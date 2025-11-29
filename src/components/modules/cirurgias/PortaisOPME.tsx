@@ -357,14 +357,14 @@ export function PortaisOPME() {
       conectado: { cor: '#10B981', texto: 'Conectado', icon: CheckCircle },
       desconectado: { cor: '#EF4444', texto: 'Desconectado', icon: XCircle },
       erro: { cor: '#EF4444', texto: 'Erro', icon: AlertTriangle },
-      manutencao: { cor: '#F59E0B', texto: 'Manutenção', icon: Clock },
+      manutencao: { cor: '#8b5cf6', texto: 'Manutenção', icon: Clock },
       disponivel: { cor: '#10B981', texto: 'Disponível', icon: CheckCircle },
-      sob_consulta: { cor: '#F59E0B', texto: 'Sob Consulta', icon: Clock },
+      sob_consulta: { cor: '#8b5cf6', texto: 'Sob Consulta', icon: Clock },
       indisponivel: { cor: '#EF4444', texto: 'Indisponível', icon: XCircle },
       rascunho: { cor: '#6B7280', texto: 'Rascunho', icon: FileText },
       enviado: { cor: '#3B82F6', texto: 'Enviado', icon: Truck },
       confirmado: { cor: '#8B5CF6', texto: 'Confirmado', icon: CheckCircle },
-      em_transito: { cor: '#F59E0B', texto: 'Em Trânsito', icon: Truck },
+      em_transito: { cor: '#8b5cf6', texto: 'Em Trânsito', icon: Truck },
       entregue: { cor: '#10B981', texto: 'Entregue', icon: CheckCircle },
       cancelado: { cor: '#EF4444', texto: 'Cancelado', icon: XCircle },
     }
@@ -374,7 +374,7 @@ export function PortaisOPME() {
   const getImpactoConfig = (impacto: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       alto: { cor: '#EF4444', texto: 'Alto' },
-      medio: { cor: '#F59E0B', texto: 'Médio' },
+      medio: { cor: '#8b5cf6', texto: 'Médio' },
       baixo: { cor: '#10B981', texto: 'Baixo' },
     }
     return configs[impacto] || { cor: '#6B7280', texto: impacto }
@@ -480,8 +480,8 @@ export function PortaisOPME() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Calculator className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Calculator className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Cotações</p>
@@ -584,7 +584,7 @@ export function PortaisOPME() {
                         </div>
                         <div className="flex justify-between">
                           <span className={`text-sm ${textSecondary}`}>Taxa Resposta</span>
-                          <span className={`font-medium ${portal.taxaResposta >= 95 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
+                          <span className={`font-medium ${portal.taxaResposta >= 95 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`}>
                             {portal.taxaResposta}%
                           </span>
                         </div>
@@ -721,7 +721,7 @@ export function PortaisOPME() {
                               <p className={`text-xs ${textSecondary}`}>{cot.portalNome}</p>
                               <p className={`font-bold ${isMinimo ? 'text-[#10B981]' : textPrimary}`}>
                                 {formatCurrency(cot.preco)}
-                                {isMinimo && <Crown className="w-3 h-3 inline ml-1 text-[#F59E0B]" />}
+                                {isMinimo && <Crown className="w-3 h-3 inline ml-1 text-[#8b5cf6]" />}
                               </p>
                             </div>
                           )
@@ -950,7 +950,7 @@ export function PortaisOPME() {
                           className={`p-3 rounded-xl ${inputBg} flex items-center justify-between ${isMinimo ? 'border-2 border-[#10B981]' : ''}`}
                         >
                           <div className="flex items-center gap-3">
-                            {isMinimo && <Crown className="w-5 h-5 text-[#F59E0B]" />}
+                            {isMinimo && <Crown className="w-5 h-5 text-[#8b5cf6]" />}
                             <div>
                               <p className={`font-medium ${textPrimary}`}>{cot.portalNome}</p>
                               <p className={`text-xs ${textSecondary}`}>

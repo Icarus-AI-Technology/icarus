@@ -13,7 +13,7 @@ export function GestaoLeads() {
       title="Gestão de Leads"
       description="Qualificação e conversão de leads"
       icon={UserPlus}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Leads Ativos', value: 0 },
         { label: 'Taxa de Conversão', value: '0%' },

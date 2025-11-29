@@ -161,7 +161,7 @@ const performanceRadarMock = [
 const categoryDistributionMock = [
   { name: 'Ortopedia', value: 45, color: '#6366F1' },
   { name: 'Cardiologia', value: 25, color: '#10B981' },
-  { name: 'Neurologia', value: 15, color: '#F59E0B' },
+  { name: 'Neurologia', value: 15, color: '#8b5cf6' },
   { name: 'Outros', value: 15, color: '#8B5CF6' }
 ]
 
@@ -202,7 +202,7 @@ export function SmartViewDashboard() {
       opportunity: <TrendingUp className="w-5 h-5 text-emerald-400" />,
       risk: <AlertTriangle className="w-5 h-5 text-red-400" />,
       trend: <Activity className="w-5 h-5 text-blue-400" />,
-      anomaly: <Zap className="w-5 h-5 text-amber-400" />,
+      anomaly: <Zap className="w-5 h-5 text-violet-300" />,
       recommendation: <Lightbulb className="w-5 h-5 text-purple-400" />
     }
     return icons[type]
@@ -213,7 +213,7 @@ export function SmartViewDashboard() {
       opportunity: 'border-l-emerald-500',
       risk: 'border-l-red-500',
       trend: 'border-l-blue-500',
-      anomaly: 'border-l-amber-500',
+      anomaly: 'border-l-violet-500',
       recommendation: 'border-l-purple-500'
     }
     return colors[type]
@@ -222,7 +222,7 @@ export function SmartViewDashboard() {
   const getImpactBadge = (impact: MLInsight['impact']) => {
     const configs = {
       high: { label: 'Alto Impacto', className: 'bg-red-500/20 text-red-400' },
-      medium: { label: 'Médio Impacto', className: 'bg-amber-500/20 text-amber-400' },
+      medium: { label: 'Médio Impacto', className: 'bg-violet-500/20 text-violet-300' },
       low: { label: 'Baixo Impacto', className: 'bg-slate-500/20 text-slate-400' }
     }
     const config = configs[impact]
@@ -232,7 +232,7 @@ export function SmartViewDashboard() {
   const getSeverityBadge = (severity: AnomalyDetection['severity']) => {
     const configs = {
       critical: { label: 'Crítico', className: 'bg-red-500/20 text-red-400' },
-      warning: { label: 'Atenção', className: 'bg-amber-500/20 text-amber-400' },
+      warning: { label: 'Atenção', className: 'bg-violet-500/20 text-violet-300' },
       info: { label: 'Info', className: 'bg-blue-500/20 text-blue-400' }
     }
     const config = configs[severity]
@@ -512,7 +512,7 @@ export function SmartViewDashboard() {
                          metric.currentValue}
                       </span>
                       <span className={textSecondary}>→</span>
-                      <span className={`text-lg ${metric.trend === 'up' && !metric.name.includes('Inadimplência') && !metric.name.includes('Crítico') ? 'text-emerald-400' : metric.trend === 'down' && (metric.name.includes('Inadimplência') || metric.name.includes('Crítico')) ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      <span className={`text-lg ${metric.trend === 'up' && !metric.name.includes('Inadimplência') && !metric.name.includes('Crítico') ? 'text-emerald-400' : metric.trend === 'down' && (metric.name.includes('Inadimplência') || metric.name.includes('Crítico')) ? 'text-emerald-400' : 'text-violet-300'}`}>
                         {metric.name.includes('Taxa') ? `${metric.predictedValue}%` :
                          metric.name.includes('Faturamento') ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', notation: 'compact' }).format(metric.predictedValue) :
                          metric.predictedValue}
@@ -584,7 +584,7 @@ export function SmartViewDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-[#F59E0B]" />
+                <Zap className="w-5 h-5 text-[#8b5cf6]" />
                 Detecção de Anomalias em Tempo Real
               </CardTitle>
             </CardHeader>
@@ -595,7 +595,7 @@ export function SmartViewDashboard() {
                     key={anomaly.id} 
                     className={`p-4 rounded-xl ${inputBg} border-l-4 ${
                       anomaly.severity === 'critical' ? 'border-l-red-500' :
-                      anomaly.severity === 'warning' ? 'border-l-amber-500' :
+                      anomaly.severity === 'warning' ? 'border-l-violet-500' :
                       'border-l-blue-500'
                     }`}
                   >
@@ -615,13 +615,13 @@ export function SmartViewDashboard() {
                       </div>
                       <div>
                         <p className={`text-xs ${textSecondary}`}>Atual</p>
-                        <p className={`text-lg font-semibold ${anomaly.severity === 'critical' ? 'text-red-400' : 'text-amber-400'}`}>
+                        <p className={`text-lg font-semibold ${anomaly.severity === 'critical' ? 'text-red-400' : 'text-violet-300'}`}>
                           {anomaly.actualValue}
                         </p>
                       </div>
                       <div>
                         <p className={`text-xs ${textSecondary}`}>Desvio</p>
-                        <p className={`text-lg font-semibold ${anomaly.severity === 'critical' ? 'text-red-400' : 'text-amber-400'}`}>
+                        <p className={`text-lg font-semibold ${anomaly.severity === 'critical' ? 'text-red-400' : 'text-violet-300'}`}>
                           +{anomaly.deviation}%
                         </p>
                       </div>

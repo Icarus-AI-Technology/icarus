@@ -240,8 +240,8 @@ export const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
     const stateClasses = {
       default: '',
       correcting: isDark 
-        ? 'border-yellow-500/50 shadow-[0_0_10px_rgba(234,179,8,0.2)]' 
-        : 'border-yellow-400 shadow-[0_0_10px_rgba(234,179,8,0.15)]',
+        ? 'border-slate-600/50 shadow-[0_0_10px_rgba(234,179,8,0.2)]' 
+        : 'border-slate-600 shadow-[0_0_10px_rgba(234,179,8,0.15)]',
       valid: isDark 
         ? 'border-green-500/50 shadow-[0_0_10px_rgba(34,197,94,0.2)]' 
         : 'border-green-400 shadow-[0_0_10px_rgba(34,197,94,0.15)]',
@@ -307,7 +307,7 @@ export const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
           {showValidation && internalValue.length > 0 && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
               {isCorrecting && (
-                <Loader2 className="w-4 h-4 text-yellow-500 animate-spin" />
+                <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
               )}
               {!isCorrecting && fieldState === 'valid' && (
                 <Check className="w-4 h-4 text-green-500" />
@@ -323,8 +323,8 @@ export const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
         <div className="min-h-[20px]">
           {/* Correction Message */}
           {correctionMessage && (
-            <p className="text-xs text-yellow-500 flex items-center gap-1 animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
+            <p className="text-xs text-cyan-400 flex items-center gap-1 animate-pulse">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
               {correctionMessage}
             </p>
           )}

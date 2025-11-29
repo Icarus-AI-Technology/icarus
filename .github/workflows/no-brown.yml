@@ -1,0 +1,87 @@
+# ICARUS v5.1 - Verificação de cores proibidas
+# Dark Glass Medical Design System - ZERO tolerância para marrom/bege/amarelo
+
+name: 🎨 Dark Glass Medical - Color Guard
+
+on:
+  push:
+    branches: [main, develop, feature/*]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  color-guard:
+    name: 🚫 Detectar Cores Proibidas
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔍 Verificar cores proibidas (amber/orange/yellow/stone/beige)
+        run: |
+          echo "🎨 ICARUS Dark Glass Medical - Color Guard"
+          echo "============================================"
+          echo ""
+          echo "Verificando cores proibidas no código..."
+          echo ""
+          
+          # Cores proibidas: amber, orange, yellow, stone, beige, tan
+          # Exceção: comentários e strings de documentação
+          
+          VIOLATIONS=$(grep -r -n -E "(bg-amber|bg-orange|bg-yellow|bg-stone|text-amber|text-orange|text-yellow|border-amber|border-orange|border-yellow|from-amber|from-orange|from-yellow|to-amber|to-orange|to-yellow)" \
+            --include="*.tsx" \
+            --include="*.ts" \
+            --include="*.css" \
+            src/ app/ components/ 2>/dev/null || true)
+          
+          if [ -n "$VIOLATIONS" ]; then
+            echo "❌ CORES PROIBIDAS ENCONTRADAS!"
+            echo ""
+            echo "$VIOLATIONS"
+            echo ""
+            echo "============================================"
+            echo "🚫 BUILD REJEITADO"
+            echo ""
+            echo "O ICARUS usa APENAS o Dark Glass Medical palette:"
+            echo "  • Fundo: slate-950, slate-900, slate-800"
+            echo "  • Primária: violet-600, purple-600"
+            echo "  • Sucesso: emerald-600, teal-600"
+            echo "  • Perigo: red-600, pink-600"
+            echo "  • Info: cyan-600, blue-600"
+            echo ""
+            echo "Substitua as cores proibidas e tente novamente."
+            exit 1
+          fi
+          
+          echo "✅ Sistema 100% limpo!"
+          echo "🎨 Dark Glass Medical puro - nenhuma cor proibida encontrada."
+          echo ""
+          echo "Paleta aprovada:"
+          echo "  • slate (fundos)"
+          echo "  • violet/purple (primária)"
+          echo "  • emerald/teal (sucesso)"
+          echo "  • red/pink (perigo)"
+          echo "  • cyan/blue (info)"
+
+      - name: 📊 Estatísticas de cores
+        if: always()
+        run: |
+          echo ""
+          echo "📊 Estatísticas de cores no projeto:"
+          echo ""
+          echo "Violet/Purple (primária):"
+          grep -r -c "violet\|purple" src/ --include="*.tsx" 2>/dev/null | awk -F: '{sum+=$2} END {print "  " sum " ocorrências"}'
+          
+          echo "Emerald/Teal (sucesso):"
+          grep -r -c "emerald\|teal" src/ --include="*.tsx" 2>/dev/null | awk -F: '{sum+=$2} END {print "  " sum " ocorrências"}'
+          
+          echo "Cyan/Blue (info):"
+          grep -r -c "cyan\|blue" src/ --include="*.tsx" 2>/dev/null | awk -F: '{sum+=$2} END {print "  " sum " ocorrências"}'
+          
+          echo "Red/Pink (perigo):"
+          grep -r -c "red\|pink" src/ --include="*.tsx" 2>/dev/null | awk -F: '{sum+=$2} END {print "  " sum " ocorrências"}'
+          
+          echo "Slate (fundos):"
+          grep -r -c "slate" src/ --include="*.tsx" 2>/dev/null | awk -F: '{sum+=$2} END {print "  " sum " ocorrências"}'
+

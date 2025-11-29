@@ -369,15 +369,15 @@ export function FontesPagadoras() {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       ativo: { cor: '#10B981', texto: 'Ativo', icon: CheckCircle },
       inativo: { cor: '#6B7280', texto: 'Inativo', icon: XCircle },
-      suspenso: { cor: '#F59E0B', texto: 'Suspenso', icon: AlertTriangle },
+      suspenso: { cor: '#8b5cf6', texto: 'Suspenso', icon: AlertTriangle },
       bloqueado: { cor: '#EF4444', texto: 'Bloqueado', icon: XCircle },
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       autorizado: { cor: '#10B981', texto: 'Autorizado', icon: CheckCircle },
       negado: { cor: '#EF4444', texto: 'Negado', icon: XCircle },
       parcial: { cor: '#3B82F6', texto: 'Parcial', icon: AlertTriangle },
       vencido: { cor: '#6B7280', texto: 'Vencido', icon: Clock },
       vigente: { cor: '#10B981', texto: 'Vigente', icon: CheckCircle },
-      negociacao: { cor: '#F59E0B', texto: 'Em Negociação', icon: Handshake },
+      negociacao: { cor: '#8b5cf6', texto: 'Em Negociação', icon: Handshake },
     }
     return configs[status] || { cor: '#6B7280', texto: status, icon: Info }
   }
@@ -445,10 +445,10 @@ export function FontesPagadoras() {
             </div>
           </CardContent>
         </Card>
-        <Card className={`${cardBg} border-l-4 border-l-[#F59E0B]`}>
+        <Card className={`${cardBg} border-l-4 border-l-[#8b5cf6]`}>
           <CardContent className="pt-4">
             <div className="flex items-start gap-3">
-              <Building className="w-5 h-5 text-[#F59E0B] mt-0.5 flex-shrink-0" />
+              <Building className="w-5 h-5 text-[#8b5cf6] mt-0.5 flex-shrink-0" />
               <div>
                 <p className={`font-medium ${textPrimary}`}>Hospitais com Repasse</p>
                 <p className={`text-sm ${textSecondary}`}>
@@ -479,8 +479,8 @@ export function FontesPagadoras() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Building className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Building className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Hospitais</p>
@@ -532,13 +532,13 @@ export function FontesPagadoras() {
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                resumo.autorizacoesPendentes > 0 ? 'bg-[#F59E0B]/20' : 'bg-[#10B981]/20'
+                resumo.autorizacoesPendentes > 0 ? 'bg-[#8b5cf6]/20' : 'bg-[#10B981]/20'
               }`}>
-                <Clock className={`w-5 h-5 ${resumo.autorizacoesPendentes > 0 ? 'text-[#F59E0B]' : 'text-[#10B981]'}`} />
+                <Clock className={`w-5 h-5 ${resumo.autorizacoesPendentes > 0 ? 'text-[#8b5cf6]' : 'text-[#10B981]'}`} />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Autorizações</p>
-                <p className={`text-2xl font-bold ${resumo.autorizacoesPendentes > 0 ? 'text-[#F59E0B]' : 'text-[#10B981]'}`}>
+                <p className={`text-2xl font-bold ${resumo.autorizacoesPendentes > 0 ? 'text-[#8b5cf6]' : 'text-[#10B981]'}`}>
                   {resumo.autorizacoesPendentes}
                 </p>
               </div>
@@ -631,7 +631,7 @@ export function FontesPagadoras() {
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star 
                                   key={star}
-                                  className={`w-4 h-4 ${star <= Math.floor(convenio.avaliacao) ? 'text-[#F59E0B] fill-[#F59E0B]' : 'text-gray-400'}`}
+                                  className={`w-4 h-4 ${star <= Math.floor(convenio.avaliacao) ? 'text-[#8b5cf6] fill-[#8b5cf6]' : 'text-gray-400'}`}
                                 />
                               ))}
                               <span className={`text-sm ${textSecondary} ml-1`}>{convenio.avaliacao}</span>
@@ -664,7 +664,7 @@ export function FontesPagadoras() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <Building className="w-5 h-5 text-[#F59E0B]" />
+                <Building className="w-5 h-5 text-[#8b5cf6]" />
                 Hospitais com Repasse
               </CardTitle>
               <Button onClick={() => setIsNovoHospitalOpen(true)} className="gap-2">
@@ -688,8 +688,8 @@ export function FontesPagadoras() {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                            <Building className="w-6 h-6 text-[#F59E0B]" />
+                          <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                            <Building className="w-6 h-6 text-[#8b5cf6]" />
                           </div>
                           <div>
                             <div className="flex items-center gap-2 mb-1">
@@ -717,7 +717,7 @@ export function FontesPagadoras() {
                           <p className={`text-lg font-bold ${textPrimary}`}>{formatCompact(hospital.faturamentoMensal)}</p>
                           <p className={`text-xs ${textSecondary}`}>{hospital.volumeMensal} proc./mês</p>
                           <div className="flex items-center gap-2 mt-2 justify-end">
-                            <Badge className="bg-yellow-500/20 text-yellow-500 text-xs">
+                            <Badge className="bg-cyan-500/20 text-cyan-400 text-xs">
                               {hospital.condicoes.margemRepasse}% margem
                             </Badge>
                             <Badge className="bg-blue-500/20 text-blue-500 text-xs">
@@ -828,7 +828,7 @@ export function FontesPagadoras() {
                             {aut.dataResposta && ` • Resposta: ${new Date(aut.dataResposta).toLocaleDateString('pt-BR')}`}
                           </p>
                           {aut.observacoes && (
-                            <p className={`text-xs text-[#F59E0B] mt-1`}>
+                            <p className={`text-xs text-[#8b5cf6] mt-1`}>
                               <AlertCircle className="w-3 h-3 inline mr-1" />
                               {aut.observacoes}
                             </p>
@@ -837,7 +837,7 @@ export function FontesPagadoras() {
                         <div className="text-right">
                           <p className={`font-medium ${textSecondary}`}>Solicitado: {formatCurrency(aut.valorSolicitado)}</p>
                           {aut.valorAutorizado && (
-                            <p className={`text-lg font-bold ${aut.valorAutorizado < aut.valorSolicitado ? 'text-[#F59E0B]' : 'text-[#10B981]'}`}>
+                            <p className={`text-lg font-bold ${aut.valorAutorizado < aut.valorSolicitado ? 'text-[#8b5cf6]' : 'text-[#10B981]'}`}>
                               Autorizado: {formatCurrency(aut.valorAutorizado)}
                             </p>
                           )}
@@ -996,7 +996,7 @@ export function FontesPagadoras() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Building className="w-5 h-5 text-[#F59E0B]" />
+              <Building className="w-5 h-5 text-[#8b5cf6]" />
               {hospitalSelecionado?.nome}
             </DialogTitle>
           </DialogHeader>
@@ -1027,7 +1027,7 @@ export function FontesPagadoras() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className={`text-xs ${textSecondary}`}>Margem Repasse</p>
-                    <p className={`font-medium text-[#F59E0B]`}>{hospitalSelecionado.condicoes.margemRepasse}%</p>
+                    <p className={`font-medium text-[#8b5cf6]`}>{hospitalSelecionado.condicoes.margemRepasse}%</p>
                   </div>
                   <div>
                     <p className={`text-xs ${textSecondary}`}>Prazo Repasse</p>
@@ -1064,7 +1064,7 @@ export function FontesPagadoras() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5 text-[#F59E0B]" />
+              <Plus className="w-5 h-5 text-[#8b5cf6]" />
               Novo Hospital
             </DialogTitle>
           </DialogHeader>
