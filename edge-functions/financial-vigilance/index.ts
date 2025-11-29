@@ -21,7 +21,7 @@ interface Transaction {
   tipo: 'credito' | 'debito';
   categoria?: string;
   is_tarifa: boolean;
-  pluggy_metadata?: Record<string, unknown>;
+  pluggy_dados_extras?: Record<string, unknown>;
 }
 
 interface AuditResult {

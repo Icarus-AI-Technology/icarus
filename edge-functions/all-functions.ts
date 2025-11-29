@@ -212,7 +212,7 @@ serve(async (req) => {
         const { data: conta } = await supabase.from('contas_bancarias').select('*').eq('pluggy_item_id', itemId).single();
         if (conta) {
           // Fetch transactions from Pluggy
-          const pluggyResponse = await fetch(`https://api.pluggy.ai/transactions?accountId=${conta.pluggy_account_id}`, {
+          const pluggyResponse = await fetch(`https://api.pluggy.ai/transactions?accountId=${conta.pluggy_conta_id}`, {
             headers: { 'X-API-KEY': Deno.env.get('PLUGGY_CLIENT_ID')!, 'Authorization': `Bearer ${Deno.env.get('PLUGGY_ACCESS_TOKEN')}` },
           });
           const { results: transactions } = await pluggyResponse.json();
@@ -220,20 +220,20 @@ serve(async (req) => {
           // Upsert transactions
           for (const t of transactions) {
             await supabase.from('transacoes_bancarias').upsert({
-              empresa_id: conta.empresa_id, conta_bancaria_id: conta.id, pluggy_transaction_id: t.id,
+              empresa_id: conta.empresa_id, conta_bancaria_id: conta.id, pluggy_transacao_id: t.id,
               data_transacao: t.date, descricao: t.description, descricao_original: t.descriptionRaw,
               valor: Math.abs(t.amount), tipo: t.amount > 0 ? 'credito' : 'debito',
-              categoria: t.category, pluggy_metadata: t,
-            }, { onConflict: 'pluggy_transaction_id' });
+              categoria: t.category, pluggy_dados_extras: t,
+            }, { onConflict: 'pluggy_transacao_id' });
           }
           
           // Update account balance
-          await supabase.from('contas_bancarias').update({ saldo_atual: event.data.balance, saldo_disponivel: event.data.availableBalance, pluggy_last_sync: new Date().toISOString(), pluggy_status: 'connected' }).eq('id', conta.id);
+          await supabase.from('contas_bancarias').update({ saldo_atual: event.data.balance, saldo_disponivel: event.data.availableBalance, pluggy_ultima_sincronizacao: new Date().toISOString(), pluggy_situacao: 'connected' }).eq('id', conta.id);
         }
         break;
         
       case 'item/error':
-        await supabase.from('contas_bancarias').update({ pluggy_status: 'error', pluggy_error: event.data.error?.message }).eq('pluggy_item_id', event.data.id);
+        await supabase.from('contas_bancarias').update({ pluggy_situacao: 'error', pluggy_erro: event.data.error?.message }).eq('pluggy_item_id', event.data.id);
         break;
     }
 

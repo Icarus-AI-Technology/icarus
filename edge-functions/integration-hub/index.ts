@@ -405,8 +405,8 @@ async function pluggySync(
   await supabase
     .from('contas_bancarias')
     .update({
-      pluggy_status: item.status,
-      pluggy_last_sync: new Date().toISOString(),
+      pluggy_situacao: item.status,
+      pluggy_ultima_sincronizacao: new Date().toISOString(),
       saldo_disponivel: item.accounts?.[0]?.balance || 0,
     })
     .eq('pluggy_item_id', itemId)
@@ -442,7 +442,7 @@ async function pluggySync(
       {
         empresa_id: empresaId,
         conta_bancaria_id: conta.id,
-        pluggy_transaction_id: trans.id,
+        pluggy_transacao_id: trans.id,
         data_transacao: trans.date,
         descricao: trans.description,
         descricao_original: trans.descriptionRaw,
@@ -450,13 +450,13 @@ async function pluggySync(
         tipo: trans.type === 'CREDIT' ? 'credito' : 'debito',
         categoria: trans.category,
         is_tarifa: trans.category?.includes('BANK_FEE') || false,
-        pluggy_metadata: {
+        pluggy_dados_extras: {
           merchantName: trans.merchantName,
           paymentData: trans.paymentData,
           creditCardMetadata: trans.creditCardMetadata,
         },
       },
-      { onConflict: 'pluggy_transaction_id' }
+      { onConflict: 'pluggy_transacao_id' }
     );
   }
 

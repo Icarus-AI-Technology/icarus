@@ -106,7 +106,7 @@ const calculateReorderPointTool = new DynamicStructuredTool({
 
       // Ponto de pedido = (Demanda média × Lead time) + Estoque de segurança (Z × σ × √LT)
       const Z = 1.65 // 95% de nível de serviço
-      const pontoP edido = Math.ceil(
+      const pontoPedido = Math.ceil(
         (demandaDiaria * lead_time_dias) +
         (Z * desvio * Math.sqrt(lead_time_dias))
       )

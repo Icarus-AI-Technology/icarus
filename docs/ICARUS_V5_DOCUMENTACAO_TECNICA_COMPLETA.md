@@ -14,7 +14,7 @@
 5. [Stack Tecnológico](#5-stack-tecnológico)
 
 ### PARTE II - DESIGN SYSTEM
-6. [OraclusX Design System](#6-oraclusx-design-system)
+6. [Dark Glass Medical Design System](#6-dark-glass-medical-design-system)
 7. [Neuromorfismo (Neumorphism)](#7-neuromorfismo-neumorphism)
 8. [Paleta de Cores](#8-paleta-de-cores)
 9. [Design Tokens (38 tokens)](#9-design-tokens-38-tokens)
@@ -915,12 +915,12 @@ SEGURANÇA:
 
 # PARTE II - DESIGN SYSTEM
 
-## 6. ORACLUSX DESIGN SYSTEM
+## 6. DARK GLASS MEDICAL DESIGN SYSTEM
 
-### 6.1. O Que é o OraclusX DS?
+### 6.1. O Que é o Dark Glass Medical DS?
 
 ```yaml
-NOME: OraclusX Design System
+NOME: Dark Glass Medical Design System
 VERSÃO: 1.0.0
 STATUS: ✅ Certificado e Aprovado
 
@@ -949,10 +949,10 @@ COMPONENTES:
 
 ```typescript
 /**
- * ORACLUSX DESIGN SYSTEM - ESTRUTURA
+ * DARK GLASS MEDICAL DESIGN SYSTEM - ESTRUTURA
  */
 
-interface OraclusXDesignSystem {
+interface DarkGlassDesignSystem {
   // 1. DESIGN TOKENS
   tokens: {
     colors: ColorTokens;           // 38 tokens de cor
@@ -1259,7 +1259,7 @@ VARIAÇÕES:
 
 ```css
 /**
- * PALETA DE CORES ORACLUSX DS
+ * PALETA DE CORES DARK GLASS MEDICAL DS
  * 
  * 8 Variantes de cores para diferentes contextos
  */
@@ -1377,7 +1377,7 @@ TOTAL: 38 Design Tokens Semânticos
 
 ```css
 /**
- * 38 DESIGN TOKENS - ORACLUSX DS
+ * 38 DESIGN TOKENS - DARK GLASS MEDICAL DS
  */
 
 :root {

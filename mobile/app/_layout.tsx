@@ -1,88 +1,170 @@
-/**
- * ICARUS Mobile - Root Layout
- * 
- * Layout principal do app com providers.
- */
+// ============================================================================
+// ICARUS v6.0 - React Native Mobile App
+// Expo SDK 50 + React Native + Expo Router
+// ============================================================================
 
-import { useEffect } from 'react'
-import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import { useColorScheme } from 'react-native'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import * as SplashScreen from 'expo-splash-screen'
-import { useFonts } from 'expo-font'
+// app/_layout.tsx
+import { useEffect } from 'react';
+import { Stack } from 'expo-router';
+import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ThemeProvider } from '@/providers/ThemeProvider';
+import { AuthProvider } from '@/providers/AuthProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { Colors } from '../constants/Colors'
+SplashScreen.preventAutoHideAsync();
 
-// Prevenir splash screen de esconder automaticamente
-SplashScreen.preventAutoHideAsync()
-
-// Query Client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutos
-      gcTime: 1000 * 60 * 30, // 30 minutos
-      retry: 2,
-    },
-  },
-})
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme()
-  const colors = Colors[colorScheme ?? 'dark']
-
   const [fontsLoaded] = useFonts({
-    'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf'),
-    'Inter-Medium': require('../assets/fonts/Inter-Medium.ttf'),
-    'Inter-SemiBold': require('../assets/fonts/Inter-SemiBold.ttf'),
-    'Inter-Bold': require('../assets/fonts/Inter-Bold.ttf'),
-  })
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
 
   useEffect(() => {
     if (fontsLoaded) {
-      SplashScreen.hideAsync()
+      SplashScreen.hideAsync();
     }
-  }, [fontsLoaded])
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null
+    return null;
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: colors.card,
-          },
-          headerTintColor: colors.text,
-          headerTitleStyle: {
-            fontFamily: 'Inter-SemiBold',
-          },
-          contentStyle: {
-            backgroundColor: colors.background,
-          },
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="cirurgia/[id]"
-          options={{
-            title: 'Detalhes da Cirurgia',
-            presentation: 'card',
-          }}
-        />
-        <Stack.Screen
-          name="scanner"
-          options={{
-            title: 'Scanner',
-            presentation: 'modal',
-          }}
-        />
-      </Stack>
-    </QueryClientProvider>
-  )
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider>
+            <StatusBar style="light" />
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: '#050508' },
+                animation: 'fade',
+              }}
+            >
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen 
+                name="cirurgia/[id]" 
+                options={{ 
+                  presentation: 'modal',
+                  animation: 'slide_from_bottom',
+                }} 
+              />
+            </Stack>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
+  );
 }
 
+// ============================================================================
+// app/(tabs)/_layout.tsx
+// ============================================================================
+
+import { Tabs } from 'expo-router';
+import { BlurView } from 'expo-blur';
+import { StyleSheet, View } from 'react-native';
+import { 
+  LayoutDashboard, 
+  Calendar, 
+  Package, 
+  MessageSquare,
+  Settings
+} from 'lucide-react-native';
+
+const COLORS = {
+  primary: '#3b82f6',
+  muted: '#64748b',
+  background: '#050508',
+};
+
+export default function TabsLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: styles.tabBar,
+        tabBarBackground: () => (
+          <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+        ),
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.muted,
+        tabBarLabelStyle: styles.tabLabel,
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color, size }) => (
+            <LayoutDashboard color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="cirurgias"
+        options={{
+          title: 'Cirurgias',
+          tabBarIcon: ({ color, size }) => (
+            <Calendar color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="estoque"
+        options={{
+          title: 'Estoque',
+          tabBarIcon: ({ color, size }) => (
+            <Package color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'IcarusBrain',
+          tabBarIcon: ({ color, size }) => (
+            <MessageSquare color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Ajustes',
+          tabBarIcon: ({ color, size }) => (
+            <Settings color={color} size={size} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
+
+const styles = StyleSheet.create({
+  tabBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 80,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'transparent',
+    elevation: 0,
+  },
+  tabLabel: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 10,
+    marginTop: -4,
+  },
+});

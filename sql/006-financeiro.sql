@@ -99,12 +99,12 @@ CREATE TABLE contas_bancarias (
   
   -- Pluggy integration
   pluggy_item_id VARCHAR(100),
-  pluggy_account_id VARCHAR(100),
-  pluggy_connector_id VARCHAR(100),
-  pluggy_connector_name VARCHAR(100),
-  pluggy_status VARCHAR(20) DEFAULT 'pending' CHECK (pluggy_status IN ('pending', 'connected', 'updating', 'error', 'disconnected')),
-  pluggy_last_sync TIMESTAMPTZ,
-  pluggy_error TEXT,
+  pluggy_conta_id VARCHAR(100),
+  pluggy_conector_id VARCHAR(100),
+  pluggy_conector_nome VARCHAR(100),
+  pluggy_situacao VARCHAR(20) DEFAULT 'pending' CHECK (pluggy_situacao IN ('pending', 'connected', 'updating', 'error', 'disconnected')),
+  pluggy_ultima_sincronizacao TIMESTAMPTZ,
+  pluggy_erro TEXT,
   
   -- Saldos
   saldo_disponivel DECIMAL(15,2) DEFAULT 0,
@@ -126,7 +126,7 @@ CREATE TABLE transacoes_bancarias (
   conta_bancaria_id UUID NOT NULL REFERENCES contas_bancarias(id),
   
   -- Pluggy data
-  pluggy_transaction_id VARCHAR(100) UNIQUE,
+  pluggy_transacao_id VARCHAR(100) UNIQUE,
   
   -- Dados da transação
   data_transacao DATE NOT NULL,
@@ -160,7 +160,7 @@ CREATE TABLE transacoes_bancarias (
   auditoria_processado_em TIMESTAMPTZ,
   
   -- Metadata
-  pluggy_metadata JSONB DEFAULT '{}',
+  pluggy_dados_extras JSONB DEFAULT '{}',
   
   criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -193,7 +193,7 @@ CREATE TABLE dda_boletos (
   recomendacao TEXT,
   
   -- Pluggy
-  pluggy_bill_id VARCHAR(100),
+  pluggy_boleto_id VARCHAR(100),
   
   criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()

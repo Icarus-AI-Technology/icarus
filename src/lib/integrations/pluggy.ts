@@ -451,7 +451,7 @@ export class PluggyClient extends APIClient {
         const { data: lastTx } = await supabase
           .from('contas_transacoes')
           .select('data')
-          .eq('pluggy_account_id', account.id)
+          .eq('pluggy_conta_id', account.id)
           .order('data', { ascending: false })
           .limit(1)
           .single();
@@ -473,7 +473,7 @@ export class PluggyClient extends APIClient {
             {
               id: tx.id,
               empresa_id: empresaId,
-              pluggy_account_id: account.id,
+              pluggy_conta_id: account.id,
               pluggy_item_id: itemId,
               data: tx.date.toISOString(),
               descricao: tx.description,

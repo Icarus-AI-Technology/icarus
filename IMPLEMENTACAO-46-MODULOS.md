@@ -460,7 +460,7 @@ ANTHROPIC_API_KEY=***
 - `CLAUDE.md` - Contexto para Claude Code
 - `README.md` - Setup e guias
 - `docs/ICARUS-INDICE-MESTRE-58-MODULOS.md` - Índice completo
-- `docs/06-ORACLUSX-DESIGN-SYSTEM.md` - Design System
+- `docs/ICARUS_V5_DOCUMENTACAO_TECNICA_COMPLETA.md` - Design System Dark Glass Medical
 - `plano.plan.md` - Plano de implementação
 
 ### Componentes Reutilizáveis
