@@ -13,7 +13,7 @@ export function GestaoContabil() {
       title="Gestão Contábil"
       description="Contabilidade e plano de contas"
       icon={FileSpreadsheet}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Lançamentos (Mês)', value: 0 },
         { label: 'Contas Ativas', value: 0 },

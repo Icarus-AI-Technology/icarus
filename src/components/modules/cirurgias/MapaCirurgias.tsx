@@ -102,8 +102,8 @@ const STATUS_CONFIG: Record<StatusCirurgiaSimplificado, {
 }> = {
   em_negociacao: {
     label: 'Em Negociação',
-    cor: '#F59E0B',
-    corBg: '#F59E0B20',
+    cor: '#8b5cf6',
+    corBg: '#8b5cf620',
     icon: MessageSquare,
     descricao: 'Pedido médico anexado',
     ordem: 1,
@@ -199,8 +199,8 @@ function CirurgiaCard({ cirurgia, onClick }: CirurgiaCardProps) {
         </div>
         {cirurgia.alertas.length > 0 && (
           <div className="relative">
-            <AlertCircle className="w-4 h-4 text-orange-500" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full text-[8px] text-white flex items-center justify-center">
+            <AlertCircle className="w-4 h-4 text-red-400" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-[8px] text-white flex items-center justify-center">
               {cirurgia.alertas.length}
             </span>
           </div>
@@ -476,7 +476,7 @@ export function MapaCirurgias({
                 </div>
                 <div className="h-6 w-px bg-slate-500/30" />
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                  <div className="w-2 h-2 rounded-full bg-cyan-500" />
                   <span className={`text-sm ${textSecondary}`}>{stats.emAndamento} em andamento</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -637,7 +637,7 @@ export function MapaCirurgias({
             </div>
             <div className={`p-3 rounded-xl ${inputBg}`}>
               <div className="flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-[#F59E0B]" />
+                <CreditCard className="w-4 h-4 text-[#8b5cf6]" />
                 <span className={`text-xs ${textSecondary}`}>Valor Total</span>
               </div>
               <p className={`text-lg font-bold ${textPrimary} mt-1`}>
@@ -713,11 +713,11 @@ export function MapaCirurgias({
               <span className={`text-xs ${textSecondary}`}>Urgência</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-orange-500" />
+              <div className="w-3 h-3 rounded-full bg-red-500" />
               <span className={`text-xs ${textSecondary}`}>Com Alertas</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-cyan-500" />
               <span className={`text-xs ${textSecondary}`}>Em Negociação/Processamento</span>
             </div>
             <div className="flex items-center gap-2">

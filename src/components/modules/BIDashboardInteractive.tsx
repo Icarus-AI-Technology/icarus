@@ -13,7 +13,7 @@ export function BIDashboardInteractive() {
       title="BI Dashboard Interactive"
       description="Dashboard BI interativo e customizável"
       icon={Activity}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Dashboards Personalizados', value: 0 },
         { label: 'Widgets', value: 0 },

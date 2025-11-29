@@ -181,7 +181,7 @@ export const CONFIGURACOES_MODULOS: Record<EventoAgenda['moduloOrigem'], Configu
   manutencao: {
     nome: 'Manutenção Preventiva',
     tiposEvento: ['manutencao'],
-    corPadrao: '#F59E0B', // Âmbar
+    corPadrao: '#8b5cf6', // Âmbar
     iconePadrao: 'Wrench',
     lembretePadrao: [1440, 60],
     prioridadePadrao: 'media',

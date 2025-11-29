@@ -13,7 +13,7 @@ export function APIGateway() {
       title="API Gateway"
       description="Gateway de APIs e webhooks"
       icon={Webhook}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Endpoints Ativos', value: 0 },
         { label: 'Requisições (Hoje)', value: 0 },

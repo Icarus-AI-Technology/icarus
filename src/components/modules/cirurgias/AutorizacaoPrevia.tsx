@@ -120,7 +120,7 @@ interface EtapaWorkflow {
 const ETAPAS_WORKFLOW: EtapaWorkflow[] = [
   { id: 1, nome: 'Pedido Médico', descricao: 'Upload e validação do pedido', icone: FileText, cor: '#6366F1' },
   { id: 2, nome: 'Validação CRM', descricao: 'Verificação do médico no CFM', icone: ShieldCheck, cor: '#10B981' },
-  { id: 3, nome: 'Documentação', descricao: 'Anexo de documentos obrigatórios', icone: Paperclip, cor: '#F59E0B' },
+  { id: 3, nome: 'Documentação', descricao: 'Anexo de documentos obrigatórios', icone: Paperclip, cor: '#8b5cf6' },
   { id: 4, nome: 'Análise Convênio', descricao: 'Envio e análise pela operadora', icone: Building2, cor: '#3B82F6' },
   { id: 5, nome: 'Autorização', descricao: 'Resposta final do convênio', icone: CheckCircle, cor: '#10B981' },
   { id: 6, nome: 'Reserva Estoque', descricao: 'Reserva automática de materiais', icone: Package, cor: '#8B5CF6' },
@@ -280,7 +280,7 @@ export function AutorizacaoPrevia() {
   const getStatusConfig = (status: string) => {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       rascunho: { cor: '#6B7280', texto: 'Rascunho', icon: FileText },
-      aguardando_docs: { cor: '#F59E0B', texto: 'Aguardando Docs', icon: FileClock },
+      aguardando_docs: { cor: '#8b5cf6', texto: 'Aguardando Docs', icon: FileClock },
       em_analise: { cor: '#3B82F6', texto: 'Em Análise', icon: Clock },
       autorizado: { cor: '#10B981', texto: 'Autorizado', icon: CheckCircle },
       negado: { cor: '#EF4444', texto: 'Negado', icon: XCircle },
@@ -301,7 +301,7 @@ export function AutorizacaoPrevia() {
   const getUrgenciaConfig = (urgencia: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       eletiva: { cor: '#10B981', texto: 'Eletiva' },
-      urgencia: { cor: '#F59E0B', texto: 'Urgência' },
+      urgencia: { cor: '#8b5cf6', texto: 'Urgência' },
       emergencia: { cor: '#EF4444', texto: 'Emergência' },
     }
     return configs[urgencia] || { cor: '#6B7280', texto: urgencia }
@@ -399,12 +399,12 @@ export function AutorizacaoPrevia() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <FileClock className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <FileClock className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Aguardando</p>
-                <p className={`text-2xl font-bold text-[#F59E0B]`}>{resumo.aguardandoDocs}</p>
+                <p className={`text-2xl font-bold text-[#8b5cf6]`}>{resumo.aguardandoDocs}</p>
               </div>
             </div>
           </CardContent>
@@ -564,7 +564,7 @@ export function AutorizacaoPrevia() {
                         <div className="text-right ml-4">
                           <p className={`text-lg font-bold ${textPrimary}`}>{formatCurrency(sol.valorSolicitado)}</p>
                           {sol.valorAutorizado && sol.valorAutorizado !== sol.valorSolicitado && (
-                            <p className={`text-sm ${sol.valorAutorizado < sol.valorSolicitado ? 'text-[#F59E0B]' : 'text-[#10B981]'}`}>
+                            <p className={`text-sm ${sol.valorAutorizado < sol.valorSolicitado ? 'text-[#8b5cf6]' : 'text-[#10B981]'}`}>
                               Autorizado: {formatCurrency(sol.valorAutorizado)}
                             </p>
                           )}
@@ -624,7 +624,7 @@ export function AutorizacaoPrevia() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Paperclip className="w-5 h-5 text-[#F59E0B]" />
+                <Paperclip className="w-5 h-5 text-[#8b5cf6]" />
                 Documentos Obrigatórios
               </CardTitle>
             </CardHeader>

@@ -237,7 +237,7 @@ export function ContasPagar() {
 
   const getStatusConfig = (status: ContaPagar['status']) => {
     const configs = {
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       vencida: { cor: '#EF4444', texto: 'Vencida', icon: AlertTriangle },
       paga: { cor: '#10B981', texto: 'Paga', icon: CheckCircle },
       parcial: { cor: '#3B82F6', texto: 'Parcial', icon: TrendingUp },
@@ -284,8 +284,8 @@ export function ContasPagar() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Pendente</p>
@@ -370,7 +370,7 @@ export function ContasPagar() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Calendar className="w-5 h-5 text-[#F59E0B]" />
+                  <Calendar className="w-5 h-5 text-[#8b5cf6]" />
                   Vencimentos Próximos
                 </CardTitle>
               </CardHeader>
@@ -431,7 +431,7 @@ export function ContasPagar() {
                   {[
                     { forma: 'PIX', icon: Zap, valor: 45000, cor: '#10B981' },
                     { forma: 'TED', icon: Send, valor: 89500, cor: '#3B82F6' },
-                    { forma: 'Boleto', icon: Receipt, valor: 125000, cor: '#F59E0B' },
+                    { forma: 'Boleto', icon: Receipt, valor: 125000, cor: '#8b5cf6' },
                     { forma: 'Débito', icon: CreditCard, valor: 8500, cor: '#8B5CF6' },
                   ].map((item) => (
                     <div 
@@ -666,7 +666,7 @@ export function ContasPagar() {
                 titulo: 'IA Negociação',
                 descricao: 'Identifica oportunidades de renegociação com fornecedores',
                 icon: DollarSign,
-                cor: '#F59E0B',
+                cor: '#8b5cf6',
                 insight: '2 fornecedores com histórico de aceitar parcelamento',
               },
               {

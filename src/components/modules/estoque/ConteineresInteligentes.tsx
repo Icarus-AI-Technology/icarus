@@ -255,7 +255,7 @@ function ConteinerCard({ conteiner, onClick }: ConteinerCardProps) {
   const statusConfig = {
     disponivel: { cor: '#10B981', texto: 'Disponível', icon: CheckCircle },
     em_uso: { cor: '#3B82F6', texto: 'Em Uso', icon: Play },
-    em_transito: { cor: '#F59E0B', texto: 'Em Trânsito', icon: Truck },
+    em_transito: { cor: '#8b5cf6', texto: 'Em Trânsito', icon: Truck },
     manutencao: { cor: '#8B5CF6', texto: 'Manutenção', icon: Settings },
     bloqueado: { cor: '#EF4444', texto: 'Bloqueado', icon: XCircle },
   }
@@ -294,7 +294,7 @@ function ConteinerCard({ conteiner, onClick }: ConteinerCardProps) {
             <div className="flex items-center gap-2">
               <span className={`font-semibold ${textPrimary}`}>{conteiner.codigo}</span>
               {conteiner.alertas.length > 0 && (
-                <AlertTriangle className="w-4 h-4 text-orange-500" />
+                <AlertTriangle className="w-4 h-4 text-red-400" />
               )}
             </div>
             <p className={`text-sm ${textSecondary}`}>{conteiner.nome}</p>
@@ -327,7 +327,7 @@ function ConteinerCard({ conteiner, onClick }: ConteinerCardProps) {
           </Badge>
         )}
         {itensAlerta > 0 && (
-          <Badge className="bg-yellow-500/20 text-yellow-500 text-xs">
+          <Badge className="bg-cyan-500/20 text-cyan-400 text-xs">
             {itensAlerta} alerta{itensAlerta > 1 ? 's' : ''}
           </Badge>
         )}
@@ -337,19 +337,19 @@ function ConteinerCard({ conteiner, onClick }: ConteinerCardProps) {
       <div className="flex items-center gap-4 pt-3 border-t border-white/5">
         {conteiner.temperatura !== undefined && (
           <div className="flex items-center gap-1">
-            <ThermometerSun className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <ThermometerSun className="w-3.5 h-3.5 text-[#8b5cf6]" />
             <span className={`text-xs ${textSecondary}`}>{conteiner.temperatura}°C</span>
           </div>
         )}
         {conteiner.bateria !== undefined && (
           <div className="flex items-center gap-1">
-            <Battery className={`w-3.5 h-3.5 ${conteiner.bateria < 30 ? 'text-red-500' : conteiner.bateria < 70 ? 'text-yellow-500' : 'text-green-500'}`} />
+            <Battery className={`w-3.5 h-3.5 ${conteiner.bateria < 30 ? 'text-red-500' : conteiner.bateria < 70 ? 'text-cyan-400' : 'text-green-500'}`} />
             <span className={`text-xs ${textSecondary}`}>{conteiner.bateria}%</span>
           </div>
         )}
         {conteiner.sinalGPS !== undefined && (
           <div className="flex items-center gap-1">
-            <Signal className={`w-3.5 h-3.5 ${conteiner.sinalGPS > 80 ? 'text-green-500' : conteiner.sinalGPS > 50 ? 'text-yellow-500' : 'text-red-500'}`} />
+            <Signal className={`w-3.5 h-3.5 ${conteiner.sinalGPS > 80 ? 'text-green-500' : conteiner.sinalGPS > 50 ? 'text-cyan-400' : 'text-red-500'}`} />
             <span className={`text-xs ${textSecondary}`}>GPS</span>
           </div>
         )}
@@ -494,8 +494,8 @@ export function ConteineresInteligentes() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Truck className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Truck className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Em Trânsito</p>
@@ -613,7 +613,7 @@ export function ConteineresInteligentes() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
+                <AlertTriangle className="w-5 h-5 text-[#8b5cf6]" />
                 Alertas Preditivos
               </CardTitle>
             </CardHeader>
@@ -624,20 +624,20 @@ export function ConteineresInteligentes() {
                     key={alerta.id}
                     className={`p-4 rounded-xl ${inputBg} border ${borderColor} border-l-4 ${
                       alerta.severidade === 'critical' ? 'border-l-red-500' :
-                      alerta.severidade === 'warning' ? 'border-l-yellow-500' : 'border-l-blue-500'
+                      alerta.severidade === 'warning' ? 'border-l-cyan-500' : 'border-l-blue-500'
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                           alerta.severidade === 'critical' ? 'bg-red-500/20' :
-                          alerta.severidade === 'warning' ? 'bg-yellow-500/20' : 'bg-blue-500/20'
+                          alerta.severidade === 'warning' ? 'bg-cyan-500/20' : 'bg-blue-500/20'
                         }`}>
                           {alerta.tipo === 'vencimento' && <Calendar className={`w-5 h-5 ${
                             alerta.severidade === 'critical' ? 'text-red-500' :
-                            alerta.severidade === 'warning' ? 'text-yellow-500' : 'text-blue-500'
+                            alerta.severidade === 'warning' ? 'text-cyan-400' : 'text-blue-500'
                           }`} />}
-                          {alerta.tipo === 'bateria' && <Battery className="w-5 h-5 text-yellow-500" />}
+                          {alerta.tipo === 'bateria' && <Battery className="w-5 h-5 text-cyan-400" />}
                           {alerta.tipo === 'estoque_baixo' && <Package className="w-5 h-5 text-blue-500" />}
                         </div>
                         <div>
@@ -645,7 +645,7 @@ export function ConteineresInteligentes() {
                           <p className={`text-sm ${textSecondary}`}>{alerta.descricao}</p>
                           <div className={`mt-2 p-2 rounded-lg ${isDark ? 'bg-[#0F1220]' : 'bg-slate-50'}`}>
                             <p className={`text-xs ${textSecondary}`}>
-                              <Zap className="w-3 h-3 inline mr-1 text-[#F59E0B]" />
+                              <Zap className="w-3 h-3 inline mr-1 text-[#8b5cf6]" />
                               Ação sugerida: {alerta.acaoSugerida}
                             </p>
                           </div>
@@ -668,7 +668,7 @@ export function ConteineresInteligentes() {
             {[
               { titulo: 'Entrada e Saída Automatizada', icon: ArrowRightLeft, cor: '#6366F1', desc: 'Registro automático via código de barras' },
               { titulo: 'Transferências entre Locais', icon: Truck, cor: '#10B981', desc: 'Movimentação rastreada em tempo real' },
-              { titulo: 'Ajustes de Inventário', icon: RefreshCw, cor: '#F59E0B', desc: 'Correções com auditoria completa' },
+              { titulo: 'Ajustes de Inventário', icon: RefreshCw, cor: '#8b5cf6', desc: 'Correções com auditoria completa' },
               { titulo: 'Rastreabilidade Completa', icon: Navigation, cor: '#8B5CF6', desc: 'Histórico de todas as movimentações' },
             ].map((item) => (
               <Card key={item.titulo} className={cardBg}>
@@ -700,7 +700,7 @@ export function ConteineresInteligentes() {
             {[
               { titulo: 'Contagem Cíclica Automatizada', icon: RefreshCw, cor: '#6366F1', desc: 'Contagens programadas por categoria' },
               { titulo: 'Inventário por Código de Barras', icon: Barcode, cor: '#10B981', desc: 'Leitura rápida e precisa' },
-              { titulo: 'Reconciliação Automática', icon: CheckCircle, cor: '#F59E0B', desc: 'Ajuste automático de divergências' },
+              { titulo: 'Reconciliação Automática', icon: CheckCircle, cor: '#8b5cf6', desc: 'Ajuste automático de divergências' },
               { titulo: 'Relatórios de Divergências', icon: FileText, cor: '#EF4444', desc: 'Análise detalhada de diferenças' },
             ].map((item) => (
               <Card key={item.titulo} className={cardBg}>
@@ -769,7 +769,7 @@ export function ConteineresInteligentes() {
                 {[
                   { titulo: '3 Templates Profissionais', icon: FileText, cor: '#6366F1' },
                   { titulo: 'Geração em Lote', icon: Layers, cor: '#10B981' },
-                  { titulo: 'QR Code Integrado', icon: QrCode, cor: '#F59E0B' },
+                  { titulo: 'QR Code Integrado', icon: QrCode, cor: '#8b5cf6' },
                   { titulo: 'Impressão Automatizada', icon: Printer, cor: '#8B5CF6' },
                 ].map((item) => (
                   <div 
@@ -803,7 +803,7 @@ export function ConteineresInteligentes() {
                 {[
                   { titulo: 'Câmera Integrada', icon: Camera, cor: '#6366F1' },
                   { titulo: 'Leitor Dedicado', icon: ScanLine, cor: '#10B981' },
-                  { titulo: 'Validação em Tempo Real', icon: CheckCircle, cor: '#F59E0B' },
+                  { titulo: 'Validação em Tempo Real', icon: CheckCircle, cor: '#8b5cf6' },
                   { titulo: 'Sincronização Offline', icon: WifiOff, cor: '#8B5CF6' },
                 ].map((item) => (
                   <div 
@@ -920,7 +920,7 @@ export function ConteineresInteligentes() {
                   <Badge className={
                     conteinerSelecionado.status === 'disponivel' ? 'bg-green-500/20 text-green-500' :
                     conteinerSelecionado.status === 'em_uso' ? 'bg-blue-500/20 text-blue-500' :
-                    conteinerSelecionado.status === 'em_transito' ? 'bg-yellow-500/20 text-yellow-500' :
+                    conteinerSelecionado.status === 'em_transito' ? 'bg-cyan-500/20 text-cyan-400' :
                     'bg-slate-500/20 text-slate-500'
                   }>
                     {conteinerSelecionado.status.replace('_', ' ').toUpperCase()}
@@ -935,14 +935,14 @@ export function ConteineresInteligentes() {
               {/* Sensores */}
               <div className="grid grid-cols-3 gap-4">
                 <div className={`p-4 rounded-xl ${inputBg} text-center`}>
-                  <ThermometerSun className="w-6 h-6 mx-auto mb-2 text-[#F59E0B]" />
+                  <ThermometerSun className="w-6 h-6 mx-auto mb-2 text-[#8b5cf6]" />
                   <p className={`text-2xl font-bold ${textPrimary}`}>{conteinerSelecionado.temperatura}°C</p>
                   <p className={`text-xs ${textSecondary}`}>Temperatura</p>
                 </div>
                 <div className={`p-4 rounded-xl ${inputBg} text-center`}>
                   <Battery className={`w-6 h-6 mx-auto mb-2 ${
                     (conteinerSelecionado.bateria || 0) < 30 ? 'text-red-500' : 
-                    (conteinerSelecionado.bateria || 0) < 70 ? 'text-yellow-500' : 'text-green-500'
+                    (conteinerSelecionado.bateria || 0) < 70 ? 'text-cyan-400' : 'text-green-500'
                   }`} />
                   <p className={`text-2xl font-bold ${textPrimary}`}>{conteinerSelecionado.bateria}%</p>
                   <p className={`text-xs ${textSecondary}`}>Bateria</p>
@@ -950,7 +950,7 @@ export function ConteineresInteligentes() {
                 <div className={`p-4 rounded-xl ${inputBg} text-center`}>
                   <Signal className={`w-6 h-6 mx-auto mb-2 ${
                     (conteinerSelecionado.sinalGPS || 0) > 80 ? 'text-green-500' : 
-                    (conteinerSelecionado.sinalGPS || 0) > 50 ? 'text-yellow-500' : 'text-red-500'
+                    (conteinerSelecionado.sinalGPS || 0) > 50 ? 'text-cyan-400' : 'text-red-500'
                   }`} />
                   <p className={`text-2xl font-bold ${textPrimary}`}>{conteinerSelecionado.sinalGPS}%</p>
                   <p className={`text-xs ${textSecondary}`}>Sinal GPS</p>
@@ -975,7 +975,7 @@ export function ConteineresInteligentes() {
                       <div className="text-right">
                         <Badge className={
                           item.status === 'ok' ? 'bg-green-500/20 text-green-500' :
-                          item.status === 'alerta' ? 'bg-yellow-500/20 text-yellow-500' :
+                          item.status === 'alerta' ? 'bg-cyan-500/20 text-cyan-400' :
                           item.status === 'critico' ? 'bg-red-500/20 text-red-500' :
                           'bg-slate-500/20 text-slate-500'
                         }>
@@ -992,14 +992,14 @@ export function ConteineresInteligentes() {
 
               {/* Alertas */}
               {conteinerSelecionado.alertas.length > 0 && (
-                <div className={`p-4 rounded-xl bg-orange-500/10 border border-orange-500/20`}>
-                  <h4 className="font-medium text-orange-500 mb-2 flex items-center gap-2">
+                <div className={`p-4 rounded-xl bg-red-500/10 border border-slate-600/20`}>
+                  <h4 className="font-medium text-red-400 mb-2 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4" />
                     Alertas
                   </h4>
                   <ul className="space-y-1">
                     {conteinerSelecionado.alertas.map((alerta, idx) => (
-                      <li key={idx} className="text-sm text-orange-400">• {alerta}</li>
+                      <li key={idx} className="text-sm text-pink-400">• {alerta}</li>
                     ))}
                   </ul>
                 </div>

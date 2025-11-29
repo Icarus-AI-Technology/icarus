@@ -296,7 +296,7 @@ export function FluxoCaixaIA() {
   const getSeveridadeConfig = (severidade: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       info: { cor: '#3B82F6', texto: 'Info' },
-      warning: { cor: '#F59E0B', texto: 'Atenção' },
+      warning: { cor: '#8b5cf6', texto: 'Atenção' },
       critical: { cor: '#EF4444', texto: 'Crítico' },
     }
     return configs[severidade] || { cor: '#6B7280', texto: severidade }
@@ -764,7 +764,7 @@ export function FluxoCaixaIA() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-[#F59E0B]" />
+                <Bell className="w-5 h-5 text-[#8b5cf6]" />
                 Alertas de Liquidez
               </CardTitle>
             </CardHeader>
@@ -798,7 +798,7 @@ export function FluxoCaixaIA() {
                           </p>
                           <div className={`mt-2 p-2 rounded-lg ${isDark ? 'bg-[#0F1220]' : 'bg-slate-50'}`}>
                             <p className={`text-xs ${textSecondary}`}>
-                              <Zap className="w-3 h-3 inline mr-1 text-[#F59E0B]" />
+                              <Zap className="w-3 h-3 inline mr-1 text-[#8b5cf6]" />
                               {alerta.acaoSugerida}
                             </p>
                           </div>
@@ -853,7 +853,7 @@ export function FluxoCaixaIA() {
                                 Impacto: {otim.impactoLiquidez >= 0 ? '+' : ''}{formatCurrency(otim.impactoLiquidez)}
                               </span>
                               {otim.economia && (
-                                <span className={`text-sm ${otim.economia >= 0 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
+                                <span className={`text-sm ${otim.economia >= 0 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`}>
                                   {otim.economia >= 0 ? 'Rendimento' : 'Custo'}: {formatCurrency(Math.abs(otim.economia))}
                                 </span>
                               )}
@@ -887,16 +887,16 @@ export function FluxoCaixaIA() {
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                      ind.status === 'ok' ? 'bg-[#10B981]/20' : 'bg-[#F59E0B]/20'
+                      ind.status === 'ok' ? 'bg-[#10B981]/20' : 'bg-[#8b5cf6]/20'
                     }`}>
-                      <ind.icon className={`w-5 h-5 ${ind.status === 'ok' ? 'text-[#10B981]' : 'text-[#F59E0B]'}`} />
+                      <ind.icon className={`w-5 h-5 ${ind.status === 'ok' ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`} />
                     </div>
                     <div>
                       <h4 className={`font-medium ${textPrimary}`}>{ind.titulo}</h4>
                       <p className={`text-xs ${textSecondary}`}>Meta: {ind.meta}</p>
                     </div>
                   </div>
-                  <p className={`text-2xl font-bold ${ind.status === 'ok' ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
+                  <p className={`text-2xl font-bold ${ind.status === 'ok' ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`}>
                     {ind.valor}
                   </p>
                 </CardContent>

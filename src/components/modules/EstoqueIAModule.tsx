@@ -382,7 +382,7 @@ export function EstoqueIAModule() {
   const getStatusBadge = (status: Produto['status']) => {
     const statusConfig = {
       normal: { color: 'bg-[#10B981]/20 text-[#10B981]', label: 'Normal' },
-      baixo: { color: 'bg-[#F59E0B]/20 text-[#F59E0B]', label: 'Baixo' },
+      baixo: { color: 'bg-[#8b5cf6]/20 text-[#8b5cf6]', label: 'Baixo' },
       critico: { color: 'bg-[#EF4444]/20 text-[#EF4444]', label: 'Crítico' },
       excesso: { color: 'bg-[#3B82F6]/20 text-[#3B82F6]', label: 'Excesso' },
     }
@@ -464,7 +464,7 @@ export function EstoqueIAModule() {
           title="Estoque Baixo"
           value={stats.estoqueBaixo}
           icon={TrendingUp}
-          iconColor="#F59E0B"
+          iconColor="#8b5cf6"
         />
         <KPICard
           title="Valor em Estoque"
@@ -682,7 +682,7 @@ export function EstoqueIAModule() {
                     <div
                       key={produto.id}
                       className={`p-4 rounded-xl ${cardBg} border-l-4 ${
-                        produto.status === 'critico' ? 'border-l-[#EF4444]' : 'border-l-[#F59E0B]'
+                        produto.status === 'critico' ? 'border-l-[#EF4444]' : 'border-l-[#8b5cf6]'
                       }`}
                     >
                       <div className="flex items-center justify-between">

@@ -327,7 +327,7 @@ export function ContasReceber() {
 
   const getStatusConfig = (status: ContaReceber['status']) => {
     const configs = {
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       vencido: { cor: '#EF4444', texto: 'Vencido', icon: AlertTriangle },
       recebido: { cor: '#10B981', texto: 'Recebido', icon: CheckCircle },
       parcial: { cor: '#3B82F6', texto: 'Parcial', icon: TrendingUp },
@@ -341,7 +341,7 @@ export function ContasReceber() {
   const getRiscoConfig = (risco: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       baixo: { cor: '#10B981', texto: 'Baixo' },
-      medio: { cor: '#F59E0B', texto: 'Médio' },
+      medio: { cor: '#8b5cf6', texto: 'Médio' },
       alto: { cor: '#EF4444', texto: 'Alto' },
       critico: { cor: '#DC2626', texto: 'Crítico' },
     }
@@ -472,8 +472,8 @@ export function ContasReceber() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Gauge className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Gauge className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Inadimplência</p>
@@ -485,8 +485,8 @@ export function ContasReceber() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Pendentes</p>
@@ -542,7 +542,7 @@ export function ContasReceber() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Calendar className="w-5 h-5 text-[#F59E0B]" />
+                  <Calendar className="w-5 h-5 text-[#8b5cf6]" />
                   Vencimentos Próximos
                 </CardTitle>
               </CardHeader>
@@ -773,7 +773,7 @@ export function ContasReceber() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-[#F59E0B]" />
+                <Zap className="w-5 h-5 text-[#8b5cf6]" />
                 Configuração de Cobrança Automática
               </CardTitle>
             </CardHeader>
@@ -787,12 +787,12 @@ export function ContasReceber() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                          config.diasAposVencimento < 0 ? 'bg-[#10B981]/20' : 'bg-[#F59E0B]/20'
+                          config.diasAposVencimento < 0 ? 'bg-[#10B981]/20' : 'bg-[#8b5cf6]/20'
                         }`}>
-                          {config.canal === 'email' && <Mail className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`} />}
-                          {config.canal === 'sms' && <Smartphone className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`} />}
-                          {config.canal === 'whatsapp' && <MessageCircle className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`} />}
-                          {config.canal === 'todos' && <Bell className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`} />}
+                          {config.canal === 'email' && <Mail className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`} />}
+                          {config.canal === 'sms' && <Smartphone className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`} />}
+                          {config.canal === 'whatsapp' && <MessageCircle className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`} />}
+                          {config.canal === 'todos' && <Bell className={`w-5 h-5 ${config.diasAposVencimento < 0 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`} />}
                         </div>
                         <div>
                           <p className={`font-medium ${textPrimary}`}>{config.nome}</p>
@@ -990,7 +990,7 @@ export function ContasReceber() {
                     className={`p-4 rounded-xl ${inputBg} border ${borderColor} border-l-4`}
                     style={{ 
                       borderLeftColor: analise.probabilidadeInadimplencia >= 70 ? '#EF4444' :
-                        analise.probabilidadeInadimplencia >= 40 ? '#F59E0B' : '#10B981'
+                        analise.probabilidadeInadimplencia >= 40 ? '#8b5cf6' : '#10B981'
                     }}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -1005,7 +1005,7 @@ export function ContasReceber() {
                           <span className={`text-sm ${textSecondary}`}>Score Risco</span>
                           <span className={`text-xl font-bold ${
                             analise.scoreRisco >= 70 ? 'text-[#EF4444]' :
-                            analise.scoreRisco >= 40 ? 'text-[#F59E0B]' : 'text-[#10B981]'
+                            analise.scoreRisco >= 40 ? 'text-[#8b5cf6]' : 'text-[#10B981]'
                           }`}>{analise.scoreRisco}</span>
                         </div>
                         <p className={`text-xs ${textSecondary}`}>
@@ -1027,7 +1027,7 @@ export function ContasReceber() {
 
                     <div className={`p-2 rounded-lg ${isDark ? 'bg-[#0F1220]' : 'bg-slate-50'}`}>
                       <p className={`text-sm ${textSecondary}`}>
-                        <Zap className="w-4 h-4 inline mr-1 text-[#F59E0B]" />
+                        <Zap className="w-4 h-4 inline mr-1 text-[#8b5cf6]" />
                         <strong>Recomendação IA:</strong> {analise.recomendacao}
                       </p>
                     </div>
@@ -1094,7 +1094,7 @@ export function ContasReceber() {
                   <p className={`text-xs ${textSecondary}`}>Score Crédito</p>
                   <p className={`font-medium ${
                     contaSelecionada.cliente.scoreCredito >= 700 ? 'text-[#10B981]' :
-                    contaSelecionada.cliente.scoreCredito >= 500 ? 'text-[#F59E0B]' : 'text-[#EF4444]'
+                    contaSelecionada.cliente.scoreCredito >= 500 ? 'text-[#8b5cf6]' : 'text-[#EF4444]'
                   }`}>{contaSelecionada.cliente.scoreCredito}</p>
                 </div>
                 <div className={`p-3 rounded-xl ${inputBg}`}>

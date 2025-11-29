@@ -13,7 +13,7 @@ export function AutomacaoIA() {
       title="Automação IA"
       description="Automações inteligentes baseadas em IA"
       icon={Zap}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Automações Ativas', value: 0 },
         { label: 'Executadas (Hoje)', value: 0 },

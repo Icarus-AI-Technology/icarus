@@ -226,14 +226,14 @@ export function RastreamentoRFID() {
   const getStatusConfig = (status: string) => {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       em_estoque: { cor: '#3B82F6', texto: 'Em Estoque', icon: Package },
-      expedido: { cor: '#F59E0B', texto: 'Expedido', icon: Navigation },
+      expedido: { cor: '#8b5cf6', texto: 'Expedido', icon: Navigation },
       em_uso: { cor: '#8B5CF6', texto: 'Em Uso', icon: Activity },
       implantado: { cor: '#10B981', texto: 'Implantado', icon: CheckCircle },
       retornado: { cor: '#6B7280', texto: 'Retornado', icon: ArrowLeft },
       descartado: { cor: '#EF4444', texto: 'Descartado', icon: XCircle },
       online: { cor: '#10B981', texto: 'Online', icon: Wifi },
       offline: { cor: '#EF4444', texto: 'Offline', icon: WifiOff },
-      alerta: { cor: '#F59E0B', texto: 'Alerta', icon: AlertTriangle },
+      alerta: { cor: '#8b5cf6', texto: 'Alerta', icon: AlertTriangle },
       associado: { cor: '#3B82F6', texto: 'Associado', icon: Link },
       removido: { cor: '#6B7280', texto: 'Removido', icon: Unlink },
     }
@@ -340,12 +340,12 @@ export function RastreamentoRFID() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Navigation className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Navigation className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Expedidos</p>
-                <p className={`text-2xl font-bold text-[#F59E0B]`}>{resumo.expedidos}</p>
+                <p className={`text-2xl font-bold text-[#8b5cf6]`}>{resumo.expedidos}</p>
               </div>
             </div>
           </CardContent>
@@ -473,7 +473,7 @@ export function RastreamentoRFID() {
                           {new Date(leitura.dataHora).toLocaleTimeString('pt-BR')}
                         </p>
                         <div className="flex items-center gap-1 justify-end mt-1">
-                          <Wifi className={`w-4 h-4 ${leitura.sinalForca > 80 ? 'text-[#10B981]' : leitura.sinalForca > 50 ? 'text-[#F59E0B]' : 'text-[#EF4444]'}`} />
+                          <Wifi className={`w-4 h-4 ${leitura.sinalForca > 80 ? 'text-[#10B981]' : leitura.sinalForca > 50 ? 'text-[#8b5cf6]' : 'text-[#EF4444]'}`} />
                           <span className={`text-xs ${textSecondary}`}>{leitura.sinalForca}%</span>
                         </div>
                       </div>

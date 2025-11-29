@@ -27,7 +27,7 @@ const badgeVariants = cva(
         success:
           "bg-[#10B981]/20 text-[#10B981]",
         warning:
-          "bg-[#F59E0B]/20 text-[#F59E0B]",
+          "bg-[#8b5cf6]/20 text-[#8b5cf6]",
         info:
           "bg-[#3B82F6]/20 text-[#3B82F6]",
       },

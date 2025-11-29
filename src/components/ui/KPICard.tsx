@@ -31,7 +31,7 @@ export interface KPICardProps {
 const variantColors: Record<string, string> = {
   primary: '#6366F1',
   success: '#10B981',
-  warning: '#F59E0B',
+  warning: '#8b5cf6',
   danger: '#EF4444',
   default: '#6366F1',
   info: '#3B82F6',

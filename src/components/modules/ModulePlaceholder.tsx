@@ -34,7 +34,7 @@ const features = [
     icon: BarChart3, 
     title: 'Relatórios e Analytics', 
     desc: 'Dashboards e gráficos para análise de dados',
-    color: '#F59E0B' // Amber
+    color: '#8b5cf6' // Amber
   },
 ]
 
@@ -146,7 +146,7 @@ export function ModulePlaceholder({ title, description, icon: Icon, category }: 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { label: 'Módulo ID', value: title.toLowerCase().replace(/\s+/g, '-'), color: textSecondary },
-              { label: 'Status', value: 'Em Desenvolvimento', color: 'text-[#F59E0B]' },
+              { label: 'Status', value: 'Em Desenvolvimento', color: 'text-[#8b5cf6]' },
               { label: 'Categoria', value: category, color: textSecondary },
               { label: 'Versão', value: 'v5.1.0', color: textSecondary },
             ].map((info, index) => (

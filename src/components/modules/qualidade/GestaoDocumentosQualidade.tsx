@@ -340,9 +340,9 @@ function StatusBadge({ status, diasParaVencer }: { status: StatusDocumento; dias
   const configs: Record<StatusDocumento, { label: string; color: string; icon: React.ReactNode }> = {
     vigente: { label: 'Vigente', color: 'bg-emerald-500/20 text-emerald-400', icon: <CheckCircle className="w-3 h-3" /> },
     em_revisao: { label: 'Em Revisão', color: 'bg-blue-500/20 text-blue-400', icon: <RefreshCw className="w-3 h-3" /> },
-    aguardando_aprovacao: { label: 'Aguardando Aprovação', color: 'bg-amber-500/20 text-amber-400', icon: <Clock className="w-3 h-3" /> },
+    aguardando_aprovacao: { label: 'Aguardando Aprovação', color: 'bg-violet-500/20 text-violet-300', icon: <Clock className="w-3 h-3" /> },
     vencido: { label: 'Vencido', color: 'bg-red-500/20 text-red-400', icon: <AlertTriangle className="w-3 h-3" /> },
-    proximo_vencimento: { label: `Vence em ${diasParaVencer} dias`, color: 'bg-orange-500/20 text-orange-400', icon: <FileClock className="w-3 h-3" /> },
+    proximo_vencimento: { label: `Vence em ${diasParaVencer} dias`, color: 'bg-red-500/20 text-pink-400', icon: <FileClock className="w-3 h-3" /> },
     obsoleto: { label: 'Obsoleto', color: 'bg-slate-500/20 text-slate-400', icon: <Archive className="w-3 h-3" /> },
     rascunho: { label: 'Rascunho', color: 'bg-slate-500/20 text-slate-400', icon: <Edit className="w-3 h-3" /> },
   }
@@ -360,8 +360,8 @@ function StatusBadge({ status, diasParaVencer }: { status: StatusDocumento; dias
 function PrioridadeBadge({ prioridade }: { prioridade: AlertaVencimento['prioridade'] }) {
   const configs = {
     critica: { label: 'Crítica', color: 'bg-red-500/20 text-red-400' },
-    alta: { label: 'Alta', color: 'bg-orange-500/20 text-orange-400' },
-    media: { label: 'Média', color: 'bg-amber-500/20 text-amber-400' },
+    alta: { label: 'Alta', color: 'bg-red-500/20 text-pink-400' },
+    media: { label: 'Média', color: 'bg-violet-500/20 text-violet-300' },
     baixa: { label: 'Baixa', color: 'bg-blue-500/20 text-blue-400' },
   }
 
@@ -614,8 +614,8 @@ export function GestaoDocumentosQualidade() {
 
         <Card className={`${cardBg} p-3`}>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
-              <FileClock className="w-4 h-4 text-orange-400" />
+            <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+              <FileClock className="w-4 h-4 text-pink-400" />
             </div>
             <div>
               <p className={`text-xs ${textSecondary}`}>Vencendo</p>
@@ -650,8 +650,8 @@ export function GestaoDocumentosQualidade() {
 
         <Card className={`${cardBg} p-3`}>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Clock className="w-4 h-4 text-amber-400" />
+            <div className="w-8 h-8 rounded-lg bg-violet-500/20 flex items-center justify-center">
+              <Clock className="w-4 h-4 text-violet-300" />
             </div>
             <div>
               <p className={`text-xs ${textSecondary}`}>Cartas Venc.</p>
@@ -703,7 +703,7 @@ export function GestaoDocumentosQualidade() {
                         <span className={textPrimary}>{alerta.documentoTitulo}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className={`text-sm ${alerta.diasRestantes < 0 ? 'text-red-400' : 'text-orange-400'}`}>
+                        <span className={`text-sm ${alerta.diasRestantes < 0 ? 'text-red-400' : 'text-pink-400'}`}>
                           {alerta.diasRestantes < 0 
                             ? `Vencido há ${Math.abs(alerta.diasRestantes)} dias`
                             : `Vence em ${alerta.diasRestantes} dias`
@@ -870,7 +870,7 @@ export function GestaoDocumentosQualidade() {
                     key={carta.id}
                     className={`p-4 rounded-xl ${inputBg} ${
                       carta.status === 'vencida' ? 'border-l-4 border-l-red-500' :
-                      carta.status === 'proximo_vencimento' ? 'border-l-4 border-l-orange-500' :
+                      carta.status === 'proximo_vencimento' ? 'border-l-4 border-l-red-500' :
                       'border-l-4 border-l-emerald-500'
                     }`}
                   >
@@ -880,7 +880,7 @@ export function GestaoDocumentosQualidade() {
                           <h3 className={`font-semibold ${textPrimary}`}>{carta.fabricante}</h3>
                           <Badge className={
                             carta.status === 'vigente' ? 'bg-emerald-500/20 text-emerald-400' :
-                            carta.status === 'proximo_vencimento' ? 'bg-orange-500/20 text-orange-400' :
+                            carta.status === 'proximo_vencimento' ? 'bg-red-500/20 text-pink-400' :
                             'bg-red-500/20 text-red-400'
                           }>
                             {carta.status === 'vigente' ? 'Vigente' :
@@ -912,7 +912,7 @@ export function GestaoDocumentosQualidade() {
                           </div>
                         </div>
                         {carta.observacoes && (
-                          <p className={`text-sm mt-2 ${carta.status === 'vencida' ? 'text-red-400' : 'text-amber-400'}`}>
+                          <p className={`text-sm mt-2 ${carta.status === 'vencida' ? 'text-red-400' : 'text-violet-300'}`}>
                             ⚠️ {carta.observacoes}
                           </p>
                         )}
@@ -927,7 +927,7 @@ export function GestaoDocumentosQualidade() {
                           PDF
                         </Button>
                         {carta.status !== 'vigente' && (
-                          <Button size="sm" className="bg-amber-500 text-white hover:bg-amber-600">
+                          <Button size="sm" className="bg-violet-500 text-white hover:bg-violet-600">
                             <RefreshCw className="w-4 h-4 mr-1" />
                             Renovar
                           </Button>
@@ -977,7 +977,7 @@ export function GestaoDocumentosQualidade() {
                       <div>
                         <p className={`font-medium ${textPrimary}`}>{doc.nome}</p>
                         {doc.validade && (
-                          <p className={`text-sm ${doc.dias && doc.dias < 90 ? 'text-orange-400' : textSecondary}`}>
+                          <p className={`text-sm ${doc.dias && doc.dias < 90 ? 'text-pink-400' : textSecondary}`}>
                             Validade: {new Date(doc.validade).toLocaleDateString('pt-BR')}
                             {doc.dias && ` (${doc.dias} dias)`}
                           </p>
@@ -1005,7 +1005,7 @@ export function GestaoDocumentosQualidade() {
           <Card className={cardBg}>
             <CardHeader>
               <CardTitle className={`${textPrimary} flex items-center gap-2`}>
-                <Bell className="w-5 h-5 text-amber-400" />
+                <Bell className="w-5 h-5 text-violet-300" />
                 Central de Alertas de Vencimento
               </CardTitle>
             </CardHeader>
@@ -1016,8 +1016,8 @@ export function GestaoDocumentosQualidade() {
                     key={alerta.id}
                     className={`p-4 rounded-xl ${inputBg} border-l-4 ${
                       alerta.prioridade === 'critica' ? 'border-l-red-500' :
-                      alerta.prioridade === 'alta' ? 'border-l-orange-500' :
-                      alerta.prioridade === 'media' ? 'border-l-amber-500' :
+                      alerta.prioridade === 'alta' ? 'border-l-red-500' :
+                      alerta.prioridade === 'media' ? 'border-l-violet-500' :
                       'border-l-blue-500'
                     }`}
                   >
@@ -1034,7 +1034,7 @@ export function GestaoDocumentosQualidade() {
                       <div className="text-right">
                         <p className={`font-medium ${
                           alerta.diasRestantes < 0 ? 'text-red-400' :
-                          alerta.diasRestantes < 30 ? 'text-orange-400' :
+                          alerta.diasRestantes < 30 ? 'text-pink-400' :
                           textPrimary
                         }`}>
                           {alerta.diasRestantes < 0 
@@ -1083,12 +1083,12 @@ export function GestaoDocumentosQualidade() {
                       <p className="text-2xl font-bold text-red-400">2</p>
                       <p className={`text-sm ${textSecondary}`}>Próximos 30 dias</p>
                     </div>
-                    <div className="text-center p-3 rounded-lg bg-orange-500/10">
-                      <p className="text-2xl font-bold text-orange-400">3</p>
+                    <div className="text-center p-3 rounded-lg bg-red-500/10">
+                      <p className="text-2xl font-bold text-pink-400">3</p>
                       <p className={`text-sm ${textSecondary}`}>31-60 dias</p>
                     </div>
-                    <div className="text-center p-3 rounded-lg bg-amber-500/10">
-                      <p className="text-2xl font-bold text-amber-400">2</p>
+                    <div className="text-center p-3 rounded-lg bg-violet-500/10">
+                      <p className="text-2xl font-bold text-violet-300">2</p>
                       <p className={`text-sm ${textSecondary}`}>61-90 dias</p>
                     </div>
                   </div>

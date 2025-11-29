@@ -142,7 +142,7 @@ export function useDashboardStats() {
           productCategoryData: [
             { name: 'Cardiologia (CRM)', value: 35, color: '#6366F1' },
             { name: 'Cirurgia Vascular', value: 30, color: '#10B981' },
-            { name: 'Eletrofisiologia', value: 15, color: '#F59E0B' },
+            { name: 'Eletrofisiologia', value: 15, color: '#8b5cf6' },
             { name: 'Hemodinâmica', value: 12, color: '#EF4444' },
             { name: 'Outros', value: 8, color: '#8B5CF6' },
           ],
@@ -217,7 +217,7 @@ export function useDashboardStats() {
         }, {} as Record<string, { total: number, value: 0 }>)
 
         const totalValue = Object.values(categoryDistribution).reduce((sum, cat) => sum + cat.total, 0)
-        const colors = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#3B82F6', '#EC4899']
+        const colors = ['#6366F1', '#10B981', '#8b5cf6', '#EF4444', '#8B5CF6', '#3B82F6', '#EC4899']
 
         const productCategoryData = Object.entries(categoryDistribution).map(([name, data], index) => ({
           name,
@@ -253,7 +253,7 @@ export function useDashboardStats() {
           productCategoryData: [
             { name: 'Cardiologia (CRM)', value: 35, color: '#6366F1' },
             { name: 'Cirurgia Vascular', value: 30, color: '#10B981' },
-            { name: 'Eletrofisiologia', value: 15, color: '#F59E0B' },
+            { name: 'Eletrofisiologia', value: 15, color: '#8b5cf6' },
             { name: 'Hemodinâmica', value: 12, color: '#EF4444' },
             { name: 'Outros', value: 8, color: '#8B5CF6' },
           ],

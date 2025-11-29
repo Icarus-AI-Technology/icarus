@@ -13,7 +13,7 @@ export function TabelasPrecosForm() {
       title="Tabelas Preços Form"
       description="Cadastro e edição de tabelas de preços"
       icon={FileSpreadsheet}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Tabelas Cadastradas', value: 0 },
         { label: 'Pendentes Aprovação', value: 0 }

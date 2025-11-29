@@ -13,7 +13,7 @@ export function ManutencaoPreventiva() {
       title="Manutenção Preventiva"
       description="Manutenção preventiva de equipamentos OPME"
       icon={Settings}
-      iconColor="#F59E0B"
+      iconColor="#8b5cf6"
       stats={[
         { label: 'Equipamentos', value: 0 },
         { label: 'Manutenções Agendadas', value: 0 },

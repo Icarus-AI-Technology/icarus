@@ -364,11 +364,11 @@ export function FinanceiroAvancadoCompleto() {
   const getStatusBadge = (status: string) => {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       ok: { cor: '#10B981', texto: 'OK', icon: CheckCircle },
-      'needs-review': { cor: '#F59E0B', texto: 'Revisar', icon: AlertTriangle },
+      'needs-review': { cor: '#8b5cf6', texto: 'Revisar', icon: AlertTriangle },
       error: { cor: '#EF4444', texto: 'Erro', icon: XCircle },
-      warning: { cor: '#F59E0B', texto: 'Atenção', icon: AlertCircle },
+      warning: { cor: '#8b5cf6', texto: 'Atenção', icon: AlertCircle },
       autorizado: { cor: '#10B981', texto: 'Autorizado', icon: CheckCircle },
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       revogado: { cor: '#EF4444', texto: 'Revogado', icon: Ban },
       expirado: { cor: '#6B7280', texto: 'Expirado', icon: FileClock },
       negado: { cor: '#EF4444', texto: 'Negado', icon: ThumbsDown },
@@ -477,7 +477,7 @@ export function FinanceiroAvancadoCompleto() {
                 <h3 className={`font-semibold ${textPrimary} text-sm`}>{submodulo.nome}</h3>
                 <p className={`text-xs ${textSecondary} mt-1`}>{submodulo.detalhes}</p>
                 {submodulo.acoesPendentes > 0 && (
-                  <p className="text-xs text-[#F59E0B] mt-1">
+                  <p className="text-xs text-[#8b5cf6] mt-1">
                     {submodulo.acoesPendentes} ações pendentes
                   </p>
                 )}
@@ -538,7 +538,7 @@ export function FinanceiroAvancadoCompleto() {
                 </div>
                 <div className={`p-3 rounded-xl ${inputBg} flex justify-between items-center`}>
                   <span className={textSecondary}>Pendentes</span>
-                  <span className="font-bold text-[#F59E0B]">{formatCurrency(70000)}</span>
+                  <span className="font-bold text-[#8b5cf6]">{formatCurrency(70000)}</span>
                 </div>
               </CardContent>
             </Card>
@@ -555,7 +555,7 @@ export function FinanceiroAvancadoCompleto() {
                 <div className={`p-3 rounded-xl ${inputBg}`}>
                   <div className="flex items-center justify-between mb-2">
                     <span className={textSecondary}>Ambiente</span>
-                    <Badge className={pluggyConfig.ambiente === 'production' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}>
+                    <Badge className={pluggyConfig.ambiente === 'production' ? 'bg-green-500/20 text-green-500' : 'bg-cyan-500/20 text-cyan-400'}>
                       {pluggyConfig.ambiente === 'production' ? 'Produção' : 'Sandbox'}
                     </Badge>
                   </div>
@@ -593,7 +593,7 @@ export function FinanceiroAvancadoCompleto() {
                 </div>
                 <div className={`p-3 rounded-xl ${inputBg} flex justify-between items-center`}>
                   <span className={textSecondary}>Pendentes</span>
-                  <span className="font-bold text-[#F59E0B]">
+                  <span className="font-bold text-[#8b5cf6]">
                     {consentimentos.filter(c => c.status === 'pendente').length}
                   </span>
                 </div>
@@ -658,7 +658,7 @@ export function FinanceiroAvancadoCompleto() {
                       checked={pluggyConfig.ambiente === 'sandbox'}
                       onChange={() => setPluggyConfig({...pluggyConfig, ambiente: 'sandbox'})}
                     />
-                    <Server className="w-4 h-4 text-[#F59E0B]" />
+                    <Server className="w-4 h-4 text-[#8b5cf6]" />
                     <span className={textPrimary}>Sandbox</span>
                   </label>
                   <label className={`flex items-center gap-2 p-3 rounded-xl ${inputBg} cursor-pointer ${pluggyConfig.ambiente === 'production' ? 'border-2 border-[#6366F1]' : ''}`}>
@@ -673,7 +673,7 @@ export function FinanceiroAvancadoCompleto() {
                   </label>
                 </div>
                 {pluggyConfig.ambiente === 'sandbox' && (
-                  <p className="text-xs text-[#F59E0B] flex items-center gap-1">
+                  <p className="text-xs text-[#8b5cf6] flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
                     Ambiente de testes - dados não são reais
                   </p>
@@ -866,7 +866,7 @@ export function FinanceiroAvancadoCompleto() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-[#F59E0B]" />
+                <FileText className="w-5 h-5 text-[#8b5cf6]" />
                 Débitos DDA
               </CardTitle>
               <div className="flex gap-2">
@@ -1047,10 +1047,10 @@ export function FinanceiroAvancadoCompleto() {
             </Card>
             <Card className={cardBg}>
               <CardContent className="pt-4 text-center">
-                <div className="w-16 h-16 rounded-full bg-[#F59E0B]/20 flex items-center justify-center mx-auto mb-3">
-                  <AlertTriangle className="w-8 h-8 text-[#F59E0B]" />
+                <div className="w-16 h-16 rounded-full bg-[#8b5cf6]/20 flex items-center justify-center mx-auto mb-3">
+                  <AlertTriangle className="w-8 h-8 text-[#8b5cf6]" />
                 </div>
-                <p className={`text-3xl font-bold text-[#F59E0B]`}>12</p>
+                <p className={`text-3xl font-bold text-[#8b5cf6]`}>12</p>
                 <p className={textSecondary}>Divergências</p>
               </CardContent>
             </Card>
@@ -1071,7 +1071,7 @@ export function FinanceiroAvancadoCompleto() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
+                <AlertTriangle className="w-5 h-5 text-[#8b5cf6]" />
                 Alertas de Divergência
               </CardTitle>
             </CardHeader>
@@ -1080,7 +1080,7 @@ export function FinanceiroAvancadoCompleto() {
                 {alertas.map((alerta) => {
                   const severidadeConfig: Record<string, { cor: string; texto: string }> = {
                     baixa: { cor: '#3B82F6', texto: 'Baixa' },
-                    media: { cor: '#F59E0B', texto: 'Média' },
+                    media: { cor: '#8b5cf6', texto: 'Média' },
                     alta: { cor: '#EF4444', texto: 'Alta' },
                     critica: { cor: '#DC2626', texto: 'Crítica' },
                   }
@@ -1101,7 +1101,7 @@ export function FinanceiroAvancadoCompleto() {
                             >
                               {sev.texto}
                             </Badge>
-                            <Badge className={alerta.status === 'resolvido' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}>
+                            <Badge className={alerta.status === 'resolvido' ? 'bg-green-500/20 text-green-500' : 'bg-cyan-500/20 text-cyan-400'}>
                               {alerta.status === 'resolvido' ? 'Resolvido' : 'Pendente'}
                             </Badge>
                           </div>
@@ -1154,7 +1154,7 @@ export function FinanceiroAvancadoCompleto() {
             {[
               { titulo: 'Relatório de Conciliação', icon: FileCheck, cor: '#10B981', desc: 'Resumo completo da conciliação bancária' },
               { titulo: 'Relatório DDA', icon: FileText, cor: '#6366F1', desc: 'Débitos autorizados e negados' },
-              { titulo: 'Relatório de Divergências', icon: FileWarning, cor: '#F59E0B', desc: 'Alertas e resoluções' },
+              { titulo: 'Relatório de Divergências', icon: FileWarning, cor: '#8b5cf6', desc: 'Alertas e resoluções' },
               { titulo: 'Relatório Fiscal', icon: Receipt, cor: '#8B5CF6', desc: 'Apuração de impostos e declarações' },
             ].map((relatorio) => (
               <Card key={relatorio.titulo} className={cardBg}>
@@ -1206,7 +1206,7 @@ export function FinanceiroAvancadoCompleto() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-[#F59E0B]" />
+              <AlertCircle className="w-5 h-5 text-[#8b5cf6]" />
               Confirmação Necessária
             </DialogTitle>
             <DialogDescription>

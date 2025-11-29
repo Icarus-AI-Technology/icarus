@@ -257,7 +257,7 @@ const MOCK_CONSUMO_MENSAL = [
 const MOCK_DISTRIBUICAO_TIPO = [
   { tipo: 'Hospital', valor: 550000, cor: '#6366F1' },
   { tipo: 'Convênio', valor: 420000, cor: '#10B981' },
-  { tipo: 'Fornecedor', valor: 65000, cor: '#F59E0B' },
+  { tipo: 'Fornecedor', valor: 65000, cor: '#8b5cf6' },
 ]
 
 // ============ COMPONENTE PRINCIPAL ============
@@ -297,10 +297,10 @@ export function GestaoContratos() {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       ativo: { cor: '#10B981', texto: 'Ativo', icon: CheckCircle },
       vencido: { cor: '#EF4444', texto: 'Vencido', icon: XCircle },
-      suspenso: { cor: '#F59E0B', texto: 'Suspenso', icon: AlertTriangle },
+      suspenso: { cor: '#8b5cf6', texto: 'Suspenso', icon: AlertTriangle },
       encerrado: { cor: '#6B7280', texto: 'Encerrado', icon: XCircle },
       renovacao: { cor: '#3B82F6', texto: 'Em Renovação', icon: RefreshCw },
-      pendente: { cor: '#F59E0B', texto: 'Pendente', icon: Clock },
+      pendente: { cor: '#8b5cf6', texto: 'Pendente', icon: Clock },
       aprovada: { cor: '#10B981', texto: 'Aprovada', icon: CheckCircle },
       rejeitada: { cor: '#EF4444', texto: 'Rejeitada', icon: XCircle },
       auditoria: { cor: '#8B5CF6', texto: 'Em Auditoria', icon: Eye },
@@ -312,7 +312,7 @@ export function GestaoContratos() {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       hospital: { cor: '#6366F1', texto: 'Hospital', icon: Building2 },
       convenio: { cor: '#10B981', texto: 'Convênio', icon: Shield },
-      fornecedor: { cor: '#F59E0B', texto: 'Fornecedor', icon: Building },
+      fornecedor: { cor: '#8b5cf6', texto: 'Fornecedor', icon: Building },
       prestador: { cor: '#8B5CF6', texto: 'Prestador', icon: Users },
     }
     return configs[tipo] || { cor: '#6B7280', texto: tipo, icon: FileText }
@@ -321,7 +321,7 @@ export function GestaoContratos() {
   const getSeveridadeConfig = (severidade: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       critico: { cor: '#EF4444', texto: 'Crítico' },
-      alto: { cor: '#F59E0B', texto: 'Alto' },
+      alto: { cor: '#8b5cf6', texto: 'Alto' },
       medio: { cor: '#3B82F6', texto: 'Médio' },
       baixo: { cor: '#10B981', texto: 'Baixo' },
     }
@@ -438,8 +438,8 @@ export function GestaoContratos() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <DollarSign className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Consumo Mês</p>
@@ -614,8 +614,8 @@ export function GestaoContratos() {
                           {contrato.percentualMeta && (
                             <div className="mt-2">
                               <div className="flex items-center gap-1 justify-end">
-                                <Gauge className={`w-4 h-4 ${contrato.percentualMeta >= 100 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`} />
-                                <span className={`font-bold ${contrato.percentualMeta >= 100 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
+                                <Gauge className={`w-4 h-4 ${contrato.percentualMeta >= 100 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`} />
+                                <span className={`font-bold ${contrato.percentualMeta >= 100 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`}>
                                   {contrato.percentualMeta}%
                                 </span>
                               </div>
@@ -669,7 +669,7 @@ export function GestaoContratos() {
                             {medicao.quantidadeItens} itens medidos
                           </p>
                           {medicao.divergencias && medicao.divergencias > 0 && (
-                            <p className={`text-xs text-[#F59E0B] mt-1`}>
+                            <p className={`text-xs text-[#8b5cf6] mt-1`}>
                               <AlertTriangle className="w-3 h-3 inline mr-1" />
                               {medicao.divergencias} divergências encontradas
                             </p>
@@ -706,7 +706,7 @@ export function GestaoContratos() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-[#F59E0B]" />
+                <Bell className="w-5 h-5 text-[#8b5cf6]" />
                 Alertas de Contratos
               </CardTitle>
             </CardHeader>
@@ -893,7 +893,7 @@ export function GestaoContratos() {
                 </div>
                 <div className={`p-3 rounded-xl ${inputBg} text-center`}>
                   <p className={`text-xs ${textSecondary}`}>% Meta</p>
-                  <p className={`text-xl font-bold ${(contratoSelecionado.percentualMeta || 0) >= 100 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
+                  <p className={`text-xl font-bold ${(contratoSelecionado.percentualMeta || 0) >= 100 ? 'text-[#10B981]' : 'text-[#8b5cf6]'}`}>
                     {contratoSelecionado.percentualMeta}%
                   </p>
                 </div>

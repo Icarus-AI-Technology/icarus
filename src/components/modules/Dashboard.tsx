@@ -301,7 +301,7 @@ export function Dashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-[#F59E0B]" />
+                <PieChartIcon className="w-5 h-5 text-[#8b5cf6]" />
                 Distribuição por Categoria
               </CardTitle>
             </CardHeader>
@@ -395,7 +395,7 @@ export function Dashboard() {
                         : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.8)]'
                     }`}
                   >
-                    <Star className="w-4 h-4 text-[#F59E0B]" strokeWidth={2.5} />
+                    <Star className="w-4 h-4 text-[#8b5cf6]" strokeWidth={2.5} />
                   </div>
                   Satisfação Clientes
                 </CardTitle>
@@ -470,21 +470,21 @@ export function Dashboard() {
 
               {/* AI Insight 3 - Attention Needed */}
               <div 
-                className={`p-4 rounded-xl border-l-4 border-l-amber-500 ${
+                className={`p-4 rounded-xl border-l-4 border-l-violet-500 ${
                   isDark 
                     ? 'bg-[#1A1F35] shadow-[4px_4px_8px_rgba(0,0,0,0.3),-3px_-3px_6px_rgba(255,255,255,0.02)]'
                     : 'bg-slate-50 shadow-[3px_3px_6px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.9)]'
                 }`}
               >
                 <div className={`font-medium ${textPrimary} mb-2 flex items-center gap-2`}>
-                  <AlertCircle className="w-5 h-5 text-[#F59E0B]" />
+                  <AlertCircle className="w-5 h-5 text-[#8b5cf6]" />
                   Atenção Necessária
                 </div>
                 <p className={`text-sm ${textSecondary}`}>
                   3 clientes com alto risco de inadimplência detectados.
                   Recomenda-se contato proativo para negociação.
                 </p>
-                <Badge className="mt-3 bg-[#F59E0B]/20 text-[#F59E0B] border-none">
+                <Badge className="mt-3 bg-[#8b5cf6]/20 text-[#8b5cf6] border-none">
                   Confiança: 85%
                 </Badge>
               </div>

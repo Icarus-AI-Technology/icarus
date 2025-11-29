@@ -190,7 +190,7 @@ export function ChatResponseCard({ card, onAction }: ChatResponseCardProps) {
     const alert = card.data as AlertData;
     const alertStyles = {
       success: { bg: 'bg-green-500/10', border: 'border-green-500/30', icon: CheckCircle, iconColor: 'text-green-400' },
-      warning: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', icon: AlertTriangle, iconColor: 'text-amber-400' },
+      warning: { bg: 'bg-violet-500/10', border: 'border-slate-600/30', icon: AlertTriangle, iconColor: 'text-violet-300' },
       error: { bg: 'bg-red-500/10', border: 'border-red-500/30', icon: XCircle, iconColor: 'text-red-400' },
       info: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', icon: Info, iconColor: 'text-blue-400' },
     };

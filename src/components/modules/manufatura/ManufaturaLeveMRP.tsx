@@ -223,7 +223,7 @@ const distribuicaoStatusMock = [
   { name: 'Em Produção', value: 35, color: '#3B82F6' },
   { name: 'Planejada', value: 25, color: '#8B5CF6' },
   { name: 'Finalizada', value: 30, color: '#10B981' },
-  { name: 'Pausada', value: 10, color: '#F59E0B' }
+  { name: 'Pausada', value: 10, color: '#8b5cf6' }
 ]
 
 // ============ COMPONENTE PRINCIPAL ============
@@ -267,7 +267,7 @@ export function ManufaturaLeveMRP() {
     const configs = {
       planejada: { label: 'Planejada', className: 'bg-purple-500/20 text-purple-400' },
       em_producao: { label: 'Em Produção', className: 'bg-blue-500/20 text-blue-400' },
-      pausada: { label: 'Pausada', className: 'bg-amber-500/20 text-amber-400' },
+      pausada: { label: 'Pausada', className: 'bg-violet-500/20 text-violet-300' },
       finalizada: { label: 'Finalizada', className: 'bg-emerald-500/20 text-emerald-400' },
       cancelada: { label: 'Cancelada', className: 'bg-red-500/20 text-red-400' }
     }
@@ -279,7 +279,7 @@ export function ManufaturaLeveMRP() {
     const configs = {
       baixa: { label: 'Baixa', className: 'bg-slate-500/20 text-slate-400' },
       media: { label: 'Média', className: 'bg-blue-500/20 text-blue-400' },
-      alta: { label: 'Alta', className: 'bg-amber-500/20 text-amber-400' },
+      alta: { label: 'Alta', className: 'bg-violet-500/20 text-violet-300' },
       urgente: { label: 'Urgente', className: 'bg-red-500/20 text-red-400' }
     }
     const config = configs[prioridade]
@@ -385,8 +385,8 @@ export function ManufaturaLeveMRP() {
                 <p className={`text-sm ${textSecondary}`}>Alertas Estoque</p>
                 <p className={`text-3xl font-bold ${textPrimary}`}>{kpis.alertasEstoque}</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <AlertTriangle className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-violet-300" />
               </div>
             </div>
           </CardContent>
@@ -519,7 +519,7 @@ export function ManufaturaLeveMRP() {
                           <Button
                             size="sm"
                             onClick={() => handlePausarProducao(ordem.id)}
-                            className="bg-amber-500/20 text-amber-400 hover:bg-amber-500/30"
+                            className="bg-violet-500/20 text-violet-300 hover:bg-violet-500/30"
                           >
                             <Pause className="w-4 h-4" />
                           </Button>
@@ -545,8 +545,8 @@ export function ManufaturaLeveMRP() {
                   </div>
 
                   {ordem.observacoes && (
-                    <div className={`mt-3 p-3 rounded-lg ${isDark ? 'bg-amber-500/10' : 'bg-amber-50'} border-l-4 border-amber-500`}>
-                      <p className={`text-sm ${isDark ? 'text-amber-300' : 'text-amber-700'}`}>
+                    <div className={`mt-3 p-3 rounded-lg ${isDark ? 'bg-violet-500/10' : 'bg-slate-800'} border-l-4 border-slate-600`}>
+                      <p className={`text-sm ${isDark ? 'text-violet-300' : 'text-violet-400'}`}>
                         <AlertTriangle className="w-4 h-4 inline mr-2" />
                         {ordem.observacoes}
                       </p>
@@ -607,7 +607,7 @@ export function ManufaturaLeveMRP() {
                         <td className={`py-3 px-4 text-center ${textSecondary}`}>{comp.estoqueMinimo}</td>
                         <td className={`py-3 px-4 text-center ${textPrimary}`}>{comp.demandaPrevista}</td>
                         <td className={`py-3 px-4 text-center ${
-                          comp.necessidadeLiquida > 0 ? 'text-amber-400 font-semibold' : textSecondary
+                          comp.necessidadeLiquida > 0 ? 'text-violet-300 font-semibold' : textSecondary
                         }`}>
                           {comp.necessidadeLiquida}
                         </td>
@@ -711,7 +711,7 @@ export function ManufaturaLeveMRP() {
             <Card className="lg:col-span-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#F59E0B]" />
+                  <TrendingUp className="w-5 h-5 text-[#8b5cf6]" />
                   Eficiência de Produção (%)
                 </CardTitle>
               </CardHeader>
@@ -732,9 +732,9 @@ export function ManufaturaLeveMRP() {
                       type="monotone"
                       dataKey="eficiencia"
                       name="Eficiência %"
-                      stroke="#F59E0B"
+                      stroke="#8b5cf6"
                       strokeWidth={3}
-                      dot={{ fill: '#F59E0B', strokeWidth: 2 }}
+                      dot={{ fill: '#8b5cf6', strokeWidth: 2 }}
                     />
                     {/* Linha de meta 100% */}
                     <Line
@@ -786,7 +786,7 @@ export function ManufaturaLeveMRP() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className={textSecondary}>Custo Adicional:</span>
-                        <span className="text-amber-400">R$ 85.000</span>
+                        <span className="text-violet-300">R$ 85.000</span>
                       </div>
                       <div className="flex justify-between">
                         <span className={textSecondary}>Itens a Comprar:</span>

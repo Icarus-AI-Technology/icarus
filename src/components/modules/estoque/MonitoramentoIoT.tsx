@@ -179,14 +179,14 @@ export function MonitoramentoIoT() {
     const configs: Record<string, { cor: string; texto: string; icon: any }> = {
       online: { cor: '#10B981', texto: 'Online', icon: Wifi },
       offline: { cor: '#EF4444', texto: 'Offline', icon: WifiOff },
-      alerta: { cor: '#F59E0B', texto: 'Alerta', icon: AlertTriangle },
+      alerta: { cor: '#8b5cf6', texto: 'Alerta', icon: AlertTriangle },
       manutencao: { cor: '#6B7280', texto: 'Manutenção', icon: Settings },
       em_transito: { cor: '#3B82F6', texto: 'Em Trânsito', icon: Navigation },
       entregue: { cor: '#10B981', texto: 'Entregue', icon: CheckCircle },
-      aguardando: { cor: '#F59E0B', texto: 'Aguardando', icon: Clock },
+      aguardando: { cor: '#8b5cf6', texto: 'Aguardando', icon: Clock },
       retorno: { cor: '#8B5CF6', texto: 'Retorno', icon: Navigation },
       ativo: { cor: '#EF4444', texto: 'Ativo', icon: AlertCircle },
-      reconhecido: { cor: '#F59E0B', texto: 'Reconhecido', icon: Eye },
+      reconhecido: { cor: '#8b5cf6', texto: 'Reconhecido', icon: Eye },
       resolvido: { cor: '#10B981', texto: 'Resolvido', icon: CheckCircle },
     }
     return configs[status] || { cor: '#6B7280', texto: status, icon: Info }
@@ -195,7 +195,7 @@ export function MonitoramentoIoT() {
   const getSeveridadeConfig = (severidade: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       critico: { cor: '#EF4444', texto: 'Crítico' },
-      alto: { cor: '#F59E0B', texto: 'Alto' },
+      alto: { cor: '#8b5cf6', texto: 'Alto' },
       medio: { cor: '#3B82F6', texto: 'Médio' },
       baixo: { cor: '#10B981', texto: 'Baixo' },
     }
@@ -205,7 +205,7 @@ export function MonitoramentoIoT() {
   const getRiscoConfig = (risco: string) => {
     const configs: Record<string, { cor: string; texto: string }> = {
       alto: { cor: '#EF4444', texto: 'Alto' },
-      medio: { cor: '#F59E0B', texto: 'Médio' },
+      medio: { cor: '#8b5cf6', texto: 'Médio' },
       baixo: { cor: '#10B981', texto: 'Baixo' },
     }
     return configs[risco] || { cor: '#6B7280', texto: risco }
@@ -320,12 +320,12 @@ export function MonitoramentoIoT() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Em Alerta</p>
-                <p className={`text-2xl font-bold text-[#F59E0B]`}>{resumo.sensoresAlerta}</p>
+                <p className={`text-2xl font-bold text-[#8b5cf6]`}>{resumo.sensoresAlerta}</p>
               </div>
             </div>
           </CardContent>
@@ -440,7 +440,7 @@ export function MonitoramentoIoT() {
             <Card className={cardBg}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
+                  <AlertTriangle className="w-5 h-5 text-[#8b5cf6]" />
                   Alertas Recentes
                 </CardTitle>
               </CardHeader>
@@ -671,7 +671,7 @@ export function MonitoramentoIoT() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-[#F59E0B]" />
+                <Bell className="w-5 h-5 text-[#8b5cf6]" />
                 Todos os Alertas
               </CardTitle>
             </CardHeader>
@@ -713,7 +713,7 @@ export function MonitoramentoIoT() {
                               {new Date(alerta.dataHora).toLocaleString('pt-BR')}
                             </p>
                             {alerta.produtosAfetados && (
-                              <p className={`text-xs text-[#F59E0B]`}>
+                              <p className={`text-xs text-[#8b5cf6]`}>
                                 <Package className="w-3 h-3 inline mr-1" />
                                 {alerta.produtosAfetados} produtos afetados
                               </p>

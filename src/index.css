@@ -68,7 +68,7 @@
   /* Semantic Colors */
   --success: 16 185 129;            /* #10B981 */
   --success-light: #D1FAE5;
-  --warning: 245 158 11;            /* #F59E0B */
+  --warning: 245 158 11;            /* #8b5cf6 */
   --warning-light: #FEF3C7;
   --error: 239 68 68;               /* #EF4444 */
   --destructive: 239 68 68;
@@ -812,7 +812,7 @@ a:focus-visible {
 
 .badge-warning {
   background: rgba(245, 158, 11, 0.15);
-  color: #F59E0B;
+  color: #8b5cf6;
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 

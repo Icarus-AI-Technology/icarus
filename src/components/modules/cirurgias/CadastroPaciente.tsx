@@ -313,11 +313,11 @@ export function CadastroPaciente() {
       ativo: { cor: '#10B981', texto: 'Ativo', icon: CheckCircle },
       inativo: { cor: '#6B7280', texto: 'Inativo', icon: XCircle },
       completo: { cor: '#10B981', texto: 'Completo', icon: ShieldCheck },
-      parcial: { cor: '#F59E0B', texto: 'Parcial', icon: AlertTriangle },
+      parcial: { cor: '#8b5cf6', texto: 'Parcial', icon: AlertTriangle },
       pendente: { cor: '#EF4444', texto: 'Pendente', icon: ShieldAlert },
       realizado: { cor: '#10B981', texto: 'Realizado', icon: CheckCircle },
       cancelado: { cor: '#EF4444', texto: 'Cancelado', icon: XCircle },
-      adiado: { cor: '#F59E0B', texto: 'Adiado', icon: Clock },
+      adiado: { cor: '#8b5cf6', texto: 'Adiado', icon: Clock },
     }
     return configs[status] || { cor: '#6B7280', texto: status, icon: Info }
   }
@@ -379,10 +379,10 @@ export function CadastroPaciente() {
       </div>
 
       {/* Aviso Importante */}
-      <Card className={`${cardBg} border-l-4 border-l-[#F59E0B]`}>
+      <Card className={`${cardBg} border-l-4 border-l-[#8b5cf6]`}>
         <CardContent className="pt-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-[#F59E0B] mt-0.5 flex-shrink-0" />
+            <AlertCircle className="w-5 h-5 text-[#8b5cf6] mt-0.5 flex-shrink-0" />
             <div>
               <p className={`font-medium ${textPrimary}`}>Cadastro para Rastreabilidade OPME</p>
               <p className={`text-sm ${textSecondary}`}>
@@ -426,8 +426,8 @@ export function CadastroPaciente() {
         <Card className={cardBg}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                <Package className="w-5 h-5 text-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                <Package className="w-5 h-5 text-[#8b5cf6]" />
               </div>
               <div>
                 <p className={`text-xs ${textSecondary}`}>Materiais Implantados</p>
@@ -538,7 +538,7 @@ export function CadastroPaciente() {
                         </div>
                         <div className="text-right">
                           <p className={`text-sm ${textPrimary}`}>
-                            <Package className="w-4 h-4 inline mr-1 text-[#F59E0B]" />
+                            <Package className="w-4 h-4 inline mr-1 text-[#8b5cf6]" />
                             {paciente.materiaisImplantados} materiais
                           </p>
                           <p className={`text-xs ${textSecondary}`}>
@@ -564,7 +564,7 @@ export function CadastroPaciente() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-[#F59E0B]" />
+                <QrCode className="w-5 h-5 text-[#8b5cf6]" />
                 Materiais Implantados - Rastreabilidade
               </CardTitle>
             </CardHeader>
@@ -711,7 +711,7 @@ export function CadastroPaciente() {
               { titulo: 'Relatório de Implantes', descricao: 'Lista de todos os materiais implantados com rastreabilidade', icon: Package, cor: '#6366F1' },
               { titulo: 'Rastreabilidade Completa', descricao: 'Detalhamento de lote/serial por paciente', icon: QrCode, cor: '#10B981' },
               { titulo: 'Eventos Adversos', descricao: 'Registro de eventos adversos relacionados a materiais', icon: AlertTriangle, cor: '#EF4444' },
-              { titulo: 'Recall de Produtos', descricao: 'Pacientes afetados por recall de fabricante', icon: ShieldAlert, cor: '#F59E0B' },
+              { titulo: 'Recall de Produtos', descricao: 'Pacientes afetados por recall de fabricante', icon: ShieldAlert, cor: '#8b5cf6' },
               { titulo: 'Auditoria Sanitária', descricao: 'Relatório para vigilância sanitária', icon: FileCheck, cor: '#3B82F6' },
               { titulo: 'Certificado de Rastreabilidade', descricao: 'Documento oficial de rastreabilidade OPME', icon: FileSignature, cor: '#8B5CF6' },
             ].map((rel, idx) => (
@@ -805,7 +805,7 @@ export function CadastroPaciente() {
                   <p className={`text-xs ${textSecondary}`}>Procedimentos</p>
                 </div>
                 <div className={`p-3 rounded-xl ${inputBg} text-center`}>
-                  <p className={`text-2xl font-bold text-[#F59E0B]`}>{pacienteSelecionado.materiaisImplantados}</p>
+                  <p className={`text-2xl font-bold text-[#8b5cf6]`}>{pacienteSelecionado.materiaisImplantados}</p>
                   <p className={`text-xs ${textSecondary}`}>Materiais Implantados</p>
                 </div>
               </div>
@@ -909,7 +909,7 @@ export function CadastroPaciente() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <QrCode className="w-5 h-5 text-[#F59E0B]" />
+              <QrCode className="w-5 h-5 text-[#8b5cf6]" />
               Rastreabilidade do Material
             </DialogTitle>
           </DialogHeader>

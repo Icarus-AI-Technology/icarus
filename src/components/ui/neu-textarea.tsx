@@ -109,7 +109,7 @@ export const NeuTextarea = React.forwardRef<
             <div
               className={cn(
                 'text-sm',
-                currentLength > maxLength * 0.9 ? 'text-orange-400' : 'text-[#64748B]'
+                currentLength > maxLength * 0.9 ? 'text-pink-400' : 'text-[#64748B]'
               )}
             >
               {currentLength} / {maxLength}

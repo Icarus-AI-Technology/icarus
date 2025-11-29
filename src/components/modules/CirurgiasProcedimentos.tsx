@@ -438,7 +438,7 @@ export function CirurgiasProcedimentos() {
           title="Em Andamento"
           value={stats.emAndamento}
           icon={Clock}
-          iconColor="#F59E0B"
+          iconColor="#8b5cf6"
         />
         <KPICard
           title="Realizadas"
@@ -516,8 +516,8 @@ export function CirurgiasProcedimentos() {
                 <Card className={inputBg}>
                   <CardContent className="pt-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-[#F59E0B]" />
+                      <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-[#8b5cf6]" />
                       </div>
                       <div>
                         <h4 className={`font-medium ${textPrimary}`}>Cotação</h4>
@@ -686,7 +686,7 @@ export function CirurgiasProcedimentos() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className={`p-4 rounded-xl ${inputBg}`}>
                   <div className="flex items-center gap-2 mb-2">
-                    <Clock className="w-4 h-4 text-[#F59E0B]" />
+                    <Clock className="w-4 h-4 text-[#8b5cf6]" />
                     <span className={`text-sm ${textSecondary}`}>Pendentes</span>
                   </div>
                   <p className={`text-2xl font-bold ${textPrimary}`}>
@@ -758,7 +758,7 @@ export function CirurgiasProcedimentos() {
                 {[
                   { titulo: 'Cirurgias Eletivas', descricao: 'Relatório mensal', icon: Calendar, cor: '#3B82F6' },
                   { titulo: 'Urgências', descricao: 'Análise de casos', icon: AlertCircle, cor: '#EF4444' },
-                  { titulo: 'Pendentes de Faturamento', descricao: 'Valores a receber', icon: Clock, cor: '#F59E0B' },
+                  { titulo: 'Pendentes de Faturamento', descricao: 'Valores a receber', icon: Clock, cor: '#8b5cf6' },
                   { titulo: 'Faturamento Parcial', descricao: 'Glosas e ajustes', icon: AlertCircle, cor: '#F97316' },
                   { titulo: 'Faturamento Total', descricao: 'Receita consolidada', icon: CheckCircle, cor: '#10B981' },
                   { titulo: 'Performance por Médico', descricao: 'Análise de produtividade', icon: Stethoscope, cor: '#8B5CF6' },
@@ -1041,7 +1041,7 @@ export function CirurgiasProcedimentos() {
                   <span className={textPrimary}>{selectedCirurgia.medico.nome}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-[#F59E0B]" />
+                  <Building2 className="w-4 h-4 text-[#8b5cf6]" />
                   <span className={textSecondary}>Hospital:</span>
                   <span className={textPrimary}>{selectedCirurgia.hospital.nome}</span>
                 </div>
@@ -1070,14 +1070,14 @@ export function CirurgiasProcedimentos() {
               </div>
 
               {selectedCirurgia.alertas.length > 0 && (
-                <div className={`p-4 rounded-xl bg-orange-500/10 border border-orange-500/20`}>
-                  <h4 className="font-medium text-orange-500 mb-2 flex items-center gap-2">
+                <div className={`p-4 rounded-xl bg-red-500/10 border border-slate-600/20`}>
+                  <h4 className="font-medium text-red-400 mb-2 flex items-center gap-2">
                     <AlertCircle className="w-4 h-4" />
                     Alertas
                   </h4>
                   <ul className="space-y-1">
                     {selectedCirurgia.alertas.map((alerta, idx) => (
-                      <li key={idx} className="text-sm text-orange-400">• {alerta}</li>
+                      <li key={idx} className="text-sm text-pink-400">• {alerta}</li>
                     ))}
                   </ul>
                 </div>
