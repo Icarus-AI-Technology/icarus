@@ -390,3 +390,367 @@ export function CampanhaForm({ isOpen, onClose, mode, initialData }: Omit<Generi
   )
 }
 
+/**
+ * Formulário para Compras Internacionais
+ */
+export function CompraInternacionalForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    numero_proforma: z.string().min(1),
+    data_proforma: z.string(),
+    valor_usd: z.number().min(0),
+    valor_frete_usd: z.number().min(0),
+    valor_seguro_usd: z.number().min(0),
+    incoterm: z.enum(['FOB', 'CIF', 'EXW', 'FCA', 'DAP']),
+  })
+
+  const fields: FormField[] = [
+    { name: 'numero_proforma', label: 'Número Proforma', type: 'text', placeholder: 'PI-2025-001' },
+    { name: 'data_proforma', label: 'Data Proforma', type: 'date' },
+    { name: 'valor_usd', label: 'Valor Produtos (USD)', type: 'number', placeholder: '10000' },
+    { name: 'valor_frete_usd', label: 'Frete (USD)', type: 'number', placeholder: '1500' },
+    { name: 'valor_seguro_usd', label: 'Seguro (USD)', type: 'number', placeholder: '500' },
+    { 
+      name: 'incoterm', 
+      label: 'Incoterm', 
+      type: 'select',
+      options: [
+        { value: 'FOB', label: 'FOB - Free On Board' },
+        { value: 'CIF', label: 'CIF - Cost, Insurance and Freight' },
+        { value: 'EXW', label: 'EXW - Ex Works' },
+        { value: 'FCA', label: 'FCA - Free Carrier' },
+        { value: 'DAP', label: 'DAP - Delivered At Place' },
+      ]
+    },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="compras_internacionais"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Videoconferências
+ */
+export function VideoCallForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    titulo: z.string().min(3),
+    descricao: z.string().optional(),
+    agendado_para: z.string(),
+    duracao_minutos: z.number().min(15).max(480),
+    plataforma: z.enum(['meet', 'teams', 'zoom']),
+  })
+
+  const fields: FormField[] = [
+    { name: 'titulo', label: 'Título da Reunião', type: 'text', placeholder: 'Reunião Semanal de Vendas' },
+    { name: 'descricao', label: 'Descrição', type: 'textarea', placeholder: 'Pauta da reunião...' },
+    { name: 'agendado_para', label: 'Data/Hora', type: 'datetime-local' as any },
+    { name: 'duracao_minutos', label: 'Duração (minutos)', type: 'number', placeholder: '60' },
+    { 
+      name: 'plataforma', 
+      label: 'Plataforma', 
+      type: 'select',
+      options: [
+        { value: 'meet', label: 'Google Meet' },
+        { value: 'teams', label: 'Microsoft Teams' },
+        { value: 'zoom', label: 'Zoom' },
+      ]
+    },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="video_calls"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Lançamentos Contábeis
+ */
+export function LancamentoContabilForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    data_lancamento: z.string(),
+    historico: z.string().min(10),
+    tipo: z.enum(['debito', 'credito']),
+    valor: z.number().min(0.01),
+    documento: z.string().optional(),
+  })
+
+  const fields: FormField[] = [
+    { name: 'data_lancamento', label: 'Data', type: 'date' },
+    { name: 'historico', label: 'Histórico', type: 'textarea', placeholder: 'Descrição do lançamento...' },
+    { 
+      name: 'tipo', 
+      label: 'Tipo', 
+      type: 'select',
+      options: [
+        { value: 'debito', label: 'Débito' },
+        { value: 'credito', label: 'Crédito' },
+      ]
+    },
+    { name: 'valor', label: 'Valor (R$)', type: 'number', placeholder: '1000.00' },
+    { name: 'documento', label: 'Documento', type: 'text', placeholder: 'NF-001234' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="lancamentos_contabeis"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Voice Macros
+ */
+export function VoiceMacroForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    comando: z.string().min(3),
+    acao: z.enum(['navegar', 'criar', 'buscar', 'abrir', 'fechar']),
+    parametros: z.string().optional(),
+  })
+
+  const fields: FormField[] = [
+    { name: 'comando', label: 'Comando de Voz', type: 'text', placeholder: 'abrir dashboard' },
+    { 
+      name: 'acao', 
+      label: 'Ação', 
+      type: 'select',
+      options: [
+        { value: 'navegar', label: 'Navegar' },
+        { value: 'criar', label: 'Criar Registro' },
+        { value: 'buscar', label: 'Buscar' },
+        { value: 'abrir', label: 'Abrir Módulo' },
+        { value: 'fechar', label: 'Fechar' },
+      ]
+    },
+    { name: 'parametros', label: 'Parâmetros (JSON)', type: 'textarea', placeholder: '{"modulo": "dashboard"}' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="voice_macros"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Automações IA
+ */
+export function AutomacaoIAForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    nome: z.string().min(3),
+    descricao: z.string(),
+    tipo: z.enum(['workflow', 'trigger', 'scheduled']),
+    config: z.string(), // JSON string
+  })
+
+  const fields: FormField[] = [
+    { name: 'nome', label: 'Nome da Automação', type: 'text', placeholder: 'Alerta de Estoque Baixo' },
+    { name: 'descricao', label: 'Descrição', type: 'textarea', placeholder: 'Descrição detalhada...' },
+    { 
+      name: 'tipo', 
+      label: 'Tipo', 
+      type: 'select',
+      options: [
+        { value: 'workflow', label: 'Workflow' },
+        { value: 'trigger', label: 'Trigger (Evento)' },
+        { value: 'scheduled', label: 'Agendada' },
+      ]
+    },
+    { name: 'config', label: 'Configuração (JSON)', type: 'textarea', placeholder: '{"condicao": "estoque < 10"}' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="automacoes_ia"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para API Tokens
+ */
+export function APITokenForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    nome: z.string().min(3),
+    tipo: z.enum(['read', 'write', 'admin']),
+    rate_limit: z.number().min(100).max(10000),
+    expira_em: z.string().optional(),
+  })
+
+  const fields: FormField[] = [
+    { name: 'nome', label: 'Nome do Token', type: 'text', placeholder: 'API Production' },
+    { 
+      name: 'tipo', 
+      label: 'Tipo de Acesso', 
+      type: 'select',
+      options: [
+        { value: 'read', label: 'Somente Leitura' },
+        { value: 'write', label: 'Leitura e Escrita' },
+        { value: 'admin', label: 'Administrador' },
+      ]
+    },
+    { name: 'rate_limit', label: 'Rate Limit (req/hora)', type: 'number', placeholder: '1000' },
+    { name: 'expira_em', label: 'Data de Expiração', type: 'date' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="api_tokens"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Rotas de Entrega
+ */
+export function RotaEntregaForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    nome: z.string().min(3),
+    data: z.string(),
+    distancia_km: z.number().min(0),
+    tempo_estimado: z.number().min(10),
+  })
+
+  const fields: FormField[] = [
+    { name: 'nome', label: 'Nome da Rota', type: 'text', placeholder: 'Rota Sul - Zona Leste' },
+    { name: 'data', label: 'Data', type: 'date' },
+    { name: 'distancia_km', label: 'Distância (km)', type: 'number', placeholder: '45.5' },
+    { name: 'tempo_estimado', label: 'Tempo Estimado (min)', type: 'number', placeholder: '120' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="rotas_entrega"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Compliance Checks
+ */
+export function ComplianceCheckForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    tipo: z.enum(['lgpd', 'iso42001', 'anvisa', 'sox']),
+    nome: z.string().min(3),
+    descricao: z.string(),
+    proxima_verificacao: z.string(),
+  })
+
+  const fields: FormField[] = [
+    { 
+      name: 'tipo', 
+      label: 'Tipo de Compliance', 
+      type: 'select',
+      options: [
+        { value: 'lgpd', label: 'LGPD' },
+        { value: 'iso42001', label: 'ISO 42001' },
+        { value: 'anvisa', label: 'ANVISA' },
+        { value: 'sox', label: 'SOX' },
+      ]
+    },
+    { name: 'nome', label: 'Nome da Verificação', type: 'text', placeholder: 'Audit Trail Completo' },
+    { name: 'descricao', label: 'Descrição', type: 'textarea', placeholder: 'Descrição detalhada...' },
+    { name: 'proxima_verificacao', label: 'Próxima Verificação', type: 'date' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="compliance_checks"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
+/**
+ * Formulário para Licitações
+ */
+export function LicitacaoForm({ isOpen, onClose, mode, initialData }: Omit<GenericCRUDFormProps, 'tableName' | 'fields' | 'schema'>) {
+  const schema = z.object({
+    numero_edital: z.string().min(1),
+    orgao: z.string().min(3),
+    modalidade: z.enum(['pregao', 'concorrencia', 'tomada_preco', 'convite']),
+    data_abertura: z.string(),
+    valor_estimado: z.number().min(0),
+  })
+
+  const fields: FormField[] = [
+    { name: 'numero_edital', label: 'Número do Edital', type: 'text', placeholder: 'PE-2025-0001' },
+    { name: 'orgao', label: 'Órgão', type: 'text', placeholder: 'Secretaria Municipal de Saúde' },
+    { 
+      name: 'modalidade', 
+      label: 'Modalidade', 
+      type: 'select',
+      options: [
+        { value: 'pregao', label: 'Pregão' },
+        { value: 'concorrencia', label: 'Concorrência' },
+        { value: 'tomada_preco', label: 'Tomada de Preço' },
+        { value: 'convite', label: 'Convite' },
+      ]
+    },
+    { name: 'data_abertura', label: 'Data de Abertura', type: 'date' },
+    { name: 'valor_estimado', label: 'Valor Estimado (R$)', type: 'number', placeholder: '100000' },
+  ]
+
+  return (
+    <GenericCRUDForm
+      tableName="licitacoes"
+      fields={fields}
+      schema={schema}
+      isOpen={isOpen}
+      onClose={onClose}
+      mode={mode}
+      initialData={initialData}
+    />
+  )
+}
+
