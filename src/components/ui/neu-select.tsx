@@ -74,7 +74,7 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
     return (
       <div ref={ref} className={cn('w-full', className)}>
         {label && (
-          <label className="block text-sm font-medium text-[#94A3B8] mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
             {label}
             {required && <span className="text-red-400 ml-1">*</span>}
           </label>
@@ -165,7 +165,7 @@ export const NeuSelect = React.forwardRef<HTMLDivElement, NeuSelectProps>(
           </p>
         )}
         {helperText && !error && (
-          <p className="mt-1.5 text-sm text-[#64748B]">{helperText}</p>
+          <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">{helperText}</p>
         )}
       </div>
     );

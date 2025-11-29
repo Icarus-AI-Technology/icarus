@@ -33,7 +33,7 @@ export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-[#94A3B8] mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
             {label}
           </label>
         )}
@@ -72,7 +72,7 @@ export const NeuInput = React.forwardRef<HTMLInputElement, NeuInputProps>(
         {helperText && !error && (
           <p
             id={`${props.id}-helper`}
-            className="mt-1.5 text-sm text-[#64748B]"
+            className="mt-1.5 text-sm text-slate-500 dark:text-slate-400"
           >
             {helperText}
           </p>

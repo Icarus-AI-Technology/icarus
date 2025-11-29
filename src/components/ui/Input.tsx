@@ -26,12 +26,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const errorId = `${inputId}-error`
     const helperId = `${inputId}-helper`
 
-    // Theme-aware styles
+    // Theme-aware styles - CORRIGIDO para melhor contraste
     const inputBg = isDark ? '#1A1F35' : '#F1F5F9'
     const inputText = isDark ? 'text-white' : 'text-slate-900'
-    const placeholderColor = isDark ? 'placeholder-[#64748B]' : 'placeholder-slate-400'
-    const labelColor = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
-    const helperColor = isDark ? 'text-[#64748B]' : 'text-slate-500'
+    const placeholderColor = isDark ? 'placeholder-slate-500' : 'placeholder-slate-400'
+    const labelColor = isDark ? 'text-slate-200' : 'text-slate-700'  // Mais visível em ambos os modos
+    const helperColor = isDark ? 'text-slate-400' : 'text-slate-500'
     const inputShadow = isDark
       ? 'inset 3px 3px 6px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(255,255,255,0.02)'
       : 'inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8)'
