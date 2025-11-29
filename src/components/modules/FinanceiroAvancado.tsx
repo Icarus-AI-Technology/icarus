@@ -42,17 +42,7 @@ import {
   Wallet,
   BarChart3
 } from 'lucide-react'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  AreaChart,
-  Area
-} from 'recharts'
+import { InteractiveChart } from '@/components/charts/InteractiveCharts'
 
 // Componente de carrossel de tabs
 import CadastroTabsCarousel from '@/components/cadastros/CadastroTabsCarousel'
@@ -454,67 +444,59 @@ export function FinanceiroAvancado() {
         {/* Resumo Tab */}
         <TabsContent value="resumo" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-[#6366F1]" />
-                  Fluxo de Caixa (6 meses)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={mockFluxoCaixa}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                    <XAxis dataKey="mes" stroke={textMuted} fontSize={12} />
-                    <YAxis stroke={textMuted} fontSize={12} tickFormatter={(v) => `${v/1000}k`} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Area
-                      type="monotone"
-                      dataKey="receitas"
-                      stroke="#10B981"
-                      fill="#10B981"
-                      fillOpacity={0.2}
-                      name="Receitas"
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="despesas"
-                      stroke="#EF4444"
-                      fill="#EF4444"
-                      fillOpacity={0.2}
-                      name="Despesas"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* Fluxo de Caixa com Drill-Down */}
+            <InteractiveChart
+              title="Fluxo de Caixa (6 meses)"
+              subtitle="Receitas vs Despesas com ML scoring"
+              type="area"
+              data={mockFluxoCaixa}
+              dataKey="receitas"
+              xAxisKey="mes"
+              showTrend
+              enableDrillDown
+              drillDownLevels={[
+                {
+                  name: 'Por Centro de Custo',
+                  data: [
+                    { mes: 'Comercial', receitas: 85000 },
+                    { mes: 'Operacional', receitas: 45000 },
+                    { mes: 'Administrativo', receitas: 25000 },
+                  ]
+                },
+                {
+                  name: 'Por Conta',
+                  data: [
+                    { mes: 'Vendas OPME', receitas: 120000 },
+                    { mes: 'Consignação', receitas: 25000 },
+                    { mes: 'Serviços', receitas: 10000 },
+                  ]
+                }
+              ]}
+              onExport={() => console.log('Exportar fluxo de caixa')}
+            />
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#10B981]" />
-                  Saldo Acumulado
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={mockFluxoCaixa}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                    <XAxis dataKey="mes" stroke={textMuted} fontSize={12} />
-                    <YAxis stroke={textMuted} fontSize={12} tickFormatter={(v) => `${v/1000}k`} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Line
-                      type="monotone"
-                      dataKey="saldo"
-                      stroke="#6366F1"
-                      strokeWidth={3}
-                      dot={{ fill: '#6366F1', strokeWidth: 2 }}
-                      name="Saldo"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* Saldo Acumulado com Drill-Down */}
+            <InteractiveChart
+              title="Saldo Acumulado"
+              subtitle="Projeção 6 meses com IA"
+              type="line"
+              data={mockFluxoCaixa}
+              dataKey="saldo"
+              xAxisKey="mes"
+              showTrend
+              enableDrillDown
+              drillDownLevels={[
+                {
+                  name: 'Por Banco',
+                  data: [
+                    { mes: 'Banco A', saldo: 450000 },
+                    { mes: 'Banco B', saldo: 280000 },
+                    { mes: 'Caixa', saldo: 120000 },
+                  ]
+                }
+              ]}
+              onExport={() => console.log('Exportar saldo')}
+            />
           </div>
 
           {/* Próximos Vencimentos */}
