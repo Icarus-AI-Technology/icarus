@@ -13,33 +13,7 @@ import {
   TrendingUp, Clock, Star, Activity, BarChart2, PieChart as PieChartIcon,
   Plus, FileText, ShoppingCart, UserPlus, Settings
 } from 'lucide-react'
-import {
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from 'recharts'
-
-// Custom tooltip style for charts
-const CustomTooltip = ({ active, payload, label, isDark = true }: { active?: boolean; payload?: Array<{ value: number }>; label?: string; isDark?: boolean }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div 
-        className={`px-4 py-3 rounded-xl ${
-          isDark 
-            ? 'bg-[#1A1F35] text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)]' 
-            : 'bg-white text-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.15)]'
-        }`}
-      >
-        <p className={`text-sm font-medium ${isDark ? 'text-[#94A3B8]' : 'text-slate-500'}`}>{label}</p>
-        <p className="text-lg font-bold">
-          {typeof payload[0].value === 'number' && payload[0].value > 1000 
-            ? formatCurrency(payload[0].value) 
-            : payload[0].value}
-        </p>
-      </div>
-    )
-  }
-  return null
-}
+import { InteractiveChart } from '@/components/charts/InteractiveCharts'
 
 export function Dashboard() {
   const { isDark } = useTheme()
@@ -243,90 +217,83 @@ export function Dashboard() {
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Revenue Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#6366F1]" />
-                  Faturamento Mensal
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
-                  <LineChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                    <XAxis dataKey="month" stroke={chartLabelColor} fontSize={12} />
-                    <YAxis stroke={chartLabelColor} fontSize={12} />
-                    <Tooltip content={<CustomTooltip isDark={isDark} />} />
-                    <Line
-                      type="monotone"
-                      dataKey="valor"
-                      stroke="#6366F1"
-                      strokeWidth={3}
-                      dot={{ fill: '#6366F1', strokeWidth: 2 }}
-                      activeDot={{ r: 6, fill: '#818CF8' }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* Revenue Chart with Drill-Down */}
+            <InteractiveChart
+              title="Faturamento Mensal"
+              subtitle="Receita consolidada com tendência"
+              type="area"
+              data={revenueData}
+              dataKey="valor"
+              xAxisKey="month"
+              showTrend
+              enableDrillDown
+              drillDownLevels={[
+                {
+                  name: 'Por Convênio',
+                  data: [
+                    { month: 'Particular', valor: 45000 },
+                    { month: 'Planos de Saúde', valor: 85000 },
+                    { month: 'SUS', valor: 25000 },
+                  ]
+                },
+                {
+                  name: 'Por Hospital',
+                  data: [
+                    { month: 'Hospital A', valor: 60000 },
+                    { month: 'Hospital B', valor: 50000 },
+                    { month: 'Hospital C', valor: 45000 },
+                  ]
+                }
+              ]}
+              onExport={() => console.log('Exportar faturamento')}
+            />
 
-            {/* Surgeries Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-[#10B981]" />
-                  Cirurgias da Semana
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={surgeriesData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                    <XAxis dataKey="dia" stroke={chartLabelColor} fontSize={12} />
-                    <YAxis stroke={chartLabelColor} fontSize={12} />
-                    <Tooltip content={<CustomTooltip isDark={isDark} />} />
-                    <Bar 
-                      dataKey="cirurgias" 
-                      fill="#10B981" 
-                      radius={[8, 8, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* Surgeries Chart with Drill-Down */}
+            <InteractiveChart
+              title="Cirurgias da Semana"
+              subtitle="Volume de procedimentos"
+              type="bar"
+              data={surgeriesData}
+              dataKey="cirurgias"
+              xAxisKey="dia"
+              showTrend
+              enableDrillDown
+              drillDownLevels={[
+                {
+                  name: 'Por Especialidade',
+                  data: [
+                    { dia: 'Cardíaca', cirurgias: 25 },
+                    { dia: 'Vascular', cirurgias: 18 },
+                    { dia: 'Ortopédica', cirurgias: 12 },
+                  ]
+                }
+              ]}
+              onExport={() => console.log('Exportar cirurgias')}
+            />
           </div>
 
-          {/* Category Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-[#8b5cf6]" />
-                Distribuição por Categoria
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={280}>
-                <PieChart>
-                  <Pie
-                    data={productCategoryData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name || ''}: ${((percent ?? 0) * 100).toFixed(0)}%`}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {productCategoryData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomTooltip isDark={isDark} />} />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          {/* Category Distribution with Drill-Down */}
+          <InteractiveChart
+            title="Distribuição por Categoria"
+            subtitle="Análise de produtos OPME"
+            type="pie"
+            data={productCategoryData}
+            dataKey="value"
+            xAxisKey="name"
+            enableDrillDown
+            drillDownLevels={[
+              {
+                name: 'Por Fabricante',
+                data: [
+                  { name: 'Abbott', value: 35 },
+                  { name: 'Medtronic', value: 28 },
+                  { name: 'Boston Scientific', value: 22 },
+                  { name: 'Outros', value: 15 },
+                ]
+              }
+            ]}
+            onExport={() => console.log('Exportar categorias')}
+          />
         </TabsContent>
 
         {/* Analytics Tab */}
