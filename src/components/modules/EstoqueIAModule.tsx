@@ -52,6 +52,9 @@ import {
   ResponsiveContainer
 } from 'recharts'
 
+// Componente de carrossel de tabs
+import CadastroTabsCarousel, { CarouselTab } from '@/components/cadastros/CadastroTabsCarousel'
+
 /**
  * Módulo: Estoque IA (#19)
  * Categoria: Estoque & Consignação
@@ -420,14 +423,13 @@ export function EstoqueIAModule() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-violet-500/10 ${
               isDark
-                ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
-                : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
+                ? 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
+                : 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
             }`}
-            style={{ backgroundColor: '#8B5CF615' }}
           >
-            <Brain className="w-7 h-7 text-[#8B5CF6]" />
+            <Brain className="w-7 h-7 text-violet-500" />
           </div>
           <div>
             <h1 className={`text-3xl font-bold ${textPrimary}`}>Estoque IA</h1>
@@ -445,6 +447,19 @@ export function EstoqueIAModule() {
           </Button>
         </div>
       </div>
+
+      {/* Carrossel de Categorias de Estoque */}
+      <CadastroTabsCarousel
+        tabs={[
+          { id: 'todos', label: 'Todos Produtos', count: stats.totalProdutos, delta: 47, icon: Package },
+          { id: 'critico', label: 'Estoque Crítico', count: stats.estoqueCritico, icon: AlertTriangle },
+          { id: 'baixo', label: 'Estoque Baixo', count: stats.estoqueBaixo, delta: 5, icon: TrendingUp },
+          { id: 'normal', label: 'Estoque Normal', count: produtos.filter(p => p.status === 'normal').length, icon: Boxes },
+          { id: 'consignado', label: 'Consignados', count: 45, delta: 3, icon: MapPin },
+        ]}
+        active={activeTab}
+        onChange={setActiveTab}
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

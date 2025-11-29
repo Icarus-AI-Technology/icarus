@@ -284,9 +284,9 @@ export function HomePage() {
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
+                  variant="ghost"
                   onClick={() => navigate('/login')}
-                  className="px-6 sm:px-8 py-4 sm:py-6 bg-[#15192B] text-white hover:bg-[#1A1F35] hover:scale-105 transition-all duration-300 text-base sm:text-lg neu-elevated w-full sm:w-auto"
+                  className="px-6 sm:px-8 py-4 sm:py-6 !bg-[#15192B] !text-white hover:!bg-[#1A1F35] hover:scale-105 transition-all duration-300 text-base sm:text-lg shadow-[6px_6px_12px_rgba(0,0,0,0.4),-4px_-4px_10px_rgba(255,255,255,0.02)] w-full sm:w-auto border border-slate-700/50"
                 >
                   Já sou cliente
                 </Button>

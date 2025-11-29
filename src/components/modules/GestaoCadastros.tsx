@@ -35,8 +35,12 @@ import {
   Stethoscope,
   Users,
   Edit,
-  Trash2
+  Trash2,
+  Truck
 } from 'lucide-react'
+
+// Componente de carrossel de tabs
+import CadastroTabsCarousel from '@/components/cadastros/CadastroTabsCarousel'
 
 /**
  * Módulo: Gestão de Cadastros (#07)
@@ -228,7 +232,8 @@ const estados = [
 
 export function GestaoCadastros() {
   const { isDark } = useTheme()
-  const { data: medicosData } = useCadastros()
+  // Hook para dados reais - será usado quando conectar ao Supabase
+  useCadastros()
   
   // State
   const [searchQuery, setSearchQuery] = useState('')
@@ -273,7 +278,6 @@ export function GestaoCadastros() {
   const textPrimary = isDark ? 'text-white' : 'text-slate-900'
   const textSecondary = isDark ? 'text-[#94A3B8]' : 'text-slate-600'
   const textMuted = isDark ? 'text-[#64748B]' : 'text-slate-500'
-  const cardBg = isDark ? 'bg-[#1A1F35]' : 'bg-slate-50'
   const inputBg = isDark ? 'bg-[#1A1F35]' : 'bg-slate-100'
 
   // Handlers
@@ -394,14 +398,13 @@ export function GestaoCadastros() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-violet-500/10 ${
               isDark
-                ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
-                : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
+                ? 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
+                : 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
             }`}
-            style={{ backgroundColor: '#8b5cf615' }}
           >
-            <FileText className="w-7 h-7 text-[#8b5cf6]" />
+            <FileText className="w-7 h-7 text-violet-500" />
           </div>
           <div>
             <h1 className={`text-3xl font-bold ${textPrimary}`}>Gestão de Cadastros</h1>
@@ -410,9 +413,22 @@ export function GestaoCadastros() {
         </div>
       </div>
 
+      {/* Carrossel de Cadastros - Visão Geral */}
+      <CadastroTabsCarousel
+        tabs={[
+          { id: 'medicos', label: 'Médicos Cirurgiões', count: medicos.length, delta: 15, icon: Stethoscope },
+          { id: 'hospitais', label: 'Hospitais & Clínicas', count: hospitais.length, delta: 8, icon: Building2 },
+          { id: 'fornecedores', label: 'Fornecedores', count: 156, delta: 12, icon: Truck },
+          { id: 'pacientes', label: 'Pacientes', count: pacientes.length, delta: 5, icon: Users },
+          { id: 'convenios', label: 'Convênios', count: convenios.length, delta: 3, icon: Shield },
+        ]}
+        active={activeTab}
+        onChange={setActiveTab}
+      />
+
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className={`${inputBg} p-1 rounded-xl`}>
+        <TabsList className={`${inputBg} p-1 rounded-xl flex-wrap`}>
           <TabsTrigger value="medicos" className="rounded-lg px-4 py-2">
             <Stethoscope className="w-4 h-4 mr-2" />
             Médicos
@@ -420,6 +436,10 @@ export function GestaoCadastros() {
           <TabsTrigger value="hospitais" className="rounded-lg px-4 py-2">
             <Building2 className="w-4 h-4 mr-2" />
             Hospitais
+          </TabsTrigger>
+          <TabsTrigger value="fornecedores" className="rounded-lg px-4 py-2">
+            <Truck className="w-4 h-4 mr-2" />
+            Fornecedores
           </TabsTrigger>
           <TabsTrigger value="pacientes" className="rounded-lg px-4 py-2">
             <Users className="w-4 h-4 mr-2" />

@@ -3,6 +3,13 @@
  * 
  * ICARUS v5.1 - ERP Distribuidora OPME
  * Design: Dark Glass Medical com contador grande + badge +N
+ * 
+ * Uso:
+ * <CadastroTabsCarousel 
+ *   tabs={customTabs} 
+ *   active={activeTab} 
+ *   onChange={setActiveTab} 
+ * />
  */
 
 'use client'
@@ -17,18 +24,21 @@ import {
   CreditCard, 
   Truck, 
   Package, 
-  FileSpreadsheet 
+  FileSpreadsheet,
+  LucideIcon
 } from 'lucide-react'
 
-interface Tab {
+export interface CarouselTab {
   id: string
   label: string
   count: number
-  delta: number
-  icon: React.ElementType
+  delta?: number
+  icon: LucideIcon
+  color?: string // Cor customizada para o ícone ativo
 }
 
-const tabs: Tab[] = [
+// Tabs padrão para módulo de cadastros
+export const DEFAULT_CADASTROS_TABS: CarouselTab[] = [
   { id: 'medicos', label: 'Médicos Cirurgiões', count: 847, delta: 15, icon: Stethoscope },
   { id: 'hospitais', label: 'Hospitais & Clínicas', count: 312, delta: 8, icon: Building2 },
   { id: 'convenios', label: 'Convênios', count: 89, delta: 3, icon: CreditCard },
@@ -38,11 +48,18 @@ const tabs: Tab[] = [
 ]
 
 interface CadastroTabsCarouselProps {
+  tabs?: CarouselTab[]
   active: string
   onChange: (id: string) => void
+  className?: string
 }
 
-export default function CadastroTabsCarousel({ active, onChange }: CadastroTabsCarouselProps) {
+export default function CadastroTabsCarousel({ 
+  tabs = DEFAULT_CADASTROS_TABS, 
+  active, 
+  onChange,
+  className 
+}: CadastroTabsCarouselProps) {
   const { isDark } = useTheme()
 
   const containerBg = isDark
@@ -52,7 +69,8 @@ export default function CadastroTabsCarousel({ active, onChange }: CadastroTabsC
   return (
     <div className={cn(
       'w-full rounded-2xl border overflow-hidden',
-      containerBg
+      containerBg,
+      className
     )}>
       <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
         <div className="flex gap-3 p-4 min-w-max">
@@ -70,7 +88,7 @@ export default function CadastroTabsCarousel({ active, onChange }: CadastroTabsC
                   'relative rounded-xl px-6 py-6 text-center transition-all duration-300 min-w-[160px]',
                   'shadow-lg',
                   isActive
-                    ? 'bg-gradient-to-br from-violet-600 to-purple-700 text-white shadow-violet-600/30 shadow-2xl'
+                    ? 'bg-linear-to-br from-violet-600 to-purple-700 text-white shadow-violet-600/30 shadow-2xl'
                     : isDark
                       ? 'bg-slate-800/70 text-slate-300 hover:bg-slate-700/80 hover:shadow-xl'
                       : 'bg-slate-100/70 text-slate-700 hover:bg-slate-200/80 hover:shadow-xl'
@@ -106,7 +124,7 @@ export default function CadastroTabsCarousel({ active, onChange }: CadastroTabsC
                 </div>
 
                 {/* Badge delta */}
-                {tab.delta > 0 && (
+                {tab.delta && tab.delta > 0 && (
                   <Badge className={cn(
                     'absolute -top-2 -right-2 px-2 py-0.5 text-xs font-bold',
                     'bg-emerald-500 text-white border-0',

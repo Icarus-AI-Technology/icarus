@@ -54,6 +54,9 @@ import {
   Area
 } from 'recharts'
 
+// Componente de carrossel de tabs
+import CadastroTabsCarousel from '@/components/cadastros/CadastroTabsCarousel'
+
 /**
  * Módulo: Financeiro Avançado (#33)
  * Categoria: Financeiro & Faturamento
@@ -328,12 +331,24 @@ export function FinanceiroAvancado() {
 
   // Custom tooltip for charts
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; name: string; color: string }>; label?: string }) => {
+    // Map de cores para classes Tailwind
+    const getColorClass = (color: string) => {
+      const colorMap: Record<string, string> = {
+        '#10B981': 'text-emerald-500',
+        '#EF4444': 'text-red-500',
+        '#6366F1': 'text-indigo-500',
+        '#8b5cf6': 'text-violet-500',
+        '#3B82F6': 'text-blue-500',
+      }
+      return colorMap[color] || 'text-slate-400'
+    }
+
     if (active && payload && payload.length) {
       return (
         <div className={`px-4 py-3 rounded-xl ${isDark ? 'bg-[#1A1F35] text-white' : 'bg-white text-slate-900'} shadow-lg`}>
           <p className={`text-sm font-medium ${textSecondary} mb-2`}>{label}</p>
           {payload.map((entry, index) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
+            <p key={index} className={`text-sm ${getColorClass(entry.color)}`}>
               {entry.name}: {formatCurrency(entry.value)}
             </p>
           ))}
@@ -349,14 +364,13 @@ export function FinanceiroAvancado() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-emerald-500/10 ${
               isDark
-                ? 'bg-[#1A1F35] shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
-                : 'bg-slate-100 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
+                ? 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(255,255,255,0.02)]'
+                : 'shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]'
             }`}
-            style={{ backgroundColor: '#10B98115' }}
           >
-            <DollarSign className="w-7 h-7 text-[#10B981]" />
+            <DollarSign className="w-7 h-7 text-emerald-500" />
           </div>
           <div>
             <h1 className={`text-3xl font-bold ${textPrimary}`}>Financeiro Avançado</h1>
@@ -374,6 +388,19 @@ export function FinanceiroAvancado() {
           </Button>
         </div>
       </div>
+
+      {/* Carrossel de Categorias Financeiras */}
+      <CadastroTabsCarousel
+        tabs={[
+          { id: 'pagar', label: 'Contas a Pagar', count: contasPagar.filter(c => c.status === 'pendente').length, delta: 3, icon: ArrowDownRight },
+          { id: 'receber', label: 'Contas a Receber', count: contasReceber.filter(c => c.status === 'pendente').length, delta: 8, icon: ArrowUpRight },
+          { id: 'vencidas', label: 'Vencidas', count: contasVencidas, icon: AlertCircle },
+          { id: 'pagas', label: 'Pagas/Recebidas', count: contasPagar.filter(c => c.status === 'pago').length + contasReceber.filter(c => c.status === 'recebido').length, delta: 12, icon: CheckCircle },
+          { id: 'fluxo', label: 'Fluxo de Caixa', count: movimentacoes.length, icon: BarChart3 },
+        ]}
+        active={activeTab}
+        onChange={setActiveTab}
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -25,6 +25,9 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 
+// Componente de carrossel de tabs
+import CadastroTabsCarousel from '@/components/cadastros/CadastroTabsCarousel'
+
 /**
  * Módulo: RH Gestão de Pessoas
  * Categoria: Cadastros & Gestão
@@ -510,6 +513,19 @@ export function RHGestaoPessoas() {
           </Dialog>
         </div>
       </div>
+
+      {/* Carrossel de Categorias RH */}
+      <CadastroTabsCarousel
+        tabs={[
+          { id: 'funcionarios', label: 'Funcionários', count: 56, delta: 3, icon: Users },
+          { id: 'prestadores', label: 'Prestadores PJ', count: 12, delta: 2, icon: Briefcase },
+          { id: 'turnos', label: 'Turnos Ativos', count: 3, icon: Clock },
+          { id: 'ferias', label: 'Férias Pendentes', count: 8, icon: Calendar },
+          { id: 'treinamentos', label: 'Treinamentos', count: treinamentosNR1Data.length, delta: 1, icon: GraduationCap },
+        ]}
+        active="funcionarios"
+        onChange={() => {}}
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
